@@ -21,7 +21,7 @@ jobs:
       with:
         java-version: 1.8
     - name: Build with Ant
-      run: |
-        uses: GabrielBB/xvfb-action@v1.0
-        ant -noinput -buildfile build.xml
+      uses: GabrielBB/xvfb-action@v1.0
+      with:
+        run: ant -noinput -buildfile build.xml
         
