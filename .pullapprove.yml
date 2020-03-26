@@ -26,7 +26,7 @@ groups:
       author_value: 1
     reviewers:
       teams: 
-      - eq1Producteur1
+      - CACAO2020/eq1Producteur1
 
   eq2:
     conditions:
@@ -36,7 +36,7 @@ groups:
       author_value: 1
     reviewers:
       teams: 
-      - eq2Producteur2
+      - CACAO2020/eq2Producteur2
 
   eq3:
     conditions:
@@ -46,7 +46,7 @@ groups:
       author_value: 1
     reviewers:
       teams: 
-      - eq3Transformateur1
+      - CACAO2020/eq3Transformateur1
 
   eq4:
     conditions:
@@ -56,7 +56,7 @@ groups:
       author_value: 1
     reviewers:
       teams: 
-      - eq4Transformateur2
+      - CACAO2020/eq4Transformateur2
 
   eq5:
     conditions:
@@ -66,7 +66,7 @@ groups:
       author_value: 1
     reviewers:
       teams: 
-      - eq5Transformateur3
+      - CACAO2020/eq5Transformateur3
 
   eq6:
     conditions:
@@ -76,7 +76,7 @@ groups:
       author_value: 1
     reviewers:    
       teams: 
-      - eq6Distributeur1
+      - CACAO2020/eq6Distributeur1
 
   eq6:
     conditions:
@@ -86,7 +86,7 @@ groups:
       author_value: 1
     reviewers:    
       teams: 
-      - eq7Distributeur2
+      - CACAO2020/eq7Distributeur2
 
   eq6:
     conditions:
@@ -96,4 +96,4 @@ groups:
       author_value: 1
     reviewers:    
       teams: 
-      - eq8Romu
+      - CACAO2020/eq8Romu
