@@ -3,7 +3,8 @@
               Any modifications will be overwritten.
               To include a user specific buildfile here, simply create one in the same
               directory with the processing instruction <?eclipse.ant.import?>
-              as the first entry and export the buildfile again. --><project basedir="." default="build" name="CACAO2020">
+              as the first entry and export the buildfile again. -->
+<project basedir="." default="test" name="CACAO2020">
     <property environment="env"/>
     <property name="ECLIPSE_HOME" value="../../../../Applications/Eclipse.app/Contents/Eclipse/"/>
     <property name="junit.output.dir" value="."/>
