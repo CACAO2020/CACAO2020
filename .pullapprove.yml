@@ -1,0 +1,77 @@
+version: 3
+
+groups:
+  general:
+    conditions:
+    - "files.exclude('src/abstraction/eq1Producteur1/*')"
+    - "files.exclude('src/abstraction/eq2Producteur2/*')"
+    - "files.exclude('src/abstraction/eq3Transformateur1/*')"
+    - "files.exclude('src/abstraction/eq4Transformateur2/*')"
+    - "files.exclude('src/abstraction/eq5Distributeur1/*')"
+    - "files.exclude('src/abstraction/eq6Distributeur2/*')"
+    reviewers:
+      users:
+      - massimotisi
+    reviews:
+      required: 1
+      author_value: 1
+
+  eq1:
+    conditions:
+    - "files.include('src/abstraction/eq1Producteur1/*')"
+    reviews:
+      required: 1
+      author_value: 1
+    reviewers:
+      teams: 
+      - eq1
+
+  eq2:
+    conditions:
+    - "files.include('src/abstraction/eq2Producteur2/*')"
+    reviews:
+      required: 1
+      author_value: 1
+    reviewers:
+      teams: 
+      - eq2
+
+  eq3:
+    conditions:
+    - "files.include('src/abstraction/eq3Transformateur1/*')"
+    reviews:
+      required: 1
+      author_value: 1
+    reviewers:
+      teams: 
+      - eq3
+
+  eq4:
+    conditions:
+    - "files.include('src/abstraction/eq4Transformateur2/*')"
+    reviews:
+      required: 1
+      author_value: 1
+    reviewers:
+      teams: 
+      - eq4
+
+  eq5:
+    conditions:
+    - "files.include('src/abstraction/eq5Distributeur1/*')"
+    reviews:
+      required: 1
+      author_value: 1
+    reviewers:
+      teams: 
+      - eq5
+
+  eq6:
+    conditions:
+    - "files.include('src/abstraction/eq6Distributeur2/*')"
+    reviews:
+      required: 1
+      author_value: 1
+    reviewers:    
+      teams: 
+      - eq6
