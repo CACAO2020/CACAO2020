@@ -5,11 +5,14 @@ import javax.swing.JPanel;
 
 import org.junit.Test;
 
+import abstraction.fourni.Filiere;
+
 public class FenetrePrincipaleTest {
 
 	@Test
 	public void test() {
-		FenetrePrincipale fp = new FenetrePrincipale();
+		Filiere.LA_FILIERE = null;
+		FenetrePrincipale fp = new FenetrePrincipale(new String[0]);
 		for (int i=0; i<100; i++)
 			((JButton) ((JPanel) fp.getRootPane().getContentPane().getComponent(2)).getComponent(0)).doClick();
 		
