@@ -78,7 +78,7 @@ groups:
       teams: 
       - eq6Distributeur1
 
-  eq6:
+  eq7:
     conditions:
     - "files.include('src/abstraction/eq7Distributeur2/*')"
     reviews:
@@ -88,7 +88,7 @@ groups:
       teams: 
       - eq7Distributeur2
 
-  eq6:
+  eq8:
     conditions:
     - "files.include('src/abstraction/eq8Romu/*')"
     reviews:
