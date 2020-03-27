@@ -19,7 +19,7 @@ public class Distributeur2 implements IActeur {
 	}
 	
 	public String getNom() {
-		return "EQ7";
+		return "EQ666";
 	}
 
 	public String getDescription() {
