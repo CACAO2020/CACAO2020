@@ -1,7 +1,10 @@
 package abstraction.eq8Romu.cacaoCriee;
 
+import java.util.List;
+
 import abstraction.eq8Romu.produits.Feve;
 import abstraction.fourni.Filiere;
+import abstraction.fourni.IActeur;
 
 public class FiliereTestVentesCacaoCriee extends Filiere {
 
@@ -15,6 +18,20 @@ public class FiliereTestVentesCacaoCriee extends Filiere {
 		this.ajouterActeur(new ExempleAcheteurCacaoCriee());
 		SuperviseurCacaoCriee superviseur = new SuperviseurCacaoCriee();
 		this.ajouterActeur(superviseur);
+	}
+	/**
+	 * Redefinition afin d'interdire l'acces direct au superviseur.
+	 * Sans cela, il serait possible de contourner l'autentification
+	 */
+	public IActeur getActeur(String nom) {
+		if (!nom.equals("Sup.C.Criee")) {
+			return super.getActeur(nom); 
+		} else {
+			return null;
+		}
+	}
+	public List<PropositionCriee> getHistoriqueCriee(int etape) {
+		return ((SuperviseurCacaoCriee)(super.getActeur("Sup.C.Criee"))).getHistorique(etape);
 	}
 
 }
