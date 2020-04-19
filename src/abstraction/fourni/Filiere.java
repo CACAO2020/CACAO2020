@@ -278,8 +278,13 @@ public class Filiere {
 	public Variable getIndicateur(String nomIndicateur) {
 		if (nomIndicateur==null) {
 			erreur("Appel de getIndicateur de Filiere avec null pour parametre");
-		} 
-		return this.indicateurs.get(nomIndicateur);
+		}
+		Variable res = this.indicateurs.get(nomIndicateur);
+		if (res==null) {
+			System.out.println("  Aie... recherche d'un indicateur en utilisant un nom incorrect : \""+nomIndicateur+"\" n'est pas dans la liste :"+indicateurs.keySet());
+			System.out.println("  la variable que vous recherchez est peut etre un parametre plutot qu'un indicateur ?");
+		}
+		return res;
 	}
 
 	/**
@@ -292,7 +297,12 @@ public class Filiere {
 		if (nomParametre==null) {
 			erreur("Appel de getParametre de Filiere avec null pour parametre");
 		} 
-		return this.parametres.get(nomParametre);
+		Variable res = this.parametres.get(nomParametre);
+		if (res==null) {
+			System.out.println("  Aie... recherche d'un parametre en utilisant un nom incorrect : \""+nomParametre+"\" n'est pas dans la liste :"+parametres.keySet());
+			System.out.println("  la variable que vous recherchez est peut etre un indicateur plutot qu'un parametre ?");
+		}
+		return res;
 	}
 	
 	/**
