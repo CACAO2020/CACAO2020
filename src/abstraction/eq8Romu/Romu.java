@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import abstraction.eq8Romu.cacaoCriee.FiliereTestVentesCacaoCriee;
 import abstraction.eq8Romu.ventesCacaoAleatoires.FiliereVentesCacaoAleatoires;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
@@ -44,12 +45,14 @@ public class Romu implements IActeur {
 	public List<String> getNomsFilieresProposees() {
 		ArrayList<String> filieres = new ArrayList<String>();
 		filieres.add("VCA"); // Ventes  Cacao Aleatoires
+		filieres.add("TESTCRIEE"); 
 		return filieres;
 	}
 
 	public Filiere getFiliere(String nom) {
 		switch (nom) {
 		case "VCA" : return new FiliereVentesCacaoAleatoires();
+		case "TESTCRIEE" : return new FiliereTestVentesCacaoCriee();
 	    default : return null;
 		}
 	}

@@ -606,7 +606,7 @@ public class FenetreGraphique extends JFrame implements MouseListener, Component
 		File f = new File("");
 		JFileChooser select=new JFileChooser( f.getAbsolutePath() );
 
-		select.setDialogTitle("Sp�cifiez le nom du fichier PNG � cr�er");
+		select.setDialogTitle("Specifiez le nom du fichier PNG a creer");
 		select.setFileFilter(new FichiersPNG());
 
 		int reponse=select.showSaveDialog(this);
