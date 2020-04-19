@@ -18,22 +18,6 @@ import abstraction.fourni.Filiere;
  * Variante de la vente a la criee (un exemple : https://www.maisondelamer.org/ressources/la-vente-en-criee/ )
  * dans laquelle ce n'est pas necessairement la meilleur offre qui l'emporte : c'est
  * le vendeur qui en connaissance de toutes les offres decide quelle offre l'emporte.
-
-
- *  Le superviseur ne realise pas une transaction a chaque step : 
- *    il y a un delai de 0 a� 2 steps (tire au sort) entre deux echanges
- *  Lorsqu'un echange doit avoir lieu, le superviseur 
- *  - tire au sort un prix entre 1.8 et 2.1
- *  - tire au sort un vendeur parmi les vendeurs 
- *  - tire au sort un acheteur parmi les acheteurs
- *  - il demande au vendeur la quantite qu'il souhaite mettre en vente compte tenu 
- *     du prix via la fonction quantiteEnVente(prix) de IVendeurCacaoAleatoire
- *  - il demande ensuite a l'acheteur la quantite qu'il souhaite acheter connaissant 
- *     le prix de vente et la quantite en vente via la fonction quantiteeDesiree(enVente, prix)
- *     de IAcheteurCacaoAleatoire
- *  - il notifie le vendeur de la quantite qui a ete achetee via la methode 
- *     notificationVente(desiree, prix) de IVenduerCacaoAleatoire
- *  - il tire au sort dans combien de step aura lieu le prochain echange.
  *
  */
 public class SuperviseurCacaoCriee implements IActeur {
