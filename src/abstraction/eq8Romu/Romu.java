@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import abstraction.eq8Romu.cacaoCriee.FiliereTestVentesCacaoCriee;
+import abstraction.eq8Romu.chocolatBourse.FiliereTestVentesChocolatBourse;
 import abstraction.eq8Romu.ventesCacaoAleatoires.FiliereVentesCacaoAleatoires;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
@@ -46,6 +47,7 @@ public class Romu implements IActeur {
 		ArrayList<String> filieres = new ArrayList<String>();
 		filieres.add("VCA"); // Ventes  Cacao Aleatoires
 		filieres.add("TESTCRIEE"); 
+		filieres.add("TESTBOURSE"); 
 		return filieres;
 	}
 
@@ -53,6 +55,7 @@ public class Romu implements IActeur {
 		switch (nom) {
 		case "VCA" : return new FiliereVentesCacaoAleatoires();
 		case "TESTCRIEE" : return new FiliereTestVentesCacaoCriee();
+		case "TESTBOURSE" : return new FiliereTestVentesChocolatBourse();
 	    default : return null;
 		}
 	}

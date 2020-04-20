@@ -30,8 +30,6 @@ public class FiliereTestVentesCacaoCriee extends Filiere {
 			return null;
 		}
 	}
-	public List<PropositionCriee> getHistoriqueCriee(int etape) {
-		return ((SuperviseurCacaoCriee)(super.getActeur("Sup.C.Criee"))).getHistorique(etape);
-	}
+
 
 }

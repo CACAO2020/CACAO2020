@@ -26,7 +26,7 @@ public class SuperviseurCacaoCriee implements IActeur {
 	// lots proposes non vendus il est retire des vendeurs pour cette etape (il devra attendre la prochaine
 	// etape avant de pouvoir proposer d'autres lots).
 	private Journal journal;
-	private Map<Integer, List<PropositionCriee>> historique;
+	private static Map<Integer, List<PropositionCriee>> HISTORIQUE;
 	private Map<Feve,Variable> prix;
 
 	public SuperviseurCacaoCriee() {
@@ -36,7 +36,7 @@ public class SuperviseurCacaoCriee implements IActeur {
 		}
 		this.maxLotsInvendus = new Variable(this.getNom()+" max propositions sans vente", this, 5.0, 30.0, 15.0);
 		this.journal = new Journal("Ventes de feves a la criee", this);
-		this.historique = new HashMap<Integer, List<PropositionCriee>>();
+		HISTORIQUE = new HashMap<Integer, List<PropositionCriee>>();
 		this.prix = new HashMap<Feve, Variable>();
 		for (Feve f : Feve.values()) {
 			this.prix.put(f, new Variable(this.getNom()+" prix vente "+f.name(), this, 0.0, 5.0, 0.0));
@@ -51,11 +51,11 @@ public class SuperviseurCacaoCriee implements IActeur {
 		return "Superviseur des ventes de feves de cacao a la criee";
 	}
 
-	public List<PropositionCriee> getHistorique(int etape) {
-		if (!historique.keySet().contains(etape)) {
+	public static List<PropositionCriee> getHistorique(int etape) {
+		if (!HISTORIQUE.keySet().contains(etape)) {
 			return new ArrayList<PropositionCriee>();
 		} else {
-			return new ArrayList<PropositionCriee>(historique.get(etape));
+			return new ArrayList<PropositionCriee>(HISTORIQUE.get(etape));
 		}
 	}
 
@@ -199,7 +199,7 @@ public class SuperviseurCacaoCriee implements IActeur {
 		if (transactions.size()==0) {
 			this.journal.ajouter(Journal.texteColore(Color.LIGHT_GRAY, Color.BLACK,"Aucune transaction effectuee a l'etape "+Filiere.LA_FILIERE.getEtape()+" --------------------"));
 		} else {
-			historique.put(Filiere.LA_FILIERE.getEtape(), transactions);
+			HISTORIQUE.put(Filiere.LA_FILIERE.getEtape(), transactions);
 			this.journal.ajouter(Journal.texteColore(Color.LIGHT_GRAY, Color.BLACK,"Recapitulatif des transaction effectuees a l'etape "+Filiere.LA_FILIERE.getEtape()+" --------------------"));
 			for (PropositionCriee p : transactions) {
 				this.journal.ajouter(
