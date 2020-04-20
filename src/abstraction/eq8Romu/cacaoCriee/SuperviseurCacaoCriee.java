@@ -18,22 +18,6 @@ import abstraction.fourni.Filiere;
  * Variante de la vente a la criee (un exemple : https://www.maisondelamer.org/ressources/la-vente-en-criee/ )
  * dans laquelle ce n'est pas necessairement la meilleur offre qui l'emporte : c'est
  * le vendeur qui en connaissance de toutes les offres decide quelle offre l'emporte.
-
-
- *  Le superviseur ne realise pas une transaction a chaque step : 
- *    il y a un delai de 0 a� 2 steps (tire au sort) entre deux echanges
- *  Lorsqu'un echange doit avoir lieu, le superviseur 
- *  - tire au sort un prix entre 1.8 et 2.1
- *  - tire au sort un vendeur parmi les vendeurs 
- *  - tire au sort un acheteur parmi les acheteurs
- *  - il demande au vendeur la quantite qu'il souhaite mettre en vente compte tenu 
- *     du prix via la fonction quantiteEnVente(prix) de IVendeurCacaoAleatoire
- *  - il demande ensuite a l'acheteur la quantite qu'il souhaite acheter connaissant 
- *     le prix de vente et la quantite en vente via la fonction quantiteeDesiree(enVente, prix)
- *     de IAcheteurCacaoAleatoire
- *  - il notifie le vendeur de la quantite qui a ete achetee via la methode 
- *     notificationVente(desiree, prix) de IVenduerCacaoAleatoire
- *  - il tire au sort dans combien de step aura lieu le prochain echange.
  *
  */
 public class SuperviseurCacaoCriee implements IActeur {
@@ -42,7 +26,7 @@ public class SuperviseurCacaoCriee implements IActeur {
 	// lots proposes non vendus il est retire des vendeurs pour cette etape (il devra attendre la prochaine
 	// etape avant de pouvoir proposer d'autres lots).
 	private Journal journal;
-	private Map<Integer, List<PropositionCriee>> historique;
+	private static Map<Integer, List<PropositionCriee>> HISTORIQUE;
 	private Map<Feve,Variable> prix;
 
 	public SuperviseurCacaoCriee() {
@@ -52,7 +36,7 @@ public class SuperviseurCacaoCriee implements IActeur {
 		}
 		this.maxLotsInvendus = new Variable(this.getNom()+" max propositions sans vente", this, 5.0, 30.0, 15.0);
 		this.journal = new Journal("Ventes de feves a la criee", this);
-		this.historique = new HashMap<Integer, List<PropositionCriee>>();
+		HISTORIQUE = new HashMap<Integer, List<PropositionCriee>>();
 		this.prix = new HashMap<Feve, Variable>();
 		for (Feve f : Feve.values()) {
 			this.prix.put(f, new Variable(this.getNom()+" prix vente "+f.name(), this, 0.0, 5.0, 0.0));
@@ -67,11 +51,11 @@ public class SuperviseurCacaoCriee implements IActeur {
 		return "Superviseur des ventes de feves de cacao a la criee";
 	}
 
-	public List<PropositionCriee> getHistorique(int etape) {
-		if (!historique.keySet().contains(etape)) {
+	public static List<PropositionCriee> getHistorique(int etape) {
+		if (!HISTORIQUE.keySet().contains(etape)) {
 			return new ArrayList<PropositionCriee>();
 		} else {
-			return new ArrayList<PropositionCriee>(historique.get(etape));
+			return new ArrayList<PropositionCriee>(HISTORIQUE.get(etape));
 		}
 	}
 
@@ -215,7 +199,7 @@ public class SuperviseurCacaoCriee implements IActeur {
 		if (transactions.size()==0) {
 			this.journal.ajouter(Journal.texteColore(Color.LIGHT_GRAY, Color.BLACK,"Aucune transaction effectuee a l'etape "+Filiere.LA_FILIERE.getEtape()+" --------------------"));
 		} else {
-			historique.put(Filiere.LA_FILIERE.getEtape(), transactions);
+			HISTORIQUE.put(Filiere.LA_FILIERE.getEtape(), transactions);
 			this.journal.ajouter(Journal.texteColore(Color.LIGHT_GRAY, Color.BLACK,"Recapitulatif des transaction effectuees a l'etape "+Filiere.LA_FILIERE.getEtape()+" --------------------"));
 			for (PropositionCriee p : transactions) {
 				this.journal.ajouter(

@@ -1,6 +1,6 @@
 package abstraction.eq8Romu.cacaoCriee;
 
-import java.util.List;
+
 
 import abstraction.eq8Romu.produits.Feve;
 import abstraction.fourni.Filiere;
@@ -30,8 +30,6 @@ public class FiliereTestVentesCacaoCriee extends Filiere {
 			return null;
 		}
 	}
-	public List<PropositionCriee> getHistoriqueCriee(int etape) {
-		return ((SuperviseurCacaoCriee)(super.getActeur("Sup.C.Criee"))).getHistorique(etape);
-	}
+
 
 }
