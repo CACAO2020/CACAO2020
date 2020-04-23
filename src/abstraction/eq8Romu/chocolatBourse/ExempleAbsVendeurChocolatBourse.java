@@ -20,7 +20,7 @@ public class ExempleAbsVendeurChocolatBourse implements IActeur {
 
 	public ExempleAbsVendeurChocolatBourse(Chocolat choco) {	
 		if (choco==null) {
-			throw new IllegalArgumentException("creation d'une instance de ExempleVendeurCacaoCriee avec feve==null");
+			throw new IllegalArgumentException("creation d'une instance de ExempleAbsVendeurChocolatBourse avec choco==null");
 		}		
 		NB_INSTANCES++;
 		this.numero=NB_INSTANCES;
