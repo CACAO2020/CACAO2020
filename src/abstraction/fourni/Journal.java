@@ -75,7 +75,7 @@ public class Journal {
 	public static String texteColore(Color background, Color foreground, String s) {
 		return "<span style=\"font-family: Monospace; background-color:rgb("+background.getRed()+","+background.getGreen()+","+background.getBlue()+")\"><font color=\"rgb("+foreground.getRed()+","+foreground.getGreen()+","+foreground.getBlue()+")\">"+s+"<span style=\"font-family: Monospace; background-color:rgb(255,255,255)\"><font color=\"rgb(0,0,0)\">";
 	}
-	
+
 	public static String texteColore(IActeur acteur, String s) {
 		return texteColore(acteur.getColor(), Color.BLACK, s);
 	}
@@ -118,11 +118,43 @@ public class Journal {
 		}
 		return s+"</html>";
 	}
-	
+
+	public static String sansBalise(String s) {
+		StringBuffer sb = new StringBuffer();
+		boolean dansBalise=false;
+		for (int i=0; i<s.length(); i++) {
+			char c = s.charAt(i);
+			switch (c) {
+			case '<' : dansBalise=true;break;
+			case '>' : dansBalise=false;break;
+			default : if (!dansBalise) {
+				sb.append(c);
+			}
+			}
+		}
+		return sb.toString();
+	}
+	public String toStringSansBalise() {
+		StringBuffer sb=new StringBuffer();
+		for (int i=0; i<this.getTaille(); i++) {
+			sb.append(sansBalise(this.get(i).toString())+"\n");
+		}
+		return sb.toString();
+	}
+	public String allToHtml() {
+		String s="<html>...<br/>";
+		for (int i=0; i<this.getTaille(); i++) {
+			s+=//"<span style=\"font-family: Monospace; background-color:rgb(200,200,255)\"><font color=\"rgb(128,0,255)\">"+sur6(i)+" "
+					"<span style=\"font-family: Monospace; background-color:rgb(255,255,255)\"><font color=\"rgb(0,0,0)\">"+entierSur6(i)+" "
+					+this.get(i).toString()+"<br/>";
+		}
+		return s+"</html>";
+	}
+
 	public static String entierSur6(int i) {
 		return ""+(i%1000000)/100000+""+(i%100000)/10000+""+(i%10000)/1000+""+(i%1000)/100+""+(i%100)/10+""+(i%10)+"";
 	}
-	
+
 	public static  String texteSurUneLargeurDe(String s, int largeur) {
 		if (s.length()>largeur) {
 			return s.substring(0,largeur);
@@ -134,7 +166,34 @@ public class Journal {
 			return s;
 		}
 	}
-	
+
+	public static String doubleSur(double nombre, int caracteresApresLaVirgule) {
+		String avantLaVirgule = "";
+		String apresLaVirgule = "";
+		long partieEntiere = (long)nombre;
+		if (partieEntiere==0) {
+			avantLaVirgule="0";
+		} else {		
+			while (partieEntiere>999) {
+				String sur1000 = ""+(partieEntiere%1000);
+				while (sur1000.length()<3) {
+					sur1000="0"+sur1000;
+				}
+				avantLaVirgule="."+sur1000+avantLaVirgule;
+				partieEntiere=partieEntiere/1000;
+			}
+			avantLaVirgule=partieEntiere+avantLaVirgule;
+		}
+		nombre=nombre-(long)nombre;
+		for (int d = 0; d<caracteresApresLaVirgule; d++) {
+			apresLaVirgule= apresLaVirgule+(  (int)(nombre*10.0));
+			nombre=nombre*10.0;
+			nombre=nombre-(int)(nombre);
+		}
+		return avantLaVirgule+","+apresLaVirgule;
+
+	}
+
 	public static String doubleSur(double nombre, int caracteresAvantLaVirgule, int caracteresApresLaVirgule) {
 		String avantLaVirgule = "";
 		int longueurAvantLaVirgule=0;
@@ -188,7 +247,7 @@ public class Journal {
 	public void addObserver(PropertyChangeListener obs) {
 		pcs.addPropertyChangeListener(obs);
 	}
-	
+
 	public void notifyObservers() {
 		pcs.firePropertyChange("endOfNext",null,null);
 	}
