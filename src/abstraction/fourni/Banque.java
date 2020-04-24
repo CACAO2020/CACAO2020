@@ -43,17 +43,17 @@ public class Banque implements IActeur {
 	public String getNom() {
 		return "Banque";
 	}
-	
+
 	public Color getColor() {
 		return new Color(96, 125, 139);
 	}
-	
+
 	public void initialiser() {
 	}
-	
+
 	public void setCryptogramme(Integer crypto) {
 	}
-	
+
 	public void next() {
 		Set<IActeur> acteurs = comptes.keySet();
 		for (IActeur a : acteurs) {
@@ -89,12 +89,12 @@ public class Banque implements IActeur {
 			this.journalBanque.ajouter("agios au dela du decouvert autorise de "+Journal.texteColore(a.getColor(), Color.BLACK, Journal.texteSurUneLargeurDe(a.getNom(),10))+" d'un mondant de "+Journal.doubleSur(montantAgiosAuDela, 15,3));
 		}
 	}
-	
+
 	public void erreur(String s) {
 		this.journalFiliere.ajouter(Journal.texteColore(Color.RED, Color.WHITE,s));
 		throw new Error(s);
 	}
-	
+
 	public void creerCompte(IActeur acteur) {
 		if (Filiere.LA_FILIERE==null || Filiere.LA_FILIERE.getEtape()==0) {
 			if (acteur==null) {
@@ -103,7 +103,7 @@ public class Banque implements IActeur {
 				erreur("Appel de creerCompte(acteur) avec acteur ayant deja un compte");
 			} else {
 				this.journalBanque.ajouter(Journal.texteColore(acteur, "Creation du compte de "+acteur.getNom()));
-				Variable compte = new Variable(acteur.getNom()+" solde", acteur, this.decouvertAutorise.getValeur(), SOLDE_MAX,SOLDE_INITIAL);
+				Variable compte = new Variable(acteur.getNom()+" solde", acteur, this.decouvertAutorise.getValeur(), SOLDE_MAX,(acteur.getNom().contentEquals("CLIENTFINAL")?SOLDE_MAX:SOLDE_INITIAL));
 				comptes.put(acteur, compte);
 				Integer crypto = genereCryptogramme();
 				this.cryptogramme.put(acteur,crypto);
@@ -116,15 +116,15 @@ public class Banque implements IActeur {
 			erreur("Appel de creerCompte a l'etape "+ Filiere.LA_FILIERE.getEtape()+" : la creation de compte ne peut avoir lieu qu'a l'etape 0");
 		}
 	}
-	
+
 	public List<String> getNomsFilieresProposees() {
 		return new ArrayList<String>();
 	}
-	
+
 	public Filiere getFiliere(String nom) {
 		return null;
 	}
-	
+
 	public List<Variable> getIndicateurs() {
 		boolean appelantOk=false;
 		try { 
@@ -151,7 +151,7 @@ public class Banque implements IActeur {
 			return new ArrayList<Variable>();
 		}
 	}
-	
+
 	public List<Variable> getParametres() {
 		List<Variable> res = new ArrayList<Variable>();
 		res.add(this.decouvertsConsecutifsAvantFaillite);
@@ -161,18 +161,18 @@ public class Banque implements IActeur {
 		res.add(this.seuilOperationsRefusees);
 		return res;
 	}
-	
+
 	public List<Journal> getJournaux() {
 		ArrayList<Journal> res = new ArrayList<Journal>();
 		res.add(this.journalFiliere);
 		res.add(this.journalBanque);
 		return res;
 	}
-	
+
 	public String getDescription() {
 		return "LA banque";
 	}
-	
+
 	public Integer genereCryptogramme() {
 		Integer crypto=100000000+((int)(Math.random()*899999999)); 
 		while (cryptogramme.values().contains(crypto)) {
@@ -180,7 +180,7 @@ public class Banque implements IActeur {
 		}
 		return crypto;
 	}
-	
+
 	public void faireFaillite(IActeur acteur) {
 		this.journalBanque.ajouter(Journal.texteColore(acteur, "Faillite de "+acteur.getNom()));
 		this.faillites.put(acteur, true);
@@ -190,9 +190,9 @@ public class Banque implements IActeur {
 			a.notificationFaillite(acteur);
 		}
 		this.journalBanque.notifyObservers();
-		
+
 	}
-	
+
 	public boolean aFaitFaillite(IActeur acteur) {
 		if (acteur==null) {
 			erreur("Appel de aFaitFaillite de Banque avec null pour parametre");
@@ -201,7 +201,7 @@ public class Banque implements IActeur {
 		} 
 		return this.faillites.get(acteur);
 	}
-	
+
 	public void notificationFaillite(IActeur acteur) {
 		if (this==acteur) {
 			System.out.println("OMG !!! They killed the banker !");
@@ -225,7 +225,7 @@ public class Banque implements IActeur {
 	public double getAgiosDecouvertAuDela() {
 		return this.agiosDecouvertAuDela.getValeur();
 	}
-	
+
 	public double getSolde(IActeur acteur, int cryptogramme) {
 		if (acteur==null) {
 			erreur(" Appel de getSolde de Banque avec un parametre null");
@@ -244,7 +244,7 @@ public class Banque implements IActeur {
 			}
 		}
 	}
-	
+
 	public boolean virer(IActeur acteurADebiter, int cryptogrammeActeurADebiter, IActeur acteurACrediter, double montant) {
 		if (acteurADebiter==null || acteurACrediter==null) {
 			erreur(" Appel de virer de Banque avec un parametre null");
@@ -266,8 +266,10 @@ public class Banque implements IActeur {
 			this.journalBanque.ajouter(Color.RED, Color.WHITE," Appel de virer de Banque avec l'acteur dont le compte est a crediter qui a fait faillite : "+Journal.texteColore(acteurACrediter.getColor(), Color.BLACK, acteurACrediter.getNom()));
 			return false;
 		} else{
-			comptes.get(acteurADebiter).retirer(this, montant);
-			acteurADebiter.notificationOperationBancaire(-montant);
+			if (!acteurADebiter.equals("CLIENTFINAL")) {
+				comptes.get(acteurADebiter).retirer(this, montant);
+				acteurADebiter.notificationOperationBancaire(-montant);
+			}
 			comptes.get(acteurACrediter).ajouter(this,  montant);
 			acteurACrediter.notificationOperationBancaire(montant);
 			this.journalBanque.ajouter("virement de "+Journal.texteColore(acteurADebiter.getColor(), Color.BLACK, Journal.texteSurUneLargeurDe(acteurADebiter.getNom(),10))+" vers "+Journal.texteColore(acteurACrediter.getColor(), Color.BLACK, Journal.texteSurUneLargeurDe(acteurACrediter.getNom(),10))+" d'un mondant de "+Journal.doubleSur(montant, 15,3));
@@ -275,7 +277,7 @@ public class Banque implements IActeur {
 		}
 		return false;
 	}
-	
+
 	public void notificationOperationBancaire(double montant) {
 	}
 
