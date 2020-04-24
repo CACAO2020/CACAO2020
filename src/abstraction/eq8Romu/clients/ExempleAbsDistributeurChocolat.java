@@ -1,4 +1,4 @@
-package abstraction.eq8Romu.chocolatBourse;
+package abstraction.eq8Romu.clients;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
-public class ExempleAbsVendeurChocolatBourse implements IActeur {
+public class ExempleAbsDistributeurChocolat implements IActeur {
 	private static int NB_INSTANCES = 0; // Afin d'attribuer un nom different a toutes les instances
 	protected int numero;
 	protected Variable stockChocolat;
@@ -18,9 +18,9 @@ public class ExempleAbsVendeurChocolatBourse implements IActeur {
 	protected Chocolat chocolat;
 	protected Journal journal;
 
-	public ExempleAbsVendeurChocolatBourse(Chocolat choco) {	
+	public ExempleAbsDistributeurChocolat(Chocolat choco) {	
 		if (choco==null) {
-			throw new IllegalArgumentException("creation d'une instance de ExempleAbsVendeurChocolatBourse avec choco==null");
+			throw new IllegalArgumentException("creation d'une instance de ExempleAbsDistributeurChocolat avec choco==null");
 		}		
 		NB_INSTANCES++;
 		this.numero=NB_INSTANCES;
@@ -30,11 +30,11 @@ public class ExempleAbsVendeurChocolatBourse implements IActeur {
 	}
 	
 	public String getNom() {
-		return "V.ChocoBourse"+this.numero+""+chocolat.name();
+		return "D.Choco"+this.numero+""+chocolat.name();
 	}
 
 	public String getDescription() {
-		return "Vendeur de chocolat a la bourse "+this.numero+" "+this.chocolat.name();
+		return "Distributeur de chocolat "+this.numero+" "+this.chocolat.name();
 	}
 
 	public Color getColor() {
@@ -75,8 +75,10 @@ public class ExempleAbsVendeurChocolatBourse implements IActeur {
 	public void setCryptogramme(Integer crypto) {
 		this.cryptogramme = crypto;
 	}
+	
 	public void notificationFaillite(IActeur acteur) {
 	}
+	
 	public void notificationOperationBancaire(double montant) {
 	}
 }

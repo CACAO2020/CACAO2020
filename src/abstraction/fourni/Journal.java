@@ -175,7 +175,11 @@ public class Journal {
 			avantLaVirgule="0";
 		} else {		
 			while (partieEntiere>999) {
-				avantLaVirgule="."+(partieEntiere%1000)+avantLaVirgule;
+				String sur1000 = ""+(partieEntiere%1000);
+				while (sur1000.length()<3) {
+					sur1000="0"+sur1000;
+				}
+				avantLaVirgule="."+sur1000+avantLaVirgule;
 				partieEntiere=partieEntiere/1000;
 			}
 			avantLaVirgule=partieEntiere+avantLaVirgule;
