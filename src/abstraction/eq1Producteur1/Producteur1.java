@@ -7,9 +7,19 @@ import java.util.List;
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
+import abstraction.eq8Romu.cacaoCriee.IVendeurCacaoCriee;
+import abstraction.eq8Romu.cacaoCriee.LotCacaoCriee;
+import abstraction.eq8Romu.cacaoCriee.PropositionCriee;
+import abstraction.eq8Romu.produits.Feve;
 import abstraction.fourni.Filiere;
 
-public class Producteur1 implements IActeur {
+/*
+ * Précision sur la méthode de répartition des fichiers sources
+ * La méthode pour l'instant retenu est l'agrégation de classes annexes (vente de cacao, gestion de stock...)
+ * qui permetteront d'organiser le code dans plusieurs fichiers
+ */
+
+public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 
 	private Variable stockFeves;
 	private Integer cryptogramme;
@@ -22,6 +32,11 @@ public class Producteur1 implements IActeur {
 
 	public void setCryptogramme(Integer crypto) {
 		this.cryptogramme = crypto;
+	}
+	
+	private Integer getCryptogramme()
+	{
+		return this.cryptogramme;
 	}
 
 	public String getNom() {
@@ -38,8 +53,15 @@ public class Producteur1 implements IActeur {
 
 	public void initialiser() {
 	}
+	
+	public double getStock()
+	{
+		return this.stockFeves.getValeur();
+	}
 
 	public void next() {
+		// Ecriture de l'état dans les logs.
+		this.journalEq1.ajouter("Quantité de stock : " + this.getStock());
 	}
 
 	public List<String> getNomsFilieresProposees() {
@@ -76,5 +98,29 @@ public class Producteur1 implements IActeur {
 	}
 
 	public void notificationOperationBancaire(double montant) {
+	}
+
+	
+	public LotCacaoCriee getLotEnVente() {
+		// A compléter
+		return new LotCacaoCriee(this, Feve.FEVE_BASSE, this.stockFeves.getValeur(), 10);
+	}
+
+	@Override
+	public void notifierAucuneProposition(LotCacaoCriee lot) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public PropositionCriee choisir(List<PropositionCriee> propositions) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void notifierVente(PropositionCriee proposition) {
+		// TODO Auto-generated method stub
+		
 	}
 }
