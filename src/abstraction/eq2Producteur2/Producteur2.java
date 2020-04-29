@@ -14,10 +14,12 @@ public class Producteur2 implements IActeur {
 	private Variable stockFeves;
 	private Integer cryptogramme;
 	private Journal journalEq2;
+	private List<PaquetArbres> PaquetsArbres; // la liste des paquets d'arbres de notre acteur
 
 	public Producteur2() {
 		this.stockFeves=new Variable(getNom()+" stock feves", this, 1000);
 		this.journalEq2 = new Journal("Eq2 activites", this);
+		this.PaquetsArbres = new ArrayList<PaquetArbres>();
 	}
 	
 	public String getNom() {
@@ -38,8 +40,17 @@ public class Producteur2 implements IActeur {
 	public void setCryptogramme(Integer crypto) {
 		this.cryptogramme = crypto;
 	}
-
+	public List<PaquetArbres> getPaquetsArbres(){
+		return this.PaquetsArbres;
+	}
+	/**
+	 * Cette methode est appellee a chaque nouveau tour
+	 * Pour l'instant elle avance l'age de chaque paquet d'arbre de 1
+	 */
 	public void next() {
+		for (int i = 0; i < this.getPaquetsArbres().size(); i++) {
+			this.getPaquetsArbres().get(i).setAge(this.getPaquetsArbres().get(i).getAge() + 1);
+		}
 	}
 
 	public List<String> getNomsFilieresProposees() {
