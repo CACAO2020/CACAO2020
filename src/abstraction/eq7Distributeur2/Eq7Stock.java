@@ -1,23 +1,25 @@
 package abstraction.eq7Distributeur2;
 
+import java.util.List;
+
 public class Eq7Stock implements IStock {
-
+//Raphael G
 	@Override
-	public double getStocks() {
+	public List<Integer> getStocks() {
 		// TODO Auto-generated method stub
-		return 0;
+		return null;
 	}
 
 	@Override
-	public double quantitesRecues() {
+	public List<Integer> quantitesRecues() {
 		// TODO Auto-generated method stub
-		return 0;
+		return null;
 	}
 
-	@Override
-	public double quantitesPrelevees() {
+
+	public List<Integer> quantitesPrelevees() {
 		// TODO Auto-generated method stub
-		return 0;
+		return null;
 	}
 
 	@Override
@@ -27,15 +29,15 @@ public class Eq7Stock implements IStock {
 	}
 
 	@Override
-	public double estimationProchStock() {
+	public List<Integer> estimationProchStock() {
 		// TODO Auto-generated method stub
-		return 0;
+		return null ;
 	}
 
 	@Override
-	public double stockAnneePrec() {
+	public List<Integer> stockAnneePrec() {
 		// TODO Auto-generated method stub
-		return 0;
+		return null;
 	}
 
 }
