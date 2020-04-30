@@ -17,41 +17,48 @@ import abstraction.fourni.Filiere;
 
 
 //Création par Clément
-class GestionCriee {
+class GestionCriee //implements IVendeurCacaoCriee 
+{
 	
 	private double lastPrixMin;
 	private double lastPrixVente;
+	private Producteur1 producteur1;
 	
-	public GestionCriee()
+	public GestionCriee(Producteur1 sup) //Clément
 	{
+		//Prix par unité
 		this.lastPrixMin = 0;
 		this.lastPrixVente = 0;
+		this.producteur1 = sup;
 	}
 	
-	public GestionCriee(double lastPrixMinInit, double lastPrixVenteInit)
+	public GestionCriee(double lastPrixMinInit, double lastPrixVenteInit, IActeur sup) //Clément
 	{
 		this.lastPrixMin = lastPrixMinInit;
 		this.lastPrixVente = lastPrixVenteInit;
 	}
-	
-	public LotCacaoCriee getLotEnVente(IVendeurCacaoCriee acteur1, double valeurStock)
-	{
-		return new LotCacaoCriee(acteur1, Feve.FEVE_BASSE, valeurStock, 10);
+
+
+	//Clément 
+	public LotCacaoCriee getLotEnVente() {
+		double quantiteAVendre = producteur1.getStock();
+		this.lastPrixMin = lastPrixVente+10;
+		return new LotCacaoCriee(this.producteur1, Feve.FEVE_BASSE, quantiteAVendre, quantiteAVendre * (lastPrixVente+10));
 	}
 	
-	@Override
+	//Clément
 	public void notifierAucuneProposition(LotCacaoCriee lot) {
-		// TODO Auto-generated method stub
-		
+		lastPrixVente -= 20;
 	}
 
-	@Override
+	//Clément
 	public PropositionCriee choisir(List<PropositionCriee> propositions) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
+
+	
 	public void notifierVente(PropositionCriee proposition) {
 		// TODO Auto-generated method stub
 		

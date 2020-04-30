@@ -29,7 +29,7 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 	public Producteur1() {
 		this.stockFeves=new Variable(getNom()+" stock feves", this, 0, 10000, 1000);
 		this.journalEq1 = new Journal("Eq1 activites", this);
-		this.venteCriee = new GestionCriee(0, 0)
+		this.venteCriee = new GestionCriee(this);
 	}
 
 	public void setCryptogramme(Integer crypto) {
@@ -102,7 +102,9 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 	public void notificationOperationBancaire(double montant) {
 	}
 
-	
+
+	// Fonctions de vente de cacao a la criee.
+	//[+] < Clément
 	public LotCacaoCriee getLotEnVente() 
 	{
 		return venteCriee.getLotEnVente();
@@ -125,4 +127,5 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 		// TODO Auto-generated method stub
 		
 	}
+	//[-] Clément >
 }
