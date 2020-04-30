@@ -22,25 +22,21 @@ import abstraction.fourni.Variable;
 @SuppressWarnings("unused")
 public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurChocolatBourse, IAcheteurCacaoAleatoire {
 
-	private Map<Feve, Variable> stockFeves;
-	private Map<Chocolat, Variable> stockChocolat;
 	private Integer cryptogramme;
 	private Journal journalEq5;
-	private AchatCacao acheteurCacao;
-	private AchatPate acheteurPate;
-	private VenteChocolat VendeurChocolat;
-	private Tresorerie tresorier;
+	protected AchatCacao acheteurCacao;
+	protected AchatPate acheteurPate;
+	protected VenteChocolat VendeurChocolat;
+	protected Tresorerie tresorier;
+	protected Stock stock;
 
 	public Transformateur3() {
-		this.stockFeves = new HashMap<>();
-		this.stockChocolat = new HashMap<>();
-		this.stockFeves.put(Feve.FEVE_BASSE, new Variable(getNom() + " stock feves basse qualité", this, 50));
-		this.stockChocolat.put(Chocolat.CHOCOLAT_BASSE, new Variable(getNom() + " stock chocolat basse qualité", this, 50));
 		this.journalEq5 = new Journal("Eq5 activites", this);
-		this.acheteurCacao = new AchatCacao(); //needs to be filled with parameters this will work for now
-		this.acheteurPate = new AchatPate(); 
-		this.VendeurChocolat = new VenteChocolat(); 
-		this.tresorier = new Tresorerie(); 
+		this.acheteurCacao = new AchatCacao(this); //needs to be filled with parameters this will work for now
+		this.acheteurPate = new AchatPate(this); 
+		this.VendeurChocolat = new VenteChocolat(this); 
+		this.tresorier = new Tresorerie(this);
+		this.stock = new Stock(this);
 	}
 
 	public String getNom() {
@@ -75,8 +71,8 @@ public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurCh
 
 	public List<Variable> getIndicateurs() {
 		List<Variable> res = new ArrayList<Variable>();
-		res.addAll(this.stockFeves.values());
-		res.addAll(this.stockChocolat.values());
+		res.addAll(this.stock.getStockFeves().values());
+		res.addAll(this.stock.getStockChocolat().values());
 		return res;
 	}
 
@@ -114,7 +110,7 @@ public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurCh
 
 	
 	public void livrer(Chocolat chocolat, double quantite) {
-		this.stockChocolat.get(chocolat).retirer(this, quantite);
+		this.stock.getStockChocolat().get(chocolat).retirer(this, quantite);
 	}
 
 	// Achat de cacao en criée IAcheteurCacaoCriee
@@ -146,7 +142,7 @@ public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurCh
 
 	
 	public void quantiteLivree(double quantiteLivree) {
-		this.stockChocolat.get(null).ajouter(this, quantiteLivree);
+		this.stock.getStockChocolat().get(null).ajouter(this, quantiteLivree);
 	}
 
 	
