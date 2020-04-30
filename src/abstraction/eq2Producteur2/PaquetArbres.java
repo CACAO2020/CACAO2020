@@ -1,6 +1,9 @@
 package abstraction.eq2Producteur2;
 
 public class PaquetArbres {
+	/**
+	 * @author Kristof Szentes
+	 */
 	
 	private int nbreArbres;
 	private int age;

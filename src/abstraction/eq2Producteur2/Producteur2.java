@@ -46,6 +46,7 @@ public class Producteur2 implements IActeur {
 	/**
 	 * Cette methode est appellee a chaque nouveau tour
 	 * Pour l'instant elle avance l'age de chaque paquet d'arbre de 1
+	 * @author Kristof Szentes
 	 */
 	public void next() {
 		for (int i = 0; i < this.getPaquetsArbres().size(); i++) {
