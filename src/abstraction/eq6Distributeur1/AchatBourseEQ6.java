@@ -2,10 +2,10 @@ package abstraction.eq6Distributeur1;
 
 import abstraction.eq8Romu.chocolatBourse.IAcheteurChocolatBourse;
 
-public class AcheteurBourseEQ6 extends Stock implements IAcheteurChocolatBourse{
+public class AchatrBourseEQ6 extends Stock implements IAcheteurChocolatBourse{
     
 	public double EvolutionDemandeTotal (){
-		//anakyse dernière deux dernière année évolution = année-1 + (année-1 -année-2)/2
+		//anakyse dernière deuxD dernière année évolution = année-1 + (année-1 -année-2)/2
 		
 		return 0.0;
 	}
