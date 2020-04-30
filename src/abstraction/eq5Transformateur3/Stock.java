@@ -38,109 +38,32 @@ public class Stock {
 	public Map<Pate, Variable> getStockPate() {
 		return this.stockPate;
 	}
+
 	public void ajoutFeves(Feve feve, double quantite) {
-		if (feve.equals(Feve.FEVE_BASSE)) {
-			this.stockFeves.put(feve, new Variable(acteur.getNom() + " stock feves basse qualité", acteur, this.getStockFeves().get(Feve.FEVE_BASSE).getValeur() + quantite));
-		}
-		if (feve.equals(Feve.FEVE_MOYENNE)) {
-			this.stockFeves.put(feve, new Variable(acteur.getNom() + " stock feves moyenne qualité", acteur, this.getStockFeves().get(Feve.FEVE_MOYENNE).getValeur() + quantite));
-		}
-		if (feve.equals(Feve.FEVE_HAUTE)) {
-			this.stockFeves.put(feve, new Variable(acteur.getNom() + " stock feves haute qualité", acteur, this.getStockFeves().get(Feve.FEVE_HAUTE).getValeur() + quantite));
-		}
-		if (feve.equals(Feve.FEVE_MOYENNE_EQUITABLE)) {
-			this.stockFeves.put(feve, new Variable(acteur.getNom() + " stock feves moyenne qualité équitable", acteur, this.getStockFeves().get(Feve.FEVE_MOYENNE_EQUITABLE).getValeur() + quantite));
-		}
-		if (feve.equals(Feve.FEVE_HAUTE_EQUITABLE)) {
-			this.stockFeves.put(feve, new Variable(acteur.getNom() + " stock feves haute qualité équitable", acteur, this.getStockFeves().get(Feve.FEVE_HAUTE_EQUITABLE).getValeur() + quantite));
-		}
+		this.stockFeves.get(feve).ajouter(acteur, quantite);
 	}
+
 	public void retirerFeves(Feve feve, double quantite) {
-		if (feve.equals(Feve.FEVE_BASSE)) {
-			this.stockFeves.put(feve, new Variable(acteur.getNom() + " stock feves basse qualité", acteur, this.getStockFeves().get(Feve.FEVE_BASSE).getValeur() - quantite));
-		}
-		if (feve.equals(Feve.FEVE_MOYENNE)) {
-			this.stockFeves.put(feve, new Variable(acteur.getNom() + " stock feves moyenne qualité", acteur, this.getStockFeves().get(Feve.FEVE_MOYENNE).getValeur() - quantite));
-		}
-		if (feve.equals(Feve.FEVE_HAUTE)) {
-			this.stockFeves.put(feve, new Variable(acteur.getNom() + " stock feves haute qualité", acteur, this.getStockFeves().get(Feve.FEVE_HAUTE).getValeur() - quantite));
-		}
-		if (feve.equals(Feve.FEVE_MOYENNE_EQUITABLE)) {
-			this.stockFeves.put(feve, new Variable(acteur.getNom() + " stock feves moyenne qualité équitable", acteur, this.getStockFeves().get(Feve.FEVE_MOYENNE_EQUITABLE).getValeur() - quantite));
-		}
-		if (feve.equals(Feve.FEVE_HAUTE_EQUITABLE)) {
-			this.stockFeves.put(feve, new Variable(acteur.getNom() + " stock feves haute qualité équitable", acteur, this.getStockFeves().get(Feve.FEVE_HAUTE_EQUITABLE).getValeur() - quantite));
-		}
-	}	
+		this.stockFeves.get(feve).retirer(acteur, quantite);
+	}
+	
 	public void ajoutChocolat(Chocolat choco, double quantite) {
-		if (choco.equals(Chocolat.CHOCOLAT_BASSE)) {
-			this.stockChocolat.put(choco, new Variable(acteur.getNom() + " stock chocolat basse qualité", acteur, this.getStockChocolat().get(Chocolat.CHOCOLAT_BASSE).getValeur() + quantite));
-		}
-		if (choco.equals(Chocolat.CHOCOLAT_MOYENNE)) {
-			this.stockChocolat.put(choco, new Variable(acteur.getNom() + " stock chocolat moyenne qualité", acteur, this.getStockChocolat().get(Chocolat.CHOCOLAT_MOYENNE).getValeur() + quantite));
-		}
-		if (choco.equals(Chocolat.CHOCOLAT_HAUTE)) {
-			this.stockChocolat.put(choco, new Variable(acteur.getNom() + " stock chocolat haute qualité", acteur, this.getStockChocolat().get(Chocolat.CHOCOLAT_HAUTE).getValeur() + quantite));
-		}
-		if (choco.equals(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE)) {
-			this.stockChocolat.put(choco, new Variable(acteur.getNom() + " stock chocolat moyenne qualité équitable", acteur, this.getStockChocolat().get(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE).getValeur() + quantite));
-		}
-		if (choco.equals(Chocolat.CHOCOLAT_HAUTE_EQUITABLE)) {
-			this.stockChocolat.put(choco, new Variable(acteur.getNom() + " stock chocolat haute qualité équitable", acteur, this.getStockChocolat().get(Chocolat.CHOCOLAT_HAUTE_EQUITABLE).getValeur() + quantite));
-		}
+		this.stockChocolat.get(choco).ajouter(acteur, quantite);
 	}	
+
 	public void retirerChocolat(Chocolat choco, double quantite) {
-		if (choco.equals(Chocolat.CHOCOLAT_BASSE)) {
-			this.stockChocolat.put(choco, new Variable(acteur.getNom() + " stock chocolat basse qualité", acteur, this.getStockChocolat().get(Chocolat.CHOCOLAT_BASSE).getValeur() - quantite));
-		}
-		if (choco.equals(Chocolat.CHOCOLAT_MOYENNE)) {
-			this.stockChocolat.put(choco, new Variable(acteur.getNom() + " stock chocolat moyenne qualité", acteur, this.getStockChocolat().get(Chocolat.CHOCOLAT_MOYENNE).getValeur() - quantite));
-		}
-		if (choco.equals(Chocolat.CHOCOLAT_HAUTE)) {
-			this.stockChocolat.put(choco, new Variable(acteur.getNom() + " stock chocolat haute qualité", acteur, this.getStockChocolat().get(Chocolat.CHOCOLAT_HAUTE).getValeur() - quantite));
-		}
-		if (choco.equals(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE)) {
-			this.stockChocolat.put(choco, new Variable(acteur.getNom() + " stock chocolat moyenne qualité équitable", acteur, this.getStockChocolat().get(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE).getValeur() - quantite));
-		}
-		if (choco.equals(Chocolat.CHOCOLAT_HAUTE_EQUITABLE)) {
-			this.stockChocolat.put(choco, new Variable(acteur.getNom() + " stock chocolat haute qualité équitable", acteur, this.getStockChocolat().get(Chocolat.CHOCOLAT_HAUTE_EQUITABLE).getValeur() - quantite));
-		}
+		this.stockChocolat.get(choco).ajouter(acteur, quantite);
+	}
+	
+	
+	public void ajoutPate(Pate pate, double quantite) {
+		this.stockPate.get(pate).ajouter(acteur, quantite);
 	}	
-	public void ajoutPate(Pate pate, double quantite) {
-		if (pate.equals(Pate.PATE_BASSE)) {
-			this.stockPate.put(pate, new Variable(acteur.getNom() + " stock pate basse qualité", acteur, this.getStockPate().get(Pate.PATE_BASSE).getValeur() + quantite));
-		}
-		if (pate.equals(Pate.PATE_MOYENNE)) {
-			this.stockPate.put(pate, new Variable(acteur.getNom() + " stock pate moyenne qualité", acteur, this.getStockPate().get(Pate.PATE_MOYENNE).getValeur() + quantite));
-		}
-		if (pate.equals(Pate.PATE_HAUTE)) {
-			this.stockPate.put(pate, new Variable(acteur.getNom() + " stock pate haute qualité", acteur, this.getStockPate().get(Pate.PATE_HAUTE).getValeur() + quantite));
-		}
-		if (pate.equals(Pate.PATE_MOYENNE_EQUITABLE)) {
-			this.stockPate.put(pate, new Variable(acteur.getNom() + " stock pate moyenne qualité équitable", acteur, this.getStockPate().get(Pate.PATE_MOYENNE_EQUITABLE).getValeur() + quantite));
-		}
-		if (pate.equals(Pate.PATE_HAUTE_EQUITABLE)) {
-			this.stockPate.put(pate, new Variable(acteur.getNom() + " stock pate haute qualité équitable", acteur, this.getStockPate().get(Pate.PATE_HAUTE_EQUITABLE).getValeur() + quantite));
-		}
+
+	public void retirerPate(Pate pate, double quantite) {
+		this.stockPate.get(pate).ajouter(acteur, quantite);
 	}
-	public void ajoutPate(Pate pate, double quantite) {
-		if (pate.equals(Pate.PATE_BASSE)) {
-			this.stockPate.put(pate, new Variable(acteur.getNom() + " stock pate basse qualité", acteur, this.getStockPate().get(Pate.PATE_BASSE).getValeur() - quantite));
-		}
-		if (pate.equals(Pate.PATE_MOYENNE)) {
-			this.stockPate.put(pate, new Variable(acteur.getNom() + " stock pate moyenne qualité", acteur, this.getStockPate().get(Pate.PATE_MOYENNE).getValeur() - quantite));
-		}
-		if (pate.equals(Pate.PATE_HAUTE)) {
-			this.stockPate.put(pate, new Variable(acteur.getNom() + " stock pate haute qualité", acteur, this.getStockPate().get(Pate.PATE_HAUTE).getValeur() - quantite));
-		}
-		if (pate.equals(Pate.PATE_MOYENNE_EQUITABLE)) {
-			this.stockPate.put(pate, new Variable(acteur.getNom() + " stock pate moyenne qualité équitable", acteur, this.getStockPate().get(Pate.PATE_MOYENNE_EQUITABLE).getValeur() - quantite));
-		}
-		if (pate.equals(Pate.PATE_HAUTE_EQUITABLE)) {
-			this.stockPate.put(pate, new Variable(acteur.getNom() + " stock pate haute qualité équitable", acteur, this.getStockPate().get(Pate.PATE_HAUTE_EQUITABLE).getValeur() - quantite));
-		}
-	}
-		
+			
 }
 	
 	
