@@ -19,11 +19,11 @@ public class Distributeur2 implements IActeur {
 	}
 	
 	public String getNom() {
-		return "EQ7";
+		return "EQ7 : Ecocoa de Liege";
 	}
 
 	public String getDescription() {
-		return "Distributeur bla bla bla";
+		return "Ecocoa, chocolatier responsable";
 	}
 	
 	public Color getColor() {
