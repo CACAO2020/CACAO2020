@@ -42,6 +42,10 @@ class GestionCriee //implements IVendeurCacaoCriee
 	//Clément 
 	public LotCacaoCriee getLotEnVente() {
 		double quantiteAVendre = producteur1.getStock();
+		if(quantiteAVendre == 0)
+		{
+			return null;
+		}
 		this.lastPrixMin = lastPrixVente+10;
 		return new LotCacaoCriee(this.producteur1, Feve.FEVE_BASSE, quantiteAVendre, quantiteAVendre * (lastPrixVente+10));
 	}
@@ -53,14 +57,30 @@ class GestionCriee //implements IVendeurCacaoCriee
 
 	//Clément
 	public PropositionCriee choisir(List<PropositionCriee> propositions) {
-		// TODO Auto-generated method stub
-		return null;
+		int n = propositions.size();
+		double prixMax = 0.02;
+		int indPrixMax = -1;
+		for(int i = 0; i < n; i++)
+		{
+			if(propositions.get(i).getPrixPourUneTonne() >= prixMax)
+			{
+				indPrixMax = i;
+			}
+		}
+		if(indPrixMax >= 0)
+		{
+			return propositions.get(indPrixMax);
+		}
+		else
+		{
+			return null;
+		}
 	}
 
 
 	
+	//Clément
 	public void notifierVente(PropositionCriee proposition) {
-		// TODO Auto-generated method stub
-		
+		//TODO
 	}
 }
