@@ -24,10 +24,12 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 	private Variable stockFeves;
 	private Integer cryptogramme;
 	private Journal journalEq1;
+	private GestionCriee venteCriee;
 
 	public Producteur1() {
 		this.stockFeves=new Variable(getNom()+" stock feves", this, 0, 10000, 1000);
 		this.journalEq1 = new Journal("Eq1 activites", this);
+		this.venteCriee = new GestionCriee(0, 0)
 	}
 
 	public void setCryptogramme(Integer crypto) {
@@ -103,8 +105,7 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 	
 	public LotCacaoCriee getLotEnVente() 
 	{
-		// A compléter
-		return new LotCacaoCriee(this, Feve.FEVE_BASSE, this.stockFeves.getValeur(), 10);
+		return venteCriee.getLotEnVente();
 	}
 
 	@Override
