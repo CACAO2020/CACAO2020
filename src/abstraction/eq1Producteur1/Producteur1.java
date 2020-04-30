@@ -112,20 +112,18 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 
 	@Override
 	public void notifierAucuneProposition(LotCacaoCriee lot) {
-		// TODO Auto-generated method stub
+		venteCriee.notifierAucuneProposition(lot);
 		
 	}
 
 	@Override
 	public PropositionCriee choisir(List<PropositionCriee> propositions) {
-		// TODO Auto-generated method stub
-		return null;
+		return venteCriee.choisir(propositions);
 	}
 
 	@Override
 	public void notifierVente(PropositionCriee proposition) {
-		// TODO Auto-generated method stub
-		
+		venteCriee.notifierVente(proposition);
 	}
 	//[-] Clément >
 }
