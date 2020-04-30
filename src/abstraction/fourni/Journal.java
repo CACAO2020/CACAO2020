@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
+
 /**
  * Classe modelisant un journal. 
  * Un journal sert a garder trace de messages qu'on y depose.
@@ -18,6 +19,7 @@ import java.util.ArrayList;
  *
  * @author Romuald Debruyne
  */
+
 public class Journal {
 	private String nom;            // le nom du journal
 	private IActeur createur;
