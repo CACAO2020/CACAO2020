@@ -10,7 +10,7 @@ import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
-public abstract class VendeurChocolatBourse implements IActeur {
+public abstract class VendeurChocolatBourse implements IActeur, IVendeurChocolatBourse {
 	private static int NB_INSTANCES = 0; // Afin d'attribuer un nom different a toutes les instances
 	protected int numero;
 	protected Variable stockChocolat;
