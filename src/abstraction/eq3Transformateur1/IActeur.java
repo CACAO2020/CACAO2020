@@ -3,6 +3,10 @@ package abstraction.eq3Transformateur1;
 import java.awt.Color;
 import java.util.List;
 
+import abstraction.fourni.Filiere;
+import abstraction.fourni.Journal;
+import abstraction.fourni.Variable;
+
 /**
  * Tout acteur doit implementer cette interface
  * 
