@@ -2,7 +2,6 @@ package abstraction.eq2Producteur2;
 import java.util.ArrayList;
 import java.util.List;
 import abstraction.fourni.IActeur;
-import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
 
