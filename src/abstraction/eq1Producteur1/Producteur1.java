@@ -44,7 +44,7 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 	}
 
 	public String getDescription() {
-		return "Producteur bla bla bla";
+		return "Producteur 1 : Producteur de feves Forastero et Trinitario";
 	}
 
 	public Color getColor() {
