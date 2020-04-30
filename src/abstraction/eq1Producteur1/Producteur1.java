@@ -101,7 +101,8 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 	}
 
 	
-	public LotCacaoCriee getLotEnVente() {
+	public LotCacaoCriee getLotEnVente() 
+	{
 		// A compléter
 		return new LotCacaoCriee(this, Feve.FEVE_BASSE, this.stockFeves.getValeur(), 10);
 	}
