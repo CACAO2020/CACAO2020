@@ -3,7 +3,6 @@ package abstraction.eq6Distributeur1;
 import abstraction.eq8Romu.produits.Chocolat;
 
 public interface IStock { /** Interface implémentée par Avril Thibault et Tamine Mélissa. 
-	
 	/**
 	 * @param choco, choco!=null
 	 * @return Retourne la quantite (en tonnes) de chocolat de type choco que le distributeur
@@ -39,6 +38,25 @@ public interface IStock { /** Interface implémentée par Avril Thibault et Tami
 	 * a actuellement disponible en stock.
 	 */
 	public double ValeurdeQuantiteStockee(Chocolat choco);
+	
+	
+	
+	/**
+	 * Methode invoquee afin de stocker une certaine quantite de
+	 * chocolat de type choco achetée.
+	 * @param chocolat
+	 * @param quantite
+	 */
+	public void Stocker(Chocolat choco, double quantite);
+	
+	
+	/**
+	 * Methode invoquee afin de déstocker une certaine quantite de
+	 * chocolat de type choco achetée.
+	 * @param chocolat
+	 * @param quantite
+	 */
+	public void Destocker();
 
 
 }
