@@ -16,7 +16,7 @@ import abstraction.fourni.Filiere;
 
 
 
-//Création par Clément
+/** @author Clément */
 class GestionCriee //implements IVendeurCacaoCriee 
 {
 	
