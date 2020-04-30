@@ -23,11 +23,13 @@ public class Producteur2 implements IActeur {
 	}
 	
 	public String getNom() {
-		return "EQ2";
+		return "Moulacao";
 	}
 
 	public String getDescription() {
+
 		return "Producteur kris";
+
 	}
 
 	public Color getColor() {
