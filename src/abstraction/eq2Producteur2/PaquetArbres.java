@@ -1,5 +1,10 @@
 package abstraction.eq2Producteur2;
 
+/**
+ * 
+ * @author lucas
+ *type peut prendre 3 valeurs : trinitario, forastero, criollo (par ordre croissant de qualité)
+ */
 public class PaquetArbres {
 	/**
 	 * @author Kristof Szentes
