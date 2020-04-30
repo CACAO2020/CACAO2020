@@ -6,13 +6,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import abstraction.eq8Romu.cacaoCriee.PropositionCriee;
+import abstraction.eq8Romu.cacaoCriee.SuperviseurCacaoCriee;
 import abstraction.eq8Romu.produits.Feve;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
-public abstract class AcheteurCacaoCriee implements IActeur{
+public abstract class AcheteurCacaoCriee implements abstraction.eq8Romu.cacaoCriee.IAcheteurCacaoCriee{
 	private static int NB_INSTANCES = 0; // Afin d'attribuer un nom different a toutes les instances
 	private int numero;
 	private Variable totalStocksFeves;
@@ -41,6 +43,34 @@ public abstract class AcheteurCacaoCriee implements IActeur{
 	
 	public Color getColor() {
 		return new Color(((numero)*(128/NB_INSTANCES)), ((numero)*(255/NB_INSTANCES)), 128+(numero)*(127/NB_INSTANCES));
+	}
+/* On ne souhaite qu'acheter des fèves haut de gamme, haut de gamme équitable ou moyenne gamme équitable, on utilise des prix arbitraire pour l'instant
+ * Nathan Olborski */
+
+	public double proposerAchat(LotCacaoCriee lot) {
+		if ((lot.getFeve() == Feve.FEVE_HAUTE)||(lot.getFeve() == Feve.FEVE_MOYENNE_EQUITABLE)) {
+			return 10.0;}
+		if (lot.getFeve() == Feve.FEVE_HAUTE_EQUITABLE) {
+			return 15.0;}
+		return 0.0;
+	}
+
+	@Override
+	public void notifierPropositionRefusee(PropositionCriee proposition) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Integer getCryptogramme(SuperviseurCacaoCriee superviseur) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void notifierVente(PropositionCriee proposition) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	public void initialiser() {
