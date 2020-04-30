@@ -14,7 +14,7 @@ import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
-public abstract class AcheteurCacaoCriee implements abstraction.eq8Romu.cacaoCriee.IAcheteurCacaoCriee{
+public abstract class AcheteurCacaoCriee implements IActeur, abstraction.eq8Romu.cacaoCriee.IAcheteurCacaoCriee {
 	private static int NB_INSTANCES = 0; // Afin d'attribuer un nom different a toutes les instances
 	private int numero;
 	private Variable totalStocksFeves;
