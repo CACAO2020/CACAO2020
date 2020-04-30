@@ -23,7 +23,7 @@ public class Distributeur2 implements IActeur {
 	}
 
 	public String getDescription() {
-		return "Ecocoa , chocolatier responsable";
+		return "Ecocoa, chocolatier responsable";
 	}
 	
 	public Color getColor() {
