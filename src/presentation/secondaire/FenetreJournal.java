@@ -7,11 +7,18 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
+import javax.swing.filechooser.FileFilter;
 
 import abstraction.fourni.Journal;
 
@@ -23,7 +30,6 @@ import abstraction.fourni.Journal;
  * 
  * @author Romuald Debruyne
  */
-
 public class FenetreJournal extends JFrame {
 
 	private static final long serialVersionUID = 1L;
