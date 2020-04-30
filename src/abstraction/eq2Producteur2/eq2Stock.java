@@ -4,7 +4,9 @@ import java.util.List;
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
-public class eq2Stock{
+
+
+public class eq2Stock extends eq2Acteur{
 /**
  * @author lucas
  * cette classe gère les stocks de fèves et de pâte 
