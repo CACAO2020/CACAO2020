@@ -6,6 +6,7 @@ import java.util.List;
 
 import abstraction.eq8Romu.cacaoCriee.FiliereTestVentesCacaoCriee;
 import abstraction.eq8Romu.chocolatBourse.FiliereTestVentesChocolatBourse;
+import abstraction.eq8Romu.clients.FiliereTestClientFinal;
 import abstraction.eq8Romu.ventesCacaoAleatoires.FiliereVentesCacaoAleatoires;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
@@ -48,6 +49,7 @@ public class Romu implements IActeur {
 		filieres.add("VCA"); // Ventes  Cacao Aleatoires
 		filieres.add("TESTCRIEE"); 
 		filieres.add("TESTBOURSE"); 
+		filieres.add("TESTCLIENT"); 
 		return filieres;
 	}
 
@@ -56,6 +58,7 @@ public class Romu implements IActeur {
 		case "VCA" : return new FiliereVentesCacaoAleatoires();
 		case "TESTCRIEE" : return new FiliereTestVentesCacaoCriee();
 		case "TESTBOURSE" : return new FiliereTestVentesChocolatBourse();
+		case "TESTCLIENT" : return new FiliereTestClientFinal();
 	    default : return null;
 		}
 	}
