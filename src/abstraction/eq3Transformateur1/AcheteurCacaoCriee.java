@@ -44,8 +44,8 @@ public abstract class AcheteurCacaoCriee implements abstraction.eq8Romu.cacaoCri
 	public Color getColor() {
 		return new Color(((numero)*(128/NB_INSTANCES)), ((numero)*(255/NB_INSTANCES)), 128+(numero)*(127/NB_INSTANCES));
 	}
-/* On ne souhaite qu'acheter des fèves haut de gamme, haut de gamme équitable ou moyenne gamme équitable, on utilise des prix arbitraire pour l'instant
- * Nathan Olborski */
+/** On ne souhaite qu'acheter des fèves haut de gamme, haut de gamme équitable ou moyenne gamme équitable, on utilise des prix arbitraire pour l'instant
+ * Nathan Olborski **/
 
 	public double proposerAchat(LotCacaoCriee lot) {
 		if ((lot.getFeve() == Feve.FEVE_HAUTE)||(lot.getFeve() == Feve.FEVE_MOYENNE_EQUITABLE)) {
