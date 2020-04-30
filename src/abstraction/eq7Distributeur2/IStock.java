@@ -15,6 +15,6 @@ public interface IStock {
 	                                      // (ie calcule la différence entre achat et vente lors de cette step et l'ajoute au stock)
 	
 	public double stockAnneePrec();    //Informe stock 1 an auparavant
-	
+
 	
 }
