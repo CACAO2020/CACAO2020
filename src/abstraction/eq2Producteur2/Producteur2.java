@@ -27,7 +27,7 @@ public class Producteur2 implements IActeur {
 	}
 
 	public String getDescription() {
-		return "Producteur bla bla bla";
+		return "Producteur kris";
 	}
 
 	public Color getColor() {
