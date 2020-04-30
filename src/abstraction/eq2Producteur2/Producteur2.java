@@ -11,13 +11,13 @@ import abstraction.fourni.Filiere;
 
 public class Producteur2 implements IActeur {
 	
-	private Variable stockFeves;
+	private eq2Stock stock;
 	private Integer cryptogramme;
 	private Journal journalEq2;
 	private List<PaquetArbres> PaquetsArbres; // la liste des paquets d'arbres de notre acteur
 
 	public Producteur2() {
-		this.stockFeves=new Variable(getNom()+" stock feves", this, 1000);
+		this.stock=new eq2Stock(this, 0,0,0,0,0);
 		this.journalEq2 = new Journal("Eq2 activites", this);
 		this.PaquetsArbres = new ArrayList<PaquetArbres>();
 	}
@@ -65,7 +65,7 @@ public class Producteur2 implements IActeur {
 	}
 	public List<Variable> getIndicateurs() {
 		List<Variable> res=new ArrayList<Variable>();
-		res.add(this.stockFeves);
+		res.addAll(this.stock.getVariables());
 		return res;
 	}
 
