@@ -39,5 +39,41 @@ public class eq2Stock extends eq2Acteur{
 	 variables.add(this.qt_pate_hautegamme);
 	 return variables;
  }
-
+/**
+ * @param nb_feves_trinitario the nb_feves_trinitario to set
+ */
+public void setNb_feves_trinitario(double q_feves_trinitario) {
+	this.nb_feves_trinitario.setValeur(nb_feves_trinitario.getCreateur() , q_feves_trinitario); 
+}
+/**
+ * @param nb_feves_forastero the nb_feves_forastero to set
+ */
+public void setNb_feves_forastero(double q_feves_forastero) {
+	this.nb_feves_forastero.setValeur(nb_feves_forastero.getCreateur(), q_feves_forastero);;
+}
+/**
+ * @param nb_feves_criollo the nb_feves_criollo to set
+ */
+public void setNb_feves_criollo(double q_feves_criollo) {
+	this.nb_feves_criollo.setValeur(nb_feves_criollo.getCreateur(), q_feves_criollo);;
+}
+/**
+ * @param qt_pate_bassegamme the qt_pate_bassegamme to set
+ */
+public void setQt_pate_bassegamme(double q_pate_bassegamme) {
+	this.qt_pate_bassegamme.setValeur(qt_pate_bassegamme.getCreateur(), q_pate_bassegamme);;
+}
+/**
+ * @param qt_pate_hautegamme the qt_pate_hautegamme to set
+ */
+public void setQt_pate_hautegamme(double q_pate_hautegamme) {
+	this.qt_pate_hautegamme.setValeur(qt_pate_hautegamme.getCreateur(), q_pate_hautegamme);;
+}
+public void setVariables(double q1,double q2,double q3,double q4,double q5) {
+	this.setNb_feves_trinitario( q1);
+	this.setNb_feves_forastero( q2);
+	this.setNb_feves_criollo( q3);
+	this.setQt_pate_bassegamme( q4);
+	this.setQt_pate_hautegamme( q5);
+}
 }
