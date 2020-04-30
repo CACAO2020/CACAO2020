@@ -23,11 +23,11 @@ public class Producteur2 implements IActeur {
 	}
 	
 	public String getNom() {
-		return "EQ2";
+		return "Moulacao";
 	}
 
 	public String getDescription() {
-		return "Producteur bla bla bla";
+		return "Producteur 2, basé au Ghana. Nous représentons une coopérative de producteurs, avec pour but principal de garantir les meilleures conditions de vie possible à nos producteurs";
 	}
 
 	public Color getColor() {
