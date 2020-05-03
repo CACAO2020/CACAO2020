@@ -421,7 +421,7 @@ public class FenetreGraphique extends JFrame implements MouseListener, Component
 					maxTitre = (int)(gc.getFontMetrics().getStringBounds(this.getCourbe(i).getTitre(), gc).getBounds().getWidth());
 				}
 			}
-			int nbTitresParligne = (this.droite-this.gauche)/(this.largeurTraitLegende+6+maxTitre);
+			int nbTitresParligne = Math.max(1, (this.droite-this.gauche)/(this.largeurTraitLegende+6+maxTitre));
 			int largeurTitre = (this.droite-this.gauche)/nbTitresParligne;
 			int nbLignes = this.nbCourbes()/nbTitresParligne;
 			if (nbLignes*nbTitresParligne != this.nbCourbes()) {
