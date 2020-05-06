@@ -1,5 +1,5 @@
 package abstraction.eq3Transformateur1;
-
+import abstraction.eq8Romu.cacaoCriee.LotCacaoCriee;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
