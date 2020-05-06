@@ -82,6 +82,11 @@ public class Transformateur2 implements IActeur, IVendeurChocolatBourse {
 	
 	public void notificationOperationBancaire(double montant) {
 	}
+	
+//Connaitre notre solde
+	public double getSolde() {
+		return Filiere.LA_FILIERE.getBanque().getSolde(Filiere.LA_FILIERE.getActeur(this.getNom()), this.cryptogramme);
+	}
 
 // Vente de chocololat
 	public double getOffre(Chocolat chocolat, double cours) {
