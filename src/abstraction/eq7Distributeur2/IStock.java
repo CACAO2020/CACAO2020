@@ -6,7 +6,7 @@ import java.util.List;
 public interface IStock {
 	//raphael G
 
-	public List<Integer> getStocks();   //informe sur les 6 stocks différents
+	public List<Integer> getStocks();   //informe sur les 6 stocks différents dans une liste
 	
 	public List<Integer> quantitesRecues(); //Indique quantitées recues par le protocole d'achat
 	
