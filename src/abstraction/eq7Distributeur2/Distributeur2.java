@@ -11,15 +11,19 @@ import abstraction.fourni.Variable;
 
 public class Distributeur2 implements IActeur {
 
+	private Variable stockFeves;
+	private Variable stockChocolat;
 	private Integer cryptogramme;
 	private Journal journalEq7;
 	
 	public Distributeur2() {
+		this.stockFeves = new Variable(getNom()+" stock feves", this, 0);
+		this.stockChocolat = new Variable(getNom()+" stock chocolat", this, 0);
 		this.journalEq7 = new Journal("Eq7 activites", this);
 	}
 	
 	public String getNom() {
-		return "EQ7 : Ecocoa de Liege";
+		return "EQ7";
 	}
 
 	public String getDescription() {
@@ -52,6 +56,8 @@ public class Distributeur2 implements IActeur {
 	
 	public List<Variable> getIndicateurs() {
 		List<Variable> res=new ArrayList<Variable>();
+		res.add(this.stockFeves);
+		res.add(this.stockChocolat);
 		return res;
 	}
 
