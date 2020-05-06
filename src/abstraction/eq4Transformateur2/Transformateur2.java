@@ -8,9 +8,11 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import abstraction.eq8Romu.chocolatBourse.IVendeurChocolatBourse;
+import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.fourni.Filiere;
 
-public class Transformateur2 implements IActeur {
+public class Transformateur2 implements IActeur, IVendeurChocolatBourse {
 	
 	private Variable stockFeves;
 	private Variable stockChocolat;
@@ -80,4 +82,26 @@ public class Transformateur2 implements IActeur {
 	
 	public void notificationOperationBancaire(double montant) {
 	}
+
+// Vente de chocololat
+	public double getOffre(Chocolat chocolat, double cours) {
+		if (cours >= this.getPrixMinVenteChoco()) {
+			return stockChocolat.getValeur();
+		}
+		else {
+			return 0;
+		}
+	}
+
+	public void livrer(Chocolat chocolat, double quantite) {
+		stockChocolat.retirer(this, quantite);
+	}
+
+/* Fonction qui donnera le prix minimum pour qu'on veuille vendre notre chocolat
+ * Pourra être implémentée une fois qu'on saura calculer le cout de production du chocolat
+ */
+	public double getPrixMinVenteChoco() {
+		return 0;
+	}
+	
 }
