@@ -11,7 +11,7 @@ import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
-public class AbsAcheteurCacaoCriee implements IActeur {
+public class AcheteurCacaoCrieeAbs implements IActeur {
 	private static int NB_INSTANCES = 0; // Afin d'attribuer un nom different a toutes les instances
 	private int numero;
 	private Variable totalStocksFeves;
@@ -19,7 +19,7 @@ public class AbsAcheteurCacaoCriee implements IActeur {
 	protected Integer cryptogramme;
 	protected Journal journal;
 
-	public AbsAcheteurCacaoCriee() {
+	public AcheteurCacaoCrieeAbs() {
 		NB_INSTANCES++;
 		this.numero=NB_INSTANCES;
 		this.totalStocksFeves=new Variable(getNom()+" total stocks feves", this, 50);

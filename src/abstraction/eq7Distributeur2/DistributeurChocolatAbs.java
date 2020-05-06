@@ -10,23 +10,25 @@ import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
-public class AbsDistributeurChocolat implements IActeur {
+public class DistributeurChocolatAbs implements IActeur {
 	private static int NB_INSTANCES = 0; // Afin d'attribuer un nom different a toutes les instances
 	protected int numero;
 	protected Variable stockChocolat;
+	protected Variable stockFeves;
 	protected Integer cryptogramme;
 	protected Chocolat chocolat;
 	protected Journal journal;
-
-	public AbsDistributeurChocolat(Chocolat choco) {	
+	
+	public DistributeurChocolatAbs(Chocolat choco) {	
 		if (choco==null) {
 			throw new IllegalArgumentException("creation d'une instance de ExempleAbsDistributeurChocolat avec choco==null");
 		}		
 		NB_INSTANCES++;
 		this.numero=NB_INSTANCES;
 		this.chocolat = choco;
+		this.stockFeves = new Variable(getNom()+" stock feves", this, 0);
 		this.stockChocolat=new Variable(getNom()+" stock "+choco.name(), this, 0, 10000, 1000);
-		this.journal = new Journal(this.getNom()+" activites", this);
+		this.journal = new Journal("Eq7 activitesS", this);
 	}
 	
 	public String getNom() {
@@ -57,6 +59,7 @@ public class AbsDistributeurChocolat implements IActeur {
 
 	public List<Variable> getIndicateurs() {
 		List<Variable> res=new ArrayList<Variable>();
+		res.add(this.stockFeves);
 		res.add(this.stockChocolat);
 		return res;
 	}
@@ -67,9 +70,9 @@ public class AbsDistributeurChocolat implements IActeur {
 	}
 
 	public List<Journal> getJournaux() {
-		List<Journal> j= new ArrayList<Journal>();
-		j.add(this.journal);
-		return j;
+		List<Journal> res=new ArrayList<Journal>();
+		res.add(this.journal);
+		return res;
 	}
 
 	public void setCryptogramme(Integer crypto) {
@@ -77,6 +80,11 @@ public class AbsDistributeurChocolat implements IActeur {
 	}
 	
 	public void notificationFaillite(IActeur acteur) {
+		if (this==acteur) {
+			System.out.println("I'll be back... or not... "+this.getNom());
+			} else {
+				System.out.println("Poor "+acteur.getNom()+"... We will miss you. "+this.getNom());
+			}
 	}
 	
 	public void notificationOperationBancaire(double montant) {

@@ -12,7 +12,7 @@ import abstraction.eq8Romu.produits.Feve;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.Journal;
 
-public class AcheteurCacaoCriee extends AbsAcheteurCacaoCriee implements IAcheteurCacaoCriee {
+public class AcheteurCacaoCriee extends AcheteurCacaoCrieeAbs implements IAcheteurCacaoCriee {
 	private Map<Feve, Double> prixCourant;
 
 	public AcheteurCacaoCriee() {
