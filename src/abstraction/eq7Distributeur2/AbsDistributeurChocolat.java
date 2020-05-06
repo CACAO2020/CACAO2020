@@ -13,28 +13,22 @@ import abstraction.fourni.Variable;
 public class AbsDistributeurChocolat extends Stock implements IActeur {
 	private static int NB_INSTANCES = 0; // Afin d'attribuer un nom different a toutes les instances
 	protected int numero;
-	protected Variable stockChocolat;
 	protected Integer cryptogramme;
-	protected Chocolat chocolat;
 	protected Journal journal;
 
-	public AbsDistributeurChocolat(Chocolat choco) {	
-		if (choco==null) {
-			throw new IllegalArgumentException("creation d'une instance de ExempleAbsDistributeurChocolat avec choco==null");
-		}		
+	public AbsDistributeurChocolat() {	
+		
 		NB_INSTANCES++;
 		this.numero=NB_INSTANCES;
-		this.chocolat = choco;
-		this.stockChocolat=new Variable(getNom()+" stock "+choco.name(), this, 0, 10000, 1000);
 		this.journal = new Journal(this.getNom()+" activites", this);
 	}
 	
 	public String getNom() {
-		return "D.Choco"+this.numero+""+chocolat.name();
+		return "D.Choco"+this.numero;
 	}
 
 	public String getDescription() {
-		return "Distributeur de chocolat "+this.numero+" "+this.chocolat.name();
+		return "Distributeur de chocolat "+this.numero;
 	}
 
 	public Color getColor() {
@@ -57,7 +51,6 @@ public class AbsDistributeurChocolat extends Stock implements IActeur {
 
 	public List<Variable> getIndicateurs() {
 		List<Variable> res=new ArrayList<Variable>();
-		res.add(this.stockChocolat);
 		return res;
 	}
 

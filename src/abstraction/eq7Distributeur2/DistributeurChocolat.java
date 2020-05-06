@@ -17,27 +17,22 @@ public class DistributeurChocolat extends AbsDistributeurChocolat implements IDi
 	private double capaciteDeVente;
 	private double prix;
 
-	public DistributeurChocolat(Chocolat choco, double capaciteDeVente, double prix) {
-		super(choco);
-		this.capaciteDeVente = capaciteDeVente;
-		this.prix = prix;
+	public DistributeurChocolat() {
+
 	}
 
 	public boolean commercialise(Chocolat choco) {
-		return (this.chocolat.equals(choco)); // ne commercialise qu'un seul chocolat
+		return false;
 	}
 
 	public double quantiteEnVente(Chocolat choco) {
-		return Math.min(capaciteDeVente, stockChocolat.getValeur());
+		return 0.;
 	}
 
 	public double prix(Chocolat choco) {
-		return this.prix;
+		return 0.;
 	}
 
 	public void vendre(ClientFinal client, Chocolat choco, double quantite) {
-		if (client!=null) { // permet de verifier que c'est bien un client final qui appelle cette methode car les autres acteurs n'ont aucun moyen de connaitre la reference vers l'unique instance de ClientFinal
-			stockChocolat.retirer(client, quantite);
-		}
 	}
 }
