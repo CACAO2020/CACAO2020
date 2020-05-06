@@ -33,7 +33,7 @@ public class AbsAcheteurCacaoCriee implements IActeur {
 	public String getNom() {
 		return "A.CacaoCriee"+numero;
 	}
-
+ 
 	public String getDescription() {
 		return "Acheteur de cacao a la criee "+this.numero;
 	}
