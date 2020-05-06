@@ -2,9 +2,7 @@ package abstraction.eq7Distributeur2;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.fourni.Filiere;
@@ -12,51 +10,41 @@ import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
-public class AcheteurChocolatBourseAbs implements IActeur {
+public class AbsDistributeurChocolat extends Stock implements IActeur {
 	private static int NB_INSTANCES = 0; // Afin d'attribuer un nom different a toutes les instances
-	private int numero;
-	private Variable totalStocksChocolat;
-	protected Map<Chocolat, Variable> stocksChocolat;
+	protected int numero;
+	protected Variable stockChocolat;
 	protected Integer cryptogramme;
+	protected Chocolat chocolat;
 	protected Journal journal;
 
-	public AcheteurChocolatBourseAbs() {
+	public AbsDistributeurChocolat(Chocolat choco) {	
+		if (choco==null) {
+			throw new IllegalArgumentException("creation d'une instance de ExempleAbsDistributeurChocolat avec choco==null");
+		}		
 		NB_INSTANCES++;
 		this.numero=NB_INSTANCES;
-		this.totalStocksChocolat=new Variable(getNom()+" total stocks chocolat", this, 0);
-		stocksChocolat=new HashMap<Chocolat, Variable>();
-		for (Chocolat choco : Chocolat.values()) {
-			stocksChocolat.put(choco, new Variable(getNom()+" stock "+choco.name(), this, 0));
-		}
+		this.chocolat = choco;
+		this.stockChocolat=new Variable(getNom()+" stock "+choco.name(), this, 0, 10000, 1000);
 		this.journal = new Journal(this.getNom()+" activites", this);
 	}
 	
 	public String getNom() {
-		return "A.ChocoBourse"+numero;
+		return "D.Choco"+this.numero+""+chocolat.name();
 	}
 
 	public String getDescription() {
-		return "Acheteur de chocolat a la bourse "+this.numero;
+		return "Distributeur de chocolat "+this.numero+" "+this.chocolat.name();
 	}
-	
+
 	public Color getColor() {
-		return new Color(((numero)*(128/NB_INSTANCES)), ((numero)*(255/NB_INSTANCES)), 128+(numero)*(127/NB_INSTANCES));
+		return new Color(128+((numero)*(127/NB_INSTANCES)), 64+((numero)*(191/NB_INSTANCES)), 0);
 	}
 
 	public void initialiser() {
 	}
 
-	public void setCryptogramme(Integer crypto) {
-		this.cryptogramme = crypto;
-	}
 	public void next() {
-		double total=0.0;
-		for (Chocolat choco :Chocolat.values()) {
-			if (stocksChocolat.get(choco)!=null) {
-				total=total+stocksChocolat.get(choco).getValeur();
-			}
-		}
-		this.totalStocksChocolat.setValeur(this, total);
 	}
 
 	public List<String> getNomsFilieresProposees() {
@@ -66,13 +54,10 @@ public class AcheteurChocolatBourseAbs implements IActeur {
 	public Filiere getFiliere(String nom) {
 		return null;
 	}
-	
+
 	public List<Variable> getIndicateurs() {
 		List<Variable> res=new ArrayList<Variable>();
-		for (Chocolat choco :Chocolat.values()) {
-			res.add(stocksChocolat.get(choco));
-		}
-		res.add(this.totalStocksChocolat);
+		res.add(this.stockChocolat);
 		return res;
 	}
 
@@ -85,6 +70,10 @@ public class AcheteurChocolatBourseAbs implements IActeur {
 		List<Journal> j= new ArrayList<Journal>();
 		j.add(this.journal);
 		return j;
+	}
+
+	public void setCryptogramme(Integer crypto) {
+		this.cryptogramme = crypto;
 	}
 	
 	public void notificationFaillite(IActeur acteur) {

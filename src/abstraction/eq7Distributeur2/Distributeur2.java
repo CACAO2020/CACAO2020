@@ -9,7 +9,7 @@ import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
-public class Distributeur2 implements IActeur {
+public class Distributeur2 extends AcheteurChocolatBourse implements IActeur {
 	
 	private Integer cryptogramme;
 	private Journal journalEq7;
