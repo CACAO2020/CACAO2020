@@ -13,13 +13,21 @@ public class Distributeur2 implements IActeur {
 	
 	private Integer cryptogramme;
 	private Journal journalEq7;
-	private Variable stockChocolat;
-	private Variable stockFeves;
+	private Variable stockChocolatHG;
+	private Variable stockChocolatHGE;
+	private Variable stockChocolatMG;
+	private Variable stockChocolatMGE;
+	private Variable stockFevesHG;
+	private Variable stockFevesHGE;
 
 	public Distributeur2() {
 		this.journalEq7 = new Journal("Eq7 activites", this);
-		this.stockChocolat = new Variable(getNom()+" stock chocolat", this, 0, 10000, 1000);
-		this.stockFeves = new Variable(getNom()+" stock feves", this, 0, 10000, 1000);
+		this.stockChocolatHG = new Variable(getNom()+" stock chocolat haut de gamme", this, 0, 10000, 1000);
+		this.stockChocolatHGE = new Variable(getNom()+" stock chocolat haut de gamme équitable", this, 0, 10000, 1000);
+		this.stockChocolatMG = new Variable(getNom()+" stock chocolat moyenne gamme", this, 0, 10000, 1000);
+		this.stockChocolatMGE = new Variable(getNom()+" stock chocolat moyenne gamme équitable", this, 0, 10000, 1000);
+		this.stockFevesHG = new Variable(getNom()+" stock feves haut de gamme", this, 0, 10000, 1000);
+		this.stockFevesHGE = new Variable(getNom()+" stock feves haut de gamme équitables", this, 0, 10000, 1000);
 	}
 
 	public String getNom() {
@@ -54,8 +62,12 @@ public class Distributeur2 implements IActeur {
 
 	public List<Variable> getIndicateurs() {
 		List<Variable> res=new ArrayList<Variable>();
-		res.add(this.stockChocolat);
-		res.add(this.stockFeves);
+		res.add(this.stockChocolatHG);
+		res.add(this.stockChocolatHGE);
+		res.add(this.stockChocolatMG);
+		res.add(this.stockChocolatMGE);
+		res.add(this.stockFevesHG);
+		res.add(this.stockFevesHGE);
 		return res;
 	}
 
