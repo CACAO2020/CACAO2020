@@ -10,12 +10,16 @@ import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
 public class Distributeur2 implements IActeur {
-
+	
 	private Integer cryptogramme;
 	private Journal journalEq7;
+	private Variable stockChocolat;
+	private Variable stockFeves;
 
 	public Distributeur2() {
 		this.journalEq7 = new Journal("Eq7 activites", this);
+		this.stockChocolat = new Variable(getNom()+" stock chocolat", this, 0, 10000, 1000);
+		this.stockFeves = new Variable(getNom()+" stock feves", this, 0, 10000, 1000);
 	}
 
 	public String getNom() {
@@ -27,7 +31,7 @@ public class Distributeur2 implements IActeur {
 	}
 
 	public Color getColor() {
-		return new Color(230, 126, 34);
+		return new Color(240, 195, 15);
 	}
 
 	public void initialiser() {
@@ -50,18 +54,19 @@ public class Distributeur2 implements IActeur {
 
 	public List<Variable> getIndicateurs() {
 		List<Variable> res=new ArrayList<Variable>();
+		res.add(this.stockChocolat);
+		res.add(this.stockFeves);
 		return res;
 	}
 
 	public List<Variable> getParametres() {
 		List<Variable> res=new ArrayList<Variable>();
-		res.add(this.margeMin);
 		return res;
 	}
 
 	public List<Journal> getJournaux() {
 		List<Journal> res=new ArrayList<Journal>();
-		res.add(journalEq6);
+		res.add(journalEq7);
 		return res;
 	}
 
