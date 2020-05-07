@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import abstraction.eq4Transformateur2.Transformateur2;
 import abstraction.eq8Romu.cacaoCriee.IAcheteurCacaoCriee;
 import abstraction.eq8Romu.cacaoCriee.LotCacaoCriee;
 import abstraction.eq8Romu.cacaoCriee.PropositionCriee;
@@ -24,17 +25,17 @@ public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurCh
 
 	private Integer cryptogramme;
 	private Journal journalEq5;
-	protected AchatCacao acheteurCacao;
-	protected AchatPate acheteurPate;
-	protected VenteChocolat VendeurChocolat;
-	protected Tresorerie tresorier;
-	protected Stock stock;
+	private AchatCacao acheteurCacao;
+	private AchatPate acheteurPate;
+	private VenteChocolat vendeurChocolat;
+	private Tresorerie tresorier;
+	private Stock stock;
 
 	public Transformateur3() {
 		this.journalEq5 = new Journal("Eq5 activites", this);
 		this.acheteurCacao = new AchatCacao(this); //needs to be filled with parameters this will work for now
 		this.acheteurPate = new AchatPate(this); 
-		this.VendeurChocolat = new VenteChocolat(this); 
+		this.vendeurChocolat = new VenteChocolat(this); 
 		this.tresorier = new Tresorerie(this);
 		this.stock = new Stock(this);
 	}
@@ -59,6 +60,8 @@ public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurCh
 	}
 
 	public void next() {
+		stock.next();
+		tresorier.next();
 	}
 
 	public List<String> getNomsFilieresProposees() {
@@ -104,7 +107,7 @@ public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurCh
 	// Vente de Chocolat en bourse IVenteChocolatBourse
 	
 	public double getOffre(Chocolat chocolat, double cours) {
-		return this.VendeurChocolat.getOffre(chocolat, cours);
+		return this.vendeurChocolat.getOffre(chocolat, cours);
 		
 	}
 
@@ -147,9 +150,28 @@ public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurCh
 
 	
 	public Integer getCryptogramme(SuperviseurVentesCacaoAleatoires superviseur) {
-		
 		return superviseur == null ? Integer.valueOf(0) : this.cryptogramme ;
 	}
 	//TODO ajouter les methodes pour acheter de la pate de cacao
+
+	protected AchatCacao getAcheteurCacao() {
+		return acheteurCacao;
+	}
+
+	protected AchatPate getAcheteurPate() {
+		return acheteurPate;
+	}
+
+	protected VenteChocolat getVendeurChocolat() {
+		return vendeurChocolat;
+	}
+
+	protected Tresorerie getTresorier() {
+		return tresorier;
+	}
+
+	protected Stock getStock() {
+		return stock;
+	}
 
 }
