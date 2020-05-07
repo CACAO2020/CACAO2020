@@ -3,6 +3,8 @@ package abstraction.eq7Distributeur2;
 import abstraction.eq8Romu.clients.ClientFinal;
 import abstraction.eq8Romu.clients.IDistributeurChocolat;
 import abstraction.eq8Romu.produits.Chocolat;
+//import abstraction.eq8Romu.produits.Gamme;
+//import abstraction.fourni.Filiere;
 
 /**
  * 
@@ -34,5 +36,9 @@ public class DistributeurChocolat extends AbsDistributeurChocolat implements IDi
 	}
 
 	public void vendre(ClientFinal client, Chocolat choco, double quantite) {
+	}
+	
+	public void next() {
+		//Filiere.LA_FILIERE.getVentes(-24, new Chocolat(Gamme.HAUTE, false, false));
 	}
 }
