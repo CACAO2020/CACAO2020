@@ -66,7 +66,6 @@ public class Stock extends Distributeur1 implements IStock{ /** @author Avril Th
 	@Override
 	public void destocker() {
 		
-		
 	}
 
 	@Override
