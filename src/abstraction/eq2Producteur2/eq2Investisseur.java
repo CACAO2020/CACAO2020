@@ -14,8 +14,8 @@ public class eq2Investisseur extends eq2Vendeur {
 
 	private Variable prixArbre; 
 
-	public eq2Investisseur(IActeur createur, List<PaquetArbres> Arbres,Journal journal,double init1, double init2, double init3, double init4, double init5,double init6,double init7, double init8, double init9, double init10, Variable prixTF, Variable prixTT, Variable prixTC, Variable prixTPBG, Variable prixTPHG, Variable prixArbre) {
-		super(createur, Arbres ,journal,init1, init2, init3, init4, init5,init6,init7,init8,init9,init10, prixTF, prixTT,prixTC,prixTPBG, prixTPHG);
+	public eq2Investisseur( Variable prixArbre) {
+		super();
 		this.prixArbre = prixArbre;
 		// TODO Auto-generated constructor stub
 	}

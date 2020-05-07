@@ -26,8 +26,8 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 	private Variable propal_masses;
 
 	
-	public eq2Vendeur(IActeur createur,List<PaquetArbres> Arbres,Journal journal, double init1, double init2, double init3, double init4, double init5, double init6,double init7, double init8, double init9, double init10,Variable prixTF, Variable prixTT, Variable prixTC, Variable prixTPBG, Variable prixTPHG) {
-		super(createur, Arbres , journal,init1, init2, init3, init4, init5,init6,init7,init8,init9,init10);
+	public eq2Vendeur(Variable prixTF, Variable prixTT, Variable prixTC, Variable prixTPBG, Variable prixTPHG) {
+		super();
 		this.prixTF = prixTF;
 		this.prixTT = prixTT;
 		this.prixTC = prixTC;

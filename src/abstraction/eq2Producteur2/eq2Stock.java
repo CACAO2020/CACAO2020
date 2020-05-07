@@ -33,19 +33,22 @@ public class eq2Stock extends eq2Acteur{
 	 * @param qt_pate_bassegamme
 	 * @param qt_pate_hautegamme
 	 */
-	public eq2Stock( IActeur createur,List<PaquetArbres> Arbres,Journal journal,double init1, double init2, double init3, double init4, double init5,double init6, double init7, double init8, double init9, double init10) {
-		super(Arbres , journal);
-		this.masse_feves_trinitario = new Variable("masse_feves_trinitario", createur, init1);
-		this.masse_feves_forastero = new Variable("masse_feves_forastero", createur, init2);
-		this.masse_feves_criollo = new Variable("masse_feves_criollo", createur, init3 );
-		this.qt_pate_bassegamme = new Variable("qt_pate_bassegamme", createur, init4);
-		this.qt_pate_hautegamme = new Variable("qt_pate_hautegamme", createur, init5);
-		this.masse_feves_trinitario_bio = new Variable("masse_feves_trinitario_bio", createur, init6);
-		this.masse_feves_forastero_bio = new Variable("masse_feves_forastero_bio", createur, init7);
-		this.masse_feves_criollo_bio = new Variable("masse_feves_criollo_bio", createur, init8 );
-		this.qt_pate_bassegamme_bio = new Variable("qt_pate_bassegamme_bio", createur, init9);
-		this.qt_pate_hautegamme_bio = new Variable("qt_pate_hautegamme_bio", createur, init10);
+	public eq2Stock() {
+		super();
+		this.masse_feves_trinitario = new Variable("masse_feves_trinitario", this, 0);
+		this.masse_feves_forastero = new Variable("masse_feves_forastero", this, 0);
+		this.masse_feves_criollo = new Variable("masse_feves_criollo", this, 0 );
+		this.qt_pate_bassegamme = new Variable("qt_pate_bassegamme", this, 0);
+		this.qt_pate_hautegamme = new Variable("qt_pate_hautegamme", this, 0);
+		this.masse_feves_trinitario_bio = new Variable("masse_feves_trinitario_bio", this, 0);
+		this.masse_feves_forastero_bio = new Variable("masse_feves_forastero_bio", this, 0);
+		this.masse_feves_criollo_bio = new Variable("masse_feves_criollo_bio", this, 0 );
+		this.qt_pate_bassegamme_bio = new Variable("qt_pate_bassegamme_bio", this, 0);
+		this.qt_pate_hautegamme_bio = new Variable("qt_pate_hautegamme_bio", this, 0);
 	}
+	
+
+	
  public List<Variable> getVariables() {
 	 List<Variable> variables=new ArrayList<Variable>();
 	 variables.add(this.masse_feves_forastero);
@@ -131,7 +134,7 @@ public void setVariables(double q1,double q2,double q3,double q4,double q5,doubl
 	this.setQt_pate_bassegamme_bio( q9);
 	this.setQt_pate_hautegamme_bio( q10);
 }
-public void setCoutStockage(IActeur createur,double cout) {
-	this.coutStockage.setValeur(createur, cout);
+public void setCoutStockage(double cout) {
+	this.coutStockage.setValeur(this, cout);
 }
 }
