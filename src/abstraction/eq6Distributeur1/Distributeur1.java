@@ -19,7 +19,7 @@ import abstraction.fourni.Variable;
 public class Distributeur1 implements IActeur, IAcheteurChocolatBourse {
 
 	private Variable margeMin;
-	private Integer cryptogramme;
+	protected Integer cryptogramme;
 	private Journal journalEq6;
 	private Prix gestionprix;
 	private HashMap<Chocolat, Double> quantitevendueparstep;
