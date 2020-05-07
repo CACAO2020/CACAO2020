@@ -19,7 +19,7 @@ public class eq2Acteur implements IActeur {
 	private Integer cryptogramme;
 	private List<Variable> parametres;
 
-	public eq2Acteur(List<PaquetArbres> Arbres) {
+	public eq2Acteur() {
 		this.journalEq2 = new Journal("Journal Principal", this);
 		this.PaquetsArbres = new ArrayList<PaquetArbres>();
 		this.parametres = new ArrayList<Variable>();
