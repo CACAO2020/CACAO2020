@@ -66,15 +66,7 @@ public class Distributeur2 implements IActeur {
 	}
 
 	public List<Variable> getIndicateurs() {
-		List<Variable> res=new ArrayList<Variable>();
-		for (Chocolat choco : Chocolat.values()) {
-			res.add(stock.stocksChocolat.get(choco));
-		}
-		for (Feve feve : Feve.values()) {
-			res.add(stock.stocksFeves.get(feve));
-		}
-		System.out.println(res);
-		return res;
+		return stock.getIndicateurs();
 	}
 
 	public List<Variable> getParametres() {
