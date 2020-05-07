@@ -52,7 +52,7 @@ public class AcheteurCacao extends Stock implements abstraction.eq8Romu.cacaoCri
 	}
 	
 	public void notifierVente(PropositionCriee proposition) {
-		this.setStockFeves(proposition.getLot().getFeve(), proposition.getQuantiteEnTonnes());
+		this.setStockFeves(proposition.getLot().getFeve(), proposition.getQuantiteEnTonnes(),proposition.getPrixPourLeLot());
 		System.out.println("Lot " + proposition.getLot().toString() + ", de " + proposition.getVendeur().toString() + ", au prix" + proposition.getPrixPourLeLot() + " a été effectué");
 		
 	}

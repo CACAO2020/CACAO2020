@@ -11,22 +11,8 @@ import abstraction.eq8Romu.produits.Feve;
 import abstraction.eq8Romu.produits.Gamme;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;;
-public abstract class VendeurChocolat extends Stock implements IVendeurChocolatBourse {
+public abstract class VendeurChocolat extends AcheteurCacao implements IVendeurChocolatBourse {
 
-	private static int NB_INSTANCES = 0;
-	private int numeroVendeur;
-	private Chocolat chocolat;
-	
-	/** @author K. GUTIERREZ  */
-	public VendeurChocolat(Chocolat chocolat) {	
-		if (chocolat==null) {
-			throw new IllegalArgumentException("chocolat==null");
-		}		
-		NB_INSTANCES++;
-		this.numeroVendeur = NB_INSTANCES;
-		this.chocolat = chocolat;
-	}
-	
 	/** @author K. GUTIERREZ  */
 	public double getOffre(Chocolat chocolat, double cours) {
 		return cours*((Variable) stockChocolat).getValeur();
