@@ -5,6 +5,7 @@ import java.util.Map;
 import abstraction.eq8Romu.chocolatBourse.IAcheteurChocolatBourse;
 import abstraction.eq8Romu.chocolatBourse.SuperviseurChocolatBourse;
 import abstraction.eq8Romu.produits.Chocolat;
+import abstraction.eq8Romu.produits.ChocolatDeMarque;
 import abstraction.eq8Romu.produits.Feve;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
@@ -62,6 +63,12 @@ public class AcheteurChocolatBourse extends AbsAcheteurChocolatBourse implements
 			
 		
 		}
+	}
+
+	@Override
+	public void receptionner(ChocolatDeMarque chocolat, double quantite) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
