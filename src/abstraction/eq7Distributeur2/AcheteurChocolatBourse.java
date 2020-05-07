@@ -25,9 +25,6 @@ public class AcheteurChocolatBourse extends AbsAcheteurChocolatBourse implements
 		if (payee) {s = "Commande payée";}
 		else {s = "Commande non payée";}
 		s = s + "de " + chocolat.getGamme();
-		if (chocolat.isBio()) {
-			s = s + "Bio";
-		}
 		if (chocolat.isEquitable()) {
 			s = s + "Equitable";
 		}
