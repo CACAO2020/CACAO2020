@@ -13,7 +13,7 @@ import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
-public class AbsAcheteurCacaoCriee {
+public class AbsAcheteurCacaoCriee implements IActeur {
 	protected Integer cryptogramme;
 	protected Journal journal;
 	protected Distributeur2 ac;

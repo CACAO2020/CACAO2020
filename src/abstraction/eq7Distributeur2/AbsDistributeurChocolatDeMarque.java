@@ -10,7 +10,7 @@ import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
-public class AbsDistributeurChocolatDeMarque {
+public class AbsDistributeurChocolatDeMarque implements IActeur {
 	protected Integer cryptogramme;
 	protected Journal journal;
 

@@ -12,7 +12,7 @@ import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
-public class AbsAcheteurChocolatBourse {
+public class AbsAcheteurChocolatBourse implements IActeur {
 	private Map<Chocolat, Variable> demandeChoco;
 	protected Integer cryptogramme;
 	protected Journal journal;

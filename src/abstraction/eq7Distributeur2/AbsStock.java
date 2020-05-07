@@ -13,7 +13,7 @@ import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
-public class AbsStock {
+public class AbsStock implements IActeur {
 
 	private Variable totalStocksChocolat;
 	protected Map<Chocolat, Variable> stocksChocolat;
@@ -73,16 +73,59 @@ public class AbsStock {
 		return res;
 	}
 
-
 	public List<Variable> getParametres() {
 		return null;
 	}
-
 
 	public List<Journal> getJournaux() {
 		List<Journal> res = new ArrayList<Journal>();
 		res.add(journal);
 		return res;
+	}
+
+	public String getDescription() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Color getColor() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void initialiser() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void next() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public List<String> getNomsFilieresProposees() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Filiere getFiliere(String nom) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setCryptogramme(Integer crypto) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void notificationFaillite(IActeur acteur) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void notificationOperationBancaire(double montant) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
