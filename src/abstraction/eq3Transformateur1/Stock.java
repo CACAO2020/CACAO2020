@@ -25,7 +25,7 @@ public class Stock extends ActeurEQ3 {
 		StockFeves.put(feve,quantite+StockFeves.get(feve));
 	}
 	public void setStockChocolat(Chocolat chocolat,Double quantite) {
-		StockChocolat.put(chocolat,);
+		StockChocolat.put(chocolat,quantite+StockChocolat.get(chocolat));
 	}
 	
 
