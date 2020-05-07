@@ -9,7 +9,7 @@ import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 import abstraction.fourni.Filiere;
 
-public class Transformateur1 extends VendeurChocolat {
+public class Transformateur1 extends VendeurChocolatBourse {
 	
 
 }
