@@ -15,9 +15,13 @@ public class eq2Acteur implements IActeur {
 	 * 
 	 */
 	private List<PaquetArbres> PaquetsArbres;
-	private Variable stockFeves;
 	private Journal journalEq2;
 	private Integer cryptogramme;
+
+	public eq2Acteur(List<PaquetArbres> Arbres,Journal journal) {
+		this.journalEq2 = journal;
+		this.PaquetsArbres = Arbres;
+	}
 	
 	public List<PaquetArbres> getPaquetsArbres(){
 		return this.PaquetsArbres;
@@ -65,7 +69,6 @@ public class eq2Acteur implements IActeur {
 	@Override
 	public List<Variable> getIndicateurs() {
 		List<Variable> res=new ArrayList<Variable>();
-		res.add(this.stockFeves);
 		return res;
 	}
 

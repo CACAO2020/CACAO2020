@@ -4,6 +4,7 @@ package abstraction.eq2Producteur2;
 import java.util.ArrayList;
 import java.util.List;
 import abstraction.fourni.IActeur;
+import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
 
@@ -22,6 +23,9 @@ public class eq2Stock extends eq2Acteur{
 	private Variable qt_pate_hautegamme;
 	private Variable qt_pate_bassegamme_bio;
 	private Variable qt_pate_hautegamme_bio;
+	private Variable coutStockage;
+
+	
 	/**
 	 * @param masse_feves_trinitario
 	 * @param masse_feves_forastero
@@ -29,7 +33,8 @@ public class eq2Stock extends eq2Acteur{
 	 * @param qt_pate_bassegamme
 	 * @param qt_pate_hautegamme
 	 */
-	public eq2Stock( IActeur createur,double init1, double init2, double init3, double init4, double init5,double init6, double init7, double init8, double init9, double init10) {
+	public eq2Stock( IActeur createur,List<PaquetArbres> Arbres,Journal journal,double init1, double init2, double init3, double init4, double init5,double init6, double init7, double init8, double init9, double init10) {
+		super(Arbres , journal);
 		this.masse_feves_trinitario = new Variable("masse_feves_trinitario", createur, init1);
 		this.masse_feves_forastero = new Variable("masse_feves_forastero", createur, init2);
 		this.masse_feves_criollo = new Variable("masse_feves_criollo", createur, init3 );
@@ -126,8 +131,7 @@ public void setVariables(double q1,double q2,double q3,double q4,double q5,doubl
 	this.setQt_pate_bassegamme_bio( q9);
 	this.setQt_pate_hautegamme_bio( q10);
 }
-public double coutStockage() {
-	double coutFixe = 10;
-	return coutFixe*(this.masse_feves_criollo.getValeur()+this.masse_feves_forastero.getValeur()+this.masse_feves_trinitario.getValeur()+this.qt_pate_bassegamme.getValeur()+this.qt_pate_hautegamme.getValeur());
+public void setCoutStockage(IActeur createur,double cout) {
+	this.coutStockage.setValeur(createur, cout);
 }
 }
