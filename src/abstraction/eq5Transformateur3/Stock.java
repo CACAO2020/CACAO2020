@@ -18,6 +18,7 @@ public class Stock {
      * Elle est agrégé dans la classe Transformateur3.
      */
 	
+	/** Les couples de variables donne la quantité et le prix à la tonne associé*/
 	private Transformateur3 acteur;
 	private Map<Feve, List<Couple<Variable>>> stockFeves;
 	private Map<Chocolat, List<Couple<Variable>>> stockChocolat;
@@ -32,18 +33,12 @@ public class Stock {
 		this.stockFeves.get(Feve.FEVE_BASSE).add(new Couple<Variable>(new Variable(acteur.getNom() + "Stock", acteur, 50),
 			new Variable(acteur.getNom() + "Prix", acteur, 0)));
 		this.stockFeves.put(Feve.FEVE_MOYENNE, new ArrayList<Couple<Variable>>());
-		this.stockFeves.get(Feve.FEVE_MOYENNE).add(new Couple<Variable>(new Variable(acteur.getNom() + "Stock", acteur, 0),
-				new Variable(acteur.getNom() + "Prix", acteur, 0)));
 		this.stockFeves.put(Feve.FEVE_HAUTE, new ArrayList<Couple<Variable>>());
-		this.stockFeves.get(Feve.FEVE_HAUTE).add(new Couple<Variable>(new Variable(acteur.getNom() + "Stock", acteur, 0),
-				new Variable(acteur.getNom() + "Prix", acteur, 0)));
 		this.stockFeves.put(Feve.FEVE_MOYENNE_EQUITABLE, new ArrayList<Couple<Variable>>());
-		this.stockFeves.get(Feve.FEVE_MOYENNE_EQUITABLE).add(new Couple<Variable>(new Variable(acteur.getNom() + "Stock", acteur, 0),
-				new Variable(acteur.getNom() + "Prix", acteur, 0)));
 		this.stockFeves.put(Feve.FEVE_HAUTE_EQUITABLE, new ArrayList<Couple<Variable>>());
-		this.stockFeves.get(Feve.FEVE_HAUTE_EQUITABLE).add(new Couple<Variable>(new Variable(acteur.getNom() + "Stock", acteur, 0),
-				new Variable(acteur.getNom() + "Prix", acteur, 0)));
 		this.stockChocolat.put(Chocolat.CHOCOLAT_BASSE, new ArrayList<Couple<Variable>>());
+		this.stockChocolat.get(Chocolat.CHOCOLAT_BASSE).add(new Couple<Variable>(new Variable(acteur.getNom() + "Stock", acteur, 50),
+			new Variable(acteur.getNom() + "Prix", acteur, 0)));
 		this.stockChocolat.put(Chocolat.CHOCOLAT_MOYENNE, new ArrayList<Couple<Variable>>());
 		this.stockChocolat.put(Chocolat.CHOCOLAT_HAUTE, new ArrayList<Couple<Variable>>());
 		this.stockChocolat.put(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE, new ArrayList<Couple<Variable>>());
@@ -54,44 +49,175 @@ public class Stock {
 		this.stockPate.put(Pate.PATE_MOYENNE_EQUITABLE, new ArrayList<Couple<Variable>>());
 		this.stockPate.put(Pate.PATE_HAUTE_EQUITABLE, new ArrayList<Couple<Variable>>());
 		
+	}
+	
+	public Map<Feve,List<Couple<Variable>>> getStockFeves() {
+		return this.stockFeves;
+	}
+	public Map<Chocolat, List<Couple<Variable>>> getStockChocolat() {
+		return this.stockChocolat;
+	}
+	public Map<Pate, List<Couple<Variable>>> getStockPate() {
+		return this.stockPate;
+	}
+	public double getQuantitéFeves(Feve feve) {
+		List<Couple<Variable>> table = this.getStockFeves().get(feve);
+		double somme = 0;
+		for (int i=0; i<table.size(); i++) {
+			somme = somme + table.get(i).get1().getValeur();
+		}
+		return somme;
+	}
+	public double getQuantitéChocolat(Chocolat choco) {
+		List<Couple<Variable>> table = this.getStockChocolat().get(choco);
+		double somme = 0;
+		for (int i=0; i<table.size(); i++) {
+			somme = somme + table.get(i).get1().getValeur();
+		}
+		return somme;
+	}
+	public double getQuantitéPate(Pate pate) {
+		List<Couple<Variable>> table = this.getStockPate().get(pate);
+		double somme = 0;
+		for (int i=0; i<table.size(); i++) {
+			somme = somme + table.get(i).get1().getValeur();
+		}
+		return somme;
+	}
+	public double getQuantitePrixFeve(Feve feve, double prix) {
+		List<Couple<Variable>> table = this.getStockFeves().get(feve);
+		double somme = 0;
+		for (int i=0; i<table.size(); i++) {
+			if (table.get(i).get2().getValeur()==prix) {
+			somme = somme + table.get(i).get1().getValeur();
+			}
+		}
+		return somme;
+	}
+	public double getQuantitePrixChocolat(Chocolat choco, double prix) {
+		List<Couple<Variable>> table = this.getStockChocolat().get(choco);
+		double somme = 0;
+		for (int i=0; i<table.size(); i++) {
+			if (table.get(i).get2().getValeur()==prix) {
+			somme = somme + table.get(i).get1().getValeur();
+			}
+		}
+		return somme;
+	}
+	public double getQuantitePrixPate(Pate pate, double prix) {
+		List<Couple<Variable>> table = this.getStockPate().get(pate);
+		double somme = 0;
+		for (int i=0; i<table.size(); i++) {
+			if (table.get(i).get2().getValeur()==prix) {
+			somme = somme + table.get(i).get1().getValeur();
+			}
+		}
+		return somme;
+	}
+
+	public void ajoutFeves(Feve feve, double quantite, double prix) {
+		if (quantite>0) {
+		this.stockFeves.get(feve).add(new Couple<Variable>(new Variable(acteur.getNom() + "Stock", acteur, quantite), 
+				new Variable(acteur.getNom() + "Prix", acteur, prix)));
+		} else { throw new IllegalArgumentException("Quantité négative");
+			}
+	}
+
+	public void retirerFevesPrix(Feve feve, double quantite, double prix) {
+		List<Couple<Variable>> table = this.stockFeves.get(feve);
+		double quantiteAEnlever = quantite;
+		int i = 0;
+		if (getQuantitePrixFeve(feve, prix)>= quantite) {
+			while (quantiteAEnlever != 0) {
+				if (table.get(i).get2().getValeur()==prix) {
+					if (table.get(i).get1().getValeur()>=quantiteAEnlever) {
+						table.get(i).get1().retirer(this.acteur, quantiteAEnlever);
+						quantiteAEnlever = 0;
+					} else {
+						quantiteAEnlever -= table.get(i).get1().getValeur();
+						table.get(i).get1().retirer(this.acteur, table.get(i).get1().getValeur());
+					}
+				}
+			}
+		} else { throw new IllegalArgumentException("Quantite trop importante");
+			}
+		
+	}
+	public void retirerPatePrix(Pate pate, double quantite, double prix) {
+		List<Couple<Variable>> table = this.stockPate.get(pate);
+		double quantiteAEnlever = quantite;
+		int i = 0;
+		if (getQuantitePrixPate(pate, prix)>= quantite) {
+			while (quantiteAEnlever != 0) {
+				if (table.get(i).get2().getValeur()==prix) {
+					if (table.get(i).get1().getValeur()>=quantiteAEnlever) {
+						table.get(i).get1().retirer(this.acteur, quantiteAEnlever);
+						quantiteAEnlever = 0;
+					} else {
+						quantiteAEnlever -= table.get(i).get1().getValeur();
+						table.get(i).get1().retirer(this.acteur, table.get(i).get1().getValeur());
+					}
+				}
+			}
+		} else { throw new IllegalArgumentException("Quantite trop importante");
+			}
+		
+	}
+	public void retirerChocolatPrix(Chocolat choco, double quantite, double prix) {
+		List<Couple<Variable>> table = this.stockChocolat.get(choco);
+		double quantiteAEnlever = quantite;
+		int i = 0;
+		if (getQuantitePrixChocolat(choco, prix)>= quantite) {
+			while (quantiteAEnlever != 0) {
+				if (table.get(i).get2().getValeur()==prix) {
+					if (table.get(i).get1().getValeur()>=quantiteAEnlever) {
+						table.get(i).get1().retirer(this.acteur, quantiteAEnlever);
+						quantiteAEnlever = 0;
+					} else {
+						quantiteAEnlever -= table.get(i).get1().getValeur();
+						table.get(i).get1().retirer(this.acteur, table.get(i).get1().getValeur());
+					}
+				}
+			}
+		} else { throw new IllegalArgumentException("Quantite trop importante");
+			}
 		
 	}
 	
-	public Map<Feve,Variable> getStockFeves() {
-		return this.stockFeves;
+	public void ajoutChocolat(Chocolat choco, double quantite, double prix) {
+		if (quantite>0) {
+		this.stockChocolat.get(choco).add(new Couple<Variable>(new Variable(acteur.getNom() + "Stock", acteur, quantite), 
+				new Variable(acteur.getNom() + "Prix", acteur, prix)));
+		} else { throw new IllegalArgumentException("Quantité négative");
+			}
 	}
-	public Map<Chocolat, Variable> getStockChocolat() {
-		return this.stockChocolat;
-	}
-	public Map<Pate, Variable> getStockPate() {
-		return this.stockPate;
-	}
-
-	public void ajoutFeves(Feve feve, double quantite) {
-		this.stockFeves.get(feve).ajouter(acteur, quantite);
-	}
-
-	public void retirerFeves(Feve feve, double quantite) {
-		this.stockFeves.get(feve).retirer(acteur, quantite);
-	}
-	
-	public void ajoutChocolat(Chocolat choco, double quantite) {
-		this.stockChocolat.get(choco).ajouter(acteur, quantite);
-	}	
 
 	public void retirerChocolat(Chocolat choco, double quantite) {
 		this.stockChocolat.get(choco).retirer(acteur, quantite);
 	}
 	
-	public void ajoutPate(Pate pate, double quantite) {
-		this.stockPate.get(pate).ajouter(acteur, quantite);
-	}	
+	public void ajoutPate(Pate pate, double quantite, double prix) {
+		if (quantite>0) {
+		this.stockPate.get(pate).add(new Couple<Variable>(new Variable(acteur.getNom() + "Stock", acteur, quantite), 
+				new Variable(acteur.getNom() + "Prix", acteur, prix)));
+		} else { throw new IllegalArgumentException("Quantité négative");
+			}
+	}
 
 	public void retirerPate(Pate pate, double quantite) {
 		this.stockPate.get(pate).retirer(acteur, quantite);
 	}
 			
 }
+
+
+
+
+
+
+
+
+
 /*
 this.stockFeves.put(Feve.FEVE_BASSE, new Couple((new Variable(acteur.getNom() + " stock feves basse qualité", acteur, 50)));
 this.stockFeves.put(Feve.FEVE_MOYENNE, new Variable(acteur.getNom() + " stock feves moyenne qualité", acteur, 0));
