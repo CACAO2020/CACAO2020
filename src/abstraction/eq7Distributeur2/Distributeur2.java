@@ -31,11 +31,11 @@ public class Distributeur2 extends AcheteurChocolatBourse implements IActeur {
 	}
 
 	public String getNom() {
-		return "EQ7";
+		return "EQ7 : Ecocoa de Liège";
 	}
 
 	public String getDescription() {
-		return "Ecocoa de Liège";
+		return "Ecocoa de Liège, chocolatier responsable";
 	}
 
 	public Color getColor() {
