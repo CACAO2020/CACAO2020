@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import abstraction.eq8Romu.produits.Chocolat;
+import abstraction.eq8Romu.produits.ChocolatDeMarque;
 import abstraction.eq8Romu.produits.Feve;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
@@ -15,8 +16,15 @@ import abstraction.fourni.Variable;
 
 public class AbsStock implements IActeur {
 
-	private Variable totalStocksChocolat;
-	protected Map<Chocolat, Variable> stocksChocolat;
+	//idée : enlever stocksChocolat pour ne garder que stocksChocolatDeMarque
+	//initialiser stocksChocolatDeMarque avec des stocks de chaque couple (Chocolat, Marque (=String)) à 0
+	//faut-il afficher tous les indicateurs correspondants ? (on achète du chocolat aux équipes 1, 2, 3, 4 et 5, 
+	//reste à faire la liste des types de chocolat qu'ils vendent)
+	//si on veut la quantité total de chocolat HGE p.ex., on fait appel à une fonction getStockChocolat qui calcule la somme
+	//des stocks de ce type de chocolat pour chaque marque.
+	
+	protected Map<Chocolat, Variable> stocksChocolat; 
+	protected Map<ChocolatDeMarque, Variable> stocksChocolatDeMarque;
 	protected Map<Feve, Variable> stocksFeves;
 	protected Map<String, Chocolat> abreviationChocolats;
 	protected Map<String, Feve> abreviationFeves;
@@ -28,7 +36,6 @@ public class AbsStock implements IActeur {
 	public AbsStock(Distributeur2 ac) {
 
 		this.ac = ac;
-		this.totalStocksChocolat=new Variable(getNom()+" total stocks chocolat", ac, 0);
 		
 		stocksChocolat=new HashMap<Chocolat, Variable>();
 		for (Chocolat choco : Chocolat.values()) {
