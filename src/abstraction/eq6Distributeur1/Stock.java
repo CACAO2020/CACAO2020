@@ -1,9 +1,7 @@
 package abstraction.eq6Distributeur1;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Iterator;
 
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.ChocolatDeMarque;
@@ -69,6 +67,11 @@ public class Stock extends Distributeur1 implements IStock{ /** Classe implémen
 	public void destocker() {
 		
 		
+	}
+
+	@Override
+	public double quantiteEnStockMarqueChoco(ChocolatDeMarque choco) {
+		return this.MapStock.get(choco);
 	}
 
 }
