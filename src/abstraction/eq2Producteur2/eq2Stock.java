@@ -1,3 +1,5 @@
+
+
 package abstraction.eq2Producteur2;
 import java.util.ArrayList;
 import java.util.List;
@@ -81,7 +83,7 @@ public void setQt_pate_bassegamme(double q_pate_bassegamme) {
  * @param qt_pate_hautegamme the qt_pate_hautegamme to set
  */
 public void setQt_pate_hautegamme(double q_pate_hautegamme) {
-	this.qt_pate_hautegamme.setValeur(qt_pate_hautegamme.getCreateur(), q_pate_hautegamme);;
+	this.qt_pate_hautegamme.setValeur(qt_pate_hautegamme.getCreateur(), q_pate_hautegamme);;}
 	/**
 	 * @param masse_feves_trinitario the masse_feves_trinitario to set
 	 */
