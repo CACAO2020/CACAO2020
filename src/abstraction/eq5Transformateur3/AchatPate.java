@@ -6,4 +6,10 @@ public class AchatPate {
      * Elle est agrégé dans la classe Transformateur3.
      */
     //TODO ajouter les methodes pour acheter de la pate de cacao
+
+    private Transformateur3 acteur;
+		
+    public AchatPate(Transformateur3 acteur) {
+        this.acteur = acteur;
+    }
 }

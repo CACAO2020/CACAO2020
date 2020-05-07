@@ -1,9 +1,7 @@
 package abstraction.eq5Transformateur3;
 
-import abstraction.eq8Romu.cacaoCriee.IAcheteurCacaoCriee;
 import abstraction.eq8Romu.cacaoCriee.LotCacaoCriee;
 import abstraction.eq8Romu.cacaoCriee.PropositionCriee;
-import abstraction.eq8Romu.cacaoCriee.SuperviseurCacaoCriee;
 import abstraction.eq8Romu.produits.Gamme;
 /** @author Eva DUPUY  */
 public class AchatCacao {
@@ -18,9 +16,10 @@ public class AchatCacao {
 		private double prix; 
 		private Transformateur3 acteur;
 		
-	public AchatCacao() {
-		this.NB_propositions_refusees = 0;
-		this.NB_precedent = 0;
+		public AchatCacao(Transformateur3 acteur) {
+			this.acteur = acteur;
+			this.NB_propositions_refusees = 0;
+			this.NB_precedent = 0;
 	}
 	
 	//achète le lot au prix minimum si les feves sont haut de gamme et equitables
