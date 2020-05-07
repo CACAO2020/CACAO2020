@@ -63,8 +63,7 @@ public class Distributeur2 extends AcheteurChocolatBourse implements IActeur {
 
 	public List<Journal> getJournaux() {
 		List<Journal> res=new ArrayList<Journal>();
-		res.add(journal);
-		res.addAll(super.getJournaux());
+		res = super.getJournaux();
 		return res;
 	}
 
