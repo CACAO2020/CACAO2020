@@ -19,12 +19,12 @@ import abstraction.fourni.IActeur;
  * qui peut au plus mettre capaciteDeVente tonnes de chocolat en vente par step, et qui a
  * un prix fixe pour ce chocolat 
  */
-public class DistributeurChocolat extends AbsDistributeurChocolat implements IDistributeurChocolatDeMarque {
+public class DistributeurChocolatDeMarque extends AbsDistributeurChocolatDeMarque implements IDistributeurChocolatDeMarque {
 
 	private double capaciteDeVente;
 	private double prix;
 
-	public DistributeurChocolat(Distributeur2 ac) {
+	public DistributeurChocolatDeMarque(Distributeur2 ac) {
 		super(ac);
 	}
 

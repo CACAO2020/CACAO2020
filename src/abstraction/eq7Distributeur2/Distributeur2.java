@@ -23,7 +23,7 @@ public class Distributeur2 implements IActeur {
 	
 	protected AcheteurCacaoCriee acheteurCacaoCriee;
 	protected AcheteurChocolatBourse acheteurChocolatBourse;
-	protected DistributeurChocolat distributeurChocolat;
+	protected DistributeurChocolatDeMarque distributeurChocolat;
 	protected Stock stock;
 
 
@@ -33,7 +33,7 @@ public class Distributeur2 implements IActeur {
 		stock = new Stock(this);		
 		acheteurCacaoCriee = new AcheteurCacaoCriee(this);
 		acheteurChocolatBourse = new AcheteurChocolatBourse(this);
-		distributeurChocolat = new DistributeurChocolat(this);
+		distributeurChocolat = new DistributeurChocolatDeMarque(this);
 		this.journal = new Journal(this.getNom() + " Activités " + numero, this);
 	}
 	
@@ -53,7 +53,7 @@ public class Distributeur2 implements IActeur {
 	}
 	
 	// Renvoie l'unique instance de la classe DistributeurChocolat associée au distributeur
-	protected DistributeurChocolat getDistributeurChocolat() {
+	protected DistributeurChocolatDeMarque getDistributeurChocolat() {
 		return this.distributeurChocolat;
 	}
 	

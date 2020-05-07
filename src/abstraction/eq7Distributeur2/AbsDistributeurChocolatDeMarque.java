@@ -10,13 +10,13 @@ import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
-public class AbsDistributeurChocolat {
+public class AbsDistributeurChocolatDeMarque {
 	protected Integer cryptogramme;
 	protected Journal journal;
 
 	protected Distributeur2 ac;
 	
-	public AbsDistributeurChocolat(Distributeur2 ac) {	
+	public AbsDistributeurChocolatDeMarque(Distributeur2 ac) {	
 		this.ac = ac;
 		this.journal = new Journal(this.getNom()+" Distributeur Chocolat " + ac.numero, ac);
 	}
