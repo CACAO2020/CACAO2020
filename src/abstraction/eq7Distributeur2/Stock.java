@@ -40,18 +40,22 @@ public class Stock extends AbsStock implements IStock{
 
 	@Override
 	public void ajouterStockChocolat(Chocolat choco, double quantite) {
+		stocksChocolat.get(choco).setValeur(this, stocksChocolat.get(choco).getValeur() + quantite);
 	}
 
 	@Override
 	public void retirerStockChocolat(Chocolat choco, double quantite) {
+		stocksChocolat.get(choco).setValeur(this, stocksChocolat.get(choco).getValeur() - quantite);
 	}
 
 	@Override
 	public void ajouterStockFeves(Feve feve, double quantite) {
+		stocksFeves.get(feve).setValeur(this, stocksFeves.get(feve).getValeur() + quantite);
 	}
 
 	@Override
 	public void retirerStockFeves(Feve feve, double quantite) {
+		stocksFeves.get(feve).setValeur(this, stocksFeves.get(feve).getValeur() - quantite);
 	}
 	
 	
