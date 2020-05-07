@@ -19,6 +19,9 @@ public class Transformateur2 implements IActeur, IVendeurChocolatBourse {
 	private Integer cryptogramme;
 	private Journal journalEq4;
 
+	
+	
+	
 	public Transformateur2() {
 		this.stockFeves=new Variable(getNom()+" stock feves", this, 50);
 		this.stockChocolat=new Variable(getNom()+" stock chocolat", this, 100);
