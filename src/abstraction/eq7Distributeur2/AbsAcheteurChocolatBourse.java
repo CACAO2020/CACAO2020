@@ -68,11 +68,7 @@ public class AbsAcheteurChocolatBourse extends AcheteurCacaoCriee implements IAc
 	}
 	
 	public List<Variable> getIndicateurs() {
-		List<Variable> res=new ArrayList<Variable>();
-		for (Chocolat choco :Chocolat.values()) {
-			res.add(stocksChocolat.get(choco));
-		}
-		res.add(this.totalStocksChocolat);
+		List<Variable> res = super.getIndicateurs();
 		return res;
 	}
 

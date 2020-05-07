@@ -50,7 +50,7 @@ public class AbsDistributeurChocolat extends Stock implements IActeur {
 	}
 
 	public List<Variable> getIndicateurs() {
-		List<Variable> res=new ArrayList<Variable>();
+		List<Variable> res = super.getIndicateurs();
 		return res;
 	}
 

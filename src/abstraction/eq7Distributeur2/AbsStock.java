@@ -18,6 +18,8 @@ public class AbsStock implements IActeur {
 	private Variable totalStocksChocolat;
 	protected Map<Chocolat, Variable> stocksChocolat;
 	protected Map<Feve, Variable> stocksFeves;
+	protected Map<String, Chocolat> abreviationChocolats;
+	protected Map<String, Feve> abreviationFeves;
 	
 	public AbsStock() {
 
@@ -25,13 +27,28 @@ public class AbsStock implements IActeur {
 		
 		stocksChocolat=new HashMap<Chocolat, Variable>();
 		for (Chocolat choco : Chocolat.values()) {
-			stocksChocolat.put(choco, new Variable(getNom() + " : " + choco.name(), this, 0));
+			stocksChocolat.put(choco, new Variable(getNom() + " : STOCK " + choco.name(), this, 0));
 		}
 		
 		stocksFeves = new HashMap<Feve, Variable>();
 		for (Feve feve : Feve.values()) {
-				stocksFeves.put(feve, new Variable(getNom() + " : " + feve.name(), this, 0));
+				stocksFeves.put(feve, new Variable(getNom() + " : STOCK " + feve.name(), this, 0));
 		}
+		
+		abreviationChocolats = new HashMap<String, Chocolat>();
+		abreviationChocolats.put("B", Chocolat.CHOCOLAT_BASSE );
+		abreviationChocolats.put("M", Chocolat.CHOCOLAT_MOYENNE );
+		abreviationChocolats.put("ME", Chocolat.CHOCOLAT_MOYENNE_EQUITABLE );
+		abreviationChocolats.put("H", Chocolat.CHOCOLAT_HAUTE );
+		abreviationChocolats.put("HE", Chocolat.CHOCOLAT_HAUTE_EQUITABLE );
+		
+		abreviationFeves = new HashMap<String, Feve>();
+		abreviationFeves.put("B", Feve.FEVE_BASSE );
+		abreviationFeves.put("M", Feve.FEVE_MOYENNE );
+		abreviationFeves.put("ME", Feve.FEVE_MOYENNE_EQUITABLE );
+		abreviationFeves.put("H", Feve.FEVE_HAUTE );
+		abreviationFeves.put("HE", Feve.FEVE_HAUTE_EQUITABLE );
+		
 		
 	}
 	
