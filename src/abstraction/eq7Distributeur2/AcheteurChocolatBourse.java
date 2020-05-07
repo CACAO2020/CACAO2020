@@ -20,12 +20,23 @@ public class AcheteurChocolatBourse extends AbsAcheteurChocolatBourse implements
 	}
 
 	public void notifierCommande(Chocolat chocolat, double quantiteObtenue, boolean payee) {
+		int i = this.getJournaux().size();
+		String s = "";
+		if (payee) {s = "Commande payée";}
+		else {s = "Commande non payée";}
+		s = s + "de " + chocolat.getGamme();
+		if (chocolat.isBio()) {
+			s = s + "Bio";
+		}
+		if (chocolat.isEquitable()) {
+			s = s + "Equitable";
+		}
+		this.getJournaux().get(i - 1).ajouter(s);;
 		
 	}
 
 	public void receptionner(Chocolat chocolat, double quantite) {
-		
-		
+		this.ajouterStockChocolat(chocolat, quantite);
 	}
 	
 	public void next() {
