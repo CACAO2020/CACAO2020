@@ -5,7 +5,7 @@ import java.util.Map;
 
 import abstraction.eq8Romu.produits.Chocolat;
 
-public class Stock extends Distributeur1 implements IStock{ /** Classe implémentée par Avril Thibault et Tamine Mélissa*/
+public class Stock extends Distributeur1 implements IStock{ /** @author Avril Thibault et Tamine Mélissa*/
 	protected double capaciteStockmax;
 	protected Map<Chocolat,ArrayList<Double>> MapStock;
 	
