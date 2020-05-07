@@ -41,6 +41,7 @@ class GestionCriee //implements IVendeurCacaoCriee
 
 	//Clément 
 	public LotCacaoCriee getLotEnVente() {
+		this.producteur1.ajouterJournaux("[GestionCriee] - Mise en vente de : " + producteur1.getStock());
 		double quantiteAVendre = producteur1.getStock();
 		if(quantiteAVendre == 0)
 		{
@@ -81,6 +82,6 @@ class GestionCriee //implements IVendeurCacaoCriee
 	
 	//Clément
 	public void notifierVente(PropositionCriee proposition) {
-		//TODO
+		this.producteur1.ajouterJournaux("[GestionCriee] - Vente de : " + producteur1.getStock());
 	}
 }
