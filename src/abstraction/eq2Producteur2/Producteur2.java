@@ -33,8 +33,15 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 	 * @author Kristof Szentes
 	 */
 	public void next() {
+		List<Integer> deathlist = new ArrayList<Integer>();
 		for (int i = 0; i < this.getPaquetsArbres().size(); i++) {
 			this.getPaquetsArbres().get(i).setAge(this.getPaquetsArbres().get(i).getAge() + 1);
+			if (this.getPaquetsArbres().get(i).getAge() == 40);
+			{deathlist.add(i);}
+		}
+		while (deathlist.size()>0) {
+			this.getPaquetsArbres().remove(deathlist.get(deathlist.size()-1));
+			deathlist.remove(deathlist.size()-1);
 		}
 	}
 

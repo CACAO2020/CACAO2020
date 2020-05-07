@@ -37,16 +37,16 @@ public class PaquetArbres {
 	}
 	
 	public double production() {
-		return prodmax*(1-Math.exp(this.age));
-	}
-	
-	public double recolte() {
+		double prodmaxtrinitario = 7.5;
+		double prodmaxforastero = 7.5;
+		double prodmaxcriollo = 7.5;
 		if (this.type.equals("trinitario")){
-			return production;
+			return prodmaxtrinitario*(1-Math.exp(this.age))*this.nbreArbres;
 		}
 		if (this.type.equals("forastero")){
-			return production;}
-		if (this.type.equals("criollo")){
-			return production;}
+			return prodmaxforastero*(1-Math.exp(this.age))*this.nbreArbres;}
+		else {
+			return prodmaxcriollo*(1-Math.exp(this.age))*this.nbreArbres;}
 	}
+	
 }
