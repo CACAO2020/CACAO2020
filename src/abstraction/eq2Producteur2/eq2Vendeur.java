@@ -17,11 +17,14 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 	/*Lucas Y
 	 * 
 	 */
+	private double masse_en_vente;
 	private Variable prixTF;
 	private Variable prixTT;
 	private Variable prixTC;
-	private Variable prixTPBG;
+	private Variable prixTPBG; //il me semble qu'on vendra la pâte en contrat cadre et non pas à la criée, donc les prix des pates à la tonne ne sont peut-être pas utiles ici
 	private Variable prixTPHG;
+	private Variable propal_masses;
+
 	
 	public eq2Vendeur(IActeur createur,List<PaquetArbres> Arbres,Journal journal, double init1, double init2, double init3, double init4, double init5, double init6,double init7, double init8, double init9, double init10,Variable prixTF, Variable prixTT, Variable prixTC, Variable prixTPBG, Variable prixTPHG) {
 		super(createur, Arbres , journal,init1, init2, init3, init4, init5,init6,init7,init8,init9,init10);
@@ -46,12 +49,18 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 		    double vraimax = Math.max(max, m_feves.get(2));
 		    int indice_max = m_feves.indexOf(vraimax);
 		    if (indice_max == 0) {
+		    	this.setMasseEnVente(m_feves.get(0));
+		    	this.setPropalMasses(this.getMasseEnVente());
 		    	return new LotCacaoCriee(this, Feve.FEVE_BASSE, m_feves.get(0), this.getPrixTF().getValeur());
 		    }
 		    else if (indice_max == 1) {
+		    	this.setMasseEnVente(m_feves.get(1));
+		    	this.setPropalMasses(this.getMasseEnVente());
 		    	return new LotCacaoCriee(this, Feve.FEVE_MOYENNE, m_feves.get(1), this.getPrixTT().getValeur());
 		    }
 		    else if (indice_max == 2) {
+		    	this.setMasseEnVente(m_feves.get(2));
+		    	this.setPropalMasses(this.getMasseEnVente());
 		    	return new LotCacaoCriee(this, Feve.FEVE_HAUTE, m_feves.get(2), this.getPrixTC().getValeur());
 		    }
 		}
@@ -74,6 +83,20 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 	public void notifierVente(PropositionCriee proposition) {
 		// TODO Auto-generated method stub
 		
+	}
+	public Variable getPropalMasses() {
+		return this.propal_masses;
+	}
+	
+	public void setPropalMasses(double masse) {
+		propal_masses.setValeur(this, masse);
+	}
+
+	public double getMasseEnVente() {
+		return this.masse_en_vente;
+	}
+	public void setMasseEnVente(double masse) {
+		this.masse_en_vente = masse;
 	}
 
 	/**
