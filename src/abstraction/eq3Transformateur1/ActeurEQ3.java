@@ -31,7 +31,8 @@ public class ActeurEQ3 implements IActeur{
 				+ "Le centre de notre activité concernera la transformation du chocolat haut de gamme."
 				+ "La transformation du chocolat haut de gamme est effectuée totalement en interne depuis l'achat de la fève jusqu'à la revente du produit finalisé."
 				+ "Sur le haut de gamme la majorité de la production sera du chocolat labellisé."
-				+ "Concernant la gamme moyenne, du chocolat labellisé équitable ou non sera produit.";
+				+ "Concernant la gamme moyenne, du chocolat labellisé équitable ou non sera produit."
+				+ "L'équipe se garde la liberté d'acheter de la pâte de moyenne gamme";
 		
 	}
 	
@@ -50,14 +51,14 @@ public class ActeurEQ3 implements IActeur{
 
 	public List<String> getNomsFilieresProposees() {
 		ArrayList<String> filieres = new ArrayList<String>();
-		filieres.add("ACHATCACAOCRIEE");
+		filieres.add("ACHATCACAOCRIE");
 		filieres.add("VENTECHOCOLATBOURSE");
 		return filieres;
 	}
 
 	public Filiere getFiliere(String nom) {
 		switch (nom) {
-		case "ACHATCACAOCRIEE" : return new FiliereVentesCacaoAleatoires();
+		case "ACHATCACAOCRIE" : return new FiliereVentesCacaoAleatoires();
 		case "VENTECHOCOLATBOURSE" : return new FiliereTestVentesCacaoCriee();
 		default : return null;
 		}
