@@ -126,6 +126,13 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 	public void notifierVente(PropositionCriee proposition) {
 		venteCriee.notifierVente(proposition);
 	}
+
+	//Fonction pour les classes agréger pour ajouter des entrées au journaux
+	public void ajouterJournaux(String notification)
+	{
+		this.journalEq1.ajouter(notification);
+	}
+
 	//[-] Clément >
 
 
