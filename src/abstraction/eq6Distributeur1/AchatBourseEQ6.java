@@ -1,12 +1,18 @@
 package abstraction.eq6Distributeur1;
 
-import abstraction.eq8Romu.chocolatBourse.IAcheteurChocolatBourse;
+import java.util.HashMap;
 
-public class AchatrBourseEQ6 extends Stock implements IAcheteurChocolatBourse{
+import abstraction.eq8Romu.chocolatBourse.IAcheteurChocolatBourse;
+import abstraction.eq8Romu.chocolatBourse.SuperviseurChocolatBourse;
+import abstraction.eq8Romu.produits.Chocolat;
+/**
+public class AchatBourseEQ6 extends Stock implements IAcheteurChocolatBourse{
     
+	private HashMap<Integer, Integer> historiqueBrouse;
+	
 	public double EvolutionDemandeTotal (){
 		//anakyse dernière deuxD dernière année évolution = année-1 + (année-1 -année-2)/2
-		
+		demandethis.gethistorique()
 		return 0.0;
 	}
 	
@@ -33,17 +39,33 @@ public class AchatrBourseEQ6 extends Stock implements IAcheteurChocolatBourse{
 			// les cours vont s'effondrer car les acheteurs vont tres vite ne plus avoir assez d'argent pour acheter. Augmentez le solde des acheteurs via l'interface si vous voulez voir les cours repartir à la hausse
 		}
 	
-		public Integer getCryptogramme(SuperviseurChocolatBourse superviseur) {
-			return cryptogramme;
-		}
+		
 	
 		public void notifierCommande(Chocolat chocolat, double quantiteObtenue, boolean payee) {
-			
+			if (quantiteObtenue * chocolat.getMontant() )
 		}
 	
-		public void receptionner(Chocolat chocolat, double quantite) {
-			this.stocksChocolat.get(chocolat).ajouter(this, quantite);
+		public void receptioner(Chocolat chocolat, double quantite) {
+			this.Stocker(chocolat,  quantite);
 		}
+
+		
+		
+		public Integer getCryptogramme(SuperviseurChocolatBourse superviseur) {
+			if (superviseur !=null) {
+				return this.cryptogramme;
+			}
+			return null;
+		}
+
+		@Override
+		public void notifierCommande(Chocolat chocolat, double quantiteObtenue, boolean payee) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		
 	
     
 }
+*/
