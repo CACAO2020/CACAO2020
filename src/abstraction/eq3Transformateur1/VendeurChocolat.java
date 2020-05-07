@@ -13,7 +13,6 @@ import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;;
 public abstract class VendeurChocolat extends Stock implements IVendeurChocolatBourse {
 
-	private static int NB_INSTANCES = 0;
 	private int numeroVendeur;
 	private Chocolat chocolat;
 	
@@ -22,8 +21,6 @@ public abstract class VendeurChocolat extends Stock implements IVendeurChocolatB
 		if (chocolat==null) {
 			throw new IllegalArgumentException("chocolat==null");
 		}		
-		NB_INSTANCES++;
-		this.numeroVendeur = NB_INSTANCES;
 		this.chocolat = chocolat;
 	}
 	
@@ -34,19 +31,9 @@ public abstract class VendeurChocolat extends Stock implements IVendeurChocolatB
 	
 	/** @author K. GUTIERREZ  */
 	public double proposerVente(Chocolat chocolat, double cours) {
-		if (chocolat.getGamme() == Gamme.BASSE) {
-			return 10.0;}
-		if (chocolat.getGamme() == Gamme.MOYENNE && !chocolat.isEquitable()) {
-			return 15.0;}
-		if (chocolat.getGamme() == Gamme.MOYENNE && chocolat.isEquitable()) {
-			return 20.0;}
-		if (chocolat.getGamme() == Gamme.HAUTE && !chocolat.isEquitable()) {
-			return 25.0;}
-		if (chocolat.getGamme() == Gamme.HAUTE && chocolat.isEquitable()) {
-			return 25.0;}
-		return 0.0;
+		return this.getStockChocolat().get(chocolat);
 	}
-
+	
 	/** @author K. GUTIERREZ  */
 	public void livrer(Chocolat chocolat, double quantite) {
 		((Variable) stockChocolat).retirer(this, quantite);
