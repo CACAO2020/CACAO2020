@@ -14,6 +14,7 @@ public class PaquetArbres {
 	private int age;
 	private String type;
 	
+	
 	public PaquetArbres(int nbreA, String type) {
 		this.nbreArbres = nbreA;
 		this.age = 0;
