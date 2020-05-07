@@ -13,30 +13,26 @@ import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
-public class AbsAcheteurCacaoCriee implements IActeur {
-	private static int NB_INSTANCES = 0; // Afin d'attribuer un nom different a toutes les instances
-	private int numero;
+public class AbsAcheteurCacaoCriee {
 	protected Integer cryptogramme;
 	protected Journal journal;
 	protected Distributeur2 ac;
 
 	public AbsAcheteurCacaoCriee(Distributeur2 ac) {
-		NB_INSTANCES++;
 		this.ac = ac;
-		this.numero=NB_INSTANCES;
-		this.journal = new Journal(this.getNom()+" activites3"+ this.numero, ac);
+		this.journal = new Journal(this.getNom()+ " Acheteur Cacao Criée "+ this.ac.numero, ac);
 	}
 	
 	public String getNom() {
-		return "A.CacaoCriee"+numero;
+		return "EQ7";
 	}
 
 	public String getDescription() {
-		return "Acheteur de cacao a la criee "+this.numero;
+		return "Acheteur de cacao a la criee "+this.ac.numero;
 	}
 	
 	public Color getColor() {
-		return new Color(((numero)*(128/NB_INSTANCES)), ((numero)*(255/NB_INSTANCES)), 128+(numero)*(127/NB_INSTANCES));
+		return ac.getColor();
 	}
 
 	public void initialiser() {
@@ -58,7 +54,8 @@ public class AbsAcheteurCacaoCriee implements IActeur {
 	}
 	
 	public List<Variable> getIndicateurs() {
-		return null;
+		List<Variable> res = new ArrayList<Variable>();
+		return res;
 	}
 
 	public List<Variable> getParametres() {
@@ -67,7 +64,9 @@ public class AbsAcheteurCacaoCriee implements IActeur {
 	}
 
 	public List<Journal> getJournaux() {
-		return null;
+		List<Journal> res = new ArrayList<Journal>();
+		res.add(journal);
+		return res;
 	}
 	
 	public void notificationFaillite(IActeur acteur) {

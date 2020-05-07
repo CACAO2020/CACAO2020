@@ -12,10 +12,8 @@ import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
-public class AbsAcheteurChocolatBourse implements IActeur {
-	private static int NB_INSTANCES = 0; // Afin d'attribuer un nom different a toutes les instances
-	private int numero;
-	private Map<Chocolat, Variable> demande_choco;
+public class AbsAcheteurChocolatBourse {
+	private Map<Chocolat, Variable> demandeChoco;
 	protected Integer cryptogramme;
 	protected Journal journal;
 
@@ -27,29 +25,27 @@ public class AbsAcheteurChocolatBourse implements IActeur {
 	
 	public AbsAcheteurChocolatBourse(Distributeur2 ac) {
 		this.ac = ac;
-		NB_INSTANCES++;
-		this.numero=NB_INSTANCES;
-		demande_choco=new HashMap<Chocolat, Variable>();
+		demandeChoco=new HashMap<Chocolat, Variable>();
 		for (Chocolat choco : Chocolat.values()) {
-			demande_choco.put(choco, new Variable("Demande en : " + choco.name(), ac, 0));
+			demandeChoco.put(choco, new Variable("Demande en : " + choco.name(), ac, 0));
 		}
-		this.journal = new Journal(this.getNom()+" activites", ac);
+		this.journal = new Journal(this.getNom()+" Acheteur Chocolat Bourse " + ac.numero, ac);
 	}
 
 	public Map<Chocolat, Variable> getDemande_choco() {
-		return demande_choco;
+		return demandeChoco;
 	}
 
 	public String getNom() {
-		return "A.ChocoBourse"+numero;
+		return "EQ7";
 	}
 
 	public String getDescription() {
-		return "Acheteur de chocolat a la bourse "+this.numero;
+		return "Acheteur de chocolat a la bourse "+this.ac.numero;
 	}
 	
 	public Color getColor() {
-		return new Color(((numero)*(128/NB_INSTANCES)), ((numero)*(255/NB_INSTANCES)), 128+(numero)*(127/NB_INSTANCES));
+		return ac.getColor();
 	}
 
 	public void initialiser() {
@@ -71,7 +67,8 @@ public class AbsAcheteurChocolatBourse implements IActeur {
 	}
 	
 	public List<Variable> getIndicateurs() {
-		return null;
+		List<Variable> res = new ArrayList<Variable>();
+		return res;
 	}
 
 	public List<Variable> getParametres() {
@@ -80,7 +77,9 @@ public class AbsAcheteurChocolatBourse implements IActeur {
 	}
 
 	public List<Journal> getJournaux() {
-		return null;
+		List<Journal> res = new ArrayList<Journal>();
+		res.add(journal);
+		return res;
 	}
 	
 	public void notificationFaillite(IActeur acteur) {

@@ -11,8 +11,6 @@ import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
 public class AbsDistributeurChocolat {
-	private static int NB_INSTANCES = 0; // Afin d'attribuer un nom different a toutes les instances
-	protected int numero;
 	protected Integer cryptogramme;
 	protected Journal journal;
 
@@ -20,21 +18,19 @@ public class AbsDistributeurChocolat {
 	
 	public AbsDistributeurChocolat(Distributeur2 ac) {	
 		this.ac = ac;
-		NB_INSTANCES++;
-		this.numero=NB_INSTANCES;
-		this.journal = new Journal(this.getNom()+" activites4", ac);
+		this.journal = new Journal(this.getNom()+" Distributeur Chocolat " + ac.numero, ac);
 	}
 	
 	public String getNom() {
-		return "D.Choco"+this.numero;
+		return "EQ7";
 	}
 
 	public String getDescription() {
-		return "Distributeur de chocolat "+this.numero;
+		return "Distributeur de chocolat "+ ac.numero;
 	}
 
 	public Color getColor() {
-		return new Color(128+((numero)*(127/NB_INSTANCES)), 64+((numero)*(191/NB_INSTANCES)), 0);
+		return ac.getColor();
 	}
 
 	public void initialiser() {
@@ -52,7 +48,8 @@ public class AbsDistributeurChocolat {
 	}
 
 	public List<Variable> getIndicateurs() {
-		return null;
+		List<Variable> res = new ArrayList<Variable>();
+		return res;
 	}
 
 	public List<Variable> getParametres() {
@@ -61,7 +58,9 @@ public class AbsDistributeurChocolat {
 	}
 
 	public List<Journal> getJournaux() {
-		return null;
+		List<Journal> res = new ArrayList<Journal>();
+		res.add(journal);
+		return res;
 	}
 
 	public void setCryptogramme(Integer crypto) {

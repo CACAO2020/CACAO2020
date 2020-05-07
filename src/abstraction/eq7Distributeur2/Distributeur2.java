@@ -14,6 +14,9 @@ import abstraction.fourni.Variable;
 
 public class Distributeur2 implements IActeur {
 	
+	private static int NB_INSTANCES = 0; // Afin d'attribuer un nom different a toutes les instances
+	public int numero;
+	
 	private Integer cryptogramme;
 	private Journal journal;
 	
@@ -22,12 +25,15 @@ public class Distributeur2 implements IActeur {
 	protected DistributeurChocolat distributeurChocolat;
 	protected Stock stock;
 
+
 	public Distributeur2() {
+		NB_INSTANCES++;
+		numero = NB_INSTANCES;
 		stock = new Stock(this);		
 		acheteurCacaoCriee = new AcheteurCacaoCriee(this);
 		acheteurChocolatBourse = new AcheteurChocolatBourse(this);
 		distributeurChocolat = new DistributeurChocolat(this);
-		this.journal = new Journal(this.getNom() + " activités", this);
+		this.journal = new Journal(this.getNom() + " Activités " + numero, this);
 	}
 	
 	// Renvoie l'unique instance de la classe Stock associée au distributeur
@@ -72,10 +78,8 @@ public class Distributeur2 implements IActeur {
 	}
 
 	public void next() {
-		System.out.println(this.stock.stocksChocolat.get(stock.stringToChoco("H")).getValeur());
 		this.stock.stocksChocolat.get(Chocolat.CHOCOLAT_HAUTE).setValeur(this, this.stock.stocksChocolat.get(stock.stringToChoco("H")).getValeur() + 5.);
-		System.out.println(this.stock.stocksChocolat.get(stock.stringToChoco("H")).getValeur());
-		acheteurCacaoCriee.next();
+		acheteurCacaoCriee.next(); //ajoute 10 au stock "H" par l'intermédiaire de l'acheteur cacao criée
 	}
 
 	public List<String> getNomsFilieresProposees() {
@@ -89,9 +93,9 @@ public class Distributeur2 implements IActeur {
 	public List<Variable> getIndicateurs() {
 		List<Variable> res = new ArrayList<Variable>();
 		res.addAll(stock.getIndicateurs());
-		for (Variable v : res) {
-			System.out.println(v.getNom() + "  " + v.getValeur() + "  " + v.getCreateur());
-		}
+		res.addAll(acheteurCacaoCriee.getIndicateurs());
+		res.addAll(acheteurChocolatBourse.getIndicateurs());
+		res.addAll(distributeurChocolat.getIndicateurs());
 		return res;
 	}
 
@@ -103,6 +107,10 @@ public class Distributeur2 implements IActeur {
 	public List<Journal> getJournaux() {
 		List<Journal> res=new ArrayList<Journal>();
 		res.add(journal);
+		res.addAll(stock.getJournaux());
+		res.addAll(acheteurCacaoCriee.getJournaux());
+		res.addAll(acheteurChocolatBourse.getJournaux());
+		res.addAll(distributeurChocolat.getJournaux());
 		return res;
 	}
 

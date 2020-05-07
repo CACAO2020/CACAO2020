@@ -54,13 +54,13 @@ public class AbsStock {
 		abreviationFeves.put("H", Feve.FEVE_HAUTE );
 		abreviationFeves.put("HE", Feve.FEVE_HAUTE_EQUITABLE );
 		
-		this.journal = new Journal("EQ7 Suivi des stocks", ac);
+		this.journal = new Journal(getNom() + " Stocks " + ac.numero, ac);
 		this.journal.ajouter("EQ7 : Suivi des stocks de chocolats et de fèves");
 		
 	}
 	
 	public String getNom() {
-		return "Eq7 Stock";
+		return "EQ7";
 	}
 	public List<Variable> getIndicateurs() {
 		List<Variable> res=new ArrayList<Variable>();
@@ -80,8 +80,8 @@ public class AbsStock {
 
 
 	public List<Journal> getJournaux() {
-		List<Journal> res= new ArrayList<Journal>();
-		res.add(this.journal);
+		List<Journal> res = new ArrayList<Journal>();
+		res.add(journal);
 		return res;
 	}
 
