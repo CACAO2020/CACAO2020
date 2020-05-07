@@ -10,7 +10,7 @@ import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
-public class AbsDistributeurChocolat extends Stock implements IActeur {
+public class AbsDistributeurChocolat implements IActeur {
 	private static int NB_INSTANCES = 0; // Afin d'attribuer un nom different a toutes les instances
 	protected int numero;
 	protected Integer cryptogramme;
@@ -50,8 +50,7 @@ public class AbsDistributeurChocolat extends Stock implements IActeur {
 	}
 
 	public List<Variable> getIndicateurs() {
-		List<Variable> res = super.getIndicateurs();
-		return res;
+		return null;
 	}
 
 	public List<Variable> getParametres() {
@@ -60,10 +59,7 @@ public class AbsDistributeurChocolat extends Stock implements IActeur {
 	}
 
 	public List<Journal> getJournaux() {
-		List<Journal> res= new ArrayList<Journal>();
-		res.add(this.journal);
-		res.addAll(super.getJournaux());
-		return res;
+		return null;
 	}
 
 	public void setCryptogramme(Integer crypto) {

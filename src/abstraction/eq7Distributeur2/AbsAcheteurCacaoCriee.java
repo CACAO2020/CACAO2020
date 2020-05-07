@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.Feve;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
@@ -44,7 +46,7 @@ public class AbsAcheteurCacaoCriee implements IActeur {
 		this.cryptogramme = crypto;
 	}
 	public void next() {
-		this.stock.stocksChocolat.get(stock.stringToChoco("H")).setValeur(this, 10.);
+		this.stock.stocksChocolat.get(Chocolat.CHOCOLAT_HAUTE).setValeur(this, this.stock.stocksChocolat.get(stock.stringToChoco("H")).getValeur() + 10.);
 	}
 
 	public List<String> getNomsFilieresProposees() {

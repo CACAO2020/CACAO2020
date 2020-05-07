@@ -24,9 +24,11 @@ public class Distributeur2 implements IActeur {
 	protected Stock stock;
 
 	public Distributeur2() {
-		this.journal = new Journal(this.getNom() + " activites1", this);
+		this.journal = new Journal(this.getNom() + " activites", this);
+		stock = new Stock();
 		acheteurCacaoCriee = new AcheteurCacaoCriee(stock);
 		acheteurChocolatBourse = new AcheteurChocolatBourse(stock);
+		
 	}
 
 	public String getNom() {
@@ -49,7 +51,7 @@ public class Distributeur2 implements IActeur {
 	}
 
 	public void next() {
-		this.stock.stocksChocolat.get(stock.stringToChoco("H")).setValeur(this, 5.);
+		this.stock.stocksChocolat.get(Chocolat.CHOCOLAT_HAUTE).setValeur(this, this.stock.stocksChocolat.get(stock.stringToChoco("H")).getValeur() + 5.);
 		acheteurCacaoCriee.next();
 	}
 
@@ -63,7 +65,7 @@ public class Distributeur2 implements IActeur {
 
 	public List<Variable> getIndicateurs() {
 		List<Variable> res = new ArrayList<Variable>();
-		for ()
+		res.addAll(this.stock.getIndicateurs());
 		return res;
 	}
 
