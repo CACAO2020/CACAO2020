@@ -54,6 +54,7 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 
 	public List<Variable> getParametres() {
 		List<Variable> res=new ArrayList<Variable>();
+		res.add()
 		return res;
 	}
 
