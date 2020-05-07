@@ -10,6 +10,7 @@ import abstraction.eq8Romu.produits.Chocolat;
  * qui peut au plus mettre capaciteDeVente tonnes de chocolat en vente par step, et qui a
  * un prix fixe pour ce chocolat 
  */
+@Deprecated
 public class ExempleDistributeurChocolat extends ExempleAbsDistributeurChocolat implements IDistributeurChocolat {
 
 	private double capaciteDeVente;
