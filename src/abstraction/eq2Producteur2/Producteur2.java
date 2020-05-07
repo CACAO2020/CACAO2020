@@ -15,8 +15,9 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 	private Journal journalEq2;
 	private List<PaquetArbres> PaquetsArbres; // la liste des paquets d'arbres de notre acteur
 
-	public Producteur2() {
-		this.stock=new eq2Stock(this, 0,0,0,0,0);
+	public Producteur2(IActeur createur, double init1, double init2, double init3, double init4, double init5,
+			Variable prixTF, Variable prixTT, Variable prixTC, Variable prixTPBG, Variable prixTPHG) {
+		super(createur, init1, init2, init3, init4, init5, prixTF, prixTT, prixTC, prixTPBG, prixTPHG);
 		this.journalEq2 = new Journal("Eq2 activites", this);
 		this.PaquetsArbres = new ArrayList<PaquetArbres>();
 	}
