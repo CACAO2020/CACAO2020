@@ -4,7 +4,7 @@ import abstraction.eq8Romu.cacaoCriee.LotCacaoCriee;
 import abstraction.eq8Romu.cacaoCriee.PropositionCriee;
 import abstraction.eq8Romu.cacaoCriee.SuperviseurCacaoCriee;
 import abstraction.eq8Romu.produits.Gamme;
-
+/** @author Eva DUPUY  */
 public class AchatCacao {
     /**
      * Classe qui régit tous les achats de fèves, à la criée et aléatoire
@@ -39,17 +39,29 @@ public class AchatCacao {
 	}
 
 	
-	
+	// PAS COMPRIS - REPRENDRE
 	public Integer getCryptogramme(SuperviseurCacaoCriee superviseur) {
-		if (superviseur != 0) {
-			
+		if (superviseur != null) {
+			return this.getCryptogramme(superviseur);
 		}
 		return null;
 	}
 
 	//Ne pas oblier les conséquences sur la trésorerie
-	public void notifierVente(PropositionCriee proposition) {
+	
+	//diminue le nombre de propositions refusées donc on peut diminuer le prix de proposition
+	//ajoute les feves du lot au stock de feves de l'entprise
+	
+	public void notifierVente(PropositionCriee proposition, Stock stockFeves) {
 		NB_propositions_refusees = NB_propositions_refusees - 1;
-
+		stockFeves.ajoutFeves(proposition.getFeve(), proposition.getQuantiteEnTonnes()) ;
+		//Tresorerie
 	}
+	
+	
+	
+	
+	
+	
+	
 }
