@@ -20,7 +20,7 @@ public class AbsDistributeurChocolat extends Stock implements IActeur {
 		
 		NB_INSTANCES++;
 		this.numero=NB_INSTANCES;
-		this.journal = new Journal(this.getNom()+" activites", this);
+		this.journal = new Journal(this.getNom()+" activites4", this);
 	}
 	
 	public String getNom() {
@@ -60,9 +60,10 @@ public class AbsDistributeurChocolat extends Stock implements IActeur {
 	}
 
 	public List<Journal> getJournaux() {
-		List<Journal> j= new ArrayList<Journal>();
-		j.add(this.journal);
-		return j;
+		List<Journal> res= new ArrayList<Journal>();
+		res.add(this.journal);
+		res.addAll(super.getJournaux());
+		return res;
 	}
 
 	public void setCryptogramme(Integer crypto) {

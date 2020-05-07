@@ -14,10 +14,10 @@ import abstraction.fourni.Variable;
 public class Distributeur2 extends AcheteurChocolatBourse implements IActeur {
 	
 	private Integer cryptogramme;
-	private Journal journalEq7;
+	private Journal journal;
 
 	public Distributeur2() {
-		this.journalEq7 = new Journal("Eq7 activites", this);
+		this.journal = new Journal(this.getNom() + " activites1", this);
 	}
 
 	public String getNom() {
@@ -62,7 +62,8 @@ public class Distributeur2 extends AcheteurChocolatBourse implements IActeur {
 
 	public List<Journal> getJournaux() {
 		List<Journal> res=new ArrayList<Journal>();
-		res.add(journalEq7);
+		res.add(journal);
+		res.addAll(super.getJournaux());
 		return res;
 	}
 

@@ -27,7 +27,7 @@ public class AbsAcheteurCacaoCriee extends DistributeurChocolat implements IActe
 		for (Feve feve : Feve.values()) {
 			stocksFeves.put(feve, 0.0);
 		}
-		this.journal = new Journal(this.getNom()+" activites", this);
+		this.journal = new Journal(this.getNom()+" activites3"+ this.numero, this);
 	}
 	
 	public String getNom() {
@@ -77,9 +77,10 @@ public class AbsAcheteurCacaoCriee extends DistributeurChocolat implements IActe
 	}
 
 	public List<Journal> getJournaux() {
-		List<Journal> j= new ArrayList<Journal>();
-		j.add(this.journal);
-		return j;
+		List<Journal> res= new ArrayList<Journal>();
+		res.add(this.journal);
+		res.addAll(super.getJournaux());
+		return res;
 	}
 	
 	public void notificationFaillite(IActeur acteur) {

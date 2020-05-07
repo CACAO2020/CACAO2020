@@ -27,7 +27,7 @@ public class AbsAcheteurChocolatBourse extends AcheteurCacaoCriee implements IAc
 			demande_choco.put(choco, new Variable("Demande en : " + choco.name(), this, 0));
 		}
 		
-		this.journal = new Journal(this.getNom()+" activites", this);
+		this.journal = new Journal(this.getNom()+" activites2", this);
 	}
 
 	public Map<Chocolat, Variable> getDemande_choco() {
@@ -75,9 +75,10 @@ public class AbsAcheteurChocolatBourse extends AcheteurCacaoCriee implements IAc
 	}
 
 	public List<Journal> getJournaux() {
-		List<Journal> j= new ArrayList<Journal>();
-		j.add(this.journal);
-		return j;
+		List<Journal> res = new ArrayList<Journal>();
+		res.add(this.journal);
+		res.addAll(super.getJournaux());
+		return res;
 	}
 	
 	public void notificationFaillite(IActeur acteur) {

@@ -21,7 +21,7 @@ public class AbsStock implements IActeur {
 	protected Map<String, Chocolat> abreviationChocolats;
 	protected Map<String, Feve> abreviationFeves;
 	
-	protected Journal stocksLog;
+	protected Journal journal;
 	
 	public AbsStock() {
 
@@ -51,8 +51,8 @@ public class AbsStock implements IActeur {
 		abreviationFeves.put("H", Feve.FEVE_HAUTE );
 		abreviationFeves.put("HE", Feve.FEVE_HAUTE_EQUITABLE );
 		
-		stocksLog = new Journal("EQ7 Suivi des stocks", this);
-		stocksLog.ajouter("EQ7 : Suivi des stocks de chocolats et de fèves");
+		this.journal = new Journal("EQ7 Suivi des stocks", this);
+		this.journal.ajouter("EQ7 : Suivi des stocks de chocolats et de fèves");
 		
 	}
 	
@@ -109,8 +109,8 @@ public class AbsStock implements IActeur {
 
 	@Override
 	public List<Journal> getJournaux() {
-		List<Journal> res = new ArrayList<Journal>();
-		res.add(stocksLog);
+		List<Journal> res= new ArrayList<Journal>();
+		res.add(this.journal);
 		return res;
 	}
 
