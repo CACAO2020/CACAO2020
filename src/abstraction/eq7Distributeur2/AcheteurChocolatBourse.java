@@ -7,17 +7,14 @@ import abstraction.eq8Romu.chocolatBourse.SuperviseurChocolatBourse;
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.Feve;
 import abstraction.fourni.Filiere;
+import abstraction.fourni.IActeur;
 import abstraction.fourni.Variable;
 
 public class AcheteurChocolatBourse extends AbsAcheteurChocolatBourse implements IAcheteurChocolatBourse {
 	//Raphaël Caby
 	
-	public AcheteurChocolatBourse() {
-		
-	}
-	
-	public AcheteurChocolatBourse(Stock stock) {
-		super(stock);
+	public AcheteurChocolatBourse(Distributeur2 ac) {
+		super(ac);
 	}
 	
 	public double getDemande(Chocolat chocolat, double cours) {
@@ -42,14 +39,14 @@ public class AcheteurChocolatBourse extends AbsAcheteurChocolatBourse implements
 	}
 
 	public void receptionner(Chocolat chocolat, double quantite) {
-		this.stock.ajouterStockChocolat(chocolat, quantite);
+		ac.getStock().ajouterStockChocolat(chocolat, quantite);
 	}
 	
 	public void next() {
 		for (Chocolat choco : Chocolat.values()) {
 		// L'opération sera effectuée pour CHAQUE type de chocolat que nous vendons
 		//D'abord on consulte les stocks
-			double stock_choco = stock.stocksChocolat.get(choco).getValeur();
+			double stock_choco = ac.getStock().stocksChocolat.get(choco).getValeur();
 		//Ensuite on demande au vendeur quelle quantité lui est demandée
 			double demande_vendeur = 15.;   //Le temps de progresser dans le fichier vendeur
 		//On compare la demande du vendeur et les stocks

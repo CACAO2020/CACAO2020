@@ -10,13 +10,14 @@ import abstraction.eq8Romu.cacaoCriee.PropositionCriee;
 import abstraction.eq8Romu.cacaoCriee.SuperviseurCacaoCriee;
 import abstraction.eq8Romu.produits.Feve;
 import abstraction.fourni.Filiere;
+import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 
 public class AcheteurCacaoCriee extends AbsAcheteurCacaoCriee implements IAcheteurCacaoCriee {
 	private Map<Feve, Double> prixCourant;
 
-	public AcheteurCacaoCriee(Stock stock) {
-		super(stock);
+	public AcheteurCacaoCriee(Distributeur2 ac) {
+		super(ac);
 		prixCourant=new HashMap<Feve, Double>();
 		for (Feve feve : Feve.values()) {
 			prixCourant.put(feve, 0.6);

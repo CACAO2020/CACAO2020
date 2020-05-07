@@ -13,7 +13,7 @@ import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
-public class AbsStock implements IActeur {
+public class AbsStock {
 
 	private Variable totalStocksChocolat;
 	protected Map<Chocolat, Variable> stocksChocolat;
@@ -23,18 +23,21 @@ public class AbsStock implements IActeur {
 	
 	protected Journal journal;
 	
-	public AbsStock() {
+	protected Distributeur2 ac;
+	
+	public AbsStock(Distributeur2 ac) {
 
-		this.totalStocksChocolat=new Variable(getNom()+" total stocks chocolat", this, 0);
+		this.ac = ac;
+		this.totalStocksChocolat=new Variable(getNom()+" total stocks chocolat", ac, 0);
 		
 		stocksChocolat=new HashMap<Chocolat, Variable>();
 		for (Chocolat choco : Chocolat.values()) {
-			stocksChocolat.put(choco, new Variable(getNom() + " : STOCK " + choco.name(), this, 0));
+			stocksChocolat.put(choco, new Variable(getNom() + " : STOCK " + choco.name(), ac, 0));
 		}
 		
 		stocksFeves = new HashMap<Feve, Variable>();
 		for (Feve feve : Feve.values()) {
-				stocksFeves.put(feve, new Variable(getNom() + " : STOCK " + feve.name(), this, 0));
+				stocksFeves.put(feve, new Variable(getNom() + " : STOCK " + feve.name(), ac, 0));
 		}
 		
 		abreviationChocolats = new HashMap<String, Chocolat>();
@@ -51,46 +54,14 @@ public class AbsStock implements IActeur {
 		abreviationFeves.put("H", Feve.FEVE_HAUTE );
 		abreviationFeves.put("HE", Feve.FEVE_HAUTE_EQUITABLE );
 		
-		this.journal = new Journal("EQ7 Suivi des stocks", this);
+		this.journal = new Journal("EQ7 Suivi des stocks", ac);
 		this.journal.ajouter("EQ7 : Suivi des stocks de chocolats et de fèves");
 		
 	}
 	
 	public String getNom() {
-		return "Stock EQ7";
+		return "Eq7 Stock";
 	}
-
-	@Override
-	public String getDescription() {
-		return null;
-	}
-
-	@Override
-	public Color getColor() {
-		return null;
-	}
-
-	@Override
-	public void initialiser() {
-		
-	}
-
-	@Override
-	public void next() {
-		
-	}
-
-	@Override
-	public List<String> getNomsFilieresProposees() {
-		return null;
-	}
-
-	@Override
-	public Filiere getFiliere(String nom) {
-		return null;
-	}
-
-	@Override
 	public List<Variable> getIndicateurs() {
 		List<Variable> res=new ArrayList<Variable>();
 		for (Chocolat choco : Chocolat.values()) {
@@ -99,34 +70,19 @@ public class AbsStock implements IActeur {
 		for (Feve feve : Feve.values()) {
 			res.add(stocksFeves.get(feve));
 		}
-		System.out.println(res);
 		return res;
 	}
 
-	@Override
+
 	public List<Variable> getParametres() {
 		return null;
 	}
 
-	@Override
+
 	public List<Journal> getJournaux() {
 		List<Journal> res= new ArrayList<Journal>();
 		res.add(this.journal);
 		return res;
 	}
 
-	@Override
-	public void setCryptogramme(Integer crypto) {
-		
-	}
-
-	@Override
-	public void notificationFaillite(IActeur acteur) {
-		
-	}
-
-	@Override
-	public void notificationOperationBancaire(double montant) {
-		
-	}
 }

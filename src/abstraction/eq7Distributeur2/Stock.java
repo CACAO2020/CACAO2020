@@ -14,8 +14,8 @@ import abstraction.fourni.Variable;
 
 public class Stock extends AbsStock implements IStock{
 	
-	public Stock() {
-			super();
+	public Stock(Distributeur2 ac) {
+			super(ac);
 	}
 
 	@Override
@@ -40,22 +40,22 @@ public class Stock extends AbsStock implements IStock{
 
 	@Override
 	public void ajouterStockChocolat(Chocolat choco, double quantite) {
-		stocksChocolat.get(choco).setValeur(this, stocksChocolat.get(choco).getValeur() + quantite);
+		stocksChocolat.get(choco).setValeur(ac, stocksChocolat.get(choco).getValeur() + quantite);
 	}
 
 	@Override
 	public void retirerStockChocolat(Chocolat choco, double quantite) {
-		stocksChocolat.get(choco).setValeur(this, stocksChocolat.get(choco).getValeur() - quantite);
+		stocksChocolat.get(choco).setValeur(ac, stocksChocolat.get(choco).getValeur() - quantite);
 	}
 
 	@Override
 	public void ajouterStockFeves(Feve feve, double quantite) {
-		stocksFeves.get(feve).setValeur(this, stocksFeves.get(feve).getValeur() + quantite);
+		stocksFeves.get(feve).setValeur(ac, stocksFeves.get(feve).getValeur() + quantite);
 	}
 
 	@Override
 	public void retirerStockFeves(Feve feve, double quantite) {
-		stocksFeves.get(feve).setValeur(this, stocksFeves.get(feve).getValeur() - quantite);
+		stocksFeves.get(feve).setValeur(ac, stocksFeves.get(feve).getValeur() - quantite);
 	}
 	
 	

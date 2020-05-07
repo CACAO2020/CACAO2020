@@ -19,21 +19,21 @@ public class AbsAcheteurChocolatBourse implements IActeur {
 	protected Integer cryptogramme;
 	protected Journal journal;
 
-	protected Stock stock;
+	protected Distributeur2 ac;
 	
 	public AbsAcheteurChocolatBourse() {
 		
 	}
 	
-	public AbsAcheteurChocolatBourse(Stock stock) {
+	public AbsAcheteurChocolatBourse(Distributeur2 ac) {
+		this.ac = ac;
 		NB_INSTANCES++;
 		this.numero=NB_INSTANCES;
 		demande_choco=new HashMap<Chocolat, Variable>();
 		for (Chocolat choco : Chocolat.values()) {
-			demande_choco.put(choco, new Variable("Demande en : " + choco.name(), this, 0));
+			demande_choco.put(choco, new Variable("Demande en : " + choco.name(), ac, 0));
 		}
-		this.stock = stock;
-		this.journal = new Journal(this.getNom()+" activites", this);
+		this.journal = new Journal(this.getNom()+" activites", ac);
 	}
 
 	public Map<Chocolat, Variable> getDemande_choco() {

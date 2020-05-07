@@ -9,6 +9,7 @@ import abstraction.eq8Romu.produits.Chocolat;
 //import abstraction.eq8Romu.produits.Gamme;
 //import abstraction.fourni.Filiere;
 import abstraction.eq8Romu.produits.ChocolatDeMarque;
+import abstraction.fourni.IActeur;
 
 /**
  * 
@@ -23,8 +24,8 @@ public class DistributeurChocolat extends AbsDistributeurChocolat implements IDi
 	private double capaciteDeVente;
 	private double prix;
 
-	public DistributeurChocolat() {
-
+	public DistributeurChocolat(Distributeur2 ac) {
+		super(ac);
 	}
 
 	public boolean commercialise(Chocolat choco) {

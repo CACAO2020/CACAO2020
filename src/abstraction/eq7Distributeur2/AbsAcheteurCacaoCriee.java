@@ -18,13 +18,13 @@ public class AbsAcheteurCacaoCriee implements IActeur {
 	private int numero;
 	protected Integer cryptogramme;
 	protected Journal journal;
-	protected Stock stock;
+	protected Distributeur2 ac;
 
-	public AbsAcheteurCacaoCriee(Stock stock) {
+	public AbsAcheteurCacaoCriee(Distributeur2 ac) {
 		NB_INSTANCES++;
+		this.ac = ac;
 		this.numero=NB_INSTANCES;
-		this.stock = stock;
-		this.journal = new Journal(this.getNom()+" activites3"+ this.numero, this);
+		this.journal = new Journal(this.getNom()+" activites3"+ this.numero, ac);
 	}
 	
 	public String getNom() {
@@ -46,7 +46,7 @@ public class AbsAcheteurCacaoCriee implements IActeur {
 		this.cryptogramme = crypto;
 	}
 	public void next() {
-		this.stock.stocksChocolat.get(Chocolat.CHOCOLAT_HAUTE).setValeur(this, this.stock.stocksChocolat.get(stock.stringToChoco("H")).getValeur() + 10.);
+		this.ac.getStock().stocksChocolat.get(Chocolat.CHOCOLAT_HAUTE).setValeur(ac, ac.getStock().stocksChocolat.get(ac.getStock().stringToChoco("H")).getValeur() + 10.);
 	}
 
 	public List<String> getNomsFilieresProposees() {

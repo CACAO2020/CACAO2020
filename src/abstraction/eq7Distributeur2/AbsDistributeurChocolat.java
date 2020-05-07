@@ -10,17 +10,19 @@ import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
-public class AbsDistributeurChocolat implements IActeur {
+public class AbsDistributeurChocolat {
 	private static int NB_INSTANCES = 0; // Afin d'attribuer un nom different a toutes les instances
 	protected int numero;
 	protected Integer cryptogramme;
 	protected Journal journal;
 
-	public AbsDistributeurChocolat() {	
-		
+	protected Distributeur2 ac;
+	
+	public AbsDistributeurChocolat(Distributeur2 ac) {	
+		this.ac = ac;
 		NB_INSTANCES++;
 		this.numero=NB_INSTANCES;
-		this.journal = new Journal(this.getNom()+" activites4", this);
+		this.journal = new Journal(this.getNom()+" activites4", ac);
 	}
 	
 	public String getNom() {

@@ -17,26 +17,47 @@ public class Distributeur2 implements IActeur {
 	private Integer cryptogramme;
 	private Journal journal;
 	
-	public AcheteurCacaoCriee acheteurCacaoCriee;
-	private AcheteurChocolatBourse acheteurChocolatBourse;
-	private DistributeurChocolat distributeurChocolat;
-	
+	protected AcheteurCacaoCriee acheteurCacaoCriee;
+	protected AcheteurChocolatBourse acheteurChocolatBourse;
+	protected DistributeurChocolat distributeurChocolat;
 	protected Stock stock;
 
 	public Distributeur2() {
-		this.journal = new Journal(this.getNom() + " activites", this);
-		stock = new Stock();
-		acheteurCacaoCriee = new AcheteurCacaoCriee(stock);
-		acheteurChocolatBourse = new AcheteurChocolatBourse(stock);
-		
+		stock = new Stock(this);		
+		acheteurCacaoCriee = new AcheteurCacaoCriee(this);
+		acheteurChocolatBourse = new AcheteurChocolatBourse(this);
+		distributeurChocolat = new DistributeurChocolat(this);
+		this.journal = new Journal(this.getNom() + " activités", this);
 	}
-
+	
+	// Renvoie l'unique instance de la classe Stock associée au distributeur
+	protected Stock getStock() {
+		return this.stock;
+	}
+	
+	// Renvoie l'unique instance de la classe AcheteurCacaoCriee associée au distributeur
+	protected AcheteurCacaoCriee getAcheteurCacaoCriee() {
+		return this.acheteurCacaoCriee;
+	}
+	
+	// Renvoie l'unique instance de la classe AcheteurChocolatBourse associée au distributeur
+	protected AcheteurChocolatBourse getAcheteurChocolatBourse() {
+		return this.acheteurChocolatBourse;
+	}
+	
+	// Renvoie l'unique instance de la classe DistributeurChocolat associée au distributeur
+	protected DistributeurChocolat getDistributeurChocolat() {
+		return this.distributeurChocolat;
+	}
+	
+	// Renvoie le nom de l'acteur (par défaut : "EQ7")
 	public String getNom() {
 		return "EQ7";
 	}
 
+	// Renvoie la description de l'acteur
 	public String getDescription() {
-		return "Ecocoa de Liège, chocolatier responsable";
+		return "Distributeur Ecocoa de Liège, chocolatier responsable";
 	}
 
 	public Color getColor() {
@@ -66,7 +87,12 @@ public class Distributeur2 implements IActeur {
 	}
 
 	public List<Variable> getIndicateurs() {
-		return stock.getIndicateurs();
+		List<Variable> res = new ArrayList<Variable>();
+		res.addAll(stock.getIndicateurs());
+		for (Variable v : res) {
+			System.out.println(v.getNom() + "  " + v.getValeur() + "  " + v.getCreateur());
+		}
+		return res;
 	}
 
 	public List<Variable> getParametres() {
@@ -87,10 +113,10 @@ public class Distributeur2 implements IActeur {
 			System.out.println("Poor "+acteur.getNom()+"... We will miss you. "+this.getNom());
 
 		}
-	}
-	
-	
+	}	
 
 	public void notificationOperationBancaire(double montant) {
 	}
+	
+	
 }
