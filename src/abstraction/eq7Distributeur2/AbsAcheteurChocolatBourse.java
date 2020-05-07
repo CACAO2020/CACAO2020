@@ -85,4 +85,4 @@ public class AbsAcheteurChocolatBourse extends AcheteurCacaoCriee implements IAc
 	
 	public void notificationOperationBancaire(double montant) {
 	}
-}
+} 
