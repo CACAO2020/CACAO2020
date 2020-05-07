@@ -42,23 +42,5 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 			deathlist.remove(deathlist.size()-1);
 		}
 	}
-
-	public List<Variable> getIndicateurs() {
-		List<Variable> res=new ArrayList<Variable>();
-		res.addAll(this.stock.getVariables());
-		return res;
-	}
-
-	public List<Variable> getParametres() {
-		List<Variable> res=new ArrayList<Variable>();
-		res.add()
-		return res;
-	}
-
-	public List<Journal> getJournaux() {
-		List<Journal> res=new ArrayList<Journal>();
-		res.add(this.journalEq2);
-		return res;
-	}
 	
 }
