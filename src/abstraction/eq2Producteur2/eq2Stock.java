@@ -31,8 +31,8 @@ public class eq2Stock extends eq2Acteur{
 	}
  public List<Variable> getVariables() {
 	 List<Variable> variables=new ArrayList<Variable>();
-	 variables.add(this.masse_feves_trinitario);
 	 variables.add(this.masse_feves_forastero);
+	 variables.add(this.masse_feves_trinitario);
 	 variables.add(this.masse_feves_criollo);
 	 variables.add(this.qt_pate_bassegamme);
 	 variables.add(this.qt_pate_hautegamme);

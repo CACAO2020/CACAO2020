@@ -1,5 +1,6 @@
 package abstraction.eq2Producteur2;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import abstraction.eq8Romu.cacaoCriee.IVendeurCacaoCriee;
@@ -7,6 +8,9 @@ import abstraction.eq8Romu.cacaoCriee.LotCacaoCriee;
 import abstraction.eq8Romu.cacaoCriee.PropositionCriee;
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Variable;
+import abstraction.eq8Romu.produits.Feve;
+import abstraction.eq8Romu.produits.Pate;
+import abstraction.eq8Romu.produits.Gamme;
 
 public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 	/*Lucas Y
@@ -31,7 +35,25 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 	 * 
 	 */
 	public LotCacaoCriee getLotEnVente() {
-		// voir le pdf des protocoles, mais en gros faut prioriser les lots (par masse par ex), je (lucas y) m'en occupe
+		List<Variable> masses = this.getVariables();
+		if (masses.get(0).getValeur() >= 0.5 || masses.get(1).getValeur()>=0.5 || masses.get(2).getValeur()>=0.5) {
+			List<Double> m_feves = new ArrayList<Double>();
+			for (int i = 0; i < 2; i++) {
+				m_feves.add(masses.get(i).getValeur());
+			}
+		    double max = Math.max(m_feves.get(0),m_feves.get(1));
+		    double vraimax = Math.max(max, m_feves.get(2));
+		    int indice_max = m_feves.indexOf(vraimax);
+		    if (indice_max == 0) {
+		    	return new LotCacaoCriee(this, Feve.FEVE_BASSE, m_feves.get(0), this.getPrixTF().getValeur());
+		    }
+		    else if (indice_max == 1) {
+		    	return new LotCacaoCriee(this, Feve.FEVE_MOYENNE, m_feves.get(1), this.getPrixTT().getValeur());
+		    }
+		    else if (indice_max == 2) {
+		    	return new LotCacaoCriee(this, Feve.FEVE_HAUTE, m_feves.get(2), this.getPrixTC().getValeur());
+		    }
+		}
 		return null;
 	}
 
@@ -52,5 +74,76 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 		// TODO Auto-generated method stub
 		
 	}
+
+	/**
+	 * @return the prixTF
+	 */
+	public Variable getPrixTF() {
+		return prixTF;
+	}
+
+	/**
+	 * @param prixTF the prixTF to set
+	 */
+	public void setPrixTF(Variable prixTF) {
+		this.prixTF = prixTF;
+	}
+
+	/**
+	 * @return the prixTT
+	 */
+	public Variable getPrixTT() {
+		return prixTT;
+	}
+
+	/**
+	 * @param prixTT the prixTT to set
+	 */
+	public void setPrixTT(Variable prixTT) {
+		this.prixTT = prixTT;
+	}
+
+	/**
+	 * @return the prixTC
+	 */
+	public Variable getPrixTC() {
+		return prixTC;
+	}
+
+	/**
+	 * @param prixTC the prixTC to set
+	 */
+	public void setPrixTC(Variable prixTC) {
+		this.prixTC = prixTC;
+	}
+
+	/**
+	 * @return the prixTPBG
+	 */
+	public Variable getPrixTPBG() {
+		return prixTPBG;
+	}
+
+	/**
+	 * @param prixTPBG the prixTPBG to set
+	 */
+	public void setPrixTPBG(Variable prixTPBG) {
+		this.prixTPBG = prixTPBG;
+	}
+
+	/**
+	 * @return the prixTPHG
+	 */
+	public Variable getPrixTPHG() {
+		return prixTPHG;
+	}
+
+	/**
+	 * @param prixTPHG the prixTPHG to set
+	 */
+	public void setPrixTPHG(Variable prixTPHG) {
+		this.prixTPHG = prixTPHG;
+	}
+	
 
 }
