@@ -12,10 +12,46 @@ import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
-public class Stock extends AbsStock{
+public class Stock extends AbsStock implements IStock{
 	
 	public Stock() {
 			super();
+	}
+
+	@Override
+	public double getStockChocolat(Chocolat choco) {
+		return stocksChocolat.get(choco).getValeur();
+	}
+
+	@Override
+	public Chocolat stringToChoco(String abr) {
+		return abreviationChocolats.get(abr);
+	}
+
+	@Override
+	public double getStockFeves(Feve feve) {
+		return stocksFeves.get(feve).getValeur();
+	}
+
+	@Override
+	public Feve stringToFeve(String abr) {
+		return abreviationFeves.get(abr);
+	}
+
+	@Override
+	public void ajouterStockChocolat(Chocolat choco, double quantite) {
+	}
+
+	@Override
+	public void retirerStockChocolat(Chocolat choco, double quantite) {
+	}
+
+	@Override
+	public void ajouterStockFeves(Feve feve, double quantite) {
+	}
+
+	@Override
+	public void retirerStockFeves(Feve feve, double quantite) {
 	}
 	
 	

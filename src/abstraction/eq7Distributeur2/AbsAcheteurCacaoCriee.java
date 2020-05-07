@@ -67,8 +67,7 @@ public class AbsAcheteurCacaoCriee extends DistributeurChocolat implements IActe
 	}
 	
 	public List<Variable> getIndicateurs() {
-		List<Variable> res=new ArrayList<Variable>();
-		res.add(this.totalStocksFeves);
+		List<Variable> res = super.getIndicateurs();
 		return res;
 	}
 

@@ -21,7 +21,7 @@ public class Distributeur2 extends AcheteurChocolatBourse implements IActeur {
 	}
 
 	public String getNom() {
-		return "EQ7 : Ecocoa de Liège";
+		return "EQ7";
 	}
 
 	public String getDescription() {
@@ -51,7 +51,7 @@ public class Distributeur2 extends AcheteurChocolatBourse implements IActeur {
 	}
 
 	public List<Variable> getIndicateurs() {
-		List<Variable> res=new ArrayList<Variable>();
+		List<Variable> res = super.getIndicateurs();
 		return res;
 	}
 
