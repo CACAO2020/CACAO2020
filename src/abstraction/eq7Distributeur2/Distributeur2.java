@@ -51,7 +51,9 @@ public class Distributeur2 implements IActeur {
 	}
 
 	public void next() {
+		System.out.println(this.stock.stocksChocolat.get(stock.stringToChoco("H")).getValeur());
 		this.stock.stocksChocolat.get(Chocolat.CHOCOLAT_HAUTE).setValeur(this, this.stock.stocksChocolat.get(stock.stringToChoco("H")).getValeur() + 5.);
+		System.out.println(this.stock.stocksChocolat.get(stock.stringToChoco("H")).getValeur());
 		acheteurCacaoCriee.next();
 	}
 
@@ -64,8 +66,14 @@ public class Distributeur2 implements IActeur {
 	}
 
 	public List<Variable> getIndicateurs() {
-		List<Variable> res = new ArrayList<Variable>();
-		res.addAll(this.stock.getIndicateurs());
+		List<Variable> res=new ArrayList<Variable>();
+		for (Chocolat choco : Chocolat.values()) {
+			res.add(stock.stocksChocolat.get(choco));
+		}
+		for (Feve feve : Feve.values()) {
+			res.add(stock.stocksFeves.get(feve));
+		}
+		System.out.println(res);
 		return res;
 	}
 

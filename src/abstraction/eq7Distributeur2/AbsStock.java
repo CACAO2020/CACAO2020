@@ -92,14 +92,7 @@ public class AbsStock implements IActeur {
 
 	@Override
 	public List<Variable> getIndicateurs() {
-		List<Variable> res=new ArrayList<Variable>();
-		for (Chocolat choco : Chocolat.values()) {
-			res.add(stocksChocolat.get(choco));
-		}
-		for (Feve feve : Feve.values()) {
-			res.add(stocksFeves.get(feve));
-		}
-		return res;
+		return null;
 	}
 
 	@Override
