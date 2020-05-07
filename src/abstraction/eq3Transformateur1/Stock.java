@@ -14,19 +14,23 @@ public class Stock extends ActeurEQ3 {
 	 * Author Amaury Coudray
 	 */
 
-	private Map<Feve,Double> StockFeves;
-	private Map<Chocolat,Double> StockChocolat;
+	protected Map<Feve,Double> StockFeves;
+	protected Map<Chocolat,Double> StockChocolat;
 	public Stock() {
-		StockFeves=new HashMap<Feve,Double>();
-		StockChocolat=new HashMap<Chocolat,Double>();
+		this.StockFeves=new HashMap<Feve,Double>();
+		this.StockChocolat=new HashMap<Chocolat,Double>();
 	}
 	
 	public void setStockFeves(Feve feve,Double quantite) {
-		StockFeves.put(feve,quantite+StockFeves.get(feve));
+		this.StockFeves.put(feve,quantite+this.StockFeves.get(feve));
 	}
 	public void setStockChocolat(Chocolat chocolat,Double quantite) {
-		StockChocolat.put(chocolat,quantite+StockChocolat.get(chocolat));
+		this.StockChocolat.put(chocolat,quantite+this.StockChocolat.get(chocolat));
 	}
-	
-
+	public Map<Feve,Double> getStockFeves() {
+		return this.StockFeves;
+	}
+	public Map<Chocolat,Double> getStockChocolat() {
+		return this.StockChocolat;
+	}
 }
