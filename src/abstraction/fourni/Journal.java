@@ -18,7 +18,6 @@ import java.util.ArrayList;
  *
  * @author Romuald Debruyne
  */
-
 public class Journal {
 	private String nom;            // le nom du journal
 	private IActeur createur;
@@ -172,9 +171,13 @@ public class Journal {
 	public static String doubleSur(double nombre, int caracteresApresLaVirgule) {
 		String avantLaVirgule = "";
 		String apresLaVirgule = "";
+		if (nombre<0.0) {
+			avantLaVirgule="-";
+			nombre=-nombre;
+		}
 		long partieEntiere = (long)nombre;
 		if (partieEntiere==0) {
-			avantLaVirgule="0";
+			avantLaVirgule=avantLaVirgule+"0";
 		} else {		
 			while (partieEntiere>999) {
 				String sur1000 = ""+(partieEntiere%1000);

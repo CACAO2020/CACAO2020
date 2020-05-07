@@ -19,6 +19,8 @@ public class FiliereParDefaut extends Filiere {
 	
 	public FiliereParDefaut() {
 		super();
+		cf = new ClientFinal();
+		this.ajouterActeur(cf);
 		this.ajouterActeur(new Producteur1());
 		this.ajouterActeur(new Producteur2());
 		this.ajouterActeur(new Transformateur1());
@@ -31,8 +33,6 @@ public class FiliereParDefaut extends Filiere {
 		this.ajouterActeur(superviseur);
 		SuperviseurChocolatBourse superviseurBourse = new SuperviseurChocolatBourse();
 		this.ajouterActeur(superviseurBourse);
-		cf = new ClientFinal();
-		this.ajouterActeur(cf);
 
 		this.getIndicateur("BourseChoco cours CHOCOLAT_BASSE").setValeur(superviseur, 4000.0);
 		this.getIndicateur("BourseChoco cours CHOCOLAT_MOYENNE").setValeur(superviseur, 10000.0);
@@ -54,11 +54,11 @@ public class FiliereParDefaut extends Filiere {
 	}
 	public void initialiser() {
 		super.initialiser();
-		cf.initAttractiviteChoco(Chocolat.CHOCOLAT_BASSE, 1.0);
-		cf.initAttractiviteChoco(Chocolat.CHOCOLAT_MOYENNE, 2.0);
-		cf.initAttractiviteChoco(Chocolat.CHOCOLAT_HAUTE, 0.3);
-		cf.initAttractiviteChoco(Chocolat.CHOCOLAT_HAUTE_EQUITABLE, 0.1);
-		cf.initAttractiviteChoco(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE, 0.2);
+//		cf.initAttractiviteChoco(Chocolat.CHOCOLAT_BASSE, 1.0);
+//		cf.initAttractiviteChoco(Chocolat.CHOCOLAT_MOYENNE, 2.0);
+//		cf.initAttractiviteChoco(Chocolat.CHOCOLAT_HAUTE, 0.3);
+//		cf.initAttractiviteChoco(Chocolat.CHOCOLAT_HAUTE_EQUITABLE, 0.1);
+//		cf.initAttractiviteChoco(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE, 0.2);
 	}
 
 }
