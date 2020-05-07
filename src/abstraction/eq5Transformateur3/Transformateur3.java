@@ -21,7 +21,7 @@ import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 @SuppressWarnings("unused")
-public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurChocolatBourse, IAcheteurCacaoAleatoire {
+public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurChocolatBourse {
 
 	private Integer cryptogramme;
 	private Journal journalEq5;
@@ -129,7 +129,7 @@ public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurCh
 
 	
 	public Integer getCryptogramme(SuperviseurCacaoCriee superviseur) {
-		return this.acheteurCacao.getCryptogramme(superviseur);
+		return superviseur == null ? Integer.valueOf(0) : this.cryptogramme;
 	}
 
 	
@@ -137,20 +137,6 @@ public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurCh
 		this.acheteurCacao.notifierVente(proposition);
 	}
 	
-	// Achat de cacao aléatoire IAcheteurCacaoAleatoire c'est bizarre ce protocole 
-	
-	public double quantiteDesiree(double quantiteEnVente, double prix) {
-		return this.acheteurCacao.quantiteDesiree(quantiteEnVente, prix);
-	}
-
-	
-	public void quantiteLivree(double quantiteLivree) {
-		this.stock.getStockChocolat().get(null).ajouter(this, quantiteLivree);
-	}
-
-	
-	public Integer getCryptogramme(SuperviseurVentesCacaoAleatoires superviseur) {
-		return superviseur == null ? Integer.valueOf(0) : this.cryptogramme ;
 	}
 	//TODO ajouter les methodes pour acheter de la pate de cacao
 
