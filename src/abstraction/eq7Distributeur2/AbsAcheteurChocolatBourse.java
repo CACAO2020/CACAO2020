@@ -15,19 +15,12 @@ import abstraction.fourni.Variable;
 public class AbsAcheteurChocolatBourse extends AcheteurCacaoCriee implements IActeur {
 	private static int NB_INSTANCES = 0; // Afin d'attribuer un nom different a toutes les instances
 	private int numero;
-	private Variable totalStocksChocolat;
-	protected Map<Chocolat, Variable> stocksChocolat;
 	protected Integer cryptogramme;
 	protected Journal journal;
 
 	public AbsAcheteurChocolatBourse() {
 		NB_INSTANCES++;
 		this.numero=NB_INSTANCES;
-		this.totalStocksChocolat=new Variable(getNom()+" total stocks chocolat", this, 0);
-		stocksChocolat=new HashMap<Chocolat, Variable>();
-		for (Chocolat choco : Chocolat.values()) {
-			stocksChocolat.put(choco, new Variable(getNom()+" stock "+choco.name(), this, 0));
-		}
 		this.journal = new Journal(this.getNom()+" activites", this);
 	}
 	
@@ -50,13 +43,7 @@ public class AbsAcheteurChocolatBourse extends AcheteurCacaoCriee implements IAc
 		this.cryptogramme = crypto;
 	}
 	public void next() {
-		double total=0.0;
-		for (Chocolat choco :Chocolat.values()) {
-			if (stocksChocolat.get(choco)!=null) {
-				total=total+stocksChocolat.get(choco).getValeur();
-			}
-		}
-		this.totalStocksChocolat.setValeur(this, total);
+		
 	}
 
 	public List<String> getNomsFilieresProposees() {
@@ -69,10 +56,6 @@ public class AbsAcheteurChocolatBourse extends AcheteurCacaoCriee implements IAc
 	
 	public List<Variable> getIndicateurs() {
 		List<Variable> res=new ArrayList<Variable>();
-		for (Chocolat choco :Chocolat.values()) {
-			res.add(stocksChocolat.get(choco));
-		}
-		res.add(this.totalStocksChocolat);
 		return res;
 	}
 

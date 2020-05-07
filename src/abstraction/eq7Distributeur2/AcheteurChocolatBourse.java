@@ -19,9 +19,21 @@ public class AcheteurChocolatBourse extends AbsAcheteurChocolatBourse implements
 	}
 
 	public void notifierCommande(Chocolat chocolat, double quantiteObtenue, boolean payee) {
+		
 	}
 
 	public void receptionner(Chocolat chocolat, double quantite) {
-		stocksChocolat.get(chocolat).ajouter(this, quantite);
+		
+		
 	}
+	
+	public void next() {
+		// L'opération sera effectuée pour CHAQUE type de chocolat que nous vendons
+		//D'abord on consulte les stocks
+		
+		//Ensuite on demande au vendeur quelle quantité lui est demandée
+		//On compare la demande du vendeur et les stocks
+		//
+	}
+
 }
