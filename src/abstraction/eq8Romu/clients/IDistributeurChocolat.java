@@ -3,6 +3,8 @@ package abstraction.eq8Romu.clients;
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.fourni.IActeur;
 
+
+@Deprecated //Version obsolete du fait de l'introduction des marques pour les chocolats.
 public interface IDistributeurChocolat extends IActeur {
 	
 	/**
