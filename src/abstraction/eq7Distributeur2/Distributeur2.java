@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import abstraction.eq8Romu.produits.Chocolat;
+import abstraction.eq8Romu.produits.Feve;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
@@ -13,21 +15,9 @@ public class Distributeur2 extends AcheteurChocolatBourse implements IActeur {
 	
 	private Integer cryptogramme;
 	private Journal journalEq7;
-	private Variable stockChocolatHG;
-	private Variable stockChocolatHGE;
-	private Variable stockChocolatMG;
-	private Variable stockChocolatMGE;
-	private Variable stockFevesHG;
-	private Variable stockFevesHGE;
 
 	public Distributeur2() {
 		this.journalEq7 = new Journal("Eq7 activites", this);
-		this.stockChocolatHG = new Variable(getNom()+" stock chocolat haut de gamme", this, 0, 10000, 1000);
-		this.stockChocolatHGE = new Variable(getNom()+" stock chocolat haut de gamme équitable", this, 0, 10000, 1000);
-		this.stockChocolatMG = new Variable(getNom()+" stock chocolat moyenne gamme", this, 0, 10000, 1000);
-		this.stockChocolatMGE = new Variable(getNom()+" stock chocolat moyenne gamme équitable", this, 0, 10000, 1000);
-		this.stockFevesHG = new Variable(getNom()+" stock feves haut de gamme", this, 0, 10000, 1000);
-		this.stockFevesHGE = new Variable(getNom()+" stock feves haut de gamme équitables", this, 0, 10000, 1000);
 	}
 
 	public String getNom() {
@@ -57,17 +47,17 @@ public class Distributeur2 extends AcheteurChocolatBourse implements IActeur {
 	}
 
 	public Filiere getFiliere(String nom) {
-		return null;
+		return Filiere.LA_FILIERE;
 	}
 
 	public List<Variable> getIndicateurs() {
 		List<Variable> res=new ArrayList<Variable>();
-		res.add(this.stockChocolatHG);
-		res.add(this.stockChocolatHGE);
-		res.add(this.stockChocolatMG);
-		res.add(this.stockChocolatMGE);
-		res.add(this.stockFevesHG);
-		res.add(this.stockFevesHGE);
+		for (Chocolat choco : Chocolat.values()) {
+			res.add(stocksChocolat.get(choco));
+		}
+		for (Feve feve : Feve.values()) {
+			res.add(stocksFeves.get(feve));
+		}
 		return res;
 	}
 
