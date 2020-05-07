@@ -61,33 +61,6 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 		return this.stockFeves.getValeur();
 	}
 	
-	//Fonctions pour la gestion du stock
-	// --< Melanie
-	
-	public void setStock(double valeur) {
-		this.stockFeves.setValeur(this, valeur);
-	}
-	
-	/**
-	 * Ajoute la quantité de stock augmentation à la valeur
-	 * deja existante
-	 */
-	
-	public void addStock(double augmentation) {
-		this.stockFeves.setValeur(this, this.getStock() + augmentation);
-	}
-	
-	/**
-	 * Enleve la quantité de stock diminution à la valeur
-	 * deja existante
-	 */
-	
-	public void removeStock(double diminution) {
-		this.stockFeves.setValeur(this, this.getStock() - diminution);
-	}
-	
-	// -->
-	
 
 	public void next() {
 		// Ecriture de l'état dans les logs.
@@ -154,4 +127,32 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 		venteCriee.notifierVente(proposition);
 	}
 	//[-] Clément >
+
+
+		//Fonctions pour la gestion du stock
+	// --< Melanie
+	
+	public void setStock(double valeur) {
+		this.stockFeves.setValeur(this, valeur);
+	}
+	
+	/**
+	 * Ajoute la quantité de stock augmentation à la valeur
+	 * deja existante
+	 */
+	
+	public void addStock(double augmentation) {
+		this.stockFeves.setValeur(this, this.getStock() + augmentation);
+	}
+	
+	/**
+	 * Enleve la quantité de stock diminution à la valeur
+	 * deja existante
+	 */
+	
+	public void removeStock(double diminution) {
+		this.stockFeves.setValeur(this, this.getStock() - diminution);
+	}
+	
+	// -->
 }
