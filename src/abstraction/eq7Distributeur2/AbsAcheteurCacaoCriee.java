@@ -11,22 +11,17 @@ import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
-public class AbsAcheteurCacaoCriee extends DistributeurChocolat implements IActeur {
+public class AbsAcheteurCacaoCriee implements IActeur {
 	private static int NB_INSTANCES = 0; // Afin d'attribuer un nom different a toutes les instances
 	private int numero;
-	private Variable totalStocksFeves;
-	protected Map<Feve, Double> stocksFeves;
 	protected Integer cryptogramme;
 	protected Journal journal;
+	protected Stock stock;
 
-	public AbsAcheteurCacaoCriee() {
+	public AbsAcheteurCacaoCriee(Stock stock) {
 		NB_INSTANCES++;
 		this.numero=NB_INSTANCES;
-		this.totalStocksFeves=new Variable(getNom()+" total stocks feves", this, 50);
-		stocksFeves=new HashMap<Feve, Double>();
-		for (Feve feve : Feve.values()) {
-			stocksFeves.put(feve, 0.0);
-		}
+		this.stock = stock;
 		this.journal = new Journal(this.getNom()+" activites3"+ this.numero, this);
 	}
 	
@@ -49,13 +44,7 @@ public class AbsAcheteurCacaoCriee extends DistributeurChocolat implements IActe
 		this.cryptogramme = crypto;
 	}
 	public void next() {
-		double total=0.0;
-		for (Feve feve :Feve.values()) {
-			if (stocksFeves.get(feve)!=null) {
-				total=total+stocksFeves.get(feve);
-			}
-		}
-		this.totalStocksFeves.setValeur(this, total);
+		this.stock.stocksChocolat.get(stock.stringToChoco("H")).setValeur(this, 10.);
 	}
 
 	public List<String> getNomsFilieresProposees() {
@@ -67,8 +56,7 @@ public class AbsAcheteurCacaoCriee extends DistributeurChocolat implements IActe
 	}
 	
 	public List<Variable> getIndicateurs() {
-		List<Variable> res = super.getIndicateurs();
-		return res;
+		return null;
 	}
 
 	public List<Variable> getParametres() {
@@ -77,10 +65,7 @@ public class AbsAcheteurCacaoCriee extends DistributeurChocolat implements IActe
 	}
 
 	public List<Journal> getJournaux() {
-		List<Journal> res= new ArrayList<Journal>();
-		res.add(this.journal);
-		res.addAll(super.getJournaux());
-		return res;
+		return null;
 	}
 	
 	public void notificationFaillite(IActeur acteur) {

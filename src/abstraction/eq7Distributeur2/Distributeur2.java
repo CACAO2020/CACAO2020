@@ -12,13 +12,21 @@ import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
 
-public class Distributeur2 extends AcheteurChocolatBourse implements IActeur {
+public class Distributeur2 implements IActeur {
 	
 	private Integer cryptogramme;
 	private Journal journal;
+	
+	public AcheteurCacaoCriee acheteurCacaoCriee;
+	private AcheteurChocolatBourse acheteurChocolatBourse;
+	private DistributeurChocolat distributeurChocolat;
+	
+	protected Stock stock;
 
 	public Distributeur2() {
 		this.journal = new Journal(this.getNom() + " activites1", this);
+		acheteurCacaoCriee = new AcheteurCacaoCriee(stock);
+		acheteurChocolatBourse = new AcheteurChocolatBourse(stock);
 	}
 
 	public String getNom() {
@@ -41,6 +49,8 @@ public class Distributeur2 extends AcheteurChocolatBourse implements IActeur {
 	}
 
 	public void next() {
+		this.stock.stocksChocolat.get(stock.stringToChoco("H")).setValeur(this, 5.);
+		acheteurCacaoCriee.next();
 	}
 
 	public List<String> getNomsFilieresProposees() {
@@ -52,7 +62,8 @@ public class Distributeur2 extends AcheteurChocolatBourse implements IActeur {
 	}
 
 	public List<Variable> getIndicateurs() {
-		List<Variable> res = super.getIndicateurs();
+		List<Variable> res = new ArrayList<Variable>();
+		for ()
 		return res;
 	}
 
@@ -63,7 +74,7 @@ public class Distributeur2 extends AcheteurChocolatBourse implements IActeur {
 
 	public List<Journal> getJournaux() {
 		List<Journal> res=new ArrayList<Journal>();
-		res = super.getJournaux();
+		res.add(journal);
 		return res;
 	}
 

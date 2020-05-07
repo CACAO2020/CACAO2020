@@ -12,21 +12,27 @@ import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
-public class AbsAcheteurChocolatBourse extends AcheteurCacaoCriee implements IActeur {
+public class AbsAcheteurChocolatBourse implements IActeur {
 	private static int NB_INSTANCES = 0; // Afin d'attribuer un nom different a toutes les instances
 	private int numero;
 	private Map<Chocolat, Variable> demande_choco;
 	protected Integer cryptogramme;
 	protected Journal journal;
 
+	protected Stock stock;
+	
 	public AbsAcheteurChocolatBourse() {
+		
+	}
+	
+	public AbsAcheteurChocolatBourse(Stock stock) {
 		NB_INSTANCES++;
 		this.numero=NB_INSTANCES;
 		demande_choco=new HashMap<Chocolat, Variable>();
 		for (Chocolat choco : Chocolat.values()) {
 			demande_choco.put(choco, new Variable("Demande en : " + choco.name(), this, 0));
 		}
-		
+		this.stock = stock;
 		this.journal = new Journal(this.getNom()+" activites", this);
 	}
 
@@ -65,8 +71,7 @@ public class AbsAcheteurChocolatBourse extends AcheteurCacaoCriee implements IAc
 	}
 	
 	public List<Variable> getIndicateurs() {
-		List<Variable> res = super.getIndicateurs();
-		return res;
+		return null;
 	}
 
 	public List<Variable> getParametres() {
@@ -75,9 +80,7 @@ public class AbsAcheteurChocolatBourse extends AcheteurCacaoCriee implements IAc
 	}
 
 	public List<Journal> getJournaux() {
-		List<Journal> res = new ArrayList<Journal>();
-		res.add(this.journal);
-		return res;
+		return null;
 	}
 	
 	public void notificationFaillite(IActeur acteur) {

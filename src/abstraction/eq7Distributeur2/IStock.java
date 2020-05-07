@@ -20,9 +20,5 @@ public interface IStock {
 	public void ajouterStockFeves(Feve feve, double quantite);
 	
 	public void retirerStockFeves(Feve feve, double quantite);
-	
-	//commentaire
-	
-	
 
 }

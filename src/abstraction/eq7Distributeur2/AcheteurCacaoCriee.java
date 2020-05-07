@@ -15,8 +15,8 @@ import abstraction.fourni.Journal;
 public class AcheteurCacaoCriee extends AbsAcheteurCacaoCriee implements IAcheteurCacaoCriee {
 	private Map<Feve, Double> prixCourant;
 
-	public AcheteurCacaoCriee() {
-		super();
+	public AcheteurCacaoCriee(Stock stock) {
+		super(stock);
 		prixCourant=new HashMap<Feve, Double>();
 		for (Feve feve : Feve.values()) {
 			prixCourant.put(feve, 0.6);
@@ -50,8 +50,6 @@ public class AcheteurCacaoCriee extends AbsAcheteurCacaoCriee implements IAchete
 	}
 
 	public void notifierVente(PropositionCriee proposition) {
-		this.stocksFeves.put(proposition.getFeve(), this.stocksFeves.get(proposition.getFeve())+proposition.getQuantiteEnTonnes());
 		this.journal.ajouter("Apprend que sa proposition de "+Journal.doubleSur(proposition.getPrixPourUneTonne(), 4)+" pour "+Journal.texteColore(proposition.getVendeur(), Journal.doubleSur(proposition.getQuantiteEnTonnes(), 2)+" tonnes de "+proposition.getFeve().name())+Journal.texteColore(Color.green, Color.black," a ete acceptee"));
-		this.journal.ajouter("--> le stock de feve passe a "+Journal.doubleSur(this.stocksFeves.get(proposition.getFeve()), 4));
 	}
 }
