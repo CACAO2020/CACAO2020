@@ -1,17 +1,18 @@
 package abstraction.eq7Distributeur2;
 
+import java.util.Map;
+
 import abstraction.eq8Romu.chocolatBourse.IAcheteurChocolatBourse;
 import abstraction.eq8Romu.chocolatBourse.SuperviseurChocolatBourse;
 import abstraction.eq8Romu.produits.Chocolat;
+import abstraction.eq8Romu.produits.Feve;
 import abstraction.fourni.Filiere;
+import abstraction.fourni.Variable;
 
 public class AcheteurChocolatBourse extends AbsAcheteurChocolatBourse implements IAcheteurChocolatBourse {
-
+	//Raphaël Caby
 	public double getDemande(Chocolat chocolat, double cours) {
-		double solde = Filiere.LA_FILIERE.getBanque().getSolde(this,  cryptogramme);
-		double max = solde/cours;
-		//return 500; // si il retourne 500 sans verifier si il peut se le permettre il va parvenir a un impaye qu'il devra regler pour pouvoir a nouveau acheter a la bourse
-		return Math.random()*max;// les cours vont s'effondrer car les acheteurs vont tres vite ne plus avoir assez d'argent pour acheter. Augmentez le solde des acheteurs via l'interface si vous voulez voir les cours repartir à la hausse
+		return this.getDemande_choco().get(chocolat).getValeur();
 	}
 
 	public Integer getCryptogramme(SuperviseurChocolatBourse superviseur) {
@@ -28,12 +29,25 @@ public class AcheteurChocolatBourse extends AbsAcheteurChocolatBourse implements
 	}
 	
 	public void next() {
+		for (Chocolat choco : Chocolat.values()) {
 		// L'opération sera effectuée pour CHAQUE type de chocolat que nous vendons
 		//D'abord on consulte les stocks
-		
+			double stock_choco = stocksChocolat.get(choco).getValeur();
 		//Ensuite on demande au vendeur quelle quantité lui est demandée
+			double demande_vendeur = 15.;   //Le temps de progresser dans le fichier vendeur
 		//On compare la demande du vendeur et les stocks
-		//
+			double achats_a_faire = stock_choco - demande_vendeur;
+			if (achats_a_faire <= 0.) {
+				//Si achats_a_faire < 0 alors on n'achete rien
+				this.getDemande_choco().get(choco).setValeur(this, 0.);
+			}
+			else {
+				//Sinon on positionne la demande sur achats_a_faire
+				this.getDemande_choco().get(choco).setValeur(this, achats_a_faire);
+			}
+			
+		
+		}
 	}
 
 }

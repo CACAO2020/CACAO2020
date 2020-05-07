@@ -15,15 +15,25 @@ import abstraction.fourni.Variable;
 public class AbsAcheteurChocolatBourse extends AcheteurCacaoCriee implements IActeur {
 	private static int NB_INSTANCES = 0; // Afin d'attribuer un nom different a toutes les instances
 	private int numero;
+	private Map<Chocolat, Variable> demande_choco;
 	protected Integer cryptogramme;
 	protected Journal journal;
 
 	public AbsAcheteurChocolatBourse() {
 		NB_INSTANCES++;
 		this.numero=NB_INSTANCES;
+		demande_choco=new HashMap<Chocolat, Variable>();
+		for (Chocolat choco : Chocolat.values()) {
+			demande_choco.put(choco, new Variable("Demande en : " + choco.name(), this, 0));
+		}
+		
 		this.journal = new Journal(this.getNom()+" activites", this);
 	}
-	
+
+	public Map<Chocolat, Variable> getDemande_choco() {
+		return demande_choco;
+	}
+
 	public String getNom() {
 		return "A.ChocoBourse"+numero;
 	}
