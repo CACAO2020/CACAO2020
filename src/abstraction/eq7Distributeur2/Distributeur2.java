@@ -15,7 +15,7 @@ import abstraction.eq7Distributeur2.*;
 
 public class Distributeur2 implements IActeur {
 	
-	private static int NB_INSTANCES = 0; // Afin d'attribuer un nom different a toutes les instancesSs
+	private static int NB_INSTANCES = 0; // Afin d'attribuer un nom different a toutes les instances
 	public int numero;
 	
 	private Integer cryptogramme;
