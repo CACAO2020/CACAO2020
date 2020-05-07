@@ -10,6 +10,7 @@ import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
+import abstraction.eq7Distributeur2.*;
 
 
 public class Distributeur2 implements IActeur {
