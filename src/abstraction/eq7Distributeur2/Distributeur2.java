@@ -11,6 +11,7 @@ import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
+
 public class Distributeur2 extends AcheteurChocolatBourse implements IActeur {
 	
 	private Integer cryptogramme;
@@ -72,8 +73,11 @@ public class Distributeur2 extends AcheteurChocolatBourse implements IActeur {
 			System.out.println("I'll be back... or not... "+this.getNom());
 		} else {
 			System.out.println("Poor "+acteur.getNom()+"... We will miss you. "+this.getNom());
+
 		}
 	}
+	
+	
 
 	public void notificationOperationBancaire(double montant) {
 	}
