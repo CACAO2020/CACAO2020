@@ -1,6 +1,8 @@
 package abstraction.eq1Producteur1;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
 
 
 /*
@@ -17,6 +19,8 @@ import java.util.ArrayList;
  * void setArbresF(ArrayList<Double>)
  * void setArbresT(ArrayListDouble>)
  * void setDerniereRecolte(double, double)
+ * 
+ * void initialiserArbres(int, int)
  * void setPourcentageRecolteurs()
  * void nouvelArbre(int)
  * void actualiserAge()
@@ -134,6 +138,27 @@ public class Plantations {
 		this.setArbresT(l2);
 	}
 	
+/*
+ * Cette fonction est utilisé uniquement au début de la simulation
+ * pour créer une plantation déjà existante.
+ * J'ai utilisé l'aléatoire pour générer l'âge des arbres.
+ */
+	public void initialiserArbres(int arbresF, int arbresT) {
+		Random rand = new Random();
+		ArrayList<Double> lF = new ArrayList<Double>();
+		ArrayList<Double> lT = new ArrayList<Double>();
+		for (int i=0; i<arbresF; i+= 1) {
+			double age = (double) rand.nextInt(45);
+			lF.add((Double) age);
+		}
+		Collections.sort(lF);
+		for (int i=0; i<arbresT; i+= 1) {
+			double age = (double) rand.nextInt(45);
+			lT.add((Double) age);
+		}
+		Collections.sort(lT);
+	}
+	
 	
 /*
  * J'ai pris en compte le pourcentage de récolteurs (parce que cela
@@ -197,6 +222,7 @@ public class Plantations {
 		recolte.add((Double) pretesAStockerT);
 		return recolte;
 	}
+	
 	
 	
 }
