@@ -147,6 +147,7 @@ public class Stock {
 						table.get(i).get1().retirer(this.acteur, table.get(i).get1().getValeur());
 					}
 				}
+				this.majStockFeves(feve);
 			}
 		} else {
 			throw new IllegalArgumentException("Quantite trop importante");
@@ -169,6 +170,7 @@ public class Stock {
 						table.get(i).get1().retirer(this.acteur, table.get(i).get1().getValeur());
 					}
 				}
+				this.majStockPate(pate);
 			}
 		} else {
 			throw new IllegalArgumentException("Quantite trop importante");
@@ -191,6 +193,7 @@ public class Stock {
 						table.get(i).get1().retirer(this.acteur, table.get(i).get1().getValeur());
 					}
 				}
+				this.majStockChocolat(choco);
 			}
 		} else {
 			throw new IllegalArgumentException("Quantite trop importante");
@@ -216,7 +219,18 @@ public class Stock {
 			throw new IllegalArgumentException("Quantité négative");
 		}
 	}
-	
+	public void majStockFeves(Feve feve) {
+		List<Couple<Variable>> table = this.getStockFeves().get(feve);
+		table.removeIf(c -> c.get1().getValeur()==0);
+	}
+	public void majStockPate(Pate pate) {
+		List<Couple<Variable>> table = this.getStockPate().get(pate);
+		table.removeIf(c -> c.get1().getValeur()==0);
+	}
+	public void majStockChocolat(Chocolat choco) {
+		List<Couple<Variable>> table = this.getStockChocolat().get(choco);
+		table.removeIf(c -> c.get1().getValeur()==0);
+	}
 }
 
 
