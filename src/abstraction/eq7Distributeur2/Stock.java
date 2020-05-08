@@ -18,44 +18,32 @@ public class Stock extends AbsStock implements IStock{
 			super(ac);
 	}
 
-	@Override
 	public double getStockChocolat(Chocolat choco) {
 		return stocksChocolat.get(choco).getValeur();
 	}
 
-	@Override
-	public Chocolat stringToChoco(String abr) {
-		return abreviationChocolats.get(abr);
-	}
-
-	@Override
 	public double getStockFeves(Feve feve) {
 		return stocksFeves.get(feve).getValeur();
 	}
 
-	@Override
-	public Feve stringToFeve(String abr) {
-		return abreviationFeves.get(abr);
-	}
-
-	@Override
 	public void ajouterStockChocolat(Chocolat choco, double quantite) {
 		stocksChocolat.get(choco).setValeur(ac, stocksChocolat.get(choco).getValeur() + quantite);
+		journal.ajouter(quantite + " tonnes de chocolat " + choco + " ont été ajoutées au stock (nouveau stock : " + stocksChocolat.get(choco).getValeur()+ " tonnes)");
 	}
 
-	@Override
 	public void retirerStockChocolat(Chocolat choco, double quantite) {
 		stocksChocolat.get(choco).setValeur(ac, stocksChocolat.get(choco).getValeur() - quantite);
+		journal.ajouter(quantite + " tonnes de chocolat " + choco + " ont été retirées du stock (nouveau stock : " + stocksChocolat.get(choco).getValeur()+ " tonnes)");
 	}
 
-	@Override
 	public void ajouterStockFeves(Feve feve, double quantite) {
 		stocksFeves.get(feve).setValeur(ac, stocksFeves.get(feve).getValeur() + quantite);
+		journal.ajouter(quantite + " tonnes de fèves " + feve + " ont été ajoutées au stock (nouveau stock : " + stocksFeves.get(feve).getValeur() + " tonnes)");
 	}
 
-	@Override
 	public void retirerStockFeves(Feve feve, double quantite) {
 		stocksFeves.get(feve).setValeur(ac, stocksFeves.get(feve).getValeur() - quantite);
+		journal.ajouter(quantite + " tonnes de fèves " + feve + " ont été retirées du stock (nouveau stock : " + stocksFeves.get(feve).getValeur() + " tonnes)");
 	}
 	
 	

@@ -21,10 +21,10 @@ public class Distributeur2 implements IActeur {
 	private Integer cryptogramme;
 	private Journal journal;
 	
-	protected AcheteurCacaoCriee acheteurCacaoCriee;
-	protected AcheteurChocolatBourse acheteurChocolatBourse;
-	protected DistributeurChocolatDeMarque distributeurChocolat;
-	protected Stock stock;
+	private AcheteurCacaoCriee acheteurCacaoCriee;
+	private AcheteurChocolatBourse acheteurChocolatBourse;
+	private DistributeurChocolat distributeurChocolat;
+	private Stock stock;
 
 
 	public Distributeur2() {
@@ -33,28 +33,50 @@ public class Distributeur2 implements IActeur {
 		stock = new Stock(this);		
 		acheteurCacaoCriee = new AcheteurCacaoCriee(this);
 		acheteurChocolatBourse = new AcheteurChocolatBourse(this);
-		distributeurChocolat = new DistributeurChocolatDeMarque(this);
-		this.journal = new Journal(this.getNom() + " Activités " + numero, this);
+		distributeurChocolat = new DistributeurChocolat(this);
+		journal = new Journal(getNom() + " Activités " + numero, this);
+	}
+	
+	// Renvoie le numéro de l'instance de cette classe
+	public int getNumero() {
+		return this.numero;
 	}
 	
 	// Renvoie l'unique instance de la classe Stock associée au distributeur
-	protected Stock getStock() {
+	public Stock getStock() {
 		return this.stock;
 	}
 	
 	// Renvoie l'unique instance de la classe AcheteurCacaoCriee associée au distributeur
-	protected AcheteurCacaoCriee getAcheteurCacaoCriee() {
+	public AcheteurCacaoCriee getAcheteurCacaoCriee() {
 		return this.acheteurCacaoCriee;
 	}
 	
 	// Renvoie l'unique instance de la classe AcheteurChocolatBourse associée au distributeur
-	protected AcheteurChocolatBourse getAcheteurChocolatBourse() {
+	public AcheteurChocolatBourse getAcheteurChocolatBourse() {
 		return this.acheteurChocolatBourse;
 	}
 	
 	// Renvoie l'unique instance de la classe DistributeurChocolat associée au distributeur
-	protected DistributeurChocolatDeMarque getDistributeurChocolat() {
+	public DistributeurChocolat getDistributeurChocolat() {
 		return this.distributeurChocolat;
+	}
+	
+	public Chocolat stringToChoco(String abr) {
+		return stock.abreviationChocolats.get(abr);
+	}
+
+	public Feve stringToFeve(String abr) {
+		return stock.abreviationFeves.get(abr);
+	}
+	
+	public String chocoToString(Chocolat choco) {
+		for (String s : stock.abreviationChocolats.keySet()) {
+			if (stock.abreviationChocolats.get(s) == choco) {
+				return s;
+			}
+		}
+		throw new IllegalArgumentException("Type de chocolat introuvable.");
 	}
 	
 	// Renvoie le nom de l'acteur (par défaut : "EQ7")
@@ -79,8 +101,8 @@ public class Distributeur2 implements IActeur {
 	}
 
 	public void next() {
-		this.stock.stocksChocolat.get(Chocolat.CHOCOLAT_HAUTE).setValeur(this, this.stock.stocksChocolat.get(stock.stringToChoco("H")).getValeur() + 5.);
-		acheteurCacaoCriee.next(); //ajoute 10 au stock "H" par l'intermédiaire de l'acheteur cacao criée
+		stock.ajouterStockChocolat(this.stringToChoco("H"), 5);
+		acheteurCacaoCriee.next(); // Ajoute 10 au stock "H" par l'intermédiaire de l'acheteur cacao criée
 	}
 
 	public List<String> getNomsFilieresProposees() {
@@ -102,6 +124,10 @@ public class Distributeur2 implements IActeur {
 
 	public List<Variable> getParametres() {
 		List<Variable> res=new ArrayList<Variable>();
+		res.addAll(stock.getParametres());
+		res.addAll(acheteurCacaoCriee.getParametres());
+		res.addAll(acheteurChocolatBourse.getParametres());
+		res.addAll(distributeurChocolat.getParametres());
 		return res;
 	}
 

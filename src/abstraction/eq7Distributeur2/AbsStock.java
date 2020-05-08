@@ -61,7 +61,7 @@ public class AbsStock implements IActeur {
 		abreviationFeves.put("H", Feve.FEVE_HAUTE );
 		abreviationFeves.put("HE", Feve.FEVE_HAUTE_EQUITABLE );
 		
-		this.journal = new Journal(getNom() + " Stocks " + ac.numero, ac);
+		this.journal = new Journal(getNom() + " Stocks " + ac.getNumero(), ac);
 		this.journal.ajouter("EQ7 : Suivi des stocks de chocolats et de fèves");
 		
 	}
@@ -81,7 +81,8 @@ public class AbsStock implements IActeur {
 	}
 
 	public List<Variable> getParametres() {
-		return null;
+		List<Variable> res=new ArrayList<Variable>();
+		return res;
 	}
 
 	public List<Journal> getJournaux() {

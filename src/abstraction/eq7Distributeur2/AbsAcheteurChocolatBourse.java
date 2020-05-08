@@ -29,7 +29,7 @@ public class AbsAcheteurChocolatBourse implements IActeur {
 		for (Chocolat choco : Chocolat.values()) {
 			demandeChoco.put(choco, new Variable("Demande en : " + choco.name(), ac, 0));
 		}
-		this.journal = new Journal(this.getNom()+" Acheteur Chocolat Bourse " + ac.numero, ac);
+		this.journal = new Journal(this.getNom()+" Acheteur Chocolat Bourse " + ac.getNumero(), ac);
 	}
 
 	public Map<Chocolat, Variable> getDemande_choco() {
@@ -41,7 +41,7 @@ public class AbsAcheteurChocolatBourse implements IActeur {
 	}
 
 	public String getDescription() {
-		return "Acheteur de chocolat a la bourse "+this.ac.numero;
+		return "Acheteur de chocolat a la bourse "+this.ac.getNumero();
 	}
 	
 	public Color getColor() {

@@ -20,7 +20,7 @@ public class AbsAcheteurCacaoCriee implements IActeur {
 
 	public AbsAcheteurCacaoCriee(Distributeur2 ac) {
 		this.ac = ac;
-		this.journal = new Journal(this.getNom()+ " Acheteur Cacao Criée "+ this.ac.numero, ac);
+		this.journal = new Journal(this.getNom()+ " Acheteur Cacao Criée "+ this.ac.getNumero(), ac);
 	}
 	
 	public String getNom() {
@@ -28,7 +28,7 @@ public class AbsAcheteurCacaoCriee implements IActeur {
 	}
 
 	public String getDescription() {
-		return "Acheteur de cacao a la criee "+this.ac.numero;
+		return "Acheteur de cacao a la criee "+this.ac.getNumero();
 	}
 	
 	public Color getColor() {
@@ -42,7 +42,7 @@ public class AbsAcheteurCacaoCriee implements IActeur {
 		this.cryptogramme = crypto;
 	}
 	public void next() {
-		this.ac.getStock().stocksChocolat.get(Chocolat.CHOCOLAT_HAUTE).setValeur(ac, ac.getStock().stocksChocolat.get(ac.getStock().stringToChoco("H")).getValeur() + 10.);
+		ac.getStock().ajouterStockChocolat(ac.stringToChoco("H"), 10);
 	}
 
 	public List<String> getNomsFilieresProposees() {

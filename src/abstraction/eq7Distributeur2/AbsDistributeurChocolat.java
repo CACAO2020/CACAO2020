@@ -10,15 +10,15 @@ import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
-public class AbsDistributeurChocolatDeMarque implements IActeur {
+public class AbsDistributeurChocolat implements IActeur {
 	protected Integer cryptogramme;
 	protected Journal journal;
 
 	protected Distributeur2 ac;
 	
-	public AbsDistributeurChocolatDeMarque(Distributeur2 ac) {	
+	public AbsDistributeurChocolat(Distributeur2 ac) {	
 		this.ac = ac;
-		this.journal = new Journal(this.getNom()+" Distributeur Chocolat " + ac.numero, ac);
+		this.journal = new Journal(this.getNom()+" Distributeur Chocolat " + ac.getNumero(), ac);
 	}
 	
 	public String getNom() {
@@ -26,7 +26,7 @@ public class AbsDistributeurChocolatDeMarque implements IActeur {
 	}
 
 	public String getDescription() {
-		return "Distributeur de chocolat "+ ac.numero;
+		return "Distributeur de chocolat "+ ac.getNumero();
 	}
 
 	public Color getColor() {

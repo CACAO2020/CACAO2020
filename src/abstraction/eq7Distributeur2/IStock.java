@@ -7,11 +7,11 @@ public interface IStock {
 	
 	public double getStockChocolat(Chocolat choco);
 	
-	public Chocolat stringToChoco(String choco);
+
 	
 	public double getStockFeves(Feve feve);
 	
-	public Feve stringToFeve(String feve);
+
 	
 	public void ajouterStockChocolat(Chocolat choco, double quantite);
 	
