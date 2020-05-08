@@ -12,6 +12,7 @@ import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 import abstraction.eq8Romu.cacaoCriee.SuperviseurCacaoCriee;
 import abstraction.eq8Romu.produits.Chocolat;
+import abstraction.eq8Romu.produits.ChocolatDeMarque;
 import abstraction.eq8Romu.produits.Feve;
 import abstraction.fourni.Banque;
 import abstraction.fourni.Filiere;
@@ -155,11 +156,16 @@ public class SuperviseurChocolatBourse implements IActeur {
 						boolean virementEffectue = Filiere.LA_FILIERE.getBanque().virer(acheteur, crypto, this, montant);
 						acheteur.notifierCommande(choco, quantiteAchetee, virementEffectue);
 						if (virementEffectue) {
-							journal.ajouter(Journal.texteColore(acheteur,"l'acheteur "+acheteur.getNom()+" obtient "+Journal.doubleSur(quantiteAchetee, 2)));
-							acheteur.receptionner(choco, quantiteAchetee);
+							journal.ajouter(Journal.texteColore(acheteur,"l'acheteur "+acheteur.getNom()+" obtient "+Journal.doubleSur(quantiteAchetee, 2)+" qui se decompose en :"));
+							for (IVendeurChocolatBourse vendeur : offres.keySet()) {
+								acheteur.receptionner(new ChocolatDeMarque(choco,vendeur.getNom()) , offres.get(vendeur)*quantiteAchetee/totalOffres);
+								journal.ajouter("--- "+Journal.doubleSur(offres.get(vendeur)*quantiteAchetee/totalOffres, 4)+" de chez "+vendeur.getNom());
+							}
 						} else {
 							journal.ajouter(Journal.texteColore(acheteur,"l'acheteur "+acheteur.getNom()+" obtient "+Journal.doubleSur(quantiteAchetee, 2)+" mais n'a pas les moyens de payer"));
-							commandesNonPayee.put(acheteur, new CommandeChocolat(choco, quantiteAchetee, montant));
+							for (IVendeurChocolatBourse vendeur : offres.keySet()) {
+							commandesNonPayee.put(acheteur, new CommandeChocolat(new ChocolatDeMarque(choco,vendeur.getNom()), offres.get(vendeur)* quantiteAchetee/totalOffres,( offres.get(vendeur)* quantiteAchetee/totalOffres)*cours.get(choco).getValeur()));
+							}
 						}
 					}
 					double ratioOffres = Math.min(1.0, totalDemandes/totalOffres);// Vendra au plus la quantite correspondant a son offre, mais si la demande est faible vendra une quantite proportionnelle a son offre
