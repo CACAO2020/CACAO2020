@@ -1,19 +1,19 @@
 package abstraction.eq8Romu.chocolatBourse;
 
-import abstraction.eq8Romu.produits.ChocolatDeMarque;
+import abstraction.eq8Romu.produits.Chocolat;
 
 public class CommandeChocolat {
-	private ChocolatDeMarque chocolat;
+	private Chocolat chocolat;
 	private double quantite;
 	private double montant;
 	
-	public CommandeChocolat(ChocolatDeMarque chocolat, double quantite, double montant) {
+	public CommandeChocolat(Chocolat chocolat, double quantite, double montant) {
 		this.chocolat = chocolat;
 		this.montant = montant;
 		this.quantite = quantite;
 	}
 
-	public ChocolatDeMarque getChocolat() {
+	public Chocolat getChocolat() {
 		return chocolat;
 	}
 

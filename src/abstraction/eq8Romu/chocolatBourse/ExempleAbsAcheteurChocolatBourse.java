@@ -6,9 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import abstraction.eq8Romu.clients.ClientFinal;
-
-import abstraction.eq8Romu.produits.ChocolatDeMarque;
+import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
@@ -18,7 +16,7 @@ public class ExempleAbsAcheteurChocolatBourse implements IActeur {
 	private static int NB_INSTANCES = 0; // Afin d'attribuer un nom different a toutes les instances
 	private int numero;
 	private Variable totalStocksChocolat;
-	protected Map<ChocolatDeMarque, Variable> stocksChocolat;
+	protected Map<Chocolat, Variable> stocksChocolat;
 	protected Integer cryptogramme;
 	protected Journal journal;
 
@@ -26,7 +24,10 @@ public class ExempleAbsAcheteurChocolatBourse implements IActeur {
 		NB_INSTANCES++;
 		this.numero=NB_INSTANCES;
 		this.totalStocksChocolat=new Variable(getNom()+" total stocks chocolat", this, 0);
-		stocksChocolat=new HashMap<ChocolatDeMarque, Variable>();
+		stocksChocolat=new HashMap<Chocolat, Variable>();
+		for (Chocolat choco : Chocolat.values()) {
+			stocksChocolat.put(choco, new Variable(getNom()+" stock "+choco.name(), this, 0));
+		}
 		this.journal = new Journal(this.getNom()+" activites", this);
 	}
 	
@@ -43,9 +44,6 @@ public class ExempleAbsAcheteurChocolatBourse implements IActeur {
 	}
 
 	public void initialiser() {
-		for (ChocolatDeMarque choco : ClientFinal.tousLesChocolatsDeMarquePossibles()) {
-			stocksChocolat.put(choco, new Variable(getNom()+" stock "+choco.name(), this, 0));
-		}
 	}
 
 	public void setCryptogramme(Integer crypto) {
@@ -53,7 +51,7 @@ public class ExempleAbsAcheteurChocolatBourse implements IActeur {
 	}
 	public void next() {
 		double total=0.0;
-		for (ChocolatDeMarque choco :ClientFinal.tousLesChocolatsDeMarquePossibles()) {
+		for (Chocolat choco :Chocolat.values()) {
 			if (stocksChocolat.get(choco)!=null) {
 				total=total+stocksChocolat.get(choco).getValeur();
 			}
@@ -71,7 +69,7 @@ public class ExempleAbsAcheteurChocolatBourse implements IActeur {
 	
 	public List<Variable> getIndicateurs() {
 		List<Variable> res=new ArrayList<Variable>();
-		for (ChocolatDeMarque choco :stocksChocolat.keySet()) {
+		for (Chocolat choco :Chocolat.values()) {
 			res.add(stocksChocolat.get(choco));
 		}
 		res.add(this.totalStocksChocolat);

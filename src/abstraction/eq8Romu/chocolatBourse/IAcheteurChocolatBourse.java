@@ -1,7 +1,6 @@
 package abstraction.eq8Romu.chocolatBourse;
 
 import abstraction.eq8Romu.produits.Chocolat;
-import abstraction.eq8Romu.produits.ChocolatDeMarque;
 import abstraction.fourni.IActeur;
 
 public interface IAcheteurChocolatBourse extends IActeur {
@@ -45,7 +44,7 @@ public interface IAcheteurChocolatBourse extends IActeur {
 	 * @param chocolat
 	 * @param quantite
 	 */
-	public void receptionner(ChocolatDeMarque chocolat, double quantite);
+	public void receptionner(Chocolat chocolat, double quantite);
 	
 
 }

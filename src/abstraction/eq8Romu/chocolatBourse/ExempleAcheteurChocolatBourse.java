@@ -1,7 +1,6 @@
 package abstraction.eq8Romu.chocolatBourse;
 
 import abstraction.eq8Romu.produits.Chocolat;
-import abstraction.eq8Romu.produits.ChocolatDeMarque;
 import abstraction.fourni.Filiere;
 
 public class ExempleAcheteurChocolatBourse extends ExempleAbsAcheteurChocolatBourse implements IAcheteurChocolatBourse {
@@ -20,7 +19,7 @@ public class ExempleAcheteurChocolatBourse extends ExempleAbsAcheteurChocolatBou
 	public void notifierCommande(Chocolat chocolat, double quantiteObtenue, boolean payee) {
 	}
 
-	public void receptionner(ChocolatDeMarque chocolat, double quantite) {
+	public void receptionner(Chocolat chocolat, double quantite) {
 		stocksChocolat.get(chocolat).ajouter(this, quantite);
 	}
 }

@@ -8,13 +8,9 @@ public class ExempleVendeurChocolatBourse extends ExempleAbsVendeurChocolatBours
 		super(choco);
 	}
 
-	public double getOffre(Chocolat choco, double cours) {
-		if (chocolat==choco) {
-			if (Math.random()<=0.9) {// 90% de faire une offre
-				return Math.random()*stockChocolat.getValeur();
-			} else {
-				return 0.0;
-			}
+	public double getOffre(Chocolat chocolat, double cours) {
+		if (Math.random()<=0.3333333) {// 33% de faire une offre
+			return Math.random()*stockChocolat.getValeur();
 		} else {
 			return 0.0;
 		}
