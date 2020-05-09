@@ -21,7 +21,6 @@ public class Distributeur1 implements IActeur, IAcheteurChocolatBourse {
 	private Variable margeMin;
 	protected Integer cryptogramme;
 	private Journal journalEq6;
-	private Prix gestionprix;
 	private HashMap<Chocolat, Double> quantitevendueparstep;
 	private Distributeur1 EQ6;
 	private Variable soldeBancaire;
@@ -237,18 +236,15 @@ public class Distributeur1 implements IActeur, IAcheteurChocolatBourse {
         for (Chocolat c : derniereVente.keySet()) {
                 if (c.getGamme()==Gamme.MOYENNE && !(c.isEquitable())) {
                         getHistoriqueMG().add(derniereVente.get(c));
-                        gestionprix.ajustementMarge(getHistoriqueMG(), c);
                         quantitevendueparstep.put(c, 0.0);
                 }
                 if (c.getGamme()==Gamme.BASSE && !(c.isEquitable())) {
                         getHistoriqueBG().add(derniereVente.get(c));
-                        gestionprix.ajustementMarge(getHistoriqueBG(), c);
                         quantitevendueparstep.put(c, 0.0);
                 }
                
                 if (c.getGamme()==Gamme.HAUTE && (c.isEquitable())){
                         getHistoriqueHGE().add(derniereVente.get(c));
-                        gestionprix.ajustementMarge(getHistoriqueHGE(), c);
                         quantitevendueparstep.put(c, 0.0);
                 
                 }
