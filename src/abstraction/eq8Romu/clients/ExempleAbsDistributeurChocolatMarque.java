@@ -51,6 +51,7 @@ public class ExempleAbsDistributeurChocolatMarque implements IActeur {
 			journal.ajouter("Le prix moyen du chocolat \""+chocolat.name()+"\" a l'etape precedente etait de "+Filiere.LA_FILIERE.prixMoyenEtapePrecedente(chocolat));
 		}
 		journal.ajouter("Les ventes de chocolat \""+chocolat.name()+" il y a un an etaient de "+Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-24, chocolat));
+		journal.ajouter("Les ventes de chocolat \""+chocolat.getChocolat().name()+" il y a un an etaient de "+Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-24, chocolat.getChocolat()));
 	}
 
 	public List<String> getNomsFilieresProposees() {
