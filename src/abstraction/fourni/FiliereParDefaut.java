@@ -11,11 +11,19 @@ import abstraction.eq8Romu.Romu;
 import abstraction.eq8Romu.cacaoCriee.SuperviseurCacaoCriee;
 import abstraction.eq8Romu.chocolatBourse.SuperviseurChocolatBourse;
 import abstraction.eq8Romu.clients.ClientFinal;
+//import abstraction.eq8Romu.contratsCadres.SuperviseurVentesContratCadre;
+import abstraction.eq8Romu.produits.ChocolatDeMarque;
+import abstraction.eq8Romu.produits.Feve;
+import abstraction.eq8Romu.produits.Pate;
 
 public class FiliereParDefaut extends Filiere {
 	
 	private ClientFinal cf;
-	
+	/* coming soon...
+	private SuperviseurVentesContratCadre<Feve> superviseurCCFeves;
+	private SuperviseurVentesContratCadre<Pate> superviseurCCPate;
+	private SuperviseurVentesContratCadre<ChocolatDeMarque> superviseurCCChocolatDeMarque;
+	*/
 	public FiliereParDefaut() {
 		super();
 		cf = new ClientFinal();
@@ -32,7 +40,14 @@ public class FiliereParDefaut extends Filiere {
 		this.ajouterActeur(superviseur);
 		SuperviseurChocolatBourse superviseurBourse = new SuperviseurChocolatBourse();
 		this.ajouterActeur(superviseurBourse);
-
+		/* coming soon
+		this.superviseurCCFeves=new SuperviseurVentesContratCadre<Feve>();
+		this.ajouterActeur(this.superviseurCCFeves);
+		this.superviseurCCPate=new SuperviseurVentesContratCadre<Pate>();
+		this.ajouterActeur(this.superviseurCCPate);
+		this.superviseurCCChocolatDeMarque=new SuperviseurVentesContratCadre<ChocolatDeMarque>();
+		this.ajouterActeur(this.superviseurCCChocolatDeMarque);
+*/
 		this.getIndicateur("BourseChoco cours CHOCOLAT_BASSE").setValeur(superviseur, 4000.0);
 		this.getIndicateur("BourseChoco cours CHOCOLAT_MOYENNE").setValeur(superviseur, 10000.0);
 		this.getIndicateur("BourseChoco cours CHOCOLAT_HAUTE").setValeur(superviseur, 15000.0);
@@ -51,6 +66,17 @@ public class FiliereParDefaut extends Filiere {
 			return null;
 		}
 	}
+	/* coming soon
+	public SuperviseurVentesContratCadre<Feve> getSuperviseurCCFeve() {
+		return this.superviseurCCFeves;
+	}
+	public SuperviseurVentesContratCadre<Pate> getSuperviseurCCPate() {
+		return this.superviseurCCPate;
+	}
+	public SuperviseurVentesContratCadre<ChocolatDeMarque> getSuperviseurCCChocolatDeMarque() {
+		return this.superviseurCCChocolatDeMarque;
+	}
+*/
 	public void initialiser() {
 		super.initialiser();
 //		cf.initAttractiviteChoco(Chocolat.CHOCOLAT_BASSE, 1.0);
