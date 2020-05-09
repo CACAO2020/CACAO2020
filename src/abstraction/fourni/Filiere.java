@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import abstraction.eq8Romu.clients.ClientFinal;
-import abstraction.eq8Romu.contratsCadres.SuperviseurVentesContratCadre;
+//import abstraction.eq8Romu.contratsCadres.SuperviseurVentesContratCadre;
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.ChocolatDeMarque;
 import abstraction.eq8Romu.produits.Feve;
@@ -80,7 +80,7 @@ public class Filiere {
 	public Banque getBanque() {
 		return this.laBanque;
 	}
-	
+/* Coming soon...	
 	public SuperviseurVentesContratCadre<Feve> getSuperviseurCCFeve() {
 		return null;
 	}
@@ -90,7 +90,7 @@ public class Filiere {
 	public SuperviseurVentesContratCadre<ChocolatDeMarque> getSuperviseurCCChocolatDeMarque() {
 		return null;
 	}
-
+*/ 
 	private void incEtape() {
 		int old = this.etape;
 		this.etape++;
