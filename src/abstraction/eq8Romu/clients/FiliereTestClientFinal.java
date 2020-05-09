@@ -15,10 +15,12 @@ public class FiliereTestClientFinal extends Filiere {
 		this.ajouterActeur(cf);
 		this.ajouterActeur(new ExempleVendeurChocolatBourse(Chocolat.CHOCOLAT_BASSE));
 		this.ajouterActeur(new ExempleVendeurChocolatBourse(Chocolat.CHOCOLAT_MOYENNE));
+		this.ajouterActeur(new ExempleVendeurChocolatBourse(Chocolat.CHOCOLAT_MOYENNE));
 		this.ajouterActeur(new ExempleDistributeurChocolatMarque(new ChocolatDeMarque(Chocolat.CHOCOLAT_BASSE, "V.ChocoBourse1CHOCOLAT_BASSE"), 30000.0, 4000.0));
 		this.ajouterActeur(new ExempleDistributeurChocolatMarque(new ChocolatDeMarque(Chocolat.CHOCOLAT_BASSE, "V.ChocoBourse1CHOCOLAT_BASSE"), 50000.0, 3750.0));
 		this.ajouterActeur(new ExempleDistributeurChocolatMarque(new ChocolatDeMarque(Chocolat.CHOCOLAT_MOYENNE, "V.ChocoBourse2CHOCOLAT_MOYENNE"), 40000.0, 10000.0));
 		this.ajouterActeur(new ExempleDistributeurChocolatMarque(new ChocolatDeMarque(Chocolat.CHOCOLAT_MOYENNE, "V.ChocoBourse2CHOCOLAT_MOYENNE"), 35000.0, 9000.0));
+		this.ajouterActeur(new ExempleDistributeurChocolatMarque(new ChocolatDeMarque(Chocolat.CHOCOLAT_MOYENNE, "V.ChocoBourse3CHOCOLAT_MOYENNE"), 35000.0, 9000.0));
 		
 //		this.getIndicateur("D.Choco1CHOCOLAT_BASSE stock CHOCOLAT_BASSE").setValeur(cf, 1000000);
 //		this.getIndicateur("D.Choco2CHOCOLAT_BASSE stock CHOCOLAT_BASSE").setValeur(cf, 1000000);
