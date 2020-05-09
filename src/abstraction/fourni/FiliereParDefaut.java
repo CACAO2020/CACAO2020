@@ -11,7 +11,7 @@ import abstraction.eq8Romu.Romu;
 import abstraction.eq8Romu.cacaoCriee.SuperviseurCacaoCriee;
 import abstraction.eq8Romu.chocolatBourse.SuperviseurChocolatBourse;
 import abstraction.eq8Romu.clients.ClientFinal;
-import abstraction.eq8Romu.contratsCadres.SuperviseurVentesContratCadre;
+//import abstraction.eq8Romu.contratsCadres.SuperviseurVentesContratCadre;
 import abstraction.eq8Romu.produits.ChocolatDeMarque;
 import abstraction.eq8Romu.produits.Feve;
 import abstraction.eq8Romu.produits.Pate;
