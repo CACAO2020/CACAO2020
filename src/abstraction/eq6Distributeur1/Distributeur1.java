@@ -4,15 +4,12 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-import abstraction.eq8Romu.clients.ClientFinal;
-import abstraction.eq8Romu.clients.IDistributeurChocolatDeMarque;
-import abstraction.eq8Romu.produits.ChocolatDeMarque;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
-public class Distributeur1 implements IActeur, IDistributeurChocolatDeMarque {
+public class Distributeur1 implements IActeur {
 
 	private Integer cryptogramme;
 	private Journal journalEq6;
@@ -76,42 +73,6 @@ public class Distributeur1 implements IActeur, IDistributeurChocolatDeMarque {
 	}
 	
 	public void notificationOperationBancaire(double montant) {
-	}
-
-	@Override
-	public List<ChocolatDeMarque> getCatalogue() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public double prix(ChocolatDeMarque choco) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public double quantiteEnVente(ChocolatDeMarque choco) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void notificationRayonVide(ChocolatDeMarque choco) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public List<ChocolatDeMarque> pubSouhaitee() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }
 
