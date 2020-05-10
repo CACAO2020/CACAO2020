@@ -180,6 +180,10 @@ public class Banque implements IActeur {
 		}
 		return crypto;
 	}
+	
+	public boolean verifier(IActeur acteur, long cryptogramme) {
+		return this.cryptogramme.get(acteur)==cryptogramme;
+	}
 
 	public void faireFaillite(IActeur acteur) {
 		this.journalBanque.ajouter(Journal.texteColore(acteur, "Faillite de "+acteur.getNom()));
