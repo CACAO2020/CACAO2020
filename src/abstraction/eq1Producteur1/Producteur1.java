@@ -67,14 +67,27 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 		this.journalEq1.ajouter("Quantité de stock : " + this.getStock());
 	}
 
+	// Modification pour ajout de la filiere TestCrieeProd1
+	// <-- Melanie
+	
 	public List<String> getNomsFilieresProposees() {
-		return new ArrayList<String>();
+		ArrayList<String> filieres = new ArrayList<String>();
+		filieres.add("TESTCRIEEPROD1");
+		return(filieres);
+		
 	}
 
 	public Filiere getFiliere(String nom) {
-		return null;
+		if (nom == "TESTCRIEEPROD1") {
+			return new FiliereTestCrieeProd1();
+		}
+		else {
+			return null;
+		}
 	}
-
+	
+	// -->
+	
 	public List<Variable> getIndicateurs() {
 		List<Variable> res=new ArrayList<Variable>();
 		res.add(this.stockFeves);
