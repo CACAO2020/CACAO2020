@@ -1,71 +1,99 @@
+/**
+
 package abstraction.eq6Distributeur1;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import abstraction.eq8Romu.chocolatBourse.IAcheteurChocolatBourse;
 import abstraction.eq8Romu.chocolatBourse.SuperviseurChocolatBourse;
 import abstraction.eq8Romu.produits.Chocolat;
-/**
+import abstraction.eq8Romu.produits.ChocolatDeMarque;
+import abstraction.fourni.Filiere;
+
 public class AchatBourseEQ6 extends Stock implements IAcheteurChocolatBourse{
     
-	private HashMap<Integer, Integer> historiqueBrouse;
+	public AchatBourseEQ6(double capaciteStockmax, Map<ChocolatDeMarque, Double> MapStock) {
+		super(capaciteStockmax, MapStock);
+		// TODO Auto-generated constructor stub
+	}
+
+
+
+	private HashMap<Integer, HashMap<Chocolat, Double>> historiqueBourse;
 	
-	public double EvolutionDemandeTotal (){
-		//anakyse dernière deuxD dernière année évolution = année-1 + (année-1 -année-2)/2
-		demandethis.gethistorique()
+	public double DemandeTotal(){
+		double consomationAnnuel = Filiere.LA_FILIERE.getIndicateur("CLIENTFINAL consommation annuelle").getValeur();
+		
 		return 0.0;
 	}
 	
-	public double EvolutionDemandeChocolatPourcentage(){
-		//pareil que l'autre, mais pour le chocolat en question, en pourcentage
+	public double EvolutionDemandeChocolat(Chocolat chocolat){
+		
+		double anneeYa1AN = Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-24, chocolat );
+		
+		if (Filiere.LA_FILIERE.getEtape()>24) {
+			double anneeYa2AN = Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-48, chocolat );//pareil que l'autre, mais pour le chocolat en question, en pourcentage
+			
+		    
+			return anneeYa1AN + (anneeYa1AN-anneeYa2AN)/2;
+			
+		}
+
+		if (Filiere.LA_FILIERE.getEtape()<=24) {
+			return anneeYa1AN;
+		}
 		return 0;
 	}
 	
 	public double getDemande(Chocolat chocolat, double cours) {
 			double solde = Filiere.LA_FILIERE.getBanque().getSolde(this,  cryptogramme); // retourne l'argent du compte
 			double max = solde/cours;
-			double a = this.quantiteEnstockTypeChoco( chocolat);
-			double b = this.quantiteEnStockTotal();
-			double DemandeTotal = this.EvolutionDemandeTotal ();
-			double DeamndeChoco = this.DemandeChocolatPourcentage(chocolat);
-			if (DeamndeChoco<a) {
+			double stockChoco = this.quantiteEnStockTypeChoco( chocolat);
+			double DemandeTotal = this.DemandeTotal();
+			double DeamndeChoco = this.EvolutionDemandeChocolat(chocolat);
+			if (DeamndeChoco<stockChoco) {
 				return 0;
 				
 			}
-			if (DeamndeChoco>=a) {
-				return (DeamndeChoco*DemandeTotal - a);//calcul quantité en stock souhaite- quantité en stock actuel
+			if (DeamndeChoco>=stockChoco) {
+				return (DeamndeChoco - stockChoco);//calcul quantité en stock souhaite- quantité en stock actuel
 				
 			}
-			// les cours vont s'effondrer car les acheteurs vont tres vite ne plus avoir assez d'argent pour acheter. Augmentez le solde des acheteurs via l'interface si vous voulez voir les cours repartir à la hausse
+			return 0;// les cours vont s'effondrer car les acheteurs vont tres vite ne plus avoir assez d'argent pour acheter. Augmentez le solde des acheteurs via l'interface si vous voulez voir les cours repartir à la hausse
 		}
 	
 		
 	
-		public void notifierCommande(Chocolat chocolat, double quantiteObtenue, boolean payee) {
-			if (quantiteObtenue * chocolat.getMontant() )
+		public void notifierCommande(Chocolat chocolat, double quantiteObtenue, boolean payee) {//codé
+			if ( payee == true) {
+				HashMap<Chocolat, Double> a = new HashMap<Chocolat, Double>();
+				a.put(chocolat,quantiteObtenue);
+				this.historiqueBourse.put(Filiere.LA_FILIERE.getEtape(),a );      //faut le completer avec Filiere.LA_FILIERE....., on fait un historique
+			}
 		}
 	
-		public void receptioner(Chocolat chocolat, double quantite) {
-			this.Stocker(chocolat,  quantite);
+		public void receptionner(Chocolat chocolat, double quantite) { //coder
+			this.stocker(chocolat,  quantite);
 		}
 
+	
 		
-		
-		public Integer getCryptogramme(SuperviseurChocolatBourse superviseur) {
+		public Integer getCryptogramme(SuperviseurChocolatBourse superviseur) { //coder
 			if (superviseur !=null) {
 				return this.cryptogramme;
 			}
 			return null;
 		}
 
-		@Override
-		public void notifierCommande(Chocolat chocolat, double quantiteObtenue, boolean payee) {
-			// TODO Auto-generated method stub
-			
-		}
+	
 
+	
+		
+		
 		
 	
     
 }
-*/
+
+**/
