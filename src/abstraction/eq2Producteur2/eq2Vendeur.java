@@ -15,7 +15,7 @@ import abstraction.eq8Romu.produits.Gamme;
 
 public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 	/*Lucas Y
-	 * 
+	 *Kristof S
 	 */
 	private double masse_en_vente;
 	private Variable prixTF;
@@ -26,13 +26,14 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 	private Variable propal_masses;
 
 	
-	public eq2Vendeur(Variable prixTF, Variable prixTT, Variable prixTC, Variable prixTPBG, Variable prixTPHG) {
+	public eq2Vendeur() {
 		super();
-		this.prixTF = prixTF;
-		this.prixTT = prixTT;
-		this.prixTC = prixTC;
-		this.prixTPBG = prixTPBG;
-		this.prixTPHG = prixTPHG;
+		//pour l'instant tous les prix sont initialises a 0
+		this.prixTF = new Variable("prixTF",this,0);
+		this.prixTT = new Variable("prixTT",this,0);
+		this.prixTC = new Variable("prixTC",this,0);
+		this.prixTPBG = new Variable("prixTPBG",this,0);
+		this.prixTPHG = new Variable("prixTPHG",this,0);
 	}
 
 	/*On vend dès qu'on a du stock

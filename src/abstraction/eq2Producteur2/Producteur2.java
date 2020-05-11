@@ -13,17 +13,11 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 	
 	private List<PaquetArbres> PaquetsArbres; // la liste des paquets d'arbres de notre acteur
 
-	public Producteur2(IActeur createur, double init1, double init2, double init3, double init4, double init5,
-			Variable prixTF, Variable prixTT, Variable prixTC, Variable prixTPBG, Variable prixTPHG) {
-		super(createur, init1, init2, init3, init4, init5, prixTF, prixTT, prixTC, prixTPBG, prixTPHG);
-		this.PaquetsArbres = new ArrayList<PaquetArbres>();
+	public Producteur2() {
+		super();
 	}
 
 	public void initialiser() {
-	}
-	
-	public List<PaquetArbres> getPaquetsArbres(){
-		return this.PaquetsArbres;
 	}
 	/**
 	 * Cette methode est appellee a chaque nouveau tour
@@ -32,6 +26,7 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 	 */
 	public void next() {
 		List<Integer> deathlist = new ArrayList<Integer>();
+		
 		for (int i = 0; i < this.getPaquetsArbres().size(); i++) {
 			this.getPaquetsArbres().get(i).setAge(this.getPaquetsArbres().get(i).getAge() + 1);
 			if (this.getPaquetsArbres().get(i).getAge() == 40);

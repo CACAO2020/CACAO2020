@@ -14,9 +14,9 @@ public class eq2Investisseur extends eq2Vendeur {
 
 	private Variable prixArbre; 
 
-	public eq2Investisseur( Variable prixArbre) {
+	public eq2Investisseur() {
 		super();
-		this.prixArbre = prixArbre;
+		this.prixArbre = new Variable("prixArbre",this,1);
 		// TODO Auto-generated constructor stub
 	}
 
