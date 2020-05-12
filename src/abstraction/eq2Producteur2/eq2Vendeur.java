@@ -17,13 +17,12 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 	/*Lucas Y
 	 *Kristof S
 	 */
-	private double masse_en_vente;
 	private Variable prixTF;
 	private Variable prixTT;
 	private Variable prixTC;
 	private Variable prixTPBG; //il me semble qu'on vendra la pâte en contrat cadre et non pas à la criée, donc les prix des pates à la tonne ne sont peut-être pas utiles ici
 	private Variable prixTPHG;
-	private Variable propal_masses;
+	private ArrayList propal_masses;
 
 	
 	public eq2Vendeur() {
@@ -34,37 +33,41 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 		this.prixTC = new Variable("prixTC",this,0);
 		this.prixTPBG = new Variable("prixTPBG",this,0);
 		this.prixTPHG = new Variable("prixTPHG",this,0);
+		this.propal_masses = new ArrayList();
 	}
 
 	/*On vend dès qu'on a du stock
 	 * 
 	 */
-	public LotCacaoCriee getLotEnVente() {
-		List<Variable> masses = this.getStock();
-		if (masses.get(0).getValeur() >= 0.5 || masses.get(1).getValeur()>=0.5 || masses.get(2).getValeur()>=0.5) {
-			List<Double> m_feves = new ArrayList<Double>();
-			for (int i = 0; i < 2; i++) {
-				m_feves.add(masses.get(i).getValeur());
-			}
-		    double max = Math.max(m_feves.get(0),m_feves.get(1));
-		    double vraimax = Math.max(max, m_feves.get(2));
-		    int indice_max = m_feves.indexOf(vraimax);
-		    if (indice_max == 0) {
-		    	this.setMasseEnVente(m_feves.get(0));
-		    	this.setPropalMasses(this.getMasseEnVente());
-		    	return new LotCacaoCriee(this, Feve.FEVE_BASSE, m_feves.get(0), this.getPrixTF().getValeur());
-		    }
-		    else if (indice_max == 1) {
-		    	this.setMasseEnVente(m_feves.get(1));
-		    	this.setPropalMasses(this.getMasseEnVente());
-		    	return new LotCacaoCriee(this, Feve.FEVE_MOYENNE, m_feves.get(1), this.getPrixTT().getValeur());
-		    }
-		    else if (indice_max == 2) {
-		    	this.setMasseEnVente(m_feves.get(2));
-		    	this.setPropalMasses(this.getMasseEnVente());
-		    	return new LotCacaoCriee(this, Feve.FEVE_HAUTE, m_feves.get(2), this.getPrixTC().getValeur());
-		    }
-		}
+	public LotCacaoCriee getLotEnVente() { 
+		List<Variable> Stock = this.getStock();
+	    double masseFora = 0;
+	    double masseTrini = 0;
+	    double masseCrio = 0;
+	    for (int i = 0; i < Stock.size();i++) {
+	    	if (Stock.get(i).getNom() == "forastero") {
+	    		masseFora = masseFora + Stock.get(i).getValeur();
+	    	}
+	    	if (Stock.get(i).getNom() == "trinitario") {
+	    		masseTrini = masseTrini + Stock.get(i).getValeur();
+	    	}
+	    	if (Stock.get(i).getNom() == "criollo") {
+	    		masseCrio = masseCrio + Stock.get(i).getValeur();
+	    	}
+	    	if (masseFora > masseTrini && masseFora > masseCrio) {
+	    		this.getPropalMasses().add(masseFora);
+	    		return new LotCacaoCriee(this, Feve.FEVE_BASSE, masseFora, this.getPrixTF().getValeur());
+	    	}
+	    	if (masseTrini > masseFora && masseTrini > masseCrio) {
+	    		this.getPropalMasses().add(masseTrini);
+	    		return new LotCacaoCriee(this, Feve.FEVE_MOYENNE, masseTrini, this.getPrixTT().getValeur());
+	    	}
+	    	if (masseCrio > masseTrini && masseFora < masseCrio) {
+	    		this.getPropalMasses().add(masseCrio);
+	    		return new LotCacaoCriee(this, Feve.FEVE_HAUTE, masseCrio, this.getPrixTC().getValeur());
+	    	}
+	    }
+	    
 		return null;
 	}
 
@@ -85,21 +88,11 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 		// TODO Auto-generated method stub
 		
 	}
-	public Variable getPropalMasses() {
+	public ArrayList getPropalMasses() {
 		return this.propal_masses;
 	}
 	
-	public void setPropalMasses(double masse) {
-		propal_masses.setValeur(this, masse);
-	}
-
-	public double getMasseEnVente() {
-		return this.masse_en_vente;
-	}
-	public void setMasseEnVente(double masse) {
-		this.masse_en_vente = masse;
-	}
-
+	
 	/**
 	 * @return the prixTF
 	 */
