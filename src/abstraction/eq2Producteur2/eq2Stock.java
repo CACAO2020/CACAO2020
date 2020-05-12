@@ -59,4 +59,11 @@ public void removeQtFeve(Feve feve, double quantite) {
 	this.getStock().get(feve).retirer(this, quantite);
 
 }
+public List<Variable> getVariables(){
+	 List<Variable >variables = new ArrayList<Variable>();
+	 for (Feve feve : this.getStock().keySet()) {
+		 variables.add(this.getStock().get(feve));
+	 }
+	return variables;
+}
 }

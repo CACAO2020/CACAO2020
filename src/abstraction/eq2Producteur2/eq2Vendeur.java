@@ -40,7 +40,7 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 	 * 
 	 */
 	public LotCacaoCriee getLotEnVente() { 
-		List<Variable> Stock = this.getStock();
+		List<Variable> Stock = this.getVariables();
 	    double masseFora = 0;
 	    double masseTrini = 0;
 	    double masseCrio = 0;
