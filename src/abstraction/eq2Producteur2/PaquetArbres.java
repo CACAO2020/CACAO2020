@@ -36,7 +36,10 @@ public class PaquetArbres {
 	public String getType() {
 		return this.type;
 	}
-	
+	/**
+	 * 
+	 * @author lucas P
+	 */
 	public double production() {
 		double prodmaxTrinitario = 7.5;
 		double prodmaxForastero = 7.5;

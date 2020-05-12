@@ -40,7 +40,7 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 	 * 
 	 */
 	public LotCacaoCriee getLotEnVente() {
-		List<Variable> masses = this.getVariables();
+		List<Variable> masses = this.getStock();
 		if (masses.get(0).getValeur() >= 0.5 || masses.get(1).getValeur()>=0.5 || masses.get(2).getValeur()>=0.5) {
 			List<Double> m_feves = new ArrayList<Double>();
 			for (int i = 0; i < 2; i++) {
