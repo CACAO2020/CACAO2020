@@ -22,7 +22,8 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 	private Variable prixTC;
 	private Variable prixTPBG; //il me semble qu'on vendra la pâte en contrat cadre et non pas à la criée, donc les prix des pates à la tonne ne sont peut-être pas utiles ici
 	private Variable prixTPHG;
-	private ArrayList propal_masses;
+	private Variable propal;
+	
 
 	
 	public eq2Vendeur() {
@@ -33,17 +34,20 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 		this.prixTC = new Variable("prixTC",this,0);
 		this.prixTPBG = new Variable("prixTPBG",this,0);
 		this.prixTPHG = new Variable("prixTPHG",this,0);
-		this.propal_masses = new ArrayList();
+			
 	}
 
 	/*On vend dès qu'on a du stock
 	 * 
 	 */
-	public LotCacaoCriee getLotEnVente() { 
+	public LotCacaoCriee getLotEnVente() { //ce que je suis en train de faire : prioriser lots par prix, pour cela, variable prix propositions précédente, propose lot que si prix est inférieur à proposition précédente, dans le cas ou la proposition précédente n'a pas abouti à une vente (on modifie éventuellemnt des trucs à propal dans notifierpasvente)
 		List<Variable> Stock = this.getVariables();
 	    double masseFora = 0;
 	    double masseTrini = 0;
 	    double masseCrio = 0;
+	    double prixfora = 0;
+	    double prixtrini = 0;
+	    double prixcrio = 0;
 	    for (int i = 0; i < Stock.size();i++) {
 	    	if (Stock.get(i).getNom() == "forastero") {
 	    		masseFora = masseFora + Stock.get(i).getValeur();
@@ -54,26 +58,30 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 	    	if (Stock.get(i).getNom() == "criollo") {
 	    		masseCrio = masseCrio + Stock.get(i).getValeur();
 	    	}
-	    	if (masseFora > masseTrini && masseFora > masseCrio) {
-	    		this.getPropalMasses().add(masseFora);
+	    }
+	    prixfora = masseFora*this.getPrixTF().getValeur();
+	    prixtrini = masseTrini*this.getPrixTT().getValeur();
+	    prixcrio = masseCrio*this.getPrixTC().getValeur();
+	    if (prixfora > prixtrini && prixfora > prixcrio && masseFora > 0.5) {
+	    	if ()
 	    		return new LotCacaoCriee(this, Feve.FEVE_BASSE, masseFora, this.getPrixTF().getValeur());
-	    	}
-	    	if (masseTrini > masseFora && masseTrini > masseCrio) {
-	    		this.getPropalMasses().add(masseTrini);
+	    }
+	    else if (prixtrini > prixfora && prixtrini > prixcrio && masseTrini > 0.5) {
+	    	
 	    		return new LotCacaoCriee(this, Feve.FEVE_MOYENNE, masseTrini, this.getPrixTT().getValeur());
-	    	}
-	    	if (masseCrio > masseTrini && masseFora < masseCrio) {
-	    		this.getPropalMasses().add(masseCrio);
+	    }
+	    else if (prixcrio > prixtrini && prixfora < prixcrio && masseCrio > 0.5) {
+	    	
 	    		return new LotCacaoCriee(this, Feve.FEVE_HAUTE, masseCrio, this.getPrixTC().getValeur());
-	    	}
 	    }
 	    
-		return null;
+	    return null;
 	}
+	
 
 	@Override
 	public void notifierAucuneProposition(LotCacaoCriee lot) {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub, modifier ici valeur de propal
 		
 	}
 
@@ -88,8 +96,8 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 		// TODO Auto-generated method stub
 		
 	}
-	public ArrayList getPropalMasses() {
-		return this.propal_masses;
+	public double getPropal() {
+		return this.propal.getValeur();
 	}
 	
 	
