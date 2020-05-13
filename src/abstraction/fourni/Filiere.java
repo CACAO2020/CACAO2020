@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import abstraction.eq8Romu.clients.ClientFinal;
+import abstraction.eq8Romu.contratsCadres.SuperviseurVentesContratCadre;
+import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.ChocolatDeMarque;
 import presentation.FenetrePrincipale;
 
@@ -77,6 +79,10 @@ public class Filiere {
 		return this.laBanque;
 	}
 
+	public SuperviseurVentesContratCadre getSuperviseurContratCadre() {
+		return null;
+	}
+
 	private void incEtape() {
 		int old = this.etape;
 		this.etape++;
@@ -125,6 +131,14 @@ public class Filiere {
 		throw new IllegalArgumentException("il n'est possible d'appeler getVentes que pour une filiere comportant une instance de ClientFinal");
 	}
 
+	public double getVentes(int etape, Chocolat choco) {
+		for (IActeur acteur : this.acteurs) {
+			if (acteur instanceof ClientFinal) {
+				return ((ClientFinal)acteur).getVentes(etape, choco);
+			}
+		}
+		throw new IllegalArgumentException("il n'est possible d'appeler getVentes que pour une filiere comportant une instance de ClientFinal");
+	}
 	/**
 	 * Ajoute l'acteur ac a la filiere si il n'existe pas deja un acteur portant le meme nom
 	 * Leve une erreur si le parametre est null ou est le nom d'un acteur deja dans la filiere

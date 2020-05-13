@@ -11,11 +11,14 @@ import abstraction.eq8Romu.Romu;
 import abstraction.eq8Romu.cacaoCriee.SuperviseurCacaoCriee;
 import abstraction.eq8Romu.chocolatBourse.SuperviseurChocolatBourse;
 import abstraction.eq8Romu.clients.ClientFinal;
+import abstraction.eq8Romu.contratsCadres.SuperviseurVentesContratCadre;
+
 
 public class FiliereParDefaut extends Filiere {
 	
 	private ClientFinal cf;
-	
+	private SuperviseurVentesContratCadre superviseurCC;
+
 	public FiliereParDefaut() {
 		super();
 		cf = new ClientFinal();
@@ -32,7 +35,8 @@ public class FiliereParDefaut extends Filiere {
 		this.ajouterActeur(superviseur);
 		SuperviseurChocolatBourse superviseurBourse = new SuperviseurChocolatBourse();
 		this.ajouterActeur(superviseurBourse);
-
+		this.superviseurCC=new SuperviseurVentesContratCadre();
+		this.ajouterActeur(this.superviseurCC);
 		this.getIndicateur("BourseChoco cours CHOCOLAT_BASSE").setValeur(superviseur, 4000.0);
 		this.getIndicateur("BourseChoco cours CHOCOLAT_MOYENNE").setValeur(superviseur, 10000.0);
 		this.getIndicateur("BourseChoco cours CHOCOLAT_HAUTE").setValeur(superviseur, 15000.0);
@@ -45,11 +49,14 @@ public class FiliereParDefaut extends Filiere {
 	 * Sans cela, il serait possible de contourner l'autentification
 	 */
 	public IActeur getActeur(String nom) {
-		if (!nom.equals("Sup.C.Criee") && (!nom.equals("BourseChoco")) && !nom.equals("CLIENTFINAL")) {
+		if (!nom.equals("Sup.C.Criee") && (!nom.equals("BourseChoco")) && !nom.equals("CLIENTFINAL") && !(nom.startsWith("sup") && nom.endsWith("CCadre"))) {
 			return super.getActeur(nom); 
 		} else {
 			return null;
 		}
+	}
+	public SuperviseurVentesContratCadre getSuperviseurContratCadre() {
+		return this.superviseurCC;
 	}
 	public void initialiser() {
 		super.initialiser();
