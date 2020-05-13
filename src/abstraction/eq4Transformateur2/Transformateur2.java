@@ -19,11 +19,19 @@ import abstraction.fourni.Filiere;
 
 public class Transformateur2 implements IActeur, IVendeurChocolatBourse {
 	
-	//variables
+	//variables : ce sont les stocks, sous la forme de dictionnaires. A chaque type de denrée correspond
+	//une Variable, dont la valeur est un double. Cela nous donne les quantités de stocks pour chaque type
+	//de denrée.
+	
 	private Map<Feve, Variable> stockFeves;
-	private Map<PateInterne, Variable> stockPate ; //vérifier que le prof n'en a pas besoin, ne pas oublier de convertir lors des échanges
+	
+	//PateInterne est une classe alternative pour Pate permettant de faciliter toutes les opérations internes
+	//Il faut cependant vérifier que lors des échanges avec les codes extérieurs, ce qui est envoyé est du
+	//type Pate. On l'utilise ici pour classifier les stocks.
+	private Map<PateInterne, Variable> stockPate ; 
 	private Map<Chocolat, Variable> stockChocolat;
 
+	
 	//paramètres
 	private Variable coutFixe ; //coûts de fonctionnement, marketing etc
 	private Integer cryptogramme;
@@ -31,6 +39,8 @@ public class Transformateur2 implements IActeur, IVendeurChocolatBourse {
 
 	
 	
+	// l'initialisation nécessite de nombreuses variables, qui sont à modifier pour les tests
+	// il faut déterminer ces valeurs en essayant d'être réalistes et cohérents avec les autres équipes
 	
 	public Transformateur2() {
 		
@@ -66,12 +76,14 @@ public class Transformateur2 implements IActeur, IVendeurChocolatBourse {
 	}
 
 	public String getDescription() {
-		return "Transformateur bla bla bla";
+		return "Chocoptimization";
 	}
 
 	public Color getColor() {
 		return new Color(155, 89, 182);
 	}
+	
+	//getters, ici permettant de récupérer directement la quantité de stock correspondant à une denrée particulière
 	
 	public double getStockFevesValeur(Feve feve) {
 		return this.stockFeves.get(feve).getValeur() ;
@@ -84,6 +96,8 @@ public class Transformateur2 implements IActeur, IVendeurChocolatBourse {
 	public double getStockChocolatValeur(Chocolat chocolat) {
 		return this.stockChocolat.get(chocolat).getValeur() ;
 	}
+	
+	//setters, ici permettant de modifier directement la quantité de stock correspondant à une denrée particulière
 	
 	public void setStockFevesValeur(Feve feve, double valeur) {
 		this.stockFeves.get(feve).setValeur(this, valeur) ;
@@ -114,12 +128,15 @@ public class Transformateur2 implements IActeur, IVendeurChocolatBourse {
 		return null;
 	}
 	
+	// récupère les attributs notés comme indicateurs, utile pour les tests et sûrement appelé par des fonctions externes
+	
 	public List<Variable> getIndicateurs() {
 		List<Variable> res=new ArrayList<Variable>();
 		for (Feve feve :Feve.values()) {
 			res.add(this.stockFeves.get(feve)) ;
 		}
 		for (PateInterne pate :PateInterne.values()) {
+			// à décommenter si getIndicateurs ne doit pas renvoyer de variables internes, utile pour les tests pour le moment
 			//if (pate == PateInterne.PATE_BASSE || pate == PateInterne.PATE_MOYENNE) {
 				res.add(this.stockPate.get(pate)) ;
 			//}
@@ -130,6 +147,8 @@ public class Transformateur2 implements IActeur, IVendeurChocolatBourse {
 		return res;
 	}
 
+	// récupère les attributs notés comme paramètres, utile pour les tests et sûrement appelé par des fonctions externes
+	
 	public List<Variable> getParametres() {
 		List<Variable> res=new ArrayList<Variable>();
 		res.add(this.coutFixe) ;
@@ -167,7 +186,7 @@ public class Transformateur2 implements IActeur, IVendeurChocolatBourse {
 			return 0;
 		}
 	}
-
+		
 	public void livrer(Chocolat chocolat, double quantite) {
 		double valeur = this.getStockChocolatValeur(chocolat) - quantite ;
 		if (valeur >= 0) {
@@ -181,6 +200,33 @@ public class Transformateur2 implements IActeur, IVendeurChocolatBourse {
  */
 	public double getPrixMinVenteChoco() {
 		return 0;
+	}
+	
+	// permettent de récupérer les stocks totaux, pourraient servir d'indicateur mais sont surtout utiles
+	// pour alléger les codes calculant les coûts d'entretien des stocks
+	
+	public double getStockTotalFeves () {
+		double quantite = 0 ;
+		for (Feve feve : Feve.values()) {
+			quantite += this.getStockFevesValeur(feve) ;
+		}
+		return quantite ;
+	}
+	
+	public double getStockTotalPate () {
+		double quantite = 0 ;
+		for (PateInterne pate : PateInterne.values()) {
+			quantite += this.getStockPateValeur(pate) ;
+		}
+		return quantite ;
+	}
+	
+	public double getStockTotalChocolat () {
+		double quantite = 0 ;
+		for (Chocolat chocolat : Chocolat.values()) {
+			quantite += this.getStockChocolatValeur(chocolat) ;
+		}
+		return quantite ;
 	}
 	
 }
