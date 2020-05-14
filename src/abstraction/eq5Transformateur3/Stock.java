@@ -11,14 +11,12 @@ import abstraction.fourni.Variable;
 import java.util.List;
 import java.util.ArrayList;
 
-/** @author F. GOUJON  */
+/** @author F. GOUJON
+ * Gère les stock de fève, pate et chocolat du Transformateur3
+* Elle est agrégé dans la classe Transformateur3.
+*/
 public class Stock {
-	/**
-	 * Gère les stock de fève, pate et chocolat du Transformateur3
-	 * Elle est agrégé dans la classe Transformateur3.
-	 */
-
-	/** Les couples de variables donne la quantité et le prix à la tonne associé*/
+	// Les couples de variables donne la quantité et le prix à la tonne associé
 	private Transformateur3 acteur;
 	private Map<Feve, List<Couple<Variable>>> stockFeves;
 	private Map<Chocolat, List<Couple<Variable>>> stockChocolat;
@@ -227,9 +225,67 @@ public class Stock {
 		List<Couple<Variable>> table = this.getStockPate().get(pate);
 		table.removeIf(c -> c.get1().getValeur()==0);
 	}
+
 	public void majStockChocolat(Chocolat choco) {
 		List<Couple<Variable>> table = this.getStockChocolat().get(choco);
-		table.removeIf(c -> c.get1().getValeur()==0);
+		table.removeIf(c -> c.get1().getValeur() == 0);
+	}
+
+	/**
+	 * Fonction appelé lorsque le prochain tour arrive
+	 * Elle transforme les fèves et la pate automatiquement en chocolat
+	 * On notera que pour l'instant tout le stock est instantanement transformer
+	 * Paramètres transformationCost
+	 */
+	public void next() {
+		double transformationCostFeve = 10;
+		double transformationCostPate = 10;
+		for (Feve feve : Feve.values()) {
+			for (Couple<Variable> feveInfos : this.stockFeves.get(feve)) {
+				this.stockChocolat.get(this.getProduct(feve)).add(feveInfos);
+				feveInfos.get2().ajouter(acteur, transformationCostFeve);
+				this.acteur.getTresorier().DiminueTresorerie(transformationCostFeve * feveInfos.get1().getValeur());
+			}
+			//le stock est transformé donc la matière première est supprimée
+			this.stockFeves.get(feve).clear();
+		}
+		for(Pate pate : Pate.values()){
+			for (Couple<Variable> pateInfos : this.stockPate.get(pate)) {
+				this.stockChocolat.get(this.getProduct(pate)).add(pateInfos);
+				pateInfos.get2().ajouter(acteur, transformationCostPate);
+				this.acteur.getTresorier().DiminueTresorerie(transformationCostPate * pateInfos.get1().getValeur());
+			}
+			this.stockPate.get(pate).clear();
+		}
+	}
+
+	/**
+	 * Fonction pour faire l'association entre fève et chocolat produit
+	 * de même pour pate en surcharge
+	 * @return Chocolat produit par la fève associée
+	 */
+	private Chocolat getProduct(Feve feve) {
+		switch (feve) {
+			case FEVE_BASSE:
+				return Chocolat.CHOCOLAT_BASSE;
+			case FEVE_MOYENNE:
+				return Chocolat.CHOCOLAT_MOYENNE;
+			case FEVE_MOYENNE_EQUITABLE:
+				return Chocolat.CHOCOLAT_MOYENNE_EQUITABLE;
+			case FEVE_HAUTE:
+				return Chocolat.CHOCOLAT_HAUTE;
+			default:
+				return Chocolat.CHOCOLAT_HAUTE_EQUITABLE;
+		}
+	}
+
+	private Chocolat getProduct(Pate pate) {
+		switch (pate) {
+			case PATE_BASSE:
+				return Chocolat.CHOCOLAT_BASSE;
+			default:
+				return Chocolat.CHOCOLAT_MOYENNE;
+		}
 	}
 }
 

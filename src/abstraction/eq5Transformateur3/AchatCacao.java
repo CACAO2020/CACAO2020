@@ -1,25 +1,33 @@
 package abstraction.eq5Transformateur3;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 import abstraction.eq8Romu.cacaoCriee.LotCacaoCriee;
 import abstraction.eq8Romu.cacaoCriee.PropositionCriee;
+import abstraction.eq8Romu.produits.Feve;
 import abstraction.eq8Romu.produits.Gamme;
-/** @author Eva DUPUY  */
+import abstraction.fourni.Variable;
+
+/** @author Eva DUPUY 
+ * Classe qui régit tous les achats de fèves, à la criée et aléatoire
+ * Elle est agrégé dans la classe Transformateur3.
+ */
 public class AchatCacao {
-    /**
-     * Classe qui régit tous les achats de fèves, à la criée et aléatoire
-     * Elle est agrégé dans la classe Transformateur3.
-     */
-	
 	//Ces nombres influencent le prix proposé dans proposer achat
 		private double NB_propositions_refusees;
 		private double NB_precedent;
 		private double prix; 
 		private Transformateur3 acteur;
+		private Map<Feve, List<Couple<Variable>>> tentativeDachat;
 		
 		public AchatCacao(Transformateur3 acteur) {
 			this.acteur = acteur;
 			this.NB_propositions_refusees = 0;
 			this.NB_precedent = 0;
+			tentativeDachat = new HashMap<>();
 	}
 	
 	//achète le lot au prix minimum si les feves sont haut de gamme et equitables
@@ -27,6 +35,11 @@ public class AchatCacao {
 	//
 	
 	public double proposerAchat(LotCacaoCriee lot) {
+		if (tentativeDachat.get(lot.getFeve()) == null) {
+			tentativeDachat.put(lot.getFeve(),new LinkedList<>());
+		} else {
+			tentativeDachat.get(lot.getFeve()).clear();
+		}
 		if (lot.getFeve().isEquitable() && lot.getFeve().getGamme()== Gamme.HAUTE) {
 			prix = lot.getPrixMinPourUneTonne()*lot.getQuantiteEnTonnes();
 			
@@ -34,16 +47,22 @@ public class AchatCacao {
 				return prix ; //vrai que pour l'initialisation
 			}
 			
-			else if (NB_propositions_refusees > NB_precedent && acteur.getTresorier().InvestissementMaxHautDeGamme()<= prix) {  //derniere proposition acceptee
-				return prix;
+			else if (NB_propositions_refusees > NB_precedent
+					&& acteur.getTresorier().InvestissementMaxHautDeGamme() <= prix) { //derniere proposition acceptee
+					tentativeDachat.get(lot.getFeve()).add(new Couple<Variable>(new Variable("", acteur, lot.getQuantiteEnTonnes()),
+						new Variable("", acteur, prix)));
+					return prix;
 			}
 			
 			//(NB_propositions_refusees < NB_precedent)  //la dernière proposition a été refusée
-			else { 
-				prix = prix*(1 + NB_propositions_refusees)*1.5;
-				if ( acteur.getTresorier().InvestissementMaxHautDeGamme()<= prix) {
-				return prix ; //plus on a de prop refusees, plus on augmente le prix
+			else {
 				// 1.5 est un coefficient choisi au hasard pour debuter
+				prix = prix * (1 + NB_propositions_refusees) * 1.5;
+				if (acteur.getTresorier().InvestissementMaxHautDeGamme() <= prix) {
+					tentativeDachat.get(lot.getFeve()).add(new Couple<Variable>(new Variable("", acteur, lot.getQuantiteEnTonnes()),
+						new Variable("", acteur, prix)));
+					return prix ; //plus on a de prop refusees, plus on augmente le prix
+					
 				}
 				else {
 					return 0.0;
@@ -72,10 +91,12 @@ public class AchatCacao {
 	//diminue le nombre de propositions refusées donc on peut diminuer le prix de proposition
 	//ajoute les feves du lot au stock de feves de l'entprise
 	
-	public void notifierVente(PropositionCriee proposition, Stock stockFeves) {
+	public void notifierVente(PropositionCriee proposition) {
 		NB_precedent = NB_propositions_refusees;
 		NB_propositions_refusees = NB_propositions_refusees - 1;
-		stockFeves.ajoutFeves(proposition.getFeve(), proposition.getQuantiteEnTonnes()) ;
+		this.acteur.getStock().ajoutFeves(proposition.getFeve(), 
+				tentativeDachat.get(proposition.getFeve()).get(0).get1().getValeur(),
+				tentativeDachat.get(proposition.getFeve()).get(0).get2().getValeur());
 		//Tresorerie
 	}
 	
