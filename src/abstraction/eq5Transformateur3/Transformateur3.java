@@ -61,7 +61,6 @@ public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurCh
 
 	public void next() {
 		stock.next();
-		tresorier.next();
 	}
 
 	public List<String> getNomsFilieresProposees() {
@@ -74,8 +73,6 @@ public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurCh
 
 	public List<Variable> getIndicateurs() {
 		List<Variable> res = new ArrayList<Variable>();
-		res.addAll(this.stock.getStockFeves().values());
-		res.addAll(this.stock.getStockChocolat().values());
 		return res;
 	}
 
@@ -113,7 +110,7 @@ public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurCh
 
 	
 	public void livrer(Chocolat chocolat, double quantite) {
-		this.stock.getStockChocolat().get(chocolat).retirer(this, quantite);
+		this.vendeurChocolat.livrer(chocolat, quantite);
 	}
 
 	// Achat de cacao en criée IAcheteurCacaoCriee
@@ -137,7 +134,7 @@ public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurCh
 		this.acheteurCacao.notifierVente(proposition);
 	}
 	
-	}
+	
 	//TODO ajouter les methodes pour acheter de la pate de cacao
 
 	protected AchatCacao getAcheteurCacao() {
@@ -160,4 +157,7 @@ public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurCh
 		return stock;
 	}
 
+	protected int getCryptogramme() {
+		return this.cryptogramme;
+	}
 }
