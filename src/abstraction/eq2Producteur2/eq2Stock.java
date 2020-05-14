@@ -98,5 +98,10 @@ public List<Variable> getVariablesPate(){
 	 }
 	return variables;
 }
-
+public double getQuantiteFeve(Feve feve) {
+	return this.getStockFeve().get(feve).getValeur();
+}
+public double getQuantitePate(Pate pate) {
+	return this.getStockPate().get(pate).getValeur();
+}
 }

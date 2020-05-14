@@ -7,6 +7,7 @@ import java.util.List;
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
+import abstraction.eq8Romu.produits.Feve;
 import abstraction.fourni.Filiere;
 
 public class Producteur2 extends eq2Investisseur implements IActeur {
@@ -45,5 +46,9 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 		for (int i = 0; i < this.PaquetsArbres.size()+1; i++) {
 			this.addQtFeve(this.PaquetsArbres.get(i).getType(),this.PaquetsArbres.get(i).production());
 		}
+	}
+	//cette fonction va essayer de calculer la valeur de notre stock a partir des prix de la criée precedente (pour le moment), il pourra etre amelioré.(lucas p)
+	public double EstimationVenteStock() {
+		return this.getPrixTC().getValeur()*this.getQuantiteFeve(Feve.FEVE_HAUTE)+this.getPrixTT().getValeur()*this.getQuantiteFeve(Feve.FEVE_MOYENNE)+this.getPrixTF().getValeur()*this.getQuantiteFeve(Feve.FEVE_BASSE);
 	}
 }
