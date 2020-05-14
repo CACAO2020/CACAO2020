@@ -17,20 +17,21 @@ import abstraction.eq8Romu.produits.Pate;
 import abstraction.eq8Romu.chocolatBourse.IVendeurChocolatBourse;
 import abstraction.fourni.Filiere;
 
-public class Transformateur2 implements IActeur, IVendeurChocolatBourse {
+public class Transformateur2 implements IActeur {
 	
 	//variables
-	private Map<Feve, Variable> stockFeves;
-	private Map<PateInterne, Variable> stockPate ; //vérifier que le prof n'en a pas besoin, ne pas oublier de convertir lors des échanges
-	private Map<Chocolat, Variable> stockChocolat;
+	protected Map<Feve, Variable> stockFeves;
+	protected Map<PateInterne, Variable> stockPate ; //vérifier que le prof n'en a pas besoin, ne pas oublier de convertir lors des échanges
+	protected Map<Chocolat, Variable> stockChocolat;
 
 	//paramètres
 	private Variable coutFixe ; //coûts de fonctionnement, marketing etc
-	private Integer cryptogramme;
-	private Journal journalEq4;
+	protected Integer cryptogramme;
+	protected Journal journalEq4;
 
 	
 	
+/* ******LES QUANTITES SONT EN TONNES****** */
 	
 	public Transformateur2() {
 		
@@ -155,32 +156,7 @@ public class Transformateur2 implements IActeur, IVendeurChocolatBourse {
 	
 //Connaitre notre solde
 	public double getSolde() {
-		return Filiere.LA_FILIERE.getBanque().getSolde(Filiere.LA_FILIERE.getActeur(this.getNom()), this.cryptogramme);
+		return Filiere.LA_FILIERE.getBanque().getSolde(this, this.cryptogramme);
 	}
 
-// Vente de chocololat
-	public double getOffre(Chocolat chocolat, double cours) {
-		if (cours >= this.getPrixMinVenteChoco()) {
-			return this.getStockChocolatValeur(chocolat);
-		}
-		else {
-			return 0;
-		}
-	}
-
-	public void livrer(Chocolat chocolat, double quantite) {
-		double valeur = this.getStockChocolatValeur(chocolat) - quantite ;
-		if (valeur >= 0) {
-			this.setStockChocolatValeur(chocolat, valeur);
-		}
-		else {throw new IllegalArgumentException("stock insuffisant");}
-	}
-
-/* Fonction qui donnera le prix minimum pour qu'on veuille vendre notre chocolat
- * Pourra être implémentée une fois qu'on saura calculer le cout de production du chocolat
- */
-	public double getPrixMinVenteChoco() {
-		return 0;
-	}
-	
 }
