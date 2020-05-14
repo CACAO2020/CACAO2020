@@ -111,4 +111,5 @@ public class Transformateur2_negoce extends Transformateur2_e1 implements IAchet
 			return 0;
 		}
 		
+		
 }

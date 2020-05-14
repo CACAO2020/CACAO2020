@@ -3,6 +3,10 @@ package abstraction.eq4Transformateur2;
 import abstraction.eq8Romu.produits.Gamme;
 import abstraction.eq8Romu.produits.Pate;
 
+//PateInterne est une classe alternative pour Pate permettant de faciliter toutes les opérations internes
+	//Il faut cependant vérifier que lors des échanges avec les codes extérieurs, ce qui est envoyé est du
+	//type Pate. On l'utilise ici pour classifier les stocks.
+
 public enum PateInterne {
 	PATE_BASSE(Gamme.BASSE, false, false),
 	PATE_MOYENNE(Gamme.MOYENNE, false, false),
@@ -33,7 +37,12 @@ public enum PateInterne {
 			System.out.println(p);
 		}
 	}
-	public Pate conversionPateInterne () { // Attention retourne null si ça ne doit pas sortir du code interne
+	
+	// Permet de renvoyer une pâte de type Pate à partir d'une pâte de type PateInterne 
+		// Attention retourne null si c'est une pâte qui n'a pas d'équivalent dans Pate, ie une pâte
+		// qui n'est utile qu'en interne
+	
+	public Pate conversionPateInterne () { 
 		if (this == PateInterne.PATE_BASSE) {
 			return Pate.PATE_BASSE ;
 		}
