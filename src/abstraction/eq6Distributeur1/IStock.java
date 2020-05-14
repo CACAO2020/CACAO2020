@@ -65,7 +65,7 @@ public interface IStock { /** Interface implémentée par Avril Thibault et Tami
 	 * @param chocolat
 	 * @param quantite
 	 */
-	public void destocker();
+	public void destocker(ChocolatDeMarque choco, double quantite);
 
 
 }

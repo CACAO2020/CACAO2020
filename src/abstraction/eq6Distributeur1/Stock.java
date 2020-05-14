@@ -64,8 +64,10 @@ public class Stock  extends Distributeur1 implements IStock { /** @author Avril 
 	}
 
 	@Override
-	public void destocker() {
-		
+	public void destocker(ChocolatDeMarque choco, double quantite) {
+		if (MapStock.keySet().contains(choco)) {
+			this.MapStock.replace(choco, this.MapStock.get(choco)-quantite);
+		}
 	}
 
 	@Override
