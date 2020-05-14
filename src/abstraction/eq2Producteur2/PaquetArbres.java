@@ -1,5 +1,7 @@
 package abstraction.eq2Producteur2;
-
+import abstraction.eq8Romu.produits.Feve;
+import abstraction.eq8Romu.produits.Pate;
+import abstraction.eq8Romu.produits.Gamme;
 /**
  * 
  * @author lucas

@@ -1,11 +1,14 @@
 
 
 package abstraction.eq2Producteur2;
+import abstraction.eq8Romu.produits.Feve;
+import abstraction.eq8Romu.produits.Pate;
+import abstraction.eq8Romu.produits.Gamme;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import abstraction.eq2Producteur2.produits.Feve;
+
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
