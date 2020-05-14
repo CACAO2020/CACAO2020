@@ -42,7 +42,7 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 	 * 
 	 */
 	public LotCacaoCriee getLotEnVente() { //le -500 est une valeur arbitraire
-		List<Variable> Stock = this.getVariables(); 
+		List<Variable> Stock = this.getVariablesFeve(); 
 	    double masseFora = 0;
 	    double masseTrini = 0;
 	    double masseCrio = 0;

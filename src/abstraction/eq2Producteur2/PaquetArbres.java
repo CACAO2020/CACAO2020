@@ -14,10 +14,10 @@ public class PaquetArbres {
 	
 	private int nbreArbres;
 	private int age;
-	private String type;
+	private Feve type;
 	
 	
-	public PaquetArbres(int nbreA, String type) {
+	public PaquetArbres(int nbreA, Feve type) {
 		this.nbreArbres = nbreA;
 		this.age = 0;
 		this.type = type;
@@ -35,7 +35,7 @@ public class PaquetArbres {
 		this.age = newAge;
 	}
 	
-	public String getType() {
+	public Feve getType() {
 		return this.type;
 	}
 	/**
@@ -49,20 +49,14 @@ public class PaquetArbres {
 		double prodmaxTrinitario_bio = 6;
 		double prodmaxForastero_bio = 6;
 		double prodmaxCriollo_bio = 6;
-		if (this.type.equals("trinitario")){
+		if (this.type.equals(Feve.FEVE_BASSE)){
 			return prodmaxTrinitario*(1-Math.exp(this.age))*this.nbreArbres;
 		}
-		if (this.type.equals("forastero")){
+		if (this.type.equals(Feve.FEVE_MOYENNE)){
 			return prodmaxForastero*(1-Math.exp(this.age))*this.nbreArbres;}
-		if (this.type.contentEquals("criollo"))
+		else 
 			{return prodmaxCriollo*(1-Math.exp(this.age))*this.nbreArbres;}
-		if (this.type.equals("trinitario_bio")){
-			return prodmaxTrinitario_bio*(1-Math.exp(this.age))*this.nbreArbres;
-		}
-		if (this.type.equals("forastero_bio")){
-			return prodmaxForastero_bio*(1-Math.exp(this.age))*this.nbreArbres;}
-		else {
-			return prodmaxCriollo_bio*(1-Math.exp(this.age))*this.nbreArbres;}
+		
 	}
 	
 }
