@@ -228,7 +228,7 @@ public class Stock {
 		this.majStockChocolat(choco);
 		List<Couple<Variable>> table = this.stockChocolat.get(choco);
 		double quantiteAEnlever = quantite;
-		if (getQuantitéChocolat(choco) >= quantite) {
+		if (getQuantiteChocolat(choco) >= quantite) {
 			while (quantiteAEnlever != 0) {
 				double prix = this.prixMaxStock(table);
 				double quantiteprix = this.getQuantitePrixChocolat(choco, prix);
