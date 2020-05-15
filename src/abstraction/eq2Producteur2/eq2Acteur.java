@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import abstraction.eq8Romu.produits.Feve;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
@@ -23,6 +24,7 @@ public class eq2Acteur implements IActeur {
 		this.journalEq2 = new Journal("Journal Principal", this);
 		this.PaquetsArbres = new ArrayList<PaquetArbres>();
 		this.parametres = new ArrayList<Variable>();
+		this.PaquetsArbres.add(new PaquetArbres(100,Feve.FEVE_MOYENNE));
 	}
 
 	
