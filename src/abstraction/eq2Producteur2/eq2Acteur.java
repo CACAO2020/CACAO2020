@@ -18,9 +18,17 @@ public class eq2Acteur implements IActeur {
 	private Variable stockFeves;
 	private Journal journalEq2;
 	private Integer cryptogramme;
+
+	public int getCrypto(){
+		return this.cryptogramme;
+	}
 	
 	public List<PaquetArbres> getPaquetsArbres(){
 		return this.PaquetsArbres;
+	}
+
+	public void ajoutPaquetArbres(PaquetArbres paquetArbres){
+		this.PaquetsArbres.add(paquetArbres);
 	}
 	
 	@Override
