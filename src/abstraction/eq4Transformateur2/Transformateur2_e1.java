@@ -44,15 +44,15 @@ public class Transformateur2_e1 extends Transformateur2 implements IActeur {
 	
 	//paramètres
 	
-	// coûts de transformation par unité, ne dépend que de la gamme et du type de transformation effectuée
+	// coûts de transformation d'une unité (tonne), ne dépend que de la gamme et du type de transformation effectuée
 	
 	private Map<Gamme, Variable> coutsUnitairesTFEP ; 
 	private Map<Gamme, Variable> coutsUnitairesTPEC ; 
 	
 	private Variable coeffTFEP ; //équivalent en pâte d'une unité de fèves
-	private Variable coeffTPEC ; //équivalent en chocolat d'une unité de chocolat
+	private Variable coeffTPEC ; //équivalent en chocolat d'une unité de pate
 	
-	// coût d'entretien des stocks par unité, ne dépend que du type de denrée
+	// coût d'entretien des stocks par unité (tonne), ne dépend que du type de denrée
 	
 	private Variable coutUnitaireStockFeves ; 
 	private Variable coutUnitaireStockPate ; 
