@@ -1,5 +1,3 @@
-/**
-
 package abstraction.eq6Distributeur1;
 
 import java.util.HashMap;
@@ -25,10 +23,10 @@ public class AchatBourseEQ6 extends Stock implements IAcheteurChocolatBourse{
 	public double DemandeTotal(){
 		double consomationAnnuel = Filiere.LA_FILIERE.getIndicateur("CLIENTFINAL consommation annuelle").getValeur();
 		
-		return 0.0;
+		return consomationAnnuel;
 	}
 	
-	public double EvolutionDemandeChocolat(Chocolat chocolat){
+	public double EvolutionDemandeChocolat(Chocolat chocolat){ // il faut prendre en compte les ruptures de stocks
 		
 		double anneeYa1AN = Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-24, chocolat );
 		
@@ -46,6 +44,9 @@ public class AchatBourseEQ6 extends Stock implements IAcheteurChocolatBourse{
 		return 0;
 	}
 	
+	
+	
+	
 	public double getDemande(Chocolat chocolat, double cours) {
 			double solde = Filiere.LA_FILIERE.getBanque().getSolde(this,  cryptogramme); // retourne l'argent du compte
 			double max = solde/cours;
@@ -57,10 +58,17 @@ public class AchatBourseEQ6 extends Stock implements IAcheteurChocolatBourse{
 				
 			}
 			if (DeamndeChoco>=stockChoco) {
-				return (DeamndeChoco - stockChoco);//calcul quantité en stock souhaite- quantité en stock actuel
 				
+				double quantitéSouhaité =(DeamndeChoco/2 - stockChoco); //on fait l'hypothèse qu'on a la moitié du marché
+				if (quantitéSouhaité*cours <solde) {
+					return quantitéSouhaité;
+					
+				}
+				else {
+					return max;
+				}
 			}
-			return 0;// les cours vont s'effondrer car les acheteurs vont tres vite ne plus avoir assez d'argent pour acheter. Augmentez le solde des acheteurs via l'interface si vous voulez voir les cours repartir à la hausse
+			return 0;
 		}
 	
 		
@@ -74,7 +82,7 @@ public class AchatBourseEQ6 extends Stock implements IAcheteurChocolatBourse{
 		}
 	
 		public void receptionner(Chocolat chocolat, double quantite) { //coder
-			this.stocker(chocolat,  quantite);
+			//this.stocker(chocolat,  quantite);
 		}
 
 	
@@ -85,15 +93,4 @@ public class AchatBourseEQ6 extends Stock implements IAcheteurChocolatBourse{
 			}
 			return null;
 		}
-
-	
-
-	
-		
-		
-		
-	
-    
 }
-
-**/

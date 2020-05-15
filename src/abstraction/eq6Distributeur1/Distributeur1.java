@@ -13,7 +13,7 @@ import abstraction.fourni.Variable;
 
 public class Distributeur1 implements IActeur {
 
-	private Integer cryptogramme;
+	protected Integer cryptogramme;
 	protected Journal journalEq6;
 	protected Variable stockHGE;
 	protected Variable stockMG;
