@@ -82,6 +82,7 @@ class GestionCriee //implements IVendeurCacaoCriee
 	
 	//Clément
 	public void notifierVente(PropositionCriee proposition) {
-		this.producteur1.ajouterJournaux("[GestionCriee] - Vente de : " + producteur1.getStock());
+		this.producteur1.ajouterJournaux("[GestionCriee] - Vente de : " + proposition.getQuantiteEnTonnes());
+		this.producteur1.removeStock(proposition.getQuantiteEnTonnes());
 	}
 }
