@@ -12,11 +12,6 @@ import abstraction.fourni.Filiere;
 
 public class Transformateur1 extends VendeurChocolat {
 
-	public Transformateur1(Chocolat chocolat) {
-		super(chocolat);
-		// TODO Auto-generated constructor stub
-	}
-
 
 
 }

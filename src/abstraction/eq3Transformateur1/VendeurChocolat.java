@@ -13,17 +13,8 @@ import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;;
 public abstract class VendeurChocolat extends AcheteurCacao implements IVendeurChocolatBourse {
 
-
-	private int numeroVendeur;
 	private Chocolat chocolat;
 	
-	/** @author K. GUTIERREZ  */
-	public VendeurChocolat(Chocolat chocolat) {	
-		if (chocolat==null) {
-			throw new IllegalArgumentException("chocolat==null");
-		}		
-		this.chocolat = chocolat;
-	}
 	
 	/** @author K. GUTIERREZ  */
 	public double getOffre(Chocolat chocolat, double cours) {
