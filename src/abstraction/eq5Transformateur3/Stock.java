@@ -244,7 +244,7 @@ public class Stock {
 			for (Couple<Variable> feveInfos : this.stockFeves.get(feve)) {
 				this.stockChocolat.get(this.getProduct(feve)).add(feveInfos);
 				feveInfos.get2().ajouter(acteur, transformationCostFeve);
-				this.acteur.getTresorier().DiminueTresorerie(transformationCostFeve * feveInfos.get1().getValeur());
+				this.acteur.getTresorier().diminueTresorerie(transformationCostFeve * feveInfos.get1().getValeur());
 			}
 			//le stock est transformé donc la matière première est supprimée
 			this.stockFeves.get(feve).clear();
@@ -253,7 +253,7 @@ public class Stock {
 			for (Couple<Variable> pateInfos : this.stockPate.get(pate)) {
 				this.stockChocolat.get(this.getProduct(pate)).add(pateInfos);
 				pateInfos.get2().ajouter(acteur, transformationCostPate);
-				this.acteur.getTresorier().DiminueTresorerie(transformationCostPate * pateInfos.get1().getValeur());
+				this.acteur.getTresorier().diminueTresorerie(transformationCostPate * pateInfos.get1().getValeur());
 			}
 			this.stockPate.get(pate).clear();
 		}
