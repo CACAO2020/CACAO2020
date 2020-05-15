@@ -30,9 +30,9 @@ public class AcheteurChocolat extends AbsAcheteurChocolat implements IAcheteurCh
 
 	public void notifierCommande(Chocolat chocolat, double quantiteObtenue, boolean payee) {
 		if (payee) {
-			journal.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[COMMANDE PAYÉE] Confirmation d'une commande de " + quantiteObtenue + " tonnes de " + chocolat.name() + "."));
+			journal.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[PAIEMENT] Confirmation d'une commande de " + quantiteObtenue + " tonnes de " + chocolat.name() + "."));
 		} else {
-			journal.ajouter(Journal.texteColore(warningColor, Color.BLACK, "[COMMANDE NON PAYÉE] Confirmation d'une commande de " + quantiteObtenue + " tonnes de " + chocolat.name() + "."));
+			journal.ajouter(Journal.texteColore(warningColor, Color.BLACK, "[IMPAIEMENT] Confirmation d'une commande de " + quantiteObtenue + " tonnes de " + chocolat.name() + "."));
 		}
 	}
 	

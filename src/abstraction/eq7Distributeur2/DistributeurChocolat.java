@@ -1,7 +1,9 @@
 package abstraction.eq7Distributeur2;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import abstraction.eq8Romu.clients.ClientFinal;
 import abstraction.eq8Romu.clients.IDistributeurChocolat;
@@ -10,12 +12,20 @@ import abstraction.eq8Romu.produits.Chocolat;
 //import abstraction.eq8Romu.produits.Gamme;
 //import abstraction.fourni.Filiere;
 import abstraction.eq8Romu.produits.ChocolatDeMarque;
+import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
 
 public class DistributeurChocolat extends AbsDistributeurChocolat implements IDistributeurChocolatDeMarque, IActeur {
 
+	protected Map<Chocolat, Double> prixParDefaut;
+	
 	public DistributeurChocolat(Distributeur2 ac) {
 		super(ac);
+		prixParDefaut = new HashMap<Chocolat, Double>();
+		prixParDefaut.put(Chocolat.CHOCOLAT_MOYENNE, 10000.);
+		prixParDefaut.put(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE, 14000.);
+		prixParDefaut.put(Chocolat.CHOCOLAT_HAUTE, 15000.);
+		prixParDefaut.put(Chocolat.CHOCOLAT_HAUTE_EQUITABLE, 20000.);
 	}
 
 	public boolean commercialise(Chocolat choco) {
@@ -37,7 +47,14 @@ public class DistributeurChocolat extends AbsDistributeurChocolat implements IDi
 	}
 
 	public double prix(ChocolatDeMarque choco) {
-		return 5.;
+		double cours;
+		double pourcentageMarge = 5;
+		if (Filiere.LA_FILIERE.getEtape() > 1) {
+            cours = Filiere.LA_FILIERE.getIndicateur("BourseChoco cours " + choco.getChocolat().name()).getHistorique().get(Filiere.LA_FILIERE.getEtape()-1).getValeur();
+        } else {
+        	cours = prixParDefaut.get(choco.getChocolat());
+        }
+		return (1. + pourcentageMarge/100.) * cours;
 	}
 
 	public double quantiteEnVente(ChocolatDeMarque choco) {

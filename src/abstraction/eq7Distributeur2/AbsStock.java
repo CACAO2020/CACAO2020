@@ -37,11 +37,11 @@ public class AbsStock {
 		stocksChocolat=new HashMap<Chocolat, Variable>();
 		
 		this.journal = new Journal(getNom() + " Stocks " + getNumero(), ac);
-		this.journal.ajouter(Journal.texteColore(titleColor, Color.WHITE,"EQ7 : Suivi des stocks de chocolats et de fèves"));
+		this.journal.ajouter(Journal.texteColore(titleColor, Color.WHITE,"EQ7 : Suivi des stocks de chocolat"));
 
 		for (Chocolat choco : Chocolat.values()) {
 			stocksChocolat.put(choco, new Variable(getNom() + " : STOCK " + choco.name(), ac, 0));
-			journal.ajouter(Journal.texteColore(metaColor, Color.BLACK,"Création d'un stock pour le " + choco + "."));
+			journal.ajouter(Journal.texteColore(metaColor, Color.BLACK,"[CRÉATION] Création d'un stock pour le " + choco + "."));
 		}
 		
 	}

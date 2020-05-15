@@ -23,7 +23,6 @@ public class AbsAcheteurChocolat {
 	protected Distributeur2 ac;
 	
 	public Color titleColor = Color.BLACK;
-	public Color metaColor = Color.CYAN;
 	public Color alertColor = Color.RED;
 	public Color warningColor = Color.ORANGE;
 	public Color positiveColor = Color.GREEN;

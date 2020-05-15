@@ -16,6 +16,11 @@ public class AbsDistributeurChocolat {
 
 	protected Distributeur2 ac;
 	
+	public Color titleColor = Color.BLACK;
+	public Color alertColor = Color.RED;
+	public Color warningColor = Color.ORANGE;
+	public Color positiveColor = Color.GREEN;
+	
 	public AbsDistributeurChocolat(Distributeur2 ac) {	
 		this.ac = ac;
 		this.journal = new Journal(this.getNom()+" Distributeur Chocolat " + ac.getNumero(), ac);

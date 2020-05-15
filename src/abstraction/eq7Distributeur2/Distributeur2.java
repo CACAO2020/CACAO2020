@@ -29,6 +29,7 @@ public class Distributeur2 implements IActeur, IAcheteurChocolatBourse, IDistrib
 	private DistributeurChocolat distributeurChocolat;
 	private Stock stock;
 
+	public Color titleColor = Color.BLACK;
 	private Journal journal;
 	
 	public Distributeur2() {
@@ -69,7 +70,7 @@ public class Distributeur2 implements IActeur, IAcheteurChocolatBourse, IDistrib
 	}
 
 	public void initialiser() {
-		journal.ajouter("Journal d'activités " + getNom());
+		journal.ajouter(Journal.texteColore(titleColor, Color.WHITE, "EQ7 : Journal d'activités"));
 		acheteurChocolat.initialiser();
 		distributeurChocolat.initialiser();
 		stock.initialiser();
