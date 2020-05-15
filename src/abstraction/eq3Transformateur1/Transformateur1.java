@@ -16,6 +16,7 @@ public class Transformateur1 extends VendeurChocolat {
 		super(chocolat);
 		// TODO Auto-generated constructor stub
 	}
-	
+
+
 
 }

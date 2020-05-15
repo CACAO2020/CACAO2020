@@ -11,7 +11,8 @@ import abstraction.eq8Romu.produits.Feve;
 import abstraction.eq8Romu.produits.Gamme;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;;
-public abstract class VendeurChocolat extends Stock implements IVendeurChocolatBourse {
+public abstract class VendeurChocolat extends AcheteurCacao implements IVendeurChocolatBourse {
+
 
 	private int numeroVendeur;
 	private Chocolat chocolat;
