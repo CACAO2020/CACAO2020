@@ -20,7 +20,7 @@ import abstraction.fourni.IActeur;
  * qui peut au plus mettre capaciteDeVente tonnes de chocolat en vente par step, et qui a
  * un prix fixe pour ce chocolat 
  */
-public class DistributeurChocolat extends AbsDistributeurChocolat implements IDistributeurChocolatDeMarque {
+public class DistributeurChocolat extends AbsDistributeurChocolat implements IDistributeurChocolatDeMarque, IActeur {
 
 	private double capaciteDeVente;
 	private double prix;
@@ -44,8 +44,10 @@ public class DistributeurChocolat extends AbsDistributeurChocolat implements IDi
 	public void vendre(ClientFinal client, Chocolat choco, double quantite) {
 	}
 	
+	public void initialiser() {
+	}
+
 	public void next() {
-		//Filiere.LA_FILIERE.getVentes(-24, new Chocolat(Gamme.HAUTE, false, false));
 	}
 
 	public List<ChocolatDeMarque> getCatalogue() {
@@ -54,27 +56,21 @@ public class DistributeurChocolat extends AbsDistributeurChocolat implements IDi
 	}
 
 	public double prix(ChocolatDeMarque choco) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	public double quantiteEnVente(ChocolatDeMarque choco) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public void notificationRayonVide(ChocolatDeMarque choco) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	public List<ChocolatDeMarque> pubSouhaitee() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }

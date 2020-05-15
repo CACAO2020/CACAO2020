@@ -11,7 +11,7 @@ import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Variable;
 
-public class AcheteurChocolat extends AbsAcheteurChocolat implements IAcheteurChocolatBourse {
+public class AcheteurChocolat extends AbsAcheteurChocolat implements IAcheteurChocolatBourse, IActeur {
 	//Raphaël Caby
 	
 	public AcheteurChocolat(Distributeur2 ac) {
@@ -39,13 +39,16 @@ public class AcheteurChocolat extends AbsAcheteurChocolat implements IAcheteurCh
 		ac.getStock().ajouterStockChocolat(chocolat, quantite);
 	}
 
+	public void initialiser() {
+	}
+	
 	public void next() {
 		// L'opération sera effectuée pour CHAQUE type de chocolat que nous vendons
 		for (Chocolat choco : Chocolat.values()) {
 			// D'abord on consulte les stocks
 			double stockChoco = ac.getStock().getStockChocolat(choco);
 			// Ensuite on demande au vendeur quelle quantité lui est demandée
-			double demandeVendeur = 15.;   //Le temps de progresser dans le fichier vendeur
+			double demandeVendeur = 5.;   //Le temps de progresser dans le fichier vendeur
 			// On compare la demande du vendeur et les stocks
 			double achatsAFaire = max(demandeVendeur - stockChoco, 0.);
 			if (achatsAFaire == 0.) {

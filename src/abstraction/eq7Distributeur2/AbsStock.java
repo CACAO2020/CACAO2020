@@ -14,7 +14,7 @@ import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
-public class AbsStock implements IActeur {
+public class AbsStock {
 
 	protected Map<ChocolatDeMarque, Variable> stocksChocolatDeMarque;
 	protected Map<Chocolat, Variable> stocksChocolat;

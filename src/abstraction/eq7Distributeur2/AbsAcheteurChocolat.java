@@ -83,13 +83,6 @@ public class AbsAcheteurChocolat {
 	public void notificationOperationBancaire(double montant) {
 		ac.notificationOperationBancaire(montant);
 	}
-
-	public void initialiser() {
-	}
-	
-	public void next() {
-		
-	}
 	
 	public List<Variable> getIndicateurs() {
 		List<Variable> res = new ArrayList<Variable>();

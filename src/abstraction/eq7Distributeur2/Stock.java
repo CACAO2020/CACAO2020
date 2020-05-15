@@ -14,7 +14,7 @@ import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
-public class Stock extends AbsStock implements IStock{
+public class Stock extends AbsStock implements IStock, IActeur {
 	
 	public Stock(Distributeur2 ac) {
 			super(ac);
