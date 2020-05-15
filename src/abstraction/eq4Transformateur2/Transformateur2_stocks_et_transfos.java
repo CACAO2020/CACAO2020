@@ -18,7 +18,7 @@ import abstraction.fourni.Filiere;
 
 //extension gérant les stocks et la transformation
 
-public class Transformateur2_e1 extends Transformateur2 implements IActeur {
+public class Transformateur2_stocks_et_transfos extends Transformateur2 implements IActeur {
 	
 	// Notation : TFEP : transformation fève en pâte
 	// 			  TPEC : transformation pâte en chocolat
@@ -61,7 +61,7 @@ public class Transformateur2_e1 extends Transformateur2 implements IActeur {
 	// l'initialisation nécessite de nombreuses variables, qui sont à modifier pour les tests
 	// il faut déterminer ces valeurs en essayant d'être réalistes et cohérents avec les autres équipes
 	
-	public Transformateur2_e1() {
+	public Transformateur2_stocks_et_transfos() {
 		
 		super () ; 
 		
@@ -220,7 +220,7 @@ public class Transformateur2_e1 extends Transformateur2 implements IActeur {
 	
 	// renvoie la pâte ayant les mêmes caractéristiques que la fève entrée en argument
 	
-	public PateInterne creerPate (Feve feve) {
+	public PateInterne creerPateAPartirDeFeve (Feve feve) {
 		switch (feve.getGamme()) {
 		case BASSE : return PateInterne.PATE_BASSE ; 
 		case MOYENNE :
@@ -255,6 +255,46 @@ public class Transformateur2_e1 extends Transformateur2 implements IActeur {
 				return Chocolat.CHOCOLAT_HAUTE_EQUITABLE ;
 			} else {
 				return Chocolat.CHOCOLAT_HAUTE ;
+			}
+		default : throw new IllegalArgumentException("valeur non trouvée") ;
+		}
+	}
+	
+	// fonctions inverses, utiles dans d'autres fonctions 
+	
+	public PateInterne creerPateAPartirDeChocolat (Chocolat chocolat) {
+		switch (chocolat.getGamme()) {
+		case BASSE : return PateInterne.PATE_BASSE ; 
+		case MOYENNE :
+			if (chocolat.isEquitable()) {
+				return PateInterne.PATE_MOYENNE_EQUITABLE ;
+			} else {
+				return PateInterne.PATE_MOYENNE ;
+			}
+		case HAUTE : 
+			if (chocolat.isEquitable()) {
+				return PateInterne.PATE_HAUTE_EQUITABLE ;
+			} else {
+				return PateInterne.PATE_HAUTE ;
+			}
+		default : throw new IllegalArgumentException("valeur non trouvée") ;
+		}
+	}
+
+	public Feve creerFeve (PateInterne pate) {
+		switch (pate.getGamme()) {
+		case BASSE : return Feve.FEVE_BASSE ; 
+		case MOYENNE :
+			if (pate.isEquitable()) {
+				return Feve.FEVE_MOYENNE_EQUITABLE ;
+			} else {
+				return Feve.FEVE_MOYENNE ;
+			}
+		case HAUTE : 
+			if (pate.isEquitable()) {
+				return Feve.FEVE_HAUTE_EQUITABLE ;
+			} else {
+				return Feve.FEVE_HAUTE ;
 			}
 		default : throw new IllegalArgumentException("valeur non trouvée") ;
 		}
@@ -306,12 +346,12 @@ public class Transformateur2_e1 extends Transformateur2 implements IActeur {
 	public void transformationFeveEnPate (double quantiteFeve, Feve feve) { 
 			double nouveauStockFeve = super.getStockFevesValeur(feve) - quantiteFeve ;
 			if (nouveauStockFeve >= 0) {
-				PateInterne pate = this.creerPate(feve) ;
+				PateInterne pate = this.creerPateAPartirDeFeve(feve) ;
 				double quantitePate = this.getCoeffTFEP()*quantiteFeve ;
 				super.setStockFevesValeur(feve,nouveauStockFeve) ;
 				super.setStockPateValeur(pate, super.getStockPateValeur(pate) + quantitePate ) ;
 				if (quantitePate > 0) {
-					double prix = this.getCoutMoyenFeveValeur(feve)/this.getCoutTFEP(feve);
+					double prix = this.getCoutMoyenFeveValeur(feve)/this.getCoeffTFEP();
 					this.modifierCoutMoyenPate(pate, quantitePate, prix);
 				}
 			} 
@@ -326,7 +366,7 @@ public class Transformateur2_e1 extends Transformateur2 implements IActeur {
 			super.setStockPateValeur(pate,nouveauStockPate) ;
 			super.setStockChocolatValeur(chocolat, super.getStockChocolatValeur(chocolat) + quantiteChocolat ) ;
 			if (quantiteChocolat > 0) {
-				double prix = this.getCoutMoyenPateValeur(pate)/this.getCoutTPEC(pate);
+				double prix = this.getCoutMoyenPateValeur(pate)/this.getCoeffTPEC();
 				this.modifierCoutMoyenPate(pate, quantiteChocolat, prix);
 			}
 		}
