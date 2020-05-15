@@ -10,21 +10,53 @@ import java.util.Random;
  */
 
 /*
+ * A FAIRE AU TOUT DEBUT
+ * initialiserArbres(int, int)
+ * Le premier represente le nombre d'arbres Forastero
+ * Le second represente le nombre d'arbres Trinitario
+ * 
+ * A FAIRE CHAQUE QUINZAINE DANS LE PROGRAMME PRINCIPAL :
+ * cyclique(int, int, int)
+ * Le premier int represente les nouveaux arbres Forastero a planter chaque mois
+ * Le deuxieme represente les nouveaux arbres Trinitario a planter chaque mois
+ * Le troisieme represente le nombre d'employes disponibles
+ */
+
+
+/* Donnees
+ * L'arbre meurt a 45 ans
+ * Il produit des cabosses à partir de ses 3 ans jusqu'a sa mort.
+ * Sa pleine maturite dure de 6 a 30 ans
+ * Il faut espacer les cacaoyers de 3 m par 3 m, soit 1 111 arbres par hectare
+ * On considere qu'il y a un ratio de 2 hectares par employe.
+ */
+
+
+
+
+/*
  * Programmes disponibles :
  * ArrayList<Double> getArbresF()
  * ArrayList<Double> getArbresT()
  * double getDerniereRecolteF()
  * double getDerniereRecolteT()
  * double getPourcentageRecolteurs()
+ * int getNouveauxF()
+ * int getNouveauxT()
+ * 
  * void setArbresF(ArrayList<Double>)
  * void setArbresT(ArrayListDouble>)
  * void setDerniereRecolte(double, double)
+ * void setNombreRecolteurs(int)
+ * void setNouveauxF(int)
+ * void setNouveauxT(int)
  * 
  * void initialiserArbres(int, int)
- * void setPourcentageRecolteurs()
- * void nouvelArbre(int)
+ * void nouvelArbre()
  * void actualiserAge()
  * ArrayList<Double> recolte()
+ * 
+ * ArrayList<Double cyclique()
  */
 
 
@@ -44,7 +76,9 @@ public class Plantations {
 	private ArrayList<Double> arbresT;
 	private double derniereRecolteF;
 	private double derniereRecolteT;
-	private double pourcentageRecolteurs;
+	private double nombreRecolteurs;
+	private int nouveauxF;
+	private int nouveauxT;
 	
 	
 	public ArrayList<Double> getArbresF() {
@@ -67,8 +101,16 @@ public class Plantations {
 	}
 	
 	
-	public double getPourcentageRecolteurs() {
-		return this.pourcentageRecolteurs;
+	public double getNombreRecolteurs() {
+		return this.nombreRecolteurs;
+	}
+	
+	public int getNouveauxF() {
+		return this.nouveauxF;
+	}
+	
+	public int getNouveauxT() {
+		return this.nouveauxT;
 	}
 	
 	
@@ -88,17 +130,30 @@ public class Plantations {
 	}
 	
 	
-	public void setPourcentageRecolteurs(double p) {
-		this.pourcentageRecolteurs = p;
+	public void setNombreRecolteurs(int i) {
+		this.nombreRecolteurs = i;
 	}
 	
 	
-	public void nouvelArbre(int i) {
-		if (i==0) {
-			this.arbresF.add(0, (Double) 0.0); 
-		} else {
-			this.arbresT.add(0, (Double) 0.0);
+	public void setNouveauxF(int i) {
+		this.nouveauxF = i;
+	}
+	
+	public void setNouveauxT(int i) {
+		this.nouveauxT = i;
+	}
+	
+	
+	public void nouvelArbre() {
+		int F = this.getNouveauxF();
+		int T = this.getNouveauxT();
+		for (int i=0; i<F; i+=1) {
+			this.arbresF.add((Double) 0.0);
 		}
+		for (int i=0; i<T; i+=1) {
+			this.arbresT.add((Double) 0.0);
+		}
+		
 	}
 	
 	
@@ -214,8 +269,12 @@ public class Plantations {
 			}
 		}
 		
-		totalF = totalF*this.getPourcentageRecolteurs();
-		totalT = totalT*this.getPourcentageRecolteurs();
+		double pourcentageRecolteurs =this.getNombreRecolteurs()/(((this.getArbresF().size()+this.getArbresT().size())/1111)/2);
+		if (pourcentageRecolteurs>1) {
+			pourcentageRecolteurs=1;
+		}
+		totalF = totalF*pourcentageRecolteurs;
+		totalT = totalT*pourcentageRecolteurs;
 		this.setDerniereRecolte(totalF, totalT);
 		ArrayList<Double> recolte = new ArrayList<Double>();
 		recolte.add((Double) pretesAStockerF);
@@ -224,5 +283,15 @@ public class Plantations {
 	}
 	
 	
+	
+	public ArrayList<Double> cyclique(int newF, int newT, int nb_emp) {
+		this.setNombreRecolteurs(nb_emp);
+		this.setNouveauxF(newF);
+		this.setNouveauxT(newT);
+		ArrayList<Double> newStock = this.recolte();
+		this.actualiserAge();
+		this.nouvelArbre();
+		return newStock;
+	}
 	
 }
