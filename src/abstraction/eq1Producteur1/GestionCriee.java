@@ -23,32 +23,43 @@ class GestionCriee //implements IVendeurCacaoCriee
 	private double lastPrixMin;
 	private double lastPrixVente;
 	private Producteur1 producteur1;
+	private List<LotCacaoCriee> miseEnVenteLog;
+	private List<PropositionCriee> venduLog;
 	
-	public GestionCriee(Producteur1 sup) //Clément
+	public GestionCriee(final Producteur1 sup) //Clément
 	{
 		//Prix par unité
 		this.lastPrixMin = 0;
 		this.lastPrixVente = 0;
 		this.producteur1 = sup;
+		this.venduLog = new ArrayList<PropositionCriee>();
+		this.miseEnVenteLog = new ArrayList<LotCacaoCriee>();
 	}
 	
-	public GestionCriee(double lastPrixMinInit, double lastPrixVenteInit, IActeur sup) //Clément
+	public GestionCriee(final double lastPrixMinInit, final double lastPrixVenteInit, final IActeur sup) //Clément
 	{
 		this.lastPrixMin = lastPrixMinInit;
 		this.lastPrixVente = lastPrixVenteInit;
 	}
 
 
-	//Clément 
-	public LotCacaoCriee getLotEnVente() {
-		this.producteur1.ajouterJournaux("[GestionCriee] - Mise en vente de : " + producteur1.getStock());
-		double quantiteAVendre = producteur1.getStock();
+	private LotCacaoCriee makeLot(Feve typeFeve)
+	{
+		this.producteur1.ajouterJournaux("[GestionCriee] - Mise en vente de : " + producteur1.getStock(typeFeve));
+		double quantiteAVendre = producteur1.getStock(typeFeve);
 		if(quantiteAVendre == 0)
 		{
 			return null;
 		}
 		this.lastPrixMin = lastPrixVente+10;
-		return new LotCacaoCriee(this.producteur1, Feve.FEVE_BASSE, quantiteAVendre, quantiteAVendre * (lastPrixVente+10));
+		LotCacaoCriee lot = new LotCacaoCriee(this.producteur1, typeFeve, quantiteAVendre, quantiteAVendre * (lastPrixVente+10));
+		this.miseEnVenteLog.add(lot);
+		return lot;
+	}
+
+	//Clément 
+	public LotCacaoCriee getLotEnVente() {
+		return makeLot(Feve.FEVE_BASSE);
 	}
 	
 	//Clément
@@ -79,10 +90,16 @@ class GestionCriee //implements IVendeurCacaoCriee
 	}
 
 
+	public List<PropositionCriee> getLotVendu()
+	{
+		return this.venduLog;
+	}
 	
 	//Clément
 	public void notifierVente(PropositionCriee proposition) {
-		this.producteur1.ajouterJournaux("[GestionCriee] - Vente de : " + proposition.getQuantiteEnTonnes());
-		this.producteur1.removeStock(proposition.getQuantiteEnTonnes());
+		Feve typeFeve = proposition.getFeve();
+		this.producteur1.ajouterJournaux("[GestionCriee] - Vente de : " + proposition.getQuantiteEnTonnes() + " de type : " + typeFeve);
+		this.producteur1.removeStock(proposition.getQuantiteEnTonnes(), typeFeve);
+		this.venduLog.add(proposition);
 	}
 }
