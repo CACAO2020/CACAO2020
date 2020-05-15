@@ -42,13 +42,8 @@ public class Stock extends ActeurEQ3 {
 	public void setCoutChocolat(Chocolat chocolat,Double cout) {
 		this.coutChocolat.put(chocolat,cout);
 	}
-	public void setStockFeves(Feve feve,Double quantite,Double prix) {
-		if(this.coutFeves.containsKey(feve)) {
-			this.setCoutFeves(feve,(prix+this.coutFeves.get(feve)*this.stockFeves.get(feve))/(quantite+this.stockFeves.get(feve)));
-		}
-		else {
-			this.setCoutFeves(feve,prix/quantite);
-		}
+	public void setStockFeves(Feve feve,Double quantite) {
+		
 		if(this.stockFeves.containsKey(feve)) {
 			this.stockFeves.put(feve,quantite+this.stockFeves.get(feve));
 		}
@@ -59,13 +54,8 @@ public class Stock extends ActeurEQ3 {
 		this.stockTotalFeves.setValeur(this, quantite);
 
 	}
-	public void setStockChocolat(Chocolat chocolat,Double quantite,Double prix) {
-		if(this.coutChocolat.containsKey(chocolat)) {
-			this.coutChocolat.put(chocolat,(prix+this.coutChocolat.get(chocolat)*this.coutChocolat.get(chocolat))/(quantite+this.coutChocolat.get(chocolat)));
-		}
-		else {
-			this.coutChocolat.put(chocolat,prix/quantite);
-		}
+	public void setStockChocolat(Chocolat chocolat,Double quantite) {
+
 		if(this.stockChocolat.containsKey(chocolat)) {
 			this.stockChocolat.put(chocolat,quantite+this.stockChocolat.get(chocolat));
 		}
@@ -118,8 +108,8 @@ public class Stock extends ActeurEQ3 {
 		System.out.println("Stock feve moyenne = "+stock.getStockFeves(Feve.FEVE_MOYENNE));
 		System.out.println("Map cout Feves "+stock.getCoutFeves());
 		System.out.println("Cout Feves moyenne "+stock.getCoutFeves(Feve.FEVE_MOYENNE));
-		stock.setStockChocolat(Chocolat.CHOCOLAT_HAUTE_EQUITABLE,15.0,200.0);
-		stock.setStockChocolat(Chocolat.CHOCOLAT_MOYENNE,15.0,20.0);
+		stock.setStockChocolat(Chocolat.CHOCOLAT_HAUTE_EQUITABLE,15.0);
+		stock.setStockChocolat(Chocolat.CHOCOLAT_MOYENNE,15.0);
 		System.out.println("");
 		System.out.println("TEST DES METHODES GET/SET CHOCOLAT");
 		System.out.println("");
@@ -128,8 +118,8 @@ public class Stock extends ActeurEQ3 {
 		System.out.println("Cout Chocolat moyenne "+stock.getCoutChocolat(Chocolat.CHOCOLAT_MOYENNE));
 		System.out.println("Cout Chocolat haute equitable "+stock.getCoutChocolat(Chocolat.CHOCOLAT_HAUTE_EQUITABLE));
 		System.out.println("");
-		stock.setStockFeves(Feve.FEVE_MOYENNE,15.0,200.0);
-		stock.setStockFeves(Feve.FEVE_BASSE,15.0,20.0);
+		stock.setStockFeves(Feve.FEVE_MOYENNE,15.0);
+		stock.setStockFeves(Feve.FEVE_BASSE,15.0);
 		System.out.println("TEST DES METHODES GET/SET FEVES ");
 		System.out.println("");
 		System.out.println("Map Stock feves "+stock.getStockFeves());
@@ -140,6 +130,19 @@ public class Stock extends ActeurEQ3 {
 
 
 	}
-	
+	/*
+	 * if(this.coutFeves.containsKey(feve)) {
+			this.setCoutFeves(feve,(prix+this.coutFeves.get(feve)*this.stockFeves.get(feve))/(quantite+this.stockFeves.get(feve)));
+		}
+		else {
+			this.setCoutFeves(feve,prix/quantite);
+		}
+	 		if(this.coutChocolat.containsKey(chocolat)) {
+			this.coutChocolat.put(chocolat,(prix+this.coutChocolat.get(chocolat)*this.stockChocolat.get(chocolat))/(quantite+this.stockChocolat.get(chocolat)));
+		}
+		else {
+			this.coutChocolat.put(chocolat,prix/quantite);
+		}
+	 */
 	
 }
