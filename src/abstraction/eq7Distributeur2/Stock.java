@@ -29,15 +29,6 @@ public class Stock extends AbsStock implements IStock, IActeur {
 		}
 	}
 	
-	public void creerStockChocolat(Chocolat choco) {
-		if (stocksChocolat.containsKey(choco)) {
-			journal.ajouter("[Echec] Création d'un stock pour le " + choco + " refusée : le stock existe déjà.");
-		} else {
-			stocksChocolat.put(choco, new Variable(ac.getNom() + " : STOCK " + choco.name(), ac, 0.));
-			journal.ajouter("Création d'un stock pour le " + choco + ".");
-		}
-	}
-	
 	public double getStockChocolat(Chocolat choco) {
 		if (stocksChocolat.containsKey(choco)) {
 			return stocksChocolat.get(choco).getValeur();

@@ -29,23 +29,24 @@ public class AbsStock {
 		
 		stocksChocolatDeMarque=new HashMap<ChocolatDeMarque, Variable>();
 		stocksChocolat=new HashMap<Chocolat, Variable>();
+		
+		this.journal = new Journal(getNom() + " Stocks " + getNumero(), ac);
+		this.journal.ajouter("EQ7 : Suivi des stocks de chocolats et de fèves");
 
 		for (Chocolat choco : Chocolat.values()) {
-			stocksChocolat.put(choco, new Variable(ac.getNom() + " : STOCK " + choco.name(), ac, 0));
+			stocksChocolat.put(choco, new Variable(getNom() + " : STOCK " + choco.name(), ac, 0));
+			journal.ajouter("Création d'un stock pour le " + choco + ".");
 		}
-		
-		this.journal = new Journal(ac.getNom() + " Stocks " + ac.getNumero(), ac);
-		this.journal.ajouter("EQ7 : Suivi des stocks de chocolats et de fèves");
 		
 	}
 		
 	public List<Variable> getIndicateurs() {
 		List<Variable> res=new ArrayList<Variable>();
 		for (Chocolat choco : Chocolat.values()) {
-			res.add(stocksChocolat.get(choco));
-		}
-		for (ChocolatDeMarque choco : stocksChocolatDeMarque.keySet()) {
-			res.add(stocksChocolatDeMarque.get(choco));
+			// On n'affiche pas le stock de chocolat basse qualité car celui-ci ne variera pas
+			if (!choco.equals(Chocolat.CHOCOLAT_BASSE)) {
+				res.add(stocksChocolat.get(choco));
+			}
 		}
 		return res;
 	}
@@ -65,39 +66,36 @@ public class AbsStock {
 		return ac.getNom();
 	}
 
-
 	public String getDescription() {
 		return ac.getDescription();
 	}
-
 
 	public Color getColor() {
 		return ac.getColor();
 	}
 
-
 	public List<String> getNomsFilieresProposees() {
 		return ac.getNomsFilieresProposees();
 	}
-
 
 	public Filiere getFiliere(String nom) {
 		return ac.getFiliere(nom);
 	}
 
-
 	public void setCryptogramme(Integer crypto) {
 		ac.setCryptogramme(crypto);
 	}
-
 
 	public void notificationFaillite(IActeur acteur) {
 		ac.notificationFaillite(acteur);
 	}
 
-
 	public void notificationOperationBancaire(double montant) {
 		ac.notificationOperationBancaire(montant);
+	}
+	
+	public int getNumero() {
+		return ac.getNumero();
 	}
 
 }

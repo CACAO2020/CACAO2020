@@ -40,32 +40,26 @@ public class Distributeur2 implements IActeur, IAcheteurChocolatBourse, IDistrib
 		journal = new Journal(getNom() + " Activités " + numero, this);
 	}
 	
-	// Renvoie le numéro de l'instance de cette classe
 	public int getNumero() {
 		return this.numero;
 	}
 	
-	// Renvoie l'unique instance de la classe AcheteurChocolatBourse associée au distributeur
 	public AcheteurChocolat getAcheteurChocolat() {
 		return this.acheteurChocolat;
 	}
 	
-	// Renvoie l'unique instance de la classe DistributeurChocolat associée au distributeur
 	public DistributeurChocolat getDistributeurChocolat() {
 		return this.distributeurChocolat;
 	}
 	
-	// Renvoie l'unique instance de la classe Stock associée au distributeur
 	public Stock getStock() {
 		return this.stock;
 	}
 		
-	// Renvoie le nom de l'acteur (par défaut : "EQ7")
 	public String getNom() {
 		return "EQ7";
 	}
 
-	// Renvoie la description de l'acteur
 	public String getDescription() {
 		return "Distributeur Ecocoa de Liège, chocolatier responsable";
 	}
@@ -75,6 +69,7 @@ public class Distributeur2 implements IActeur, IAcheteurChocolatBourse, IDistrib
 	}
 
 	public void initialiser() {
+		journal.ajouter("Journal d'activités " + getNom());
 		acheteurChocolat.initialiser();
 		distributeurChocolat.initialiser();
 		stock.initialiser();
@@ -132,6 +127,7 @@ public class Distributeur2 implements IActeur, IAcheteurChocolatBourse, IDistrib
 	}
 
 	// Méthodes de l'acheteur de chocolat à la bourse
+	
 	public void setCryptogramme(Integer crypto) {
 		this.cryptogramme = crypto;
 	}
@@ -153,6 +149,7 @@ public class Distributeur2 implements IActeur, IAcheteurChocolatBourse, IDistrib
 	}
 
 	// Méthodes du distributeur de chocolat de marque
+	
 	public List<ChocolatDeMarque> getCatalogue() {
 		return distributeurChocolat.getCatalogue();
 	}

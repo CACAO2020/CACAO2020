@@ -73,4 +73,5 @@ public class DistributeurChocolat extends AbsDistributeurChocolat implements IDi
 	public List<ChocolatDeMarque> pubSouhaitee() {
 		return null;
 	}
+
 }

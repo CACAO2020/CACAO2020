@@ -8,8 +8,6 @@ public interface IStock {
 	
 	public void creerStockChocolatDeMarque(ChocolatDeMarque choco);
 	
-	public void creerStockChocolat(Chocolat choco);
-	
 	public double getStockChocolat(Chocolat choco);
 	
 	public double getStockChocolatDeMarque(ChocolatDeMarque chocoDeMarque);

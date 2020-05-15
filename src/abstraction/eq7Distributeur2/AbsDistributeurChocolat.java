@@ -25,36 +25,29 @@ public class AbsDistributeurChocolat {
 		return ac.getNom();
 	}
 
-
 	public String getDescription() {
 		return ac.getDescription();
 	}
-
 
 	public Color getColor() {
 		return ac.getColor();
 	}
 
-
 	public List<String> getNomsFilieresProposees() {
 		return ac.getNomsFilieresProposees();
 	}
-
 
 	public Filiere getFiliere(String nom) {
 		return ac.getFiliere(nom);
 	}
 
-
 	public void setCryptogramme(Integer crypto) {
 		ac.setCryptogramme(crypto);
 	}
 
-
 	public void notificationFaillite(IActeur acteur) {
 		ac.notificationFaillite(acteur);
 	}
-
 
 	public void notificationOperationBancaire(double montant) {
 		ac.notificationOperationBancaire(montant);
