@@ -68,11 +68,18 @@ public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurCh
 	}
 
 	public List<String> getNomsFilieresProposees() {
-		return new ArrayList<String>();
+		List<String> filieresPossibles = new ArrayList<String>();
+		filieresPossibles.add("AchatVente");
+		return filieresPossibles;
 	}
 
 	public Filiere getFiliere(String nom) {
-		return null;
+		if (nom.equals("AchatVente")) {
+			return new FiliereTestAchatVente();
+		}
+		else {
+			return null;
+		}
 	}
 
 	public List<Variable> getIndicateurs() {
