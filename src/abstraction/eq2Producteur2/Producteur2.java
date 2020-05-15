@@ -62,8 +62,14 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 		return this.getPrixTC().getValeur()*this.getQuantiteFeve(Feve.FEVE_HAUTE)+this.getPrixTT().getValeur()*this.getQuantiteFeve(Feve.FEVE_MOYENNE)+this.getPrixTF().getValeur()*this.getQuantiteFeve(Feve.FEVE_BASSE);
 	}
 	public List<Variable> getIndicateurs() {
-		List<Variable> res = this.getIndicateurs();
-		for (int i=0;i<)
+		List<Variable> res = new ArrayList<Variable>();
+		for (Feve feve: this.getStockFeve().keySet()) {
+			res.add(this.getStockFeve().get(feve));
+		}
+		for (Pate pate: this.getStockPate().keySet()) {
+			res.add(this.getStockPate().get(pate));
+		}
+		return res;
 	}
 
 }
