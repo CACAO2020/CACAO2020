@@ -16,7 +16,8 @@ import abstraction.fourni.Variable;
 
 public class AbsStock implements IActeur {
 
-	protected Map<ChocolatDeMarque, Variable> stocksChocolat;
+	protected Map<ChocolatDeMarque, Variable> stocksChocolatDeMarque;
+	protected Map<Chocolat, Variable> stocksChocolat;
 	protected Map<Feve, Variable> stocksFeves;
 	
 	protected Journal journal;
@@ -27,10 +28,11 @@ public class AbsStock implements IActeur {
 
 		this.ac = ac;
 		
-		stocksChocolat=new HashMap<ChocolatDeMarque, Variable>();
-		//for (ChocolatDeMarque choco : Chocolat.values()) {
-		//	stocksChocolat.put(choco, new Variable(getNom() + " : STOCK " + choco.name(), ac, 0));
-		//}
+		stocksChocolatDeMarque=new HashMap<ChocolatDeMarque, Variable>();
+		stocksChocolat=new HashMap<Chocolat, Variable>();
+		for (Chocolat choco : ac.getAcheteurChocolat().gammesChocolat) {
+			stocksChocolat.put(choco, new Variable(getNom() + " : STOCK " + choco.name(), ac, 0));
+		}
 		
 		stocksFeves = new HashMap<Feve, Variable>();
 		for (Feve feve : Feve.values()) {
@@ -47,11 +49,11 @@ public class AbsStock implements IActeur {
 	}
 	public List<Variable> getIndicateurs() {
 		List<Variable> res=new ArrayList<Variable>();
-		for (ChocolatDeMarque choco : stocksChocolat.keySet()) {
+		for (Chocolat choco : stocksChocolat.keySet()) {
 			res.add(stocksChocolat.get(choco));
 		}
-		for (Feve feve : Feve.values()) {
-			res.add(stocksFeves.get(feve));
+		for (ChocolatDeMarque choco : stocksChocolatDeMarque.keySet()) {
+			res.add(stocksChocolatDeMarque.get(choco));
 		}
 		return res;
 	}

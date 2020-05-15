@@ -35,7 +35,7 @@ public class AbsAcheteurChocolat implements IActeur {
 		gammesChocolat.add(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE);
 		gammesChocolat.add(Chocolat.CHOCOLAT_HAUTE_EQUITABLE);
 		
-		for (Chocolat choco : gammesChocolat) {
+		for (Chocolat choco : Chocolat.values()) {
 			demandesChoco.put(choco, new Variable("Demande en : " + choco.name(), ac, 0));
 		}
 		this.journal = new Journal(this.getNom() + " Acheteur Chocolat Bourse " + ac.getNumero(), ac);

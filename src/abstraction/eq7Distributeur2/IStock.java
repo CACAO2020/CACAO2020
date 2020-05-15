@@ -6,9 +6,15 @@ import abstraction.eq8Romu.produits.Feve;
 
 public interface IStock {
 	
+	public void creerStockChocolatDeMarque(ChocolatDeMarque choco);
+	
+	public void creerStockChocolat(Chocolat choco);
+	
+	public void creerStockFeves(Feve feve);
+	
 	public double getStockChocolat(Chocolat choco);
 	
-	public double getStockChocolat(ChocolatDeMarque chocoDeMarque);
+	public double getStockChocolatDeMarque(ChocolatDeMarque chocoDeMarque);
 	
 	public double getStockFeves(Feve feve);
 	

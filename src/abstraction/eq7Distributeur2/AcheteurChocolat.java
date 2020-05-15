@@ -20,7 +20,7 @@ public class AcheteurChocolat extends AbsAcheteurChocolat implements IAcheteurCh
 	}
 	
 	public double getDemande(Chocolat chocolat, double cours) {
-		return getDemandesChoco().get(chocolat).getValeur();
+		return getDemandesChoco().get(chocolat).getValeur()* cours;
 	}
 
 	public Integer getCryptogramme(SuperviseurChocolatBourse superviseur) {
@@ -28,7 +28,7 @@ public class AcheteurChocolat extends AbsAcheteurChocolat implements IAcheteurCh
 	}
 
 	public void notifierCommande(Chocolat chocolat, double quantiteObtenue, boolean payee) {
-		int i = this.getJournaux().size();
+		int i = getJournaux().size();
 		String s = "";
 		if (payee) {s = "Commande payée";}
 		else {s = "Commande non payée";}
@@ -42,29 +42,29 @@ public class AcheteurChocolat extends AbsAcheteurChocolat implements IAcheteurCh
 
 	public void next() {
 		// L'opération sera effectuée pour CHAQUE type de chocolat que nous vendons
-		for (Chocolat choco : gammesChocolat) {
-		// D'abord on consulte les stocks
+		for (Chocolat choco : Chocolat.values()) {
+			// D'abord on consulte les stocks
 			double stockChoco = ac.getStock().getStockChocolat(choco);
-		// Ensuite on demande au vendeur quelle quantité lui est demandée
+			// Ensuite on demande au vendeur quelle quantité lui est demandée
 			double demandeVendeur = 15.;   //Le temps de progresser dans le fichier vendeur
-		// On compare la demande du vendeur et les stocks
-			double achatsAFaire = min(demandeVendeur - stockChoco, 0.);
+			// On compare la demande du vendeur et les stocks
+			double achatsAFaire = max(demandeVendeur - stockChoco, 0.);
 			if (achatsAFaire == 0.) {
-				// Si achats_a_faire < 0 alors on n'achete rien
+				// Si achatsAFaire < 0 alors on n'achète rien
 			}
 			else {
-				// Sinon on positionne la demande sur achats_a_faire
+				// Sinon on positionne la demande sur achatsAFaire
 			}
-			this.getDemandesChoco().get(choco).setValeur(this, achatsAFaire);
-		
+			getDemandesChoco().get(choco).setValeur(this, achatsAFaire);
 		}
+
 	}
 
-	public double min(double d1, double d2) {
+	public double max(double d1, double d2) {
 		if (d1 < d2) {
-			return d1;
+			return d2;
 		}
-		return d2;
+		return d1;
 	}
 
 }
