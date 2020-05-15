@@ -55,24 +55,7 @@ public class Distributeur2 implements IActeur {
 	public DistributeurChocolat getDistributeurChocolat() {
 		return this.distributeurChocolat;
 	}
-	
-	public Chocolat stringToChoco(String abr) {
-		return stock.abreviationChocolats.get(abr);
-	}
-
-	public Feve stringToFeve(String abr) {
-		return stock.abreviationFeves.get(abr);
-	}
-	
-	public String chocoToString(Chocolat choco) {
-		for (String s : stock.abreviationChocolats.keySet()) {
-			if (stock.abreviationChocolats.get(s) == choco) {
-				return s;
-			}
-		}
-		throw new IllegalArgumentException("Type de chocolat introuvable.");
-	}
-	
+		
 	// Renvoie le nom de l'acteur (par défaut : "EQ7")
 	public String getNom() {
 		return "EQ7";

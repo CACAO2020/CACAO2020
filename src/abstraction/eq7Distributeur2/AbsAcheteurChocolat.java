@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.ChocolatDeMarque;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
@@ -14,7 +14,8 @@ import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
 public class AbsAcheteurChocolat implements IActeur {
-	private Map<ChocolatDeMarque, Variable> demandeChoco;
+	protected Map<Chocolat, Variable> demandeChoco;
+	protected List<Chocolat> gammesChocolat;
 	protected Integer cryptogramme;
 	protected Journal journal;
 
@@ -26,14 +27,21 @@ public class AbsAcheteurChocolat implements IActeur {
 
 	public AbsAcheteurChocolat(Distributeur2 ac) {
 		this.ac = ac;
-		demandeChoco=new HashMap<ChocolatDeMarque, Variable>();
-		for (ChocolatDeMarque choco : ac.getStock().stocksChocolat.keySet()) {
+		demandeChoco=new HashMap<Chocolat, Variable>();
+		
+		gammesChocolat = new ArrayList<Chocolat>();
+		gammesChocolat.add(Chocolat.CHOCOLAT_MOYENNE);
+		gammesChocolat.add(Chocolat.CHOCOLAT_HAUTE);
+		gammesChocolat.add(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE);
+		gammesChocolat.add(Chocolat.CHOCOLAT_HAUTE_EQUITABLE);
+		
+		for (Chocolat choco : gammesChocolat) {
 			demandeChoco.put(choco, new Variable("Demande en : " + choco.name(), ac, 0));
 		}
 		this.journal = new Journal(this.getNom()+" Acheteur Chocolat Bourse " + ac.getNumero(), ac);
 	}
 
-	public Map<ChocolatDeMarque, Variable> getDemande_choco() {
+	public Map<Chocolat, Variable> getDemande_choco() {
 		return demandeChoco;
 	}
 

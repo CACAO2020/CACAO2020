@@ -1,6 +1,7 @@
 package abstraction.eq7Distributeur2;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -105,6 +106,13 @@ public class Stock extends AbsStock implements IStock{
 				journal.ajouter("Tentative de retirer " + quantite + " tonnes de fèves " + feve + " rejetée (stock actuel : " + stocksFeves.get(feve).getValeur() + " tonnes).");
 		}	
 	}
-	
+
+	public List<String> getMarques() {
+		List<String> res = new ArrayList<String>();
+		for (ChocolatDeMarque choco : stocksChocolat.keySet()) {
+			res.add(choco.getMarque());
+		}
+		return res;
+	}
 	
 }

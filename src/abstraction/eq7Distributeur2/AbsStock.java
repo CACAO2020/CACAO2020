@@ -16,17 +16,8 @@ import abstraction.fourni.Variable;
 
 public class AbsStock implements IActeur {
 
-	//idée : enlever stocksChocolat pour ne garder que stocksChocolatDeMarque
-	//initialiser stocksChocolatDeMarque avec des stocks de chaque couple (Chocolat, Marque (=String)) à 0
-	//faut-il afficher tous les indicateurs correspondants ? (on achète du chocolat aux équipes 1, 2, 3, 4 et 5, 
-	//reste à faire la liste des types de chocolat qu'ils vendent)
-	//si on veut la quantité total de chocolat HGE p.ex., on fait appel à une fonction getStockChocolat qui calcule la somme
-	//des stocks de ce type de chocolat pour chaque marque.
-	
 	protected Map<ChocolatDeMarque, Variable> stocksChocolat;
 	protected Map<Feve, Variable> stocksFeves;
-	protected Map<String, Chocolat> abreviationChocolats;
-	protected Map<String, Feve> abreviationFeves;
 	
 	protected Journal journal;
 	
@@ -45,20 +36,6 @@ public class AbsStock implements IActeur {
 		for (Feve feve : Feve.values()) {
 				stocksFeves.put(feve, new Variable(getNom() + " : STOCK " + feve.name(), ac, 0));
 		}
-		
-		abreviationChocolats = new HashMap<String, Chocolat>();
-		abreviationChocolats.put("B", Chocolat.CHOCOLAT_BASSE );
-		abreviationChocolats.put("M", Chocolat.CHOCOLAT_MOYENNE );
-		abreviationChocolats.put("ME", Chocolat.CHOCOLAT_MOYENNE_EQUITABLE );
-		abreviationChocolats.put("H", Chocolat.CHOCOLAT_HAUTE );
-		abreviationChocolats.put("HE", Chocolat.CHOCOLAT_HAUTE_EQUITABLE );
-		
-		abreviationFeves = new HashMap<String, Feve>();
-		abreviationFeves.put("B", Feve.FEVE_BASSE );
-		abreviationFeves.put("M", Feve.FEVE_MOYENNE );
-		abreviationFeves.put("ME", Feve.FEVE_MOYENNE_EQUITABLE );
-		abreviationFeves.put("H", Feve.FEVE_HAUTE );
-		abreviationFeves.put("HE", Feve.FEVE_HAUTE_EQUITABLE );
 		
 		this.journal = new Journal(getNom() + " Stocks " + ac.getNumero(), ac);
 		this.journal.ajouter("EQ7 : Suivi des stocks de chocolats et de fèves");

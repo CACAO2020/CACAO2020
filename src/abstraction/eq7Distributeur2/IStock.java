@@ -10,11 +10,9 @@ public interface IStock {
 	
 	public double getStockChocolat(ChocolatDeMarque chocoDeMarque);
 	
-
-	
 	public double getStockFeves(Feve feve);
 	
-
+	public java.util.List<String> getMarques();
 	
 	public void ajouterStockChocolat(ChocolatDeMarque chocoDeMarque, double quantite);
 	
