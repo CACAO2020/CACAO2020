@@ -40,7 +40,7 @@ public class Distributeur2 implements IActeur, IAcheteurChocolatBourse, IDistrib
 		stock = new Stock(this);
 		journal = new Journal(getNom() + " : Activités", this);
 	}
-	
+	 
 	public int getNumero() {
 		return this.numero;
 	}
