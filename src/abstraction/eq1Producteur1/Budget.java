@@ -38,17 +38,17 @@ public class Budget {
 	
 	
 /*
- * Fonction à fair tourner à chaque cycle dans le programme principal.
- * Paie des employés (récolteurs, voir après si on diversifie les employés) :
- * 60 000 francs CFA/an, donc 2 500 francs CFA/cycle (3,81 euros).
+ * Fonction à faire tourner à chaque cycle dans le programme principal.
+ * Paie moyenne des employés (récolteurs, voir après si on diversifie les employés) :
+ *  65 000 francs CFA/mois, ce qui fait environ 100 euros par mois
  */
 	public void cyclique() {
-		if (this.getFonds()>this.getEmployes()*3.81) {
-			this.removeFonds(this.getEmployes()*3.81);
+		if (this.getFonds()>this.getEmployes()*50) {
+			this.removeFonds(this.getEmployes()*50);
 		} else {
-			int max_employes = (int) ((int) this.getFonds()/3.81);
+			int max_employes = (int) ((int) this.getFonds()/50);
 			this.setEmployes(max_employes);
-			this.removeFonds(this.getEmployes()*3.81);
+			this.removeFonds(this.getEmployes()*50);
 		}
 	}
 

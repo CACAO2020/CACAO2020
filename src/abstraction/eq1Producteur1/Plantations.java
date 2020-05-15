@@ -36,6 +36,8 @@ import java.util.Random;
 
 /*
  * Programmes disponibles :
+ * Plantations()
+ * 
  * ArrayList<Double> getArbresF()
  * ArrayList<Double> getArbresT()
  * double getDerniereRecolteF()
@@ -79,6 +81,18 @@ public class Plantations {
 	private double nombreRecolteurs;
 	private int nouveauxF;
 	private int nouveauxT;
+	
+	
+	public Plantations() {
+		this.arbresF = new ArrayList<Double>();
+		this.arbresT = new ArrayList<Double>();
+		this.derniereRecolteF = 0.0;
+		this.derniereRecolteT = 0.0;
+		this.nombreRecolteurs = 0;
+		this.nouveauxF = 0;
+		this.nouveauxT = 0;
+	}
+	
 	
 	
 	public ArrayList<Double> getArbresF() {
