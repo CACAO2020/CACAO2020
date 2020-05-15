@@ -70,7 +70,7 @@ public class Stock {
 		return this.transformationCostPate;
 	}
 
-	public double getQuantitéFeves(Feve feve) {
+	public double getQuantiteFeves(Feve feve) {
 		List<Couple<Variable>> table = this.getStockFeves().get(feve);
 		double somme = 0;
 		for (int i = 0; i < table.size(); i++) {
@@ -79,7 +79,7 @@ public class Stock {
 		return somme;
 	}
 
-	public double getQuantitéChocolat(Chocolat choco) {
+	public double getQuantiteChocolat(Chocolat choco) {
 		List<Couple<Variable>> table = this.getStockChocolat().get(choco);
 		double somme = 0;
 		for (int i = 0; i < table.size(); i++) {
@@ -88,7 +88,7 @@ public class Stock {
 		return somme;
 	}
 
-	public double getQuantitéPate(Pate pate) {
+	public double getQuantitePate(Pate pate) {
 		List<Couple<Variable>> table = this.getStockPate().get(pate);
 		double somme = 0;
 		for (int i = 0; i < table.size(); i++) {
