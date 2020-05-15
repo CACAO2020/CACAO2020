@@ -11,10 +11,10 @@ import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Variable;
 
-public class AcheteurChocolatBourse extends AbsAcheteurChocolatBourse implements IAcheteurChocolatBourse {
+public class AcheteurChocolat extends AbsAcheteurChocolatBourse implements IAcheteurChocolatBourse {
 	//Raphaël Caby
 	
-	public AcheteurChocolatBourse(Distributeur2 ac) {
+	public AcheteurChocolat(Distributeur2 ac) {
 		super(ac);
 	}
 	
