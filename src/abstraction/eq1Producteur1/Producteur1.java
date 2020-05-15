@@ -60,17 +60,9 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 	}
 	
 	// Modifiee par Melanie pour l'ajout des differents stocks de feves
-	public double getStock(String nomFeve)
+	public double getStock(Variable stockFeve)
 	{	
-		if (nomFeve.equals("Trinitario")) {
-			return this.stockFevesTrinitario.getValeur();
-		}
-		else if (nomFeve.equals("Forastero")) {
-			return this.stockFevesForastero.getValeur();
-		}
-		else {
-			return(0);
-		}
+		return stockFeve.getValeur();
 		
 	}
 	
@@ -78,8 +70,8 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 	// Modifiee par Melanie pour l'ajout des differents stocks de feves
 	public void next() {
 		// Ecriture de l'état dans les logs.
-		this.journalEq1.ajouter("Quantité de stock de Trinitario : " + this.getStock("Trinitario"));
-		this.journalEq1.ajouter("Quantité de stock de Forastero : " + this.getStock("Forastero"));
+		this.journalEq1.ajouter("Quantité de stock de Trinitario : " + this.getStock(this.stockFevesTrinitario));
+		this.journalEq1.ajouter("Quantité de stock de Forastero : " + this.getStock(this.stockFevesForastero));
 	}
 
 	// Modification pour ajout de la filiere TestCrieeProd1
@@ -170,14 +162,9 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 		//Fonctions pour la gestion du stock
 	// --< Melanie
 	
-	public void setStock(double valeur, String nomFeve) {
+	public void setStock(double valeur, Variable stockFeve) {
 		
-		if (nomFeve.equals("Forastero")) {
-			this.stockFevesForastero.setValeur(this, valeur);
-		}
-		else if (nomFeve.equals("Trinitario")) {
-			this.stockFevesTrinitario.setValeur(this, valeur);
-		}
+		stockFeve.setValeur(this, valeur);
 		
 	}
 	
@@ -186,14 +173,9 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 	 * deja existante
 	 */
 	
-	public void addStock(double augmentation, String nomFeve) {
+	public void addStock(double augmentation, Variable stockFeve) {
 		
-		if (nomFeve.equals("Forastero")) {
-			this.stockFevesForastero.setValeur(this, this.getStock("Forastero") + augmentation);
-		}
-		else if (nomFeve.equals("Trinitario")) {
-			this.stockFevesTrinitario.setValeur(this, this.getStock("Trinitario") + augmentation);
-		}
+		stockFeve.setValeur(this, this.getStock(stockFeve) + augmentation);
 		
 		
 	}
@@ -203,14 +185,9 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 	 * deja existante
 	 */
 	
-	public void removeStock(double diminution, String nomFeve) {
+	public void removeStock(double diminution, Variable stockFeve) {
 		
-		if (nomFeve.equals("Forastero")) {
-			this.stockFevesForastero.setValeur(this, this.getStock("Forastero") - diminution);
-		}
-		else if (nomFeve.equals("Trinitario")) {
-			this.stockFevesTrinitario.setValeur(this, this.getStock("Trinitario") - diminution);
-		}
+		stockFeve.setValeur(this, this.getStock(stockFeve) - diminution);
 		
 	}
 	
