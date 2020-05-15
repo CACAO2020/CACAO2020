@@ -15,10 +15,17 @@ public class eq2Acteur implements IActeur {
 	 * 
 	 */
 	private List<PaquetArbres> PaquetsArbres;
-	private Variable stockFeves;
 	private Journal journalEq2;
 	private Integer cryptogramme;
+	private List<Variable> parametres;
 
+	public eq2Acteur() {
+		this.journalEq2 = new Journal("Journal Principal", this);
+		this.PaquetsArbres = new ArrayList<PaquetArbres>();
+		this.parametres = new ArrayList<Variable>();
+	}
+
+	
 	public int getCrypto(){
 		return this.cryptogramme;
 	}
@@ -29,6 +36,14 @@ public class eq2Acteur implements IActeur {
 
 	public void ajoutPaquetArbres(PaquetArbres paquetArbres){
 		this.PaquetsArbres.add(paquetArbres);
+	}
+	
+	public double NbTotalArbres() {
+		double TotalArbre =0; 
+		for (int i=0; i<this.getPaquetsArbres().size()+1; i++) {
+			TotalArbre += this.getPaquetsArbres().get(i).getNbreArbres();
+		}
+		return TotalArbre;
 	}
 	
 	@Override
@@ -73,7 +88,6 @@ public class eq2Acteur implements IActeur {
 	@Override
 	public List<Variable> getIndicateurs() {
 		List<Variable> res=new ArrayList<Variable>();
-		res.add(this.stockFeves);
 		return res;
 	}
 
@@ -93,7 +107,6 @@ public class eq2Acteur implements IActeur {
 	@Override
 	public void setCryptogramme(Integer crypto) {
 		this.cryptogramme = crypto;
-		
 	}
 
 	public void notificationFaillite(IActeur acteur) {

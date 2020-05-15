@@ -1,27 +1,30 @@
 
 
 package abstraction.eq2Producteur2;
+
+
+import abstraction.eq8Romu.cacaoCriee.SuperviseurCacaoCriee;
+import abstraction.eq8Romu.produits.Pate;
+import abstraction.eq8Romu.produits.Gamme;
+import abstraction.eq8Romu.produits.Feve;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import abstraction.fourni.IActeur;
+import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
 
 public class eq2Stock extends eq2Acteur{
 /**
  * @author lucas et lucas
- * cette classe gère les stocks de fèves et de pâte, les masses sont exprimées en tonnes
+ * cette classe gère les StockFeves de fèves et de pâte, les masses sont exprimées en tonnes
  */
-	private Variable masse_feves_trinitario;
-	private Variable masse_feves_trinitario_bio;
-	private Variable masse_feves_forastero;
-	private Variable masse_feves_forastero_bio;
-	private Variable masse_feves_criollo;
-	private Variable masse_feves_criollo_bio;
-	private Variable qt_pate_bassegamme;
-	private Variable qt_pate_hautegamme;
-	private Variable qt_pate_bassegamme_bio;
-	private Variable qt_pate_hautegamme_bio;
+	
+	private Variable coutStockFeveage;
+	private HashMap<Feve,Variable> StockFeve;
+	private HashMap<Pate,Variable> StockPate;
+	
 	/**
 	 * @param masse_feves_trinitario
 	 * @param masse_feves_forastero
@@ -29,105 +32,76 @@ public class eq2Stock extends eq2Acteur{
 	 * @param qt_pate_bassegamme
 	 * @param qt_pate_hautegamme
 	 */
-	public eq2Stock( IActeur createur,double init1, double init2, double init3, double init4, double init5,double init6, double init7, double init8, double init9, double init10) {
-		this.masse_feves_trinitario = new Variable("masse_feves_trinitario", createur, init1);
-		this.masse_feves_forastero = new Variable("masse_feves_forastero", createur, init2);
-		this.masse_feves_criollo = new Variable("masse_feves_criollo", createur, init3 );
-		this.qt_pate_bassegamme = new Variable("qt_pate_bassegamme", createur, init4);
-		this.qt_pate_hautegamme = new Variable("qt_pate_hautegamme", createur, init5);
-		this.masse_feves_trinitario_bio = new Variable("masse_feves_trinitario_bio", createur, init6);
-		this.masse_feves_forastero_bio = new Variable("masse_feves_forastero_bio", createur, init7);
-		this.masse_feves_criollo_bio = new Variable("masse_feves_criollo_bio", createur, init8 );
-		this.qt_pate_bassegamme_bio = new Variable("qt_pate_bassegamme_bio", createur, init9);
-		this.qt_pate_hautegamme_bio = new Variable("qt_pate_hautegamme_bio", createur, init10);
+	public eq2Stock() {
+		super();
+		this.coutStockFeveage = new Variable ("cout",this,100);
+		this.StockFeve = new HashMap<Feve,Variable>();
+		this.StockPate = new HashMap<Pate,Variable>();
 	}
- public List<Variable> getVariables() {
-	 List<Variable> variables=new ArrayList<Variable>();
-	 variables.add(this.masse_feves_forastero);
-	 variables.add(this.masse_feves_trinitario);
-	 variables.add(this.masse_feves_criollo);
-	 variables.add(this.qt_pate_bassegamme);
-	 variables.add(this.qt_pate_hautegamme);
-	 variables.add(this.masse_feves_forastero_bio);
-	 variables.add(this.masse_feves_trinitario_bio);
-	 variables.add(this.masse_feves_criollo_bio);
-	 variables.add(this.qt_pate_bassegamme_bio);
-	 variables.add(this.qt_pate_hautegamme_bio);
-	 return variables;
+	
+public void addStockFeve(Feve feve, double quantité) {
+	String type = ""+feve;
+	this.StockFeve.put(feve,new Variable(type,this,quantité));
+}
+public void addStockPate(Pate pate, double quantité) {
+	String type = ""+pate;
+	this.StockPate.put(pate,new Variable(type,this,quantité));
+}
+	
+ public HashMap<Feve,Variable> getStockFeve() {
+	 return this.StockFeve;
+	 
  }
-/**
- * @param masse_feves_trinitario the masse_feves_trinitario to set
- */
-public void setmasse_feves_trinitario(double q_feves_trinitario) {
-	this.masse_feves_trinitario.setValeur(masse_feves_trinitario.getCreateur() , q_feves_trinitario); 
+ public HashMap<Pate,Variable> getStockPate() {
+	 return this.StockPate;
+	 
+ }
+
+public void setCoutStockFeveage(double cout) {
+	this.coutStockFeveage.setValeur(this, cout);
 }
-/**
- * @param masse_feves_forastero the masse_feves_forastero to set
- */
-public void setmasse_feves_forastero(double q_feves_forastero) {
-	this.masse_feves_forastero.setValeur(masse_feves_forastero.getCreateur(), q_feves_forastero);;
+public void setQtFeve(Feve feve, double quantite) {
+	this.getStockFeve().get(feve).setValeur(this, quantite);
+
 }
-/**
- * @param masse_feves_criollo the masse_feves_criollo to set
- */
-public void setmasse_feves_criollo(double q_feves_criollo) {
-	this.masse_feves_criollo.setValeur(masse_feves_criollo.getCreateur(), q_feves_criollo);;
+public void addQtPate(Pate pate, double quantite) {
+	this.getStockPate().get(pate).ajouter(this, quantite);
+
 }
-/**
- * @param qt_pate_bassegamme the qt_pate_bassegamme to set
- */
-public void setQt_pate_bassegamme(double q_pate_bassegamme) {
-	this.qt_pate_bassegamme.setValeur(qt_pate_bassegamme.getCreateur(), q_pate_bassegamme);;
+public void removeQtPate(Pate pate, double quantite) {
+	this.getStockPate().get(pate).retirer(this, quantite);
+
 }
-/**
- * @param qt_pate_hautegamme the qt_pate_hautegamme to set
- */
-public void setQt_pate_hautegamme(double q_pate_hautegamme) {
-	this.qt_pate_hautegamme.setValeur(qt_pate_hautegamme.getCreateur(), q_pate_hautegamme);;}
-	/**
-	 * @param masse_feves_trinitario the masse_feves_trinitario to set
-	 */
-	public void setmasse_feves_trinitario_bio(double q_feves_trinitario) {
-		this.masse_feves_trinitario_bio.setValeur(masse_feves_trinitario_bio.getCreateur() , q_feves_trinitario); 
-	}
-	/**
-	 * @param masse_feves_forastero the masse_feves_forastero to set
-	 */
-	public void setmasse_feves_forastero_bio(double q_feves_forastero) {
-		this.masse_feves_forastero_bio.setValeur(masse_feves_forastero_bio.getCreateur(), q_feves_forastero);;
-	}
-	/**
-	 * @param masse_feves_criollo the masse_feves_criollo to set
-	 */
-	public void setmasse_feves_criollo_bio(double q_feves_criollo) {
-		this.masse_feves_criollo_bio.setValeur(masse_feves_criollo_bio.getCreateur(), q_feves_criollo);;
-	}
-	/**
-	 * @param qt_pate_bassegamme the qt_pate_bassegamme to set
-	 */
-	public void setQt_pate_bassegamme_bio(double q_pate_bassegamme) {
-		this.qt_pate_bassegamme_bio.setValeur(qt_pate_bassegamme_bio.getCreateur(), q_pate_bassegamme);;
-	}
-	/**
-	 * @param qt_pate_hautegamme the qt_pate_hautegamme to set
-	 */
-	public void setQt_pate_hautegamme_bio(double q_pate_hautegamme) {
-		this.qt_pate_hautegamme_bio.setValeur(qt_pate_hautegamme_bio.getCreateur(), q_pate_hautegamme);;
+public void setQtPate(Pate pate, double quantite) {
+	this.getStockPate().get(pate).setValeur(this, quantite);
+
 }
-public void setVariables(double q1,double q2,double q3,double q4,double q5,double q6,double q7,double q8,double q9,double q10) {
-	this.setmasse_feves_trinitario( q1);
-	this.setmasse_feves_forastero( q2);
-	this.setmasse_feves_criollo( q3);
-	this.setQt_pate_bassegamme( q4);
-	this.setQt_pate_hautegamme( q5);
-	this.setmasse_feves_trinitario_bio( q6);
-	this.setmasse_feves_forastero_bio( q7);
-	this.setmasse_feves_criollo_bio( q8);
-	this.setQt_pate_bassegamme_bio( q9);
-	this.setQt_pate_hautegamme_bio( q10);
+public void addQtFeve(Feve feve, double quantite) {
+	this.getStockFeve().get(feve).ajouter(this, quantite);
+
 }
-public double coutStockage() {
-	double coutFixe = 10;
-	return coutFixe*(this.masse_feves_criollo.getValeur()+this.masse_feves_forastero.getValeur()+this.masse_feves_trinitario.getValeur()+this.qt_pate_bassegamme.getValeur()+this.qt_pate_hautegamme.getValeur());
+public void removeQtFeve(Feve feve, double quantite) {
+	this.getStockFeve().get(feve).retirer(this, quantite);
+
+}
+public List<Variable> getVariablesFeve(){
+	 List<Variable >variables = new ArrayList<Variable>();
+	 for (Feve feve : this.getStockFeve().keySet()) {
+		 variables.add(this.getStockFeve().get(feve));
+	 }
+	return variables;
+}
+public List<Variable> getVariablesPate(){
+	 List<Variable >variables = new ArrayList<Variable>();
+	 for (Pate pate : this.getStockPate().keySet()) {
+		 variables.add(this.getStockPate().get(pate));
+	 }
+	return variables;
+}
+public double getQuantiteFeve(Feve feve) {
+	return this.getStockFeve().get(feve).getValeur();
+}
+public double getQuantitePate(Pate pate) {
+	return this.getStockPate().get(pate).getValeur();
 }
 }
