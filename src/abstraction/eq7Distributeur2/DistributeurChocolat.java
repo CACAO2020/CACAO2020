@@ -47,11 +47,12 @@ public class DistributeurChocolat extends AbsDistributeurChocolat implements IDi
 	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant) {
 		if (client!=null) { 
 			ac.getStock().retirerStockChocolat(choco, quantite);
-			journal.ajouter("Vente de " + quantite + " tonnes de " + choco.name() + " à " + client + " pour " + montant + ".");
+			journal.ajouter("Vente de " + quantite + " tonnes de " + choco.name() + " à " + client.getNom() + " pour " + montant + ".");
 		}
 	}
 
 	public void notificationRayonVide(ChocolatDeMarque choco) {
+		journal.ajouter("Le rayon de " + choco.name() + " est vide.");
 		
 	}
 

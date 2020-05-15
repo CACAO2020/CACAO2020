@@ -1,5 +1,6 @@
 package abstraction.eq7Distributeur2;
 
+import java.awt.Color;
 import java.util.Map;
 
 import abstraction.eq8Romu.chocolatBourse.IAcheteurChocolatBourse;
@@ -9,6 +10,7 @@ import abstraction.eq8Romu.produits.ChocolatDeMarque;
 import abstraction.eq8Romu.produits.Feve;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
+import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
 public class AcheteurChocolat extends AbsAcheteurChocolat implements IAcheteurChocolatBourse, IActeur {
@@ -27,16 +29,16 @@ public class AcheteurChocolat extends AbsAcheteurChocolat implements IAcheteurCh
 	}
 
 	public void notifierCommande(Chocolat chocolat, double quantiteObtenue, boolean payee) {
-		int i = getJournaux().size();
-		String s = "";
-		if (payee) {s = "Commande payée";}
-		else {s = "Commande non payée";}
-		getJournaux().get(i - 1).ajouter(s);;
-		
+		if (payee) {
+			journal.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[COMMANDE PAYÉE] Confirmation d'une commande de " + quantiteObtenue + " tonnes de " + chocolat.name() + "."));
+		} else {
+			journal.ajouter(Journal.texteColore(warningColor, Color.BLACK, "[COMMANDE NON PAYÉE] Confirmation d'une commande de " + quantiteObtenue + " tonnes de " + chocolat.name() + "."));
+		}
 	}
 	
 	public void receptionner(ChocolatDeMarque chocolat, double quantite) {
 		ac.getStock().ajouterStockChocolat(chocolat, quantite);
+		journal.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[RÉCEPTION] Réception de " + quantite + " tonnes de " + chocolat.name() + "."));
 	}
 
 	public void initialiser() {
@@ -48,7 +50,7 @@ public class AcheteurChocolat extends AbsAcheteurChocolat implements IAcheteurCh
 			// D'abord on consulte les stocks
 			double stockChoco = ac.getStock().getStockChocolat(choco);
 			// Ensuite on demande au vendeur quelle quantité lui est demandée
-			double demandeVendeur = 5.;   //Le temps de progresser dans le fichier vendeur
+			double demandeVendeur = 1.;   //Le temps de progresser dans le fichier vendeur
 			// On compare la demande du vendeur et les stocks
 			double achatsAFaire = max(demandeVendeur - stockChoco, 0.);
 			if (achatsAFaire == 0.) {

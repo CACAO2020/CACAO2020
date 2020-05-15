@@ -22,6 +22,12 @@ public class AbsAcheteurChocolat {
 
 	protected Distributeur2 ac;
 	
+	public Color titleColor = Color.BLACK;
+	public Color metaColor = Color.CYAN;
+	public Color alertColor = Color.RED;
+	public Color warningColor = Color.ORANGE;
+	public Color positiveColor = Color.GREEN;
+	
 	public AbsAcheteurChocolat(Distributeur2 ac) {
 		this.ac = ac;
 		demandesChoco=new HashMap<Chocolat, Variable>();
@@ -36,6 +42,7 @@ public class AbsAcheteurChocolat {
 			demandesChoco.put(choco, new Variable("Demande en : " + choco.name(), ac, 0));
 		}
 		this.journal = new Journal(this.getNom() + " Acheteur Chocolat Bourse " + ac.getNumero(), ac);
+		journal.ajouter(Journal.texteColore(titleColor, Color.WHITE, "EQ7 : Acheteur Chocolat Bourse"));
 	}
 
 	public Map<Chocolat, Variable> getDemandesChoco() {
