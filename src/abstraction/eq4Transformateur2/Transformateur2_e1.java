@@ -70,6 +70,13 @@ public class Transformateur2_e1 extends Transformateur2 implements IActeur {
 	private Variable seuilSupTPEC;
 	private Variable seuilInfTPEC;
 	
+	//augmentation ou diminution de la capacite MAX de production
+	
+	private Variable tauxAugmentationTFEP;
+	private Variable tauxDiminutionTFEP;
+	private Variable tauxAugmentationTPEC;
+	private Variable tauxDiminutionTPEC;
+	
 	// l'initialisation nécessite de nombreuses variables, qui sont à modifier pour les tests
 	// il faut déterminer ces valeurs en essayant d'être réalistes et cohérents avec les autres équipes
 	
@@ -125,9 +132,15 @@ public class Transformateur2_e1 extends Transformateur2 implements IActeur {
 		this.coutMachine= new Variable (getNom()+" cout unitaire moyen machine", this, 100);
 		
 		this.seuilInfTFEP=new Variable (getNom()+" seuil pour diminuer capacité MAX Feve -> Pate", this, 0);
-		this.seuilSupTFEP=new Variable (getNom()+" seuil pour augmenter capacité MAX Feve -> Pate", this, 0);
+		this.seuilSupTFEP=new Variable (getNom()+" seuil pour augmenter capacité MAX Feve -> Pate", this, 1);
 		this.seuilInfTPEC=new Variable (getNom()+" seuil pour diminuer capacité MAX Pate -> Choco", this, 0);
-		this.seuilSupTPEC=new Variable (getNom()+" seuil pour augmenter capacité MAX Pate -> Choco ", this, 0);
+		this.seuilSupTPEC=new Variable (getNom()+" seuil pour augmenter capacité MAX Pate -> Choco", this, 1);
+	
+	
+		this.tauxAugmentationTFEP =new Variable (getNom()+" augmentation capacité MAX Feve -> Pate", this, 0);
+		this.tauxDiminutionTFEP =new Variable (getNom()+" diminution capacité MAX Feve -> Pate", this, 0);
+		this.tauxAugmentationTPEC =new Variable (getNom()+" augmentation capacité MAX Feve -> Pate", this, 0);
+		this.tauxDiminutionTPEC =new Variable (getNom()+" diminution capacité MAX Feve -> Pate", this, 0);
 	}
 	
 	// Permet de calculer la valeur des stocks en additionnant la valeur de chaque stock de denrée, obtenu
@@ -405,5 +418,6 @@ public class Transformateur2_e1 extends Transformateur2 implements IActeur {
 		cout += this.coutUnitaireStockChocolat.getValeur()*super.getStockTotalChocolat() ; 
 		return cout ;
 	}
+	
 	
 }
