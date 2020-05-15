@@ -17,6 +17,7 @@ import abstraction.eq8Romu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eq8Romu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.Feve;
+import abstraction.eq8Romu.produits.Pate;
 import abstraction.eq8Romu.ventesCacaoAleatoires.IAcheteurCacaoAleatoire;
 import abstraction.eq8Romu.ventesCacaoAleatoires.SuperviseurVentesCacaoAleatoires;
 import abstraction.fourni.Filiere;
@@ -84,6 +85,15 @@ public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurCh
 
 	public List<Variable> getIndicateurs() {
 		List<Variable> res = new ArrayList<Variable>();
+		for(Feve f: Feve.values()){
+			res.add(new Variable("Stock de " + f ,this.stock.getQuantiteFeve()));
+		}
+		for(Pate p: Pate.values()){
+			res.add(new Variable("Stock de " + p ,this.stock.getQuantitePate()));
+		}
+		for(Chocolat c: Chocolat.values()){
+			res.add(new Variable("Stock de " + c ,this.stock.getQuantiteChocolat()));
+		}
 		return res;
 	}
 
@@ -112,7 +122,7 @@ public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurCh
 
 	public void notificationOperationBancaire(double montant) {
 		String str = montant > 0 ? "On a gagné de l'argent ! " : "On a perdu de l'argent ! ";
-		this.journalEq5.ajouter(str + montant);
+		this.journalEq5.ajouter(str + montant + " Dollars");
 	}
 
 	// Vente de Chocolat en bourse IVenteChocolatBourse
