@@ -27,6 +27,7 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 	public void next() {
 		this.RefreshAge();
 		this.RefreshStocks();
+		this.PayerEmployes();
 	}
 	/**
 	 * Cette méthode avance l'age de chaque paquet d'arbre de 1 et enleve les arbres qui ont atteint les 45 ans
