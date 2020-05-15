@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.fourni.Variable;
 
@@ -32,11 +33,11 @@ public class VenteChocolat {
         }
         switch (chocolat) {
             case CHOCOLAT_BASSE:
-                return this.offreBasse(cours);
+                return this.offreStandard(cours, chocolat);
             case CHOCOLAT_HAUTE:
-                return this.offreHaute(cours, chocolat);
+                return this.offreStandard(cours, chocolat);
             case CHOCOLAT_HAUTE_EQUITABLE:
-                return this.offreHaute(cours, chocolat);
+                return this.offreStandard(cours, chocolat);
             default:
                 return this.offreMonopole(chocolat, cours);
         }
@@ -50,31 +51,50 @@ public class VenteChocolat {
         return 0;
     }
 
-    private double offreHaute(double cours, Chocolat choco) {
+    private double offreStandard(double cours, Chocolat choco) {
         double offre = 0;
         for (Couple<Variable> cp : acteur.getStock().getStockChocolat().get(choco)) {
-            if (cours * cp.get1().getValeur() > seuilRentabilite + cp.get1().getValeur() * cp.get2().getValeur()) {
-                offre += facteurDeVente(cours * cp.get1().getValeur() / seuilRentabilite);
+            if (cours > seuilRentabilite + cp.get2().getValeur()) {
+                offre += cp.get1().getValeur() * facteurDeVente(cours * cp.get1().getValeur());
                 tentativeDeVente.get(choco).add(cp);
                 this.croissanceRentabilite();
-            } else {
+            } else if (this.necessiteDeVendre(choco)) {
+                offre += cp.get1().getValeur();
+                tentativeDeVente.get(choco).add(cp);
+            }else { 
                 this.decroissanceRentabilite();
             }
         }
         return offre;
     }
+    
+    /**
+     * @return <b>true</b> si la trésorerie est dans un état critique, <b>false</b> sinon
+     *  false sinon
+     */
+    private boolean necessiteDeVendre(Chocolat choco) {
+        if (this.acteur.getTresorier().getMontantCompte() + this.valeurDuStockAVendreChoco(choco) < 10000) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    private double valeurDuStockAVendreChoco(Chocolat choco){
+        return this.tentativeDeVente.get(choco).stream().mapToDouble(couple -> couple.get1().getValeur()*couple.get2().getValeur()).sum();
+    }
     /**
      * 
-     * @param facteurDeRentabilite ratio entre le profit prévu et le seuil de rentabilité (<b>facteurDeRentabilite > 1</b>)
+     * @param profitPrevu 
      * @return proprotion de stock qu'il faut vendre
      */
-    private double facteurDeVente(double facteurDeRentabilite) {
-        double steep = 1;
-        return Math.sqrt((facteurDeRentabilite - 1) / steep);
-    }
-
-    private double offreBasse(double cours) {
-        return 0;
+    private double facteurDeVente(double profitPrevu) {
+        if(seuilRentabilite <= 0){
+            return 0.5;
+        }
+        else{
+            double steep = 1;
+            return Math.sqrt((profitPrevu - 1) / steep / this.seuilRentabilite);
+        }
     }
 
     public void livrer(Chocolat chocolat, double quantite) {
@@ -98,15 +118,15 @@ public class VenteChocolat {
      */
     private void decroissanceRentabilite() {
         if(seuilRentabilite > 0)
-            seuilRentabilite = seuilRentabilite * 0.95 - 0.5;
+            seuilRentabilite = seuilRentabilite * 0.95 - 100;
         else
-            seuilRentabilite -= 0.1;
+            seuilRentabilite = seuilRentabilite * 1.05 - 50;
     }
     
     private void croissanceRentabilite() {
         if(seuilRentabilite > 0)
             seuilRentabilite = (seuilRentabilite + 0.5) / 0.95;
         else
-            seuilRentabilite += 0.1;
+            seuilRentabilite = (seuilRentabilite + 50) /1.05;
     }
 }
