@@ -61,15 +61,6 @@ public class AbsStock {
 		return res;
 	}
 
-	public void initialiser() {
-		
-	}
-
-	public void next() {
-		
-	}
-
-
 	public String getNom() {
 		return ac.getNom();
 	}

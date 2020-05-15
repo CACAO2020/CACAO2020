@@ -10,7 +10,7 @@ import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
-public class AbsDistributeurChocolat implements IActeur {
+public class AbsDistributeurChocolat {
 	protected Integer cryptogramme;
 	protected Journal journal;
 
@@ -58,12 +58,6 @@ public class AbsDistributeurChocolat implements IActeur {
 
 	public void notificationOperationBancaire(double montant) {
 		ac.notificationOperationBancaire(montant);
-	}
-
-	public void initialiser() {
-	}
-
-	public void next() {
 	}
 
 	public List<Variable> getIndicateurs() {

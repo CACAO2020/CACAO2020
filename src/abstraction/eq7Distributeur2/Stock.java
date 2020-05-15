@@ -89,4 +89,12 @@ public class Stock extends AbsStock implements IStock, IActeur {
 		return res;
 	}
 	
+	public void initialiser() {
+		
+	}
+	
+	public void next() {
+		
+	}
+	
 }
