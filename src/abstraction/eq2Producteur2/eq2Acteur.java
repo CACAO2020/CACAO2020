@@ -40,7 +40,7 @@ public class eq2Acteur implements IActeur {
 	
 	public double NbTotalArbres() {
 		double TotalArbre =0; 
-		for (int i=0; i<this.getPaquetsArbres().size()+1; i++) {
+		for (int i=0; i<this.getPaquetsArbres().size(); i++) {
 			TotalArbre += this.getPaquetsArbres().get(i).getNbreArbres();
 		}
 		return TotalArbre;
