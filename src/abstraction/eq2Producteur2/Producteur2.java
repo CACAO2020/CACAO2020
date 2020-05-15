@@ -37,6 +37,7 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 			this.getPaquetsArbres().remove(deathlist.get(deathlist.size()-1));
 			deathlist.remove(deathlist.size()-1);
 		}
+		this.RefreshStocks();
 	}
 	/**
 	 * 
@@ -51,4 +52,5 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 	public double EstimationVenteStock() {
 		return this.getPrixTC().getValeur()*this.getQuantiteFeve(Feve.FEVE_HAUTE)+this.getPrixTT().getValeur()*this.getQuantiteFeve(Feve.FEVE_MOYENNE)+this.getPrixTF().getValeur()*this.getQuantiteFeve(Feve.FEVE_BASSE);
 	}
+	
 }
