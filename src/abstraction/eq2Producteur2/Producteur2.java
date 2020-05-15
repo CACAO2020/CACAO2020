@@ -42,6 +42,7 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 	/**
 	 * 
 	 * @author lucas P
+	 * cette fonction calcule la production d'un cycle et la rajoute au stock
 	 */
 	public void RefreshStocks() {
 		for (int i = 0; i < this.PaquetsArbres.size(); i++) {
