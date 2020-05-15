@@ -24,19 +24,18 @@ public class eq2Stock extends eq2Acteur{
 	private Variable coutStockFeveage;
 	private HashMap<Feve,Variable> StockFeve;
 	private HashMap<Pate,Variable> StockPate;
+	private double nbemployees;
+	
 	
 	/**
-	 * @param masse_feves_trinitario
-	 * @param masse_feves_forastero
-	 * @param masse_feves_criollo
-	 * @param qt_pate_bassegamme
-	 * @param qt_pate_hautegamme
-	 */
+	 * @author lucas p
+	 * 	 */
 	public eq2Stock() {
 		super();
 		this.coutStockFeveage = new Variable ("cout",this,100);
 		this.StockFeve = new HashMap<Feve,Variable>();
 		this.StockPate = new HashMap<Pate,Variable>();
+		this.nbemployees = 10;
 	}
 	
 public void addStockFeve(Feve feve, double quantité) {
@@ -103,5 +102,15 @@ public double getQuantiteFeve(Feve feve) {
 }
 public double getQuantitePate(Pate pate) {
 	return this.getStockPate().get(pate).getValeur();
+}
+/**
+ * @author lucas p
+ */
+public void seuil_employees() {
+	double ratio = this.nbemployees/this.NbTotalArbres();
+	double ratio_optimal = 1/500;
+	for (int i=0; i<this.getPaquetsArbres().size()+1;i++) {this.getPaquetsArbres().get(i).setProdmax(7.5*ratio*1/ratio_optimal);} 
+	
+	
 }
 }
