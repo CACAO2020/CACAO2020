@@ -53,6 +53,7 @@ public class AchatBourseEQ6 extends Stock implements IAcheteurChocolatBourse{
 			double stockChoco = this.quantiteEnStockTypeChoco( chocolat);
 			double DemandeTotal = this.DemandeTotal();
 			double DeamndeChoco = this.EvolutionDemandeChocolat(chocolat);
+			evolutionCours.get(Filiere.LA_FILIERE.getEtape()).put(chocolat, cours);
 			if (DeamndeChoco<stockChoco) {
 				return 0;
 				

@@ -2,7 +2,9 @@ package abstraction.eq6Distributeur1;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.ChocolatDeMarque;
@@ -21,6 +23,7 @@ public class Distributeur1 implements IActeur {
 	protected ChocolatDeMarque chocolatHGE;
 	protected ChocolatDeMarque chocolatMG;
 	protected ChocolatDeMarque chocolatBG;
+	protected Map<Integer,Map<Chocolat,Double>> evolutionCours;
 	
 	public Distributeur1() {
 		this.journalEq6 = new Journal("Eq6 activites", this); 
@@ -28,6 +31,7 @@ public class Distributeur1 implements IActeur {
 		this.stockMG=new Variable(getNom()+"stock"+ Chocolat.CHOCOLAT_MOYENNE.toString(), this, 0, 1000000000, 1000000);
 		this.stockBG=new Variable(getNom()+"stock"+ Chocolat.CHOCOLAT_BASSE.toString(), this, 0, 1000000000, 1000000);
 		this.journalEq6=new Journal(this.getNom()+" activites", this);
+		evolutionCours = new HashMap<Integer,Map<Chocolat,Double>>();
 	}
 	
 	public String getNom() {
@@ -52,6 +56,7 @@ public class Distributeur1 implements IActeur {
 	/** @author Luca Pinguet & Mélissa Tamine */
 	public void next() {
 		journalEq6.ajouter("Etape="+Filiere.LA_FILIERE.getEtape());
+		this.evolutionCours.put(Filiere.LA_FILIERE.getEtape(),new HashMap<Chocolat,Double>());
 		if (Filiere.LA_FILIERE.getEtape()>=1) {
 			journalEq6.ajouter("Le prix moyen du chocolat \""+chocolatHGE.name()+"\" a l'etape precedente etait de "+Filiere.LA_FILIERE.prixMoyenEtapePrecedente(chocolatHGE));
 			journalEq6.ajouter("Le prix moyen du chocolat \""+chocolatMG.name()+"\" a l'etape precedente etait de "+Filiere.LA_FILIERE.prixMoyenEtapePrecedente(chocolatMG));
