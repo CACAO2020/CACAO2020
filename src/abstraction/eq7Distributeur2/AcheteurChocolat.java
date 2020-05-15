@@ -8,6 +8,7 @@ import abstraction.eq8Romu.chocolatBourse.SuperviseurChocolatBourse;
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.ChocolatDeMarque;
 import abstraction.eq8Romu.produits.Feve;
+import abstraction.eq8Romu.produits.Gamme;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
@@ -59,7 +60,13 @@ public class AcheteurChocolat extends AbsAcheteurChocolat implements IAcheteurCh
 			else {
 				// Sinon on positionne la demande sur achatsAFaire
 			}
+			
+			if (choco.getGamme() == Gamme.BASSE) {
+				achatsAFaire = 0;
+			}
+			
 			getDemandesChoco().get(choco).setValeur(this, achatsAFaire);
+
 		}
 	}
 

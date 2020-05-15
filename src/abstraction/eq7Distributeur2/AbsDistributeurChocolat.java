@@ -23,7 +23,8 @@ public class AbsDistributeurChocolat {
 	
 	public AbsDistributeurChocolat(Distributeur2 ac) {	
 		this.ac = ac;
-		this.journal = new Journal(this.getNom()+" Distributeur Chocolat " + ac.getNumero(), ac);
+		this.journal = new Journal(this.getNom() + " : Distributeur Chocolat", ac);
+		journal.ajouter(Journal.texteColore(titleColor, Color.WHITE, this.getNom() + " : Distributeur Chocolat"));
 	}
 	
 	public String getNom() {

@@ -1,5 +1,6 @@
 package abstraction.eq7Distributeur2;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +15,7 @@ import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.ChocolatDeMarque;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
+import abstraction.fourni.Journal;
 
 public class DistributeurChocolat extends AbsDistributeurChocolat implements IDistributeurChocolatDeMarque, IActeur {
 
@@ -64,13 +66,12 @@ public class DistributeurChocolat extends AbsDistributeurChocolat implements IDi
 	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant) {
 		if (client!=null) { 
 			ac.getStock().retirerStockChocolat(choco, quantite);
-			journal.ajouter("Vente de " + quantite + " tonnes de " + choco.name() + " à " + client.getNom() + " pour " + montant + ".");
+			journal.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[VENTE] Vente de " + quantite + " tonnes de " + choco.name() + " à " + client.getNom() + " pour " + montant + " (" + montant/quantite + "/tonne)."));
 		}
 	}
 
 	public void notificationRayonVide(ChocolatDeMarque choco) {
-		journal.ajouter("Le rayon de " + choco.name() + " est vide.");
-		
+		journal.ajouter(Journal.texteColore(warningColor, Color.BLACK, "[RAYON] Le rayon de " + choco.name() + " est vide."));
 	}
 
 	public List<ChocolatDeMarque> pubSouhaitee() {

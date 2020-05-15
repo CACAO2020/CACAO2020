@@ -40,8 +40,8 @@ public class AbsAcheteurChocolat {
 		for (Chocolat choco : Chocolat.values()) {
 			demandesChoco.put(choco, new Variable("Demande en : " + choco.name(), ac, 0));
 		}
-		this.journal = new Journal(this.getNom() + " Acheteur Chocolat Bourse " + ac.getNumero(), ac);
-		journal.ajouter(Journal.texteColore(titleColor, Color.WHITE, "EQ7 : Acheteur Chocolat Bourse"));
+		this.journal = new Journal(this.getNom() + " : Acheteur Chocolat Bourse", ac);
+		journal.ajouter(Journal.texteColore(titleColor, Color.WHITE, this.getNom() + " : Acheteur Chocolat Bourse"));
 	}
 
 	public Map<Chocolat, Variable> getDemandesChoco() {
