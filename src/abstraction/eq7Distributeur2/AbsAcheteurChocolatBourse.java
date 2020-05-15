@@ -6,14 +6,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import abstraction.eq8Romu.produits.Chocolat;
+
+import abstraction.eq8Romu.produits.ChocolatDeMarque;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
 public class AbsAcheteurChocolatBourse implements IActeur {
-	private Map<Chocolat, Variable> demandeChoco;
+	private Map<ChocolatDeMarque, Variable> demandeChoco;
 	protected Integer cryptogramme;
 	protected Journal journal;
 
@@ -22,17 +23,17 @@ public class AbsAcheteurChocolatBourse implements IActeur {
 	public AbsAcheteurChocolatBourse() {
 		
 	}
-	
+	//WAIT FOR LEANDRE
 	public AbsAcheteurChocolatBourse(Distributeur2 ac) {
 		this.ac = ac;
-		demandeChoco=new HashMap<Chocolat, Variable>();
-		for (Chocolat choco : Chocolat.values()) {
+		demandeChoco=new HashMap<ChocolatDeMarque, Variable>();
+		for (ChocolatDeMarque choco : Chocolat.values()) {
 			demandeChoco.put(choco, new Variable("Demande en : " + choco.name(), ac, 0));
 		}
 		this.journal = new Journal(this.getNom()+" Acheteur Chocolat Bourse " + ac.getNumero(), ac);
 	}
 
-	public Map<Chocolat, Variable> getDemande_choco() {
+	public Map<ChocolatDeMarque, Variable> getDemande_choco() {
 		return demandeChoco;
 	}
 

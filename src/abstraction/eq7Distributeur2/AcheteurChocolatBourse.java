@@ -4,7 +4,6 @@ import java.util.Map;
 
 import abstraction.eq8Romu.chocolatBourse.IAcheteurChocolatBourse;
 import abstraction.eq8Romu.chocolatBourse.SuperviseurChocolatBourse;
-import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.ChocolatDeMarque;
 import abstraction.eq8Romu.produits.Feve;
 import abstraction.fourni.Filiere;
@@ -18,7 +17,7 @@ public class AcheteurChocolatBourse extends AbsAcheteurChocolatBourse implements
 		super(ac);
 	}
 	
-	public double getDemande(Chocolat chocolat, double cours) {
+	public double getDemande(ChocolatDeMarque chocolat, double cours) {
 		return this.getDemande_choco().get(chocolat).getValeur();
 	}
 
@@ -26,25 +25,22 @@ public class AcheteurChocolatBourse extends AbsAcheteurChocolatBourse implements
 		return cryptogramme;
 	}
 
-	public void notifierCommande(Chocolat chocolat, double quantiteObtenue, boolean payee) {
+	public void notifierCommande(ChocolatDeMarque chocolat, double quantiteObtenue, boolean payee) {
 		int i = this.getJournaux().size();
 		String s = "";
 		if (payee) {s = "Commande payée";}
 		else {s = "Commande non payée";}
-		s = s + "de " + chocolat.getGamme();
-		if (chocolat.isEquitable()) {
-			s = s + "Equitable";
-		}
-		this.getJournaux().get(i - 1).ajouter(s);;
+		s = s + "de " + chocolat.getMarque();
+		getJournaux().get(i - 1).ajouter(s);;
 		
 	}
-
-	public void receptionner(Chocolat chocolat, double quantite) {
+	//WAIT FOR LEANDRE
+	public void receptionner(ChocolatDeMarque chocolat, double quantite) {
 		ac.getStock().ajouterStockChocolat(chocolat, quantite);
 	}
-	
+	//WAIT FOR LEANDRE
 	public void next() {
-		for (Chocolat choco : Chocolat.values()) {
+		for (ChocolatDeMarque choco : TODOChocolat.values()) {
 		// L'opération sera effectuée pour CHAQUE type de chocolat que nous vendons
 		//D'abord on consulte les stocks
 			double stock_choco = ac.getStock().stocksChocolat.get(choco).getValeur();
@@ -63,12 +59,6 @@ public class AcheteurChocolatBourse extends AbsAcheteurChocolatBourse implements
 			
 		
 		}
-	}
-
-	@Override
-	public void receptionner(ChocolatDeMarque chocolat, double quantite) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }
