@@ -11,6 +11,7 @@ import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Variable;
 
+
 public class AcheteurChocolat extends AbsAcheteurChocolat implements IAcheteurChocolatBourse {
 	//Raphaël Caby
 	
