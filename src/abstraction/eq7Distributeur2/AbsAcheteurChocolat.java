@@ -22,10 +22,6 @@ public class AbsAcheteurChocolat {
 
 	protected Distributeur2 ac;
 	
-	public AbsAcheteurChocolat() {
-		
-	}
-
 	public AbsAcheteurChocolat(Distributeur2 ac) {
 		this.ac = ac;
 		demandesChoco=new HashMap<Chocolat, Variable>();

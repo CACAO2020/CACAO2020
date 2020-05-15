@@ -12,36 +12,14 @@ import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.ChocolatDeMarque;
 import abstraction.fourni.IActeur;
 
-/**
- * 
- * @author R. Debryune
- *
- * Un exemple simpliste d'un distributeur qui ne commercialise qu'une variete de chocolat, 
- * qui peut au plus mettre capaciteDeVente tonnes de chocolat en vente par step, et qui a
- * un prix fixe pour ce chocolat 
- */
 public class DistributeurChocolat extends AbsDistributeurChocolat implements IDistributeurChocolatDeMarque, IActeur {
-
-	private double capaciteDeVente;
-	private double prix;
 
 	public DistributeurChocolat(Distributeur2 ac) {
 		super(ac);
 	}
 
 	public boolean commercialise(Chocolat choco) {
-		return false;
-	}
-
-	public double quantiteEnVente(Chocolat choco) {
-		return 0.;
-	}
-
-	public double prix(Chocolat choco) {
-		return 0.;
-	}
-
-	public void vendre(ClientFinal client, Chocolat choco, double quantite) {
+		return ac.getAcheteurChocolat().gammesChocolat.contains(choco);
 	}
 	
 	public void initialiser() {
@@ -52,18 +30,25 @@ public class DistributeurChocolat extends AbsDistributeurChocolat implements IDi
 
 	public List<ChocolatDeMarque> getCatalogue() {
 		List<ChocolatDeMarque> res = new ArrayList<ChocolatDeMarque>();
+		for (ChocolatDeMarque choco : ac.getStock().stocksChocolatDeMarque.keySet()) {
+			res.add(choco);
+		}
 		return res;
 	}
 
 	public double prix(ChocolatDeMarque choco) {
-		return 0;
+		return 5.;
 	}
 
 	public double quantiteEnVente(ChocolatDeMarque choco) {
-		return 0;
+		return ac.getStock().getStockChocolatDeMarque(choco);
 	}
 
 	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant) {
+		if (client!=null) { 
+			ac.getStock().retirerStockChocolat(choco, quantite);
+			journal.ajouter("Vente de " + quantite + " tonnes de " + choco.name() + " à " + client + " pour " + montant + ".");
+		}
 	}
 
 	public void notificationRayonVide(ChocolatDeMarque choco) {
