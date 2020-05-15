@@ -231,12 +231,17 @@ public class Stock {
 		if (getQuantitéChocolat(choco) >= quantite) {
 			while (quantiteAEnlever != 0) {
 				double prix = this.prixMaxStock(table);
-				if (getQuantitePrixChocolat(choco, prix) >= quantiteAEnlever) {
+				double quantiteprix = this.getQuantitePrixChocolat(choco, prix);
+				if (quantiteprix >= quantiteAEnlever) {
 					this.retirerChocolatPrix(choco, quantiteAEnlever, prix);
 				} else {
-					
+					this.retirerChocolatPrix(choco, quantiteprix, prix);
+					quantiteAEnlever -= quantiteprix;
 				}
+				this.majStockChocolat(choco);
 			}
+		} else {
+			throw new IllegalArgumentException("Quantite trop importante");
 		}
 	}
 	public void ajoutChocolat(Chocolat choco, double quantite, double prix) {
