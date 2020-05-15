@@ -112,7 +112,7 @@ public class Stock extends ActeurEQ3 {
 		stock.setStockChocolat(Chocolat.CHOCOLAT_MOYENNE,15.0);
 		System.out.println("");
 		System.out.println("TEST DES METHODES GET/SET CHOCOLAT");
-		System.out.println("");
+
 		System.out.println("Map stock Chocolat "+stock.getStockChocolat());
 		System.out.println("Map cout Chocolat "+stock.getCoutChocolat());
 		System.out.println("Cout Chocolat moyenne "+stock.getCoutChocolat(Chocolat.CHOCOLAT_MOYENNE));
