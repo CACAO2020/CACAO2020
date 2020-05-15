@@ -2,11 +2,7 @@ package abstraction.eq2Producteur2;
 import abstraction.eq8Romu.produits.Feve;
 import abstraction.eq8Romu.produits.Pate;
 import abstraction.eq8Romu.produits.Gamme;
-/**
- * 
- * @author lucas
- *type peut prendre 3 valeurs : trinitario, forastero, criollo (par ordre croissant de qualité)
- */
+
 public class PaquetArbres {
 	/**
 	 * @author Kristof Szentes

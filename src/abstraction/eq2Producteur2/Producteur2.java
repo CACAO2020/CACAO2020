@@ -22,23 +22,28 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 	}
 	/**
 	 * Cette methode est appellee a chaque nouveau tour
-	 * Pour l'instant elle avance l'age de chaque paquet d'arbre de 1
-	 * @author Kristof Szentes
 	 */
 	public void next() {
+		this.RefreshAge();
+		this.RefreshStocks();
+	}
+	/**
+	 * Cette méthode avance l'age de chaque paquet d'arbre de 1 et enleve les arbres qui ont atteint les 45 ans
+	 */
+	public void RefreshAge() {
 		List<Integer> deathlist = new ArrayList<Integer>();
 		
 		for (int i = 0; i < this.getPaquetsArbres().size(); i++) {
 			this.getPaquetsArbres().get(i).setAge(this.getPaquetsArbres().get(i).getAge() + 1);
-			if (this.getPaquetsArbres().get(i).getAge() == 40);
+			if (this.getPaquetsArbres().get(i).getAge() == 45);
 			{deathlist.add(i);}
 		}
 		while (deathlist.size()>0) {
 			this.getPaquetsArbres().remove(deathlist.get(deathlist.size()-1));
 			deathlist.remove(deathlist.size()-1);
 		}
-		this.RefreshStocks();
 	}
+	
 	/**
 	 * 
 	 * @author lucas P

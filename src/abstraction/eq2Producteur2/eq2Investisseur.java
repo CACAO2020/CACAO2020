@@ -27,7 +27,6 @@ public class eq2Investisseur extends eq2Vendeur {
 			Filiere.LA_FILIERE.getBanque().virer(this,this.getCrypto(),Filiere.LA_FILIERE.getBanque(),nbrArbres*this.prixArbre);
 		}
 	}
-	
 
 }
 
