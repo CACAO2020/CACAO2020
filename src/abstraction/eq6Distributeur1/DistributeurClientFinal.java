@@ -2,19 +2,21 @@ package abstraction.eq6Distributeur1;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import abstraction.eq8Romu.clients.ClientFinal;
 import abstraction.eq8Romu.clients.IDistributeurChocolatDeMarque;
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.ChocolatDeMarque;
 
-public class DistributeurClientFinal extends Distributeur1 implements IDistributeurChocolatDeMarque{
+public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistributeurChocolatDeMarque{
 	private double capaciteDeVente;
 	private double prixHGE;
 	private double prixMG;
 	private double prixBG;
 
-	public DistributeurClientFinal(double capaciteDeVente, double prixHGE, double prixMG, double prixBG) {
+	public DistributeurClientFinal(double capaciteDeVente, double prixHGE, double prixMG, double prixBG,double capaciteStockmax, Map<ChocolatDeMarque, Double> MapStock) {
+		super(capaciteStockmax, MapStock);
 		this.capaciteDeVente = capaciteDeVente;
 		this.prixHGE=prixHGE;
 		this.prixMG=prixMG;
