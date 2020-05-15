@@ -135,7 +135,7 @@ public class Stock {
 		double quantiteAEnlever = quantite;
 		int i = 0;
 		if (getQuantitePrixFeve(feve, prix) >= quantite) {
-			while (quantiteAEnlever != 0) {
+			while (quantiteAEnlever != 0 && i<table.size()) {
 				if (table.get(i).get2().getValeur() == prix) {
 					if (table.get(i).get1().getValeur() >= quantiteAEnlever) {
 						table.get(i).get1().retirer(this.acteur, quantiteAEnlever);
@@ -146,6 +146,7 @@ public class Stock {
 					}
 				}
 				this.majStockFeves(feve);
+				i += 1;
 			}
 		} else {
 			throw new IllegalArgumentException("Quantite trop importante");
@@ -158,7 +159,7 @@ public class Stock {
 		double quantiteAEnlever = quantite;
 		int i = 0;
 		if (getQuantitePrixPate(pate, prix) >= quantite) {
-			while (quantiteAEnlever != 0) {
+			while (quantiteAEnlever != 0 && i<table.size()) {
 				if (table.get(i).get2().getValeur() == prix) {
 					if (table.get(i).get1().getValeur() >= quantiteAEnlever) {
 						table.get(i).get1().retirer(this.acteur, quantiteAEnlever);
@@ -169,6 +170,7 @@ public class Stock {
 					}
 				}
 				this.majStockPate(pate);
+				i += 1;
 			}
 		} else {
 			throw new IllegalArgumentException("Quantite trop importante");
@@ -181,7 +183,7 @@ public class Stock {
 		double quantiteAEnlever = quantite;
 		int i = 0;
 		if (getQuantitePrixChocolat(choco, prix) >= quantite) {
-			while (quantiteAEnlever != 0) {
+			while (quantiteAEnlever != 0 && i<table.size()) {
 				if (table.get(i).get2().getValeur() == prix) {
 					if (table.get(i).get1().getValeur() >= quantiteAEnlever) {
 						table.get(i).get1().retirer(this.acteur, quantiteAEnlever);
@@ -192,6 +194,7 @@ public class Stock {
 					}
 				}
 				this.majStockChocolat(choco);
+				i += 1;
 			}
 		} else {
 			throw new IllegalArgumentException("Quantite trop importante");
@@ -213,6 +216,7 @@ public class Stock {
 	}
 	public void retirerChocolat(Chocolat choco, double quantite) {
 		this.majStockChocolat(choco);
+		List<Couple<Variable>> table = this.stockChocolat.get(choco);
 		
 	}
 
