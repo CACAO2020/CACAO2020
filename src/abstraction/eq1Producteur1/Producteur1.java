@@ -61,9 +61,16 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 	}
 	
 	// Modifiee par Melanie pour l'ajout des differents stocks de feves
-	public double getStock(Variable stockFeve)
+	public double getStock(Feve typeFeve)
 	{	
-		return stockFeve.getValeur();
+		if(typeFeve == Feve.FEVE_BASSE)
+		{
+			return this.stockFevesForastero.getValeur();
+		}
+		if(typeFeve == Feve.FEVE_BASSE)
+		{
+			return this.stockFevesTrinitario.getValeur();
+		}
 		
 	}
 	
@@ -163,10 +170,8 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 		//Fonctions pour la gestion du stock
 	// --< Melanie
 	
-	public void setStock(double valeur, Variable stockFeve) {
-		
-		stockFeve.setValeur(this, valeur);
-		
+	public void setStock(double valeur, Feve typeFeve) {
+		this.setStock(valeur, typeFeve);
 	}
 	
 	/**
@@ -174,9 +179,16 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 	 * deja existante
 	 */
 	
-	public void addStock(double augmentation, Variable stockFeve) {
+	public void addStock(double augmentation, Feve typeFeve) {
 		
-		stockFeve.setValeur(this, this.getStock(stockFeve) + augmentation);
+		if(typeFeve == Feve.FEVE_BASSE)
+		{
+			stockFevesForastero.setValeur(this, this.stockFevesForastero.getValeur() + augmentation);
+		}
+		if(typeFeve == Feve.FEVE_MOYENNE)
+		{
+			stockFevesTrinitario.setValeur(this, this.stockFevesTrinitario.getValeur() + augmentation);
+		}
 		
 		
 	}
@@ -186,10 +198,8 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 	 * deja existante
 	 */
 	
-	public void removeStock(double diminution, Variable stockFeve) {
-		
-		stockFeve.setValeur(this, this.getStock(stockFeve) - diminution);
-		
+	public void removeStock(double diminution, Feve typeFeve) {
+		this.addStock(-1*diminution, typeFeve);		
 	}
 	
 	// -->
