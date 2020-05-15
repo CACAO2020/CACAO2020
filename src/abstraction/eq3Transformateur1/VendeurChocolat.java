@@ -11,14 +11,12 @@ import abstraction.eq8Romu.produits.Feve;
 import abstraction.eq8Romu.produits.Gamme;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;;
-public abstract class VendeurChocolat extends AcheteurCacao implements IVendeurChocolatBourse {
-
-	private Chocolat chocolat;
-	
+public abstract class VendeurChocolat extends Stock implements IVendeurChocolatBourse {
 	
 	/** @author K. GUTIERREZ  */
 	public double getOffre(Chocolat chocolat, double cours) {
-		return cours*((Variable) stockChocolat).getValeur();
+		Stock stock=new Stock();
+		return cours*stock.getStockChocolat(chocolat);
 	}
 	
 	/** @author K. GUTIERREZ  */
@@ -28,7 +26,8 @@ public abstract class VendeurChocolat extends AcheteurCacao implements IVendeurC
 	
 	/** @author K. GUTIERREZ  */
 	public void livrer(Chocolat chocolat, double quantite) {
-		((Variable) stockChocolat).retirer(this, quantite);
+		Stock stock=new Stock();
+		stock.setStockChocolat(chocolat, quantite, stock.getCoutChocolat(chocolat));;
 	}
 
 }
