@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import abstraction.eq8Romu.cacaoCriee.FiliereTestVentesCacaoCriee;
+import abstraction.eq8Romu.chocolatBourse.FiliereTestVentesChocolatBourse;
 import abstraction.eq8Romu.ventesCacaoAleatoires.FiliereVentesCacaoAleatoires;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
@@ -58,8 +59,8 @@ public class ActeurEQ3 implements IActeur{
 
 	public Filiere getFiliere(String nom) {
 		switch (nom) {
-		case "ACHATCACAOCRIE" : return new FiliereVentesCacaoAleatoires();
-		case "VENTECHOCOLATBOURSE" : return new FiliereTestVentesCacaoCriee();
+		case "ACHATCACAOCRIE" : return new FiliereTestVentesCacaoCriee();
+		case "VENTECHOCOLATBOURSE" : return new FiliereTestVentesChocolatBourse();
 		default : return null;
 		}
 	}
