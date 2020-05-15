@@ -49,7 +49,7 @@ public class AcheteurChocolat extends AbsAcheteurChocolat implements IAcheteurCh
 		//Ensuite on demande au vendeur quelle quantité lui est demandée
 			double demande_vendeur = 15.;   //Le temps de progresser dans le fichier vendeur
 		//On compare la demande du vendeur et les stocks
-			double achats_a_faire = stock_choco - demande_vendeur;
+			double achats_a_faire = demande_vendeur - stock_choco;
 			if (achats_a_faire <= 0.) {
 				//Si achats_a_faire < 0 alors on n'achete rien
 				this.getDemande_choco().get(choco).setValeur(this, 0.);
