@@ -7,6 +7,7 @@ import java.util.List;
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
+import abstraction.eq4Transformateur2.PateInterne;
 import abstraction.eq8Romu.produits.Feve;
 import abstraction.fourni.Filiere;
 
@@ -58,5 +59,17 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 	public double EstimationVenteStock() {
 		return this.getPrixTC().getValeur()*this.getQuantiteFeve(Feve.FEVE_HAUTE)+this.getPrixTT().getValeur()*this.getQuantiteFeve(Feve.FEVE_MOYENNE)+this.getPrixTF().getValeur()*this.getQuantiteFeve(Feve.FEVE_BASSE);
 	}
-	
+	public List<Variable> getIndicateurs() {
+	List<Variable> res=new ArrayList<Variable>();
+	for (Feve feve :Feve.values()) {
+		res.add(this.getStockFeve().get(feve)) ;
+	}
+	for (PateInterne pate :PateInterne.values()) {
+		// à décommenter si getIndicateurs ne doit pas renvoyer de variables internes, utile pour les tests pour le moment
+		//if (pate == PateInterne.PATE_BASSE || pate == PateInterne.PATE_MOYENNE) {
+			res.add(this.getStockPate().get(pate)) ;
+		//}
+	}
+	return res;
+}
 }
