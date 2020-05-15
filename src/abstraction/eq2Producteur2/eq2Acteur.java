@@ -28,6 +28,13 @@ public class eq2Acteur implements IActeur {
 	public List<PaquetArbres> getPaquetsArbres(){
 		return this.PaquetsArbres;
 	}
+	public double NbTotalArbres() {
+		double TotalArbre =0; 
+		for (int i=0; i<this.getPaquetsArbres().size()+1; i++) {
+			TotalArbre += this.getPaquetsArbres().get(i).getNbreArbres();
+		}
+		return TotalArbre;
+	}
 	
 	@Override
 	public String getNom() {
