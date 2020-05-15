@@ -13,18 +13,18 @@ import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
-public class AbsAcheteurChocolatBourse implements IActeur {
+public class AbsAcheteurChocolat implements IActeur {
 	private Map<ChocolatDeMarque, Variable> demandeChoco;
 	protected Integer cryptogramme;
 	protected Journal journal;
 
 	protected Distributeur2 ac;
 	
-	public AbsAcheteurChocolatBourse() {
+	public AbsAcheteurChocolat() {
 		
 	}
-	//WAIT FOR LEANDRE
-	public AbsAcheteurChocolatBourse(Distributeur2 ac) {
+
+	public AbsAcheteurChocolat(Distributeur2 ac) {
 		this.ac = ac;
 		demandeChoco=new HashMap<ChocolatDeMarque, Variable>();
 		for (ChocolatDeMarque choco : ac.getStock().stocksChocolat.keySet()) {

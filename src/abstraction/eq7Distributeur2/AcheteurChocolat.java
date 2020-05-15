@@ -11,10 +11,10 @@ import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Variable;
 
-public class AcheteurChocolatBourse extends AbsAcheteurChocolatBourse implements IAcheteurChocolatBourse {
+public class AcheteurChocolat extends AbsAcheteurChocolat implements IAcheteurChocolatBourse {
 	//Raphaël Caby
 	
-	public AcheteurChocolatBourse(Distributeur2 ac) {
+	public AcheteurChocolat(Distributeur2 ac) {
 		super(ac);
 	}
 	
@@ -35,11 +35,11 @@ public class AcheteurChocolatBourse extends AbsAcheteurChocolatBourse implements
 		getJournaux().get(i - 1).ajouter(s);;
 		
 	}
-	//WAIT FOR LEANDRE
+	
 	public void receptionner(ChocolatDeMarque chocolat, double quantite) {
 		ac.getStock().ajouterStockChocolat(chocolat, quantite);
 	}
-	//WAIT FOR LEANDRE
+
 	public void next() {
 		for (ChocolatDeMarque choco : ac.getStock().stocksChocolat.keySet()) {
 		// L'opération sera effectuée pour CHAQUE type de chocolat que nous vendons

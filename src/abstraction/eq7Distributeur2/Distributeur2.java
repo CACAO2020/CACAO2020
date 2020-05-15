@@ -21,7 +21,7 @@ public class Distributeur2 implements IActeur {
 	private Integer cryptogramme;
 	private Journal journal;
 	
-	private AcheteurChocolatBourse acheteurChocolatBourse;
+	private AcheteurChocolat acheteurChocolatBourse;
 	private DistributeurChocolat distributeurChocolat;
 	private Stock stock;
 
@@ -30,7 +30,7 @@ public class Distributeur2 implements IActeur {
 		NB_INSTANCES++;
 		numero = NB_INSTANCES;
 		stock = new Stock(this);		
-		acheteurChocolatBourse = new AcheteurChocolatBourse(this);
+		acheteurChocolatBourse = new AcheteurChocolat(this);
 		distributeurChocolat = new DistributeurChocolat(this);
 		journal = new Journal(getNom() + " Activités " + numero, this);
 	}
@@ -46,7 +46,7 @@ public class Distributeur2 implements IActeur {
 	}
 	
 	// Renvoie l'unique instance de la classe AcheteurChocolatBourse associée au distributeur
-	public AcheteurChocolatBourse getAcheteurChocolatBourse() {
+	public AcheteurChocolat getAcheteurChocolatBourse() {
 		return this.acheteurChocolatBourse;
 	}
 	
