@@ -14,6 +14,11 @@ import abstraction.fourni.Variable;;
 public abstract class VendeurChocolat extends AcheteurCacao implements IVendeurChocolatBourse {
 	
 	/** @author K. GUTIERREZ  */
+	public VendeurChocolat(ActeurEQ3 acteur) {
+		super(acteur);
+	}
+
+	/** @author K. GUTIERREZ  */
 	public double getOffre(Chocolat chocolat, double cours) {
 		if(cours<this.getCoutChocolat(chocolat)) {
 			return 0.0;
@@ -23,7 +28,7 @@ public abstract class VendeurChocolat extends AcheteurCacao implements IVendeurC
 	
 	/** @author K. GUTIERREZ  */
 	public void livrer(Chocolat chocolat, double quantite) {
-		this.setStockChocolat(chocolat, quantite, this.getCoutChocolat(chocolat));;
+		this.setStockChocolat(chocolat, quantite);;
 	}
 
 }
