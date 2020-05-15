@@ -33,6 +33,7 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 		this.stockFevesTrinitario=new Variable(getNom()+" stock feves Trinitario", this, 0, 10000, 1000);
 		this.journalEq1 = new Journal("Eq1 activites", this);
 		this.venteCriee = new GestionCriee(this);
+		this.plantation = new Plantations();
 	}
 
 	public void setCryptogramme(Integer crypto) {
