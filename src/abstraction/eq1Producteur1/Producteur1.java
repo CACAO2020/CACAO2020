@@ -71,15 +71,15 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 		{
 			return this.stockFevesTrinitario.getValeur();
 		}
-		
+		return 0;
 	}
 	
 	
 	// Modifiee par Melanie pour l'ajout des differents stocks de feves
 	public void next() {
 		// Ecriture de l'état dans les logs.
-		this.journalEq1.ajouter("Quantité de stock de Trinitario : " + this.getStock(this.stockFevesTrinitario));
-		this.journalEq1.ajouter("Quantité de stock de Forastero : " + this.getStock(this.stockFevesForastero));
+		this.journalEq1.ajouter("Quantité de stock de Trinitario : " + this.getStock(Feve.FEVE_MOYENNE));
+		this.journalEq1.ajouter("Quantité de stock de Forastero : " + this.getStock(Feve.FEVE_BASSE));
 	}
 
 	// Modification pour ajout de la filiere TestCrieeProd1
