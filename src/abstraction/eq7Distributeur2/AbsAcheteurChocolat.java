@@ -14,7 +14,7 @@ import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
 public class AbsAcheteurChocolat implements IActeur {
-	protected Map<Chocolat, Variable> demandeChoco;
+	protected Map<Chocolat, Variable> demandesChoco;
 	protected List<Chocolat> gammesChocolat;
 	protected Integer cryptogramme;
 	protected Journal journal;
@@ -27,7 +27,7 @@ public class AbsAcheteurChocolat implements IActeur {
 
 	public AbsAcheteurChocolat(Distributeur2 ac) {
 		this.ac = ac;
-		demandeChoco=new HashMap<Chocolat, Variable>();
+		demandesChoco=new HashMap<Chocolat, Variable>();
 		
 		gammesChocolat = new ArrayList<Chocolat>();
 		gammesChocolat.add(Chocolat.CHOCOLAT_MOYENNE);
@@ -36,13 +36,13 @@ public class AbsAcheteurChocolat implements IActeur {
 		gammesChocolat.add(Chocolat.CHOCOLAT_HAUTE_EQUITABLE);
 		
 		for (Chocolat choco : gammesChocolat) {
-			demandeChoco.put(choco, new Variable("Demande en : " + choco.name(), ac, 0));
+			demandesChoco.put(choco, new Variable("Demande en : " + choco.name(), ac, 0));
 		}
-		this.journal = new Journal(this.getNom()+" Acheteur Chocolat Bourse " + ac.getNumero(), ac);
+		this.journal = new Journal(this.getNom() + " Acheteur Chocolat Bourse " + ac.getNumero(), ac);
 	}
 
-	public Map<Chocolat, Variable> getDemande_choco() {
-		return demandeChoco;
+	public Map<Chocolat, Variable> getDemandesChoco() {
+		return demandesChoco;
 	}
 
 	public String getNom() {

@@ -19,20 +19,19 @@ public class AcheteurChocolat extends AbsAcheteurChocolat implements IAcheteurCh
 		super(ac);
 	}
 	
-	public double getDemande(ChocolatDeMarque chocolat, double cours) {
-		return this.getDemande_choco().get(chocolat).getValeur();
+	public double getDemande(Chocolat chocolat, double cours) {
+		return getDemandesChoco().get(chocolat).getValeur();
 	}
 
 	public Integer getCryptogramme(SuperviseurChocolatBourse superviseur) {
 		return cryptogramme;
 	}
 
-	public void notifierCommande(ChocolatDeMarque chocolat, double quantiteObtenue, boolean payee) {
+	public void notifierCommande(Chocolat chocolat, double quantiteObtenue, boolean payee) {
 		int i = this.getJournaux().size();
 		String s = "";
 		if (payee) {s = "Commande payée";}
 		else {s = "Commande non payée";}
-		s = s + "de " + chocolat.getMarque();
 		getJournaux().get(i - 1).ajouter(s);;
 		
 	}
@@ -45,18 +44,18 @@ public class AcheteurChocolat extends AbsAcheteurChocolat implements IAcheteurCh
 		// L'opération sera effectuée pour CHAQUE type de chocolat que nous vendons
 		for (Chocolat choco : gammesChocolat) {
 		// D'abord on consulte les stocks
-			double stock_choco = ac.getStock().stocksChocolat.get(choco).getValeur();
+			double stockChoco = ac.getStock().getStockChocolat(choco);
 		// Ensuite on demande au vendeur quelle quantité lui est demandée
-			double demande_vendeur = 15.;   //Le temps de progresser dans le fichier vendeur
+			double demandeVendeur = 15.;   //Le temps de progresser dans le fichier vendeur
 		// On compare la demande du vendeur et les stocks
-			double achats_a_faire = min(demande_vendeur - stock_choco, 0.);
-			if (achats_a_faire == 0.) {
+			double achatsAFaire = min(demandeVendeur - stockChoco, 0.);
+			if (achatsAFaire == 0.) {
 				// Si achats_a_faire < 0 alors on n'achete rien
 			}
 			else {
 				// Sinon on positionne la demande sur achats_a_faire
 			}
-			this.getDemande_choco().get(choco).setValeur(this, achats_a_faire);
+			this.getDemandesChoco().get(choco).setValeur(this, achatsAFaire);
 		
 		}
 	}
@@ -66,16 +65,6 @@ public class AcheteurChocolat extends AbsAcheteurChocolat implements IAcheteurCh
 			return d1;
 		}
 		return d2;
-	}
-	
-	// NE PAS UTILISER
-	public double getDemande(Chocolat chocolat, double cours) {
-		return 0;
-	}
-
-	// NE PAS UTILISER
-	public void notifierCommande(Chocolat chocolat, double quantiteObtenue, boolean payee) {
-		
 	}
 
 }
