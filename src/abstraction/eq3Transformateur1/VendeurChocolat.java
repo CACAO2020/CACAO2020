@@ -16,12 +16,10 @@ public abstract class VendeurChocolat extends Stock implements IVendeurChocolatB
 	/** @author K. GUTIERREZ  */
 	public double getOffre(Chocolat chocolat, double cours) {
 		Stock stock=new Stock();
-		return cours*stock.getStockChocolat(chocolat);
-	}
-	
-	/** @author K. GUTIERREZ  */
-	public double proposerVente(Chocolat chocolat, double cours) {
-		return this.getStockChocolat().get(chocolat);
+		if(cours<stock.getCoutChocolat(chocolat)) {
+			return 0;
+		}
+		return stock.getStockChocolat(chocolat);
 	}
 	
 	/** @author K. GUTIERREZ  */
