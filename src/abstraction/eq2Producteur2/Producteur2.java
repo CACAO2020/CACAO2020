@@ -66,10 +66,9 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 		res.add(this.getStockFeve().get(feve)) ;
 	}
 	for (PateInterne pate :PateInterne.values()) {
-		// à décommenter si getIndicateurs ne doit pas renvoyer de variables internes, utile pour les tests pour le moment
-		//if (pate == PateInterne.PATE_BASSE || pate == PateInterne.PATE_MOYENNE) {
+		
 			res.add(this.getStockPate().get(pate)) ;
-		//}
+		
 	}
 	return res;
 }
