@@ -21,13 +21,16 @@ import abstraction.fourni.Filiere;
 
 public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 
-	private Variable stockFeves;
+	private Variable stockFevesForastero;
+	private Variable stockFevesTrinitario;
 	private Integer cryptogramme;
 	private Journal journalEq1;
 	private GestionCriee venteCriee;
+	private Plantations plantation;
 
 	public Producteur1() {
-		this.stockFeves=new Variable(getNom()+" stock feves", this, 0, 10000, 1000);
+		this.stockFevesForastero=new Variable(getNom()+" stock feves Forastero", this, 0, 10000, 1000);
+		this.stockFevesTrinitario=new Variable(getNom()+" stock feves Trinitario", this, 0, 10000, 1000);
 		this.journalEq1 = new Journal("Eq1 activites", this);
 		this.venteCriee = new GestionCriee(this);
 	}
@@ -56,15 +59,27 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 	public void initialiser() {
 	}
 	
-	public double getStock()
-	{
-		return this.stockFeves.getValeur();
+	// Modifiee par Melanie pour l'ajout des differents stocks de feves
+	public double getStock(String nomFeve)
+	{	
+		if (nomFeve.equals("Trinitario")) {
+			return this.stockFevesTrinitario.getValeur();
+		}
+		else if (nomFeve.equals("Forastero")) {
+			return this.stockFevesForastero.getValeur();
+		}
+		else {
+			return(0);
+		}
+		
 	}
 	
-
+	
+	// Modifiee par Melanie pour l'ajout des differents stocks de feves
 	public void next() {
 		// Ecriture de l'état dans les logs.
-		this.journalEq1.ajouter("Quantité de stock : " + this.getStock());
+		this.journalEq1.ajouter("Quantité de stock de Trinitario : " + this.getStock("Trinitario"));
+		this.journalEq1.ajouter("Quantité de stock de Forastero : " + this.getStock("Forastero"));
 	}
 
 	// Modification pour ajout de la filiere TestCrieeProd1
@@ -88,9 +103,12 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 	
 	// -->
 	
+	// Melanie = ajout des stocks de chaque feves
+
 	public List<Variable> getIndicateurs() {
 		List<Variable> res=new ArrayList<Variable>();
-		res.add(this.stockFeves);
+		res.add(this.stockFevesForastero);
+		res.add(this.stockFevesTrinitario);
 		return res;
 	}
 
@@ -152,8 +170,15 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 		//Fonctions pour la gestion du stock
 	// --< Melanie
 	
-	public void setStock(double valeur) {
-		this.stockFeves.setValeur(this, valeur);
+	public void setStock(double valeur, String nomFeve) {
+		
+		if (nomFeve.equals("Forastero")) {
+			this.stockFevesForastero.setValeur(this, valeur);
+		}
+		else if (nomFeve.equals("Trinitario")) {
+			this.stockFevesTrinitario.setValeur(this, valeur);
+		}
+		
 	}
 	
 	/**
@@ -161,8 +186,16 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 	 * deja existante
 	 */
 	
-	public void addStock(double augmentation) {
-		this.stockFeves.setValeur(this, this.getStock() + augmentation);
+	public void addStock(double augmentation, String nomFeve) {
+		
+		if (nomFeve.equals("Forastero")) {
+			this.stockFevesForastero.setValeur(this, this.getStock("Forastero") + augmentation);
+		}
+		else if (nomFeve.equals("Trinitario")) {
+			this.stockFevesTrinitario.setValeur(this, this.getStock("Trinitario") + augmentation);
+		}
+		
+		
 	}
 	
 	/**
@@ -170,8 +203,15 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 	 * deja existante
 	 */
 	
-	public void removeStock(double diminution) {
-		this.stockFeves.setValeur(this, this.getStock() - diminution);
+	public void removeStock(double diminution, String nomFeve) {
+		
+		if (nomFeve.equals("Forastero")) {
+			this.stockFevesForastero.setValeur(this, this.getStock("Forastero") - diminution);
+		}
+		else if (nomFeve.equals("Trinitario")) {
+			this.stockFevesTrinitario.setValeur(this, this.getStock("Trinitario") - diminution);
+		}
+		
 	}
 	
 	// -->
