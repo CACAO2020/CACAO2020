@@ -20,8 +20,7 @@ public class AcheteurCacao extends Stock implements abstraction.eq8Romu.cacaoCri
 	private HashMap<String,Double> nb_proposition;
 	private ActeurEQ3 acteur;
 
-	public AcheteurCacao(ActeurEQ3 acteur) {
-		this.acteur = acteur;
+	public AcheteurCacao() {
 		HashMap<String,Double> map = new HashMap<String,Double>();
 		map.put("Haute", (double) 0);
 		map.put("Moyenne_equitable", (double) 0);
@@ -72,7 +71,7 @@ public class AcheteurCacao extends Stock implements abstraction.eq8Romu.cacaoCri
 	}
 	
 	public void notifierVente(PropositionCriee proposition) {
-		this.setStockFeves(proposition.getLot().getFeve(), proposition.getQuantiteEnTonnes(),proposition.getPrixPourLeLot());
+		this.setStockFeves(proposition.getLot().getFeve(), proposition.getQuantiteEnTonnes());
 		System.out.println("Lot " + proposition.getLot().toString() + ", de " + proposition.getVendeur().toString() + ", au prix" + proposition.getPrixPourLeLot() + " a été effectué");
 		
 	}
