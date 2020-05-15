@@ -42,7 +42,7 @@ public class Distributeur2 implements IActeur, IAcheteurChocolatBourse, IDistrib
 	}
 	 
 	public int getNumero() {
-		return this.numero;
+		return this.numero; 
 	}
 	
 	public AcheteurChocolat getAcheteurChocolat() {
