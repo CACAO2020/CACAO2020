@@ -42,26 +42,28 @@ public class AchatCacao {
 		}
 		if (lot.getFeve().isEquitable() && lot.getFeve().getGamme()== Gamme.HAUTE) {
 			prix = lot.getPrixMinPourUneTonne();
-			
 			if (NB_propositions_refusees == NB_precedent
-					&& acteur.getTresorier().investissementMaxHautDeGamme() >= prix) {
+					&& acteur.getTresorier().investissementMaxHautDeGamme() >= 
+					prix * lot.getQuantiteEnTonnes() + this.acteur.getStock().getTransformationCostFeve().getValeur()) {
 				tentativeDachat.get(lot.getFeve()).add(new Couple<Variable>(new Variable("", acteur, lot.getQuantiteEnTonnes()),
 						new Variable("", acteur, prix)));
 				return prix ; //vrai que pour l'initialisation
 			}
 			
 			else if (NB_propositions_refusees > NB_precedent
-					&& acteur.getTresorier().investissementMaxHautDeGamme() >= prix) { //derniere proposition acceptee
+					&& acteur.getTresorier().investissementMaxHautDeGamme() >= 
+					prix * lot.getQuantiteEnTonnes() + this.acteur.getStock().getTransformationCostFeve().getValeur()) { //derniere proposition acceptee
 					tentativeDachat.get(lot.getFeve()).add(new Couple<Variable>(new Variable("", acteur, lot.getQuantiteEnTonnes()),
 						new Variable("", acteur, prix)));
 					return prix;
 			}
 			
 			//(NB_propositions_refusees < NB_precedent) la dernière proposition a été refusée
-			else {
+			else{
 				// 1.5 est un coefficient choisi au hasard pour debuter
 				prix = prix * (1 + NB_propositions_refusees) * 1.5;
-				if (acteur.getTresorier().investissementMaxHautDeGamme() <= prix) {
+				if (acteur.getTresorier().investissementMaxHautDeGamme() >= 
+					prix * lot.getQuantiteEnTonnes() + this.acteur.getStock().getTransformationCostFeve().getValeur()) {
 					tentativeDachat.get(lot.getFeve()).add(new Couple<Variable>(new Variable("", acteur, lot.getQuantiteEnTonnes()),
 						new Variable("", acteur, prix)));
 					return prix ; //plus on a de prop refusees, plus on augmente le prix
