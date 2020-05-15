@@ -28,7 +28,7 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 	public void next() {
 		List<Integer> deathlist = new ArrayList<Integer>();
 		
-		for (int i = 0; i < this.getPaquetsArbres().size()+1; i++) {
+		for (int i = 0; i < this.getPaquetsArbres().size(); i++) {
 			this.getPaquetsArbres().get(i).setAge(this.getPaquetsArbres().get(i).getAge() + 1);
 			if (this.getPaquetsArbres().get(i).getAge() == 40);
 			{deathlist.add(i);}
@@ -44,7 +44,7 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 	 * @author lucas P
 	 */
 	public void RefreshStocks() {
-		for (int i = 0; i < this.PaquetsArbres.size()+1; i++) {
+		for (int i = 0; i < this.PaquetsArbres.size(); i++) {
 			this.addQtFeve(this.PaquetsArbres.get(i).getType(),this.PaquetsArbres.get(i).production());
 		}
 	}
