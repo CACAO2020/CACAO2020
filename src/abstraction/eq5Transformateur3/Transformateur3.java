@@ -12,6 +12,9 @@ import abstraction.eq8Romu.cacaoCriee.LotCacaoCriee;
 import abstraction.eq8Romu.cacaoCriee.PropositionCriee;
 import abstraction.eq8Romu.cacaoCriee.SuperviseurCacaoCriee;
 import abstraction.eq8Romu.chocolatBourse.IVendeurChocolatBourse;
+import abstraction.eq8Romu.contratsCadres.Echeancier;
+import abstraction.eq8Romu.contratsCadres.ExemplaireContratCadre;
+import abstraction.eq8Romu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.Feve;
 import abstraction.eq8Romu.ventesCacaoAleatoires.IAcheteurCacaoAleatoire;
@@ -20,8 +23,9 @@ import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
+
 @SuppressWarnings("unused")
-public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurChocolatBourse {
+public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurChocolatBourse, IAcheteurContratCadre {
 
 	private Integer cryptogramme;
 	private Journal journalEq5;
@@ -33,9 +37,9 @@ public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurCh
 
 	public Transformateur3() {
 		this.journalEq5 = new Journal("Eq5 activites", this);
-		this.acheteurCacao = new AchatCacao(this); //needs to be filled with parameters this will work for now
-		this.acheteurPate = new AchatPate(this); 
-		this.vendeurChocolat = new VenteChocolat(this); 
+		this.acheteurCacao = new AchatCacao(this); // needs to be filled with parameters this will work for now
+		this.acheteurPate = new AchatPate(this);
+		this.vendeurChocolat = new VenteChocolat(this);
 		this.tresorier = new Tresorerie(this);
 		this.stock = new Stock(this);
 	}
@@ -77,7 +81,8 @@ public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurCh
 	}
 
 	public List<Variable> getParametres() {
-		//TODO ici devront être mis les paramètres dont je parlais (finalement ce seront des variables qu'il faudra penser à ajouter ici)
+		// TODO ici devront être mis les paramètres dont je parlais (finalement ce
+		// seront des variables qu'il faudra penser à ajouter ici)
 		List<Variable> res = new ArrayList<Variable>();
 		return res;
 	}
@@ -102,40 +107,35 @@ public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurCh
 	}
 
 	// Vente de Chocolat en bourse IVenteChocolatBourse
-	
+
 	public double getOffre(Chocolat chocolat, double cours) {
 		return this.vendeurChocolat.getOffre(chocolat, cours);
-		
+
 	}
 
-	
 	public void livrer(Chocolat chocolat, double quantite) {
 		this.vendeurChocolat.livrer(chocolat, quantite);
 	}
 
 	// Achat de cacao en criée IAcheteurCacaoCriee
-	
+
 	public double proposerAchat(LotCacaoCriee lot) {
 		return this.acheteurCacao.proposerAchat(lot);
 	}
 
-	
 	public void notifierPropositionRefusee(PropositionCriee proposition) {
 		this.acheteurCacao.notifierPropositionRefusee(proposition);
 	}
 
-	
 	public Integer getCryptogramme(SuperviseurCacaoCriee superviseur) {
 		return superviseur == null ? Integer.valueOf(0) : this.cryptogramme;
 	}
 
-	
 	public void notifierVente(PropositionCriee proposition) {
 		this.acheteurCacao.notifierVente(proposition);
 	}
-	
-	
-	//TODO ajouter les methodes pour acheter de la pate de cacao
+
+	// TODO ajouter les methodes pour acheter de la pate de cacao
 
 	protected AchatCacao getAcheteurCacao() {
 		return acheteurCacao;
@@ -159,5 +159,20 @@ public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurCh
 
 	protected int getCryptogramme() {
 		return this.cryptogramme;
+	}
+
+	
+	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
+		return this.acheteurPate.contrePropositionDeLAcheteur(contrat);
+	}
+
+	
+	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
+		return this.acheteurPate.contrePropositionPrixAcheteur(contrat);
+	}
+
+	
+	public void receptionner(Object produit, double quantite, ExemplaireContratCadre contrat) {
+		this.acheteurPate.receptionner(produit, quantite, contrat);
 	}
 }

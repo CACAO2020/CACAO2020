@@ -16,23 +16,23 @@ import abstraction.fourni.Variable;
 public class Tresorerie {
     
 	private Transformateur3 acteur;
-	private Banque banque; //Filiere.LA_FILIERE.getBanque()
-	private double MontantCompte;
-	private double Decouvert;
+	//private double MontantCompte;				//Montant réel du compte au début du tour
+	private double MontantCompteALaFinDuTour;	//Montant théorique après les achats de quelqu'un
+	//private double Decouvert;
 	private double FacteurPrioriteGamme; // 100% haute gamme = 1, 100% bas de gamme = 0
 
 	
-	private Variable decouvertsConsecutifsAvantFaillite; //parametres fixes à priori
-	private Variable decouvertAutorise;
-	private Variable agiosDecouvertAutorise;
-	private Variable agiosDecouvertAuDela;
-	private Variable seuilOperationsRefusees;
+	//private Variable decouvertsConsecutifsAvantFaillite; //parametres fixes à priori
+	//private Variable decouvertAutorise;
+	//private Variable agiosDecouvertAutorise;
+	//private Variable agiosDecouvertAuDela;
+	//private Variable seuilOperationsRefusees;
 	
-	public Tresorerie(Transformateur3 acteur, Banque banque, double MontantCompte, double Decouvert, double Facteur, Variable decouvertsConsecutifsAvantFaillite,
+	/**public Tresorerie(Transformateur3 acteur, double MontantCompte, double MontantCompteALaFinDuTour, double Decouvert, double Facteur, Variable decouvertsConsecutifsAvantFaillite,
 			Variable decouvertAutorise, Variable agiosDecouvertAutorise, Variable agiosDecouvertAuDela, Variable seuilOperationsRefusees) {
 		this.acteur = acteur;
-		this.banque = banque;
 		this.MontantCompte=MontantCompte;
+		this.MontantCompteALaFinDuTour=MontantCompteALaFinDuTour;
 		this.Decouvert=Decouvert;
 		this.FacteurPrioriteGamme=Facteur;
 		
@@ -45,11 +45,13 @@ public class Tresorerie {
 	/**
 	     * Initialise la trésorerie
 	     */
-	public Tresorerie(Transformateur3 acteur) {
-		
-		this(acteur,
-				Filiere.LA_FILIERE.getBanque(),
+	//public Tresorerie(Transformateur3 acteur) {
+		/**
+		 * La trésorerie est initialisée comme vide, elle est mise à jour en début de tour idéalement
+		 */
+		/**this(acteur,
 				0,									//montantCompte
+				0,									//MontantCompteALaFinDuTour
 				0,									//decouvert actuel
 				0,									//FacteurPriorite
 				Filiere.LA_FILIERE.getBanque().getParametres().get(0),
@@ -57,14 +59,35 @@ public class Tresorerie {
 				Filiere.LA_FILIERE.getBanque().getParametres().get(2),
 				Filiere.LA_FILIERE.getBanque().getParametres().get(3),
 				Filiere.LA_FILIERE.getBanque().getParametres().get(4));
+	}*/
+	
+	public Tresorerie(Transformateur3 acteur, double MontantCompteALaFinDuTour, double Facteur) {
+		this.acteur = acteur;
+		this.MontantCompteALaFinDuTour=MontantCompteALaFinDuTour;
+		this.FacteurPrioriteGamme=Facteur;
+	}
+
+	public Tresorerie(Transformateur3 acteur) {
+		this(acteur,
+				0,
+				0.8);
 	}
 	
+	
+	public Transformateur3 getActeur() {
+		return acteur;
+	}
+
 	public double getMontantCompte() {
 		return Filiere.LA_FILIERE.getBanque().getSolde(this.acteur, this.acteur.getCryptogramme());
 	}
 	
+	public double getMontantCompteALaFinDuTour() {
+		return this.MontantCompteALaFinDuTour;
+	}
+	
 	public double getDecouvert() {
-		return this.Decouvert;
+		return 0; //jsp
 	}
 	/**
 	     * Le facteur qui décrit la priorité que nous mettons sur le bas de gamme par rapport au haut de gamme (évolue au cours de la
@@ -74,14 +97,31 @@ public class Tresorerie {
 		
 		return this.FacteurPrioriteGamme;
 	}
-	
-	public void setMontantCompte (double MontantCompte) {
-		this.MontantCompte=MontantCompte;
+		
+	public Variable getDecouvertsConsecutifsAvantFaillite() {
+		return Filiere.LA_FILIERE.getBanque().getParametres().get(0);
 	}
 	
-	public void setDecouvert (double Decouvert) {
-		this.Decouvert=Decouvert;
+	public Variable getDecouvertAutorise() {
+		return Filiere.LA_FILIERE.getBanque().getParametres().get(1);
 	}
+	
+	public Variable getAgiosDecouvertAutorise() {
+		return Filiere.LA_FILIERE.getBanque().getParametres().get(2);
+	}
+	
+	public Variable getAgiosDecouvertAuDela() {
+		return Filiere.LA_FILIERE.getBanque().getParametres().get(3);
+	}
+	
+	public Variable getSeuilOperationsRefusees() {
+		return Filiere.LA_FILIERE.getBanque().getParametres().get(4);
+	}
+	
+	public void setMontantCompteALaFinDuTour (double MontantCompteALaFinDuTour) {
+		this.MontantCompteALaFinDuTour=MontantCompteALaFinDuTour;
+	}
+
 	/**
 	     * Le facteur qui décrit la priorité que nous mettons sur le bas de gamme par rapport au haut de gamme (évolue au cours de la
 	     * simulation)
@@ -94,24 +134,31 @@ public class Tresorerie {
 	     * Renvoie l'investissement maximum possible à faire dans le bas de gamme en fonction du facteur de priorité que l'on s'impose
 	     * ainsi que du montant de notre trésorerie
 	     */
-	public double InvestissementMaxBasDeGamme() {
+	
+	public void next() {
+		/**
+		 * Met à jour toute la trésorerie
+		 */
+		this.setFacteurPrioriteGamme(this.getFacteurPrioriteGamme()); //pour l'instant constant
+		this.setMontantCompteALaFinDuTour(0); 						//réinitialise la valeur temporaire
+	}
+	
+	public double investissementMaxBasDeGamme() {
 		
 		return this.getMontantCompte();
 	}
+	
 	/**
 	     * Renvoie l'investissement maximum possible à faire dans le haut de gamme en fonction du facteur de priorité que l'on s'impose
 	     * ainsi que du montant de notre trésorerie
 	     */
-	public double InvestissementMaxHautDeGamme() {
+	public double investissementMaxHautDeGamme() {
 		
 		return this.getMontantCompte();
 	}
 	
-	public void DiminueTresorerie(double montant) {
-		
+	public void diminueTresorerie(double montant) {
+		Filiere.LA_FILIERE.getBanque().virer(this.getActeur(), this.getActeur().getCryptogramme(), Filiere.LA_FILIERE.getBanque(), montant);
 	}
 	
-	public void AugmenteTresorerie(double montant) {
-		
-	}
 }
