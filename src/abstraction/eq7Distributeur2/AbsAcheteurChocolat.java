@@ -13,10 +13,10 @@ import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
-public class AbsAcheteurChocolat implements IActeur {
+public class AbsAcheteurChocolat {
 	protected Map<Chocolat, Variable> demandesChoco;
 	protected List<Chocolat> gammesChocolat;
-	protected Integer cryptogramme;
+
 	protected Journal journal;
 
 	protected Distributeur2 ac;
@@ -46,33 +46,49 @@ public class AbsAcheteurChocolat implements IActeur {
 	}
 
 	public String getNom() {
-		return "EQ7";
+		return ac.getNom();
 	}
 
+
 	public String getDescription() {
-		return "Acheteur de chocolat a la bourse "+this.ac.getNumero();
+		return ac.getDescription();
 	}
-	
+
+
 	public Color getColor() {
 		return ac.getColor();
 	}
 
-	public void initialiser() {
-	}
-
-	public void setCryptogramme(Integer crypto) {
-		this.cryptogramme = crypto;
-	}
-	public void next() {
-		
-	}
 
 	public List<String> getNomsFilieresProposees() {
-		return new ArrayList<String>();
+		return ac.getNomsFilieresProposees();
 	}
 
+
 	public Filiere getFiliere(String nom) {
-		return null;
+		return ac.getFiliere(nom);
+	}
+
+
+	public void setCryptogramme(Integer crypto) {
+		ac.setCryptogramme(crypto);
+	}
+
+
+	public void notificationFaillite(IActeur acteur) {
+		ac.notificationFaillite(acteur);
+	}
+
+
+	public void notificationOperationBancaire(double montant) {
+		ac.notificationOperationBancaire(montant);
+	}
+
+	public void initialiser() {
+	}
+	
+	public void next() {
+		
 	}
 	
 	public List<Variable> getIndicateurs() {
@@ -91,9 +107,4 @@ public class AbsAcheteurChocolat implements IActeur {
 		return res;
 	}
 	
-	public void notificationFaillite(IActeur acteur) {
-	}
-	
-	public void notificationOperationBancaire(double montant) {
-	}
 } 

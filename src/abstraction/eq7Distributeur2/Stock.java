@@ -22,28 +22,19 @@ public class Stock extends AbsStock implements IStock{
 
 	public void creerStockChocolatDeMarque(ChocolatDeMarque choco) {
 		if (stocksChocolatDeMarque.containsKey(choco)) {
-			journal.ajouter("Tentative de créer un stock pour le chocolat " + choco + " refusée : le stock existe déjà.");
+			journal.ajouter("[Echec] Création d'un stock pour le " + choco.name() + " refusée : le stock existe déjà.");
 		} else {
-			stocksChocolatDeMarque.put(choco, new Variable(getNom() + " : STOCK " + choco.name(), ac, 0.));
-			journal.ajouter("Création d'un stock pour le chocolat " + choco + ".");
+			stocksChocolatDeMarque.put(choco, new Variable(ac.getNom() + " : STOCK " + choco.name(), ac, 0.));
+			journal.ajouter("Création d'un stock pour le " + choco.name() + ".");
 		}
 	}
 	
 	public void creerStockChocolat(Chocolat choco) {
 		if (stocksChocolat.containsKey(choco)) {
-			journal.ajouter("Tentative de créer un stock pour le chocolat " + choco + " refusée : le stock existe déjà.");
+			journal.ajouter("[Echec] Création d'un stock pour le " + choco + " refusée : le stock existe déjà.");
 		} else {
-			stocksChocolat.put(choco, new Variable(getNom() + " : STOCK " + choco.name(), ac, 0.));
-			journal.ajouter("Création d'un stock pour le chocolat " + choco + ".");
-		}
-	}
-	
-	public void creerStockFeves(Feve feve) {
-		if (stocksFeves.containsKey(feve)) {
-			journal.ajouter("Tentative de créer un stock pour les fèves " + feve + " refusée : le stock existe déjà.");
-		} else {
-			stocksFeves.put(feve, new Variable(getNom() + " : STOCK " + feve.name(), ac, 0.));
-			journal.ajouter("Création d'un stock pour les fèves " + feve + ".");
+			stocksChocolat.put(choco, new Variable(ac.getNom() + " : STOCK " + choco.name(), ac, 0.));
+			journal.ajouter("Création d'un stock pour le " + choco + ".");
 		}
 	}
 	
@@ -63,24 +54,15 @@ public class Stock extends AbsStock implements IStock{
 		}
 	}
 
-	public double getStockFeves(Feve feve) {
-		if (stocksFeves.containsKey(feve)) {
-			return stocksFeves.get(feve).getValeur();
-		} else {
-			return 0.;
-		}
-	}
-
 	public void ajouterStockChocolat(ChocolatDeMarque chocoDeMarque, double quantite) {
 		if (!stocksChocolatDeMarque.containsKey(chocoDeMarque)) {
 			creerStockChocolatDeMarque(chocoDeMarque);
 		}
 		if (!stocksChocolat.containsKey(chocoDeMarque.getChocolat())) {
-			creerStockChocolat(chocoDeMarque.getChocolat());
 		}
 		stocksChocolatDeMarque.get(chocoDeMarque).setValeur(ac, stocksChocolatDeMarque.get(chocoDeMarque).getValeur() + quantite);
 		stocksChocolat.get(chocoDeMarque.getChocolat()).setValeur(ac, stocksChocolat.get(chocoDeMarque.getChocolat()).getValeur() + quantite);
-		journal.ajouter(quantite + " tonnes de chocolat " + chocoDeMarque + " ont été ajoutées au stock (nouveau stock : " + stocksChocolatDeMarque.get(chocoDeMarque).getValeur()+ " tonnes).");
+		journal.ajouter(quantite + " tonnes de " + chocoDeMarque.name() + " ont été ajoutées au stock (nouveau stock : " + stocksChocolatDeMarque.get(chocoDeMarque).getValeur()+ " tonnes).");
 		
 	}
 
@@ -89,36 +71,14 @@ public class Stock extends AbsStock implements IStock{
 			creerStockChocolatDeMarque(chocoDeMarque);
 		}
 		if (!stocksChocolat.containsKey(chocoDeMarque.getChocolat())) {
-			creerStockChocolat(chocoDeMarque.getChocolat());
 		}
 		if (stocksChocolatDeMarque.get(chocoDeMarque).getValeur() >= quantite) {
 			stocksChocolatDeMarque.get(chocoDeMarque).setValeur(ac, stocksChocolatDeMarque.get(chocoDeMarque).getValeur() - quantite);
 			stocksChocolat.get(chocoDeMarque.getChocolat()).setValeur(ac, stocksChocolat.get(chocoDeMarque.getChocolat()).getValeur() - quantite);
-			journal.ajouter(quantite + " tonnes de chocolat " + chocoDeMarque + " ont été retirées du stock (nouveau stock : " + stocksChocolatDeMarque.get(chocoDeMarque).getValeur()+ " tonnes).");
+			journal.ajouter(quantite + " tonnes de " + chocoDeMarque.name() + chocoDeMarque.getMarque() + " ont été retirées du stock (nouveau stock : " + stocksChocolatDeMarque.get(chocoDeMarque).getValeur()+ " tonnes).");
 		} else {
-				journal.ajouter("Tentative de retirer " + quantite + " tonnes de chocolat " + chocoDeMarque + " rejetée (stock actuel : " + stocksChocolatDeMarque.get(chocoDeMarque).getValeur() + " tonnes).");
+				journal.ajouter("[Echec] Tentative de retirer " + quantite + " tonnes de " + chocoDeMarque.name() + " rejetée (stock actuel : " + stocksChocolatDeMarque.get(chocoDeMarque).getValeur() + " tonnes).");
 		}
-	}
-
-	public void ajouterStockFeves(Feve feve, double quantite) {
-		if (!stocksFeves.containsKey(feve)) {
-			creerStockFeves(feve);
-		}
-		stocksFeves.get(feve).setValeur(ac, stocksFeves.get(feve).getValeur() + quantite);
-		journal.ajouter(quantite + " tonnes de fèves " + feve + " ont été ajoutées au stock (nouveau stock : " + stocksFeves.get(feve).getValeur() + " tonnes).");
-	}
-
-	public void retirerStockFeves(Feve feve, double quantite) {
-		if (!stocksFeves.containsKey(feve)) {
-			creerStockFeves(feve);
-		}
-		
-		if (stocksFeves.get(feve).getValeur() >= quantite) {
-				stocksFeves.get(feve).setValeur(ac, stocksFeves.get(feve).getValeur() - quantite);
-				journal.ajouter(quantite + " tonnes de fèves " + feve + " ont été retirées du stock (nouveau stock : " + stocksFeves.get(feve).getValeur() + " tonnes).");
-		} else {
-				journal.ajouter("Tentative de retirer " + quantite + " tonnes de fèves " + feve + " rejetée (stock actuel : " + stocksFeves.get(feve).getValeur() + " tonnes).");
-		}	
 	}
 
 	public List<String> getMarques() {

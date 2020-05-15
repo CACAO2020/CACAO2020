@@ -22,29 +22,48 @@ public class AbsDistributeurChocolat implements IActeur {
 	}
 	
 	public String getNom() {
-		return "EQ7";
+		return ac.getNom();
 	}
 
+
 	public String getDescription() {
-		return "Distributeur de chocolat "+ ac.getNumero();
+		return ac.getDescription();
 	}
+
 
 	public Color getColor() {
 		return ac.getColor();
+	}
+
+
+	public List<String> getNomsFilieresProposees() {
+		return ac.getNomsFilieresProposees();
+	}
+
+
+	public Filiere getFiliere(String nom) {
+		return ac.getFiliere(nom);
+	}
+
+
+	public void setCryptogramme(Integer crypto) {
+		ac.setCryptogramme(crypto);
+	}
+
+
+	public void notificationFaillite(IActeur acteur) {
+		ac.notificationFaillite(acteur);
+	}
+
+
+	public void notificationOperationBancaire(double montant) {
+		ac.notificationOperationBancaire(montant);
 	}
 
 	public void initialiser() {
 	}
 
 	public void next() {
-	}
-
-	public List<String> getNomsFilieresProposees() {
-		return new ArrayList<String>();
-	}
-
-	public Filiere getFiliere(String nom) {
-		return null;
 	}
 
 	public List<Variable> getIndicateurs() {
@@ -63,13 +82,4 @@ public class AbsDistributeurChocolat implements IActeur {
 		return res;
 	}
 
-	public void setCryptogramme(Integer crypto) {
-		this.cryptogramme = crypto;
-	}
-	
-	public void notificationFaillite(IActeur acteur) {
-	}
-	
-	public void notificationOperationBancaire(double montant) {
-	}
 }

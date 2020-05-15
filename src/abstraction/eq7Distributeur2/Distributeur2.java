@@ -23,13 +23,13 @@ public class Distributeur2 implements IActeur, IAcheteurChocolatBourse, IDistrib
 	private static int NB_INSTANCES = 0;
 	public int numero;
 	
+	private int cryptogramme;
+	
 	private AcheteurChocolat acheteurChocolat;
 	private DistributeurChocolat distributeurChocolat;
 	private Stock stock;
 
 	private Journal journal;
-	
-	private Integer cryptogramme;
 	
 	public Distributeur2() {
 		NB_INSTANCES++;
@@ -75,10 +75,9 @@ public class Distributeur2 implements IActeur, IAcheteurChocolatBourse, IDistrib
 	}
 
 	public void initialiser() {
-	}
-
-	public void setCryptogramme(Integer crypto) {
-		this.cryptogramme = crypto;
+		acheteurChocolat.initialiser();
+		distributeurChocolat.initialiser();
+		stock.initialiser();
 	}
 
 	public void next() {
@@ -133,12 +132,16 @@ public class Distributeur2 implements IActeur, IAcheteurChocolatBourse, IDistrib
 	}
 
 	// Méthodes de l'acheteur de chocolat à la bourse
+	public void setCryptogramme(Integer crypto) {
+		this.cryptogramme = crypto;
+	}
+
 	public double getDemande(Chocolat chocolat, double cours) {
 		return acheteurChocolat.getDemande(chocolat, cours);
 	}
 
 	public Integer getCryptogramme(SuperviseurChocolatBourse superviseur) {
-		return acheteurChocolat.getCryptogramme(superviseur);
+		return this.cryptogramme;
 	}
 
 	public void notifierCommande(Chocolat chocolat, double quantiteObtenue, boolean payee) {
@@ -173,6 +176,5 @@ public class Distributeur2 implements IActeur, IAcheteurChocolatBourse, IDistrib
 	public List<ChocolatDeMarque> pubSouhaitee() {
 		return distributeurChocolat.pubSouhaitee();
 	}
-	
-	
+
 }

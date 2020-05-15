@@ -11,7 +11,6 @@ import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Variable;
 
-
 public class AcheteurChocolat extends AbsAcheteurChocolat implements IAcheteurChocolatBourse {
 	//Raphaël Caby
 	
@@ -20,11 +19,11 @@ public class AcheteurChocolat extends AbsAcheteurChocolat implements IAcheteurCh
 	}
 	
 	public double getDemande(Chocolat chocolat, double cours) {
-		return getDemandesChoco().get(chocolat).getValeur()* cours;
+		return getDemandesChoco().get(chocolat).getValeur();
 	}
 
 	public Integer getCryptogramme(SuperviseurChocolatBourse superviseur) {
-		return cryptogramme;
+		return ac.getCryptogramme(superviseur);
 	}
 
 	public void notifierCommande(Chocolat chocolat, double quantiteObtenue, boolean payee) {
@@ -57,7 +56,6 @@ public class AcheteurChocolat extends AbsAcheteurChocolat implements IAcheteurCh
 			}
 			getDemandesChoco().get(choco).setValeur(this, achatsAFaire);
 		}
-
 	}
 
 	public double max(double d1, double d2) {

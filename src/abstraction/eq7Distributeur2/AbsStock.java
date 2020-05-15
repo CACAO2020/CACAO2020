@@ -18,7 +18,6 @@ public class AbsStock implements IActeur {
 
 	protected Map<ChocolatDeMarque, Variable> stocksChocolatDeMarque;
 	protected Map<Chocolat, Variable> stocksChocolat;
-	protected Map<Feve, Variable> stocksFeves;
 	
 	protected Journal journal;
 	
@@ -30,26 +29,19 @@ public class AbsStock implements IActeur {
 		
 		stocksChocolatDeMarque=new HashMap<ChocolatDeMarque, Variable>();
 		stocksChocolat=new HashMap<Chocolat, Variable>();
-		for (Chocolat choco : ac.getAcheteurChocolat().gammesChocolat) {
-			stocksChocolat.put(choco, new Variable(getNom() + " : STOCK " + choco.name(), ac, 0));
+
+		for (Chocolat choco : Chocolat.values()) {
+			stocksChocolat.put(choco, new Variable(ac.getNom() + " : STOCK " + choco.name(), ac, 0));
 		}
 		
-		stocksFeves = new HashMap<Feve, Variable>();
-		for (Feve feve : Feve.values()) {
-				stocksFeves.put(feve, new Variable(getNom() + " : STOCK " + feve.name(), ac, 0));
-		}
-		
-		this.journal = new Journal(getNom() + " Stocks " + ac.getNumero(), ac);
+		this.journal = new Journal(ac.getNom() + " Stocks " + ac.getNumero(), ac);
 		this.journal.ajouter("EQ7 : Suivi des stocks de chocolats et de fèves");
 		
 	}
-	
-	public String getNom() {
-		return "EQ7";
-	}
+		
 	public List<Variable> getIndicateurs() {
 		List<Variable> res=new ArrayList<Variable>();
-		for (Chocolat choco : stocksChocolat.keySet()) {
+		for (Chocolat choco : Chocolat.values()) {
 			res.add(stocksChocolat.get(choco));
 		}
 		for (ChocolatDeMarque choco : stocksChocolatDeMarque.keySet()) {
@@ -69,49 +61,52 @@ public class AbsStock implements IActeur {
 		return res;
 	}
 
-	public String getDescription() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Color getColor() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public void initialiser() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	public void next() {
-		// TODO Auto-generated method stub
 		
 	}
+
+
+	public String getNom() {
+		return ac.getNom();
+	}
+
+
+	public String getDescription() {
+		return ac.getDescription();
+	}
+
+
+	public Color getColor() {
+		return ac.getColor();
+	}
+
 
 	public List<String> getNomsFilieresProposees() {
-		// TODO Auto-generated method stub
-		return null;
+		return ac.getNomsFilieresProposees();
 	}
+
 
 	public Filiere getFiliere(String nom) {
-		// TODO Auto-generated method stub
-		return null;
+		return ac.getFiliere(nom);
 	}
+
 
 	public void setCryptogramme(Integer crypto) {
-		// TODO Auto-generated method stub
-		
+		ac.setCryptogramme(crypto);
 	}
+
 
 	public void notificationFaillite(IActeur acteur) {
-		// TODO Auto-generated method stub
-		
+		ac.notificationFaillite(acteur);
 	}
 
+
 	public void notificationOperationBancaire(double montant) {
-		// TODO Auto-generated method stub
-		
+		ac.notificationOperationBancaire(montant);
 	}
 
 }
