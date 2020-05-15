@@ -17,7 +17,7 @@ public class AchatBourseEQ6 extends Stock implements IAcheteurChocolatBourse{
 	}
 
 
-
+	
 	private HashMap<Integer, HashMap<Chocolat, Double>> historiqueBourse;
 	
 	public double DemandeTotal(){
@@ -82,10 +82,7 @@ public class AchatBourseEQ6 extends Stock implements IAcheteurChocolatBourse{
 			}
 		}
 	
-		public void receptionner(Chocolat chocolat, double quantite) { //coder
-			//this.stocker(chocolat,  quantite);
-		}
-
+		
 	
 		
 		public Integer getCryptogramme(SuperviseurChocolatBourse superviseur) { //coder
@@ -93,5 +90,11 @@ public class AchatBourseEQ6 extends Stock implements IAcheteurChocolatBourse{
 				return this.cryptogramme;
 			}
 			return null;
+		}
+
+		@Override
+		public void receptionner(ChocolatDeMarque chocolat, double quantite) {
+			this.stocker(chocolat,  quantite);
+			
 		}
 }
