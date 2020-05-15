@@ -94,7 +94,6 @@ public class Distributeur2 implements IActeur {
 	}
 
 	public void next() {
-		stock.ajouterStockChocolat(this.stringToChoco("H"), 5);
 	}
 
 	public List<String> getNomsFilieresProposees() {

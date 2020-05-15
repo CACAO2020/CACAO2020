@@ -23,8 +23,7 @@ public class AbsStock implements IActeur {
 	//si on veut la quantité total de chocolat HGE p.ex., on fait appel à une fonction getStockChocolat qui calcule la somme
 	//des stocks de ce type de chocolat pour chaque marque.
 	
-	protected Map<Chocolat, Variable> stocksChocolat; 
-	protected Map<ChocolatDeMarque, Variable> stocksChocolatDeMarque;
+	protected Map<ChocolatDeMarque, Variable> stocksChocolat;
 	protected Map<Feve, Variable> stocksFeves;
 	protected Map<String, Chocolat> abreviationChocolats;
 	protected Map<String, Feve> abreviationFeves;
@@ -37,10 +36,10 @@ public class AbsStock implements IActeur {
 
 		this.ac = ac;
 		
-		stocksChocolat=new HashMap<Chocolat, Variable>();
-		for (Chocolat choco : Chocolat.values()) {
-			stocksChocolat.put(choco, new Variable(getNom() + " : STOCK " + choco.name(), ac, 0));
-		}
+		stocksChocolat=new HashMap<ChocolatDeMarque, Variable>();
+		//for (ChocolatDeMarque choco : Chocolat.values()) {
+		//	stocksChocolat.put(choco, new Variable(getNom() + " : STOCK " + choco.name(), ac, 0));
+		//}
 		
 		stocksFeves = new HashMap<Feve, Variable>();
 		for (Feve feve : Feve.values()) {
@@ -71,7 +70,7 @@ public class AbsStock implements IActeur {
 	}
 	public List<Variable> getIndicateurs() {
 		List<Variable> res=new ArrayList<Variable>();
-		for (Chocolat choco : Chocolat.values()) {
+		for (ChocolatDeMarque choco : stocksChocolat.keySet()) {
 			res.add(stocksChocolat.get(choco));
 		}
 		for (Feve feve : Feve.values()) {

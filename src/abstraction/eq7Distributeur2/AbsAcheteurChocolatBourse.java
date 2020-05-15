@@ -27,7 +27,7 @@ public class AbsAcheteurChocolatBourse implements IActeur {
 	public AbsAcheteurChocolatBourse(Distributeur2 ac) {
 		this.ac = ac;
 		demandeChoco=new HashMap<ChocolatDeMarque, Variable>();
-		for (ChocolatDeMarque choco : Chocolat.values()) {
+		for (ChocolatDeMarque choco : ac.getStock().stocksChocolat.keySet()) {
 			demandeChoco.put(choco, new Variable("Demande en : " + choco.name(), ac, 0));
 		}
 		this.journal = new Journal(this.getNom()+" Acheteur Chocolat Bourse " + ac.getNumero(), ac);

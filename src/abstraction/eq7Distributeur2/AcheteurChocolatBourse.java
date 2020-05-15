@@ -4,6 +4,7 @@ import java.util.Map;
 
 import abstraction.eq8Romu.chocolatBourse.IAcheteurChocolatBourse;
 import abstraction.eq8Romu.chocolatBourse.SuperviseurChocolatBourse;
+import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.ChocolatDeMarque;
 import abstraction.eq8Romu.produits.Feve;
 import abstraction.fourni.Filiere;
@@ -40,7 +41,7 @@ public class AcheteurChocolatBourse extends AbsAcheteurChocolatBourse implements
 	}
 	//WAIT FOR LEANDRE
 	public void next() {
-		for (ChocolatDeMarque choco : TODOChocolat.values()) {
+		for (ChocolatDeMarque choco : ac.getStock().stocksChocolat.keySet()) {
 		// L'opération sera effectuée pour CHAQUE type de chocolat que nous vendons
 		//D'abord on consulte les stocks
 			double stock_choco = ac.getStock().stocksChocolat.get(choco).getValeur();
@@ -59,6 +60,16 @@ public class AcheteurChocolatBourse extends AbsAcheteurChocolatBourse implements
 			
 		
 		}
+	}
+
+	// NE PAS UTILISER
+	public double getDemande(Chocolat chocolat, double cours) {
+		return 0;
+	}
+
+	// NE PAS UTILISER
+	public void notifierCommande(Chocolat chocolat, double quantiteObtenue, boolean payee) {
+		
 	}
 
 }
