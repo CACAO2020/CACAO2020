@@ -58,6 +58,17 @@ public class Transformateur2_stocks_et_transfos extends Transformateur2 implemen
 	private Variable coutUnitaireStockPate ; 
 	private Variable coutUnitaireStockChocolat ; 
 	
+	//Coût augmentation de la capacité max
+	
+	private Variable coutAgrandirCapacite ; 
+	
+	//seuil critique de production, qu'il soit trop bas ou trop haut: compris entre 0 et 1, pourcentage par rapport à capacité MAX
+	
+	private Variable seuilSupTFEP;
+	private Variable seuilInfTFEP;
+	private Variable seuilSupTPEC;
+	private Variable seuilInfTPEC;
+	
 	// l'initialisation nécessite de nombreuses variables, qui sont à modifier pour les tests
 	// il faut déterminer ces valeurs en essayant d'être réalistes et cohérents avec les autres équipes
 	
@@ -106,6 +117,14 @@ public class Transformateur2_stocks_et_transfos extends Transformateur2 implemen
 	
 		//utilise la fonction juste en dessous pour l'initialisation
 		this.valeurDesStocks = new Variable(getNom()+" valeur totale des stocks", this, this.calculeValeurDesStocks()) ;
+	
+		this.coutAgrandirCapacite = new Variable (getNom()+" cout unitaire pour augmenter la capacité max", this, 200);
+		
+		this.seuilInfTFEP=new Variable (getNom()+" seuil pour diminuer capacité MAX Feve -> Pate", this, 0);
+		this.seuilSupTFEP=new Variable (getNom()+" seuil pour augmenter capacité MAX Feve -> Pate", this, 1);
+		this.seuilInfTPEC=new Variable (getNom()+" seuil pour diminuer capacité MAX Pate -> Choco", this, 0);
+		this.seuilSupTPEC=new Variable (getNom()+" seuil pour augmenter capacité MAX Pate -> Choco", this, 1);
+	
 	}
 	
 	// Permet de calculer la valeur des stocks en additionnant la valeur de chaque stock de denrée, obtenu
