@@ -21,6 +21,8 @@ public class Stock {
 	private Map<Feve, List<Couple<Variable>>> stockFeves;
 	private Map<Chocolat, List<Couple<Variable>>> stockChocolat;
 	private Map<Pate, List<Couple<Variable>>> stockPate;
+	private Variable transformationCostFeve;
+	private Variable transformationCostPate;
 
 	public Stock(Transformateur3 acteur) {
 		this.acteur = acteur;
@@ -45,6 +47,8 @@ public class Stock {
 		this.stockChocolat.put(Chocolat.CHOCOLAT_HAUTE_EQUITABLE, new ArrayList<Couple<Variable>>());
 		this.stockPate.put(Pate.PATE_BASSE, new ArrayList<Couple<Variable>>());
 		this.stockPate.put(Pate.PATE_MOYENNE, new ArrayList<Couple<Variable>>());
+		this.transformationCostFeve = new Variable(acteur.getNom() + "Cout transformation feve à chocolat", acteur, 10000);
+		this.transformationCostPate = new Variable(acteur.getNom() + "Cout transformation pate à chocolat", acteur, 4000);
 
 	}
 
@@ -58,6 +62,12 @@ public class Stock {
 
 	public Map<Pate, List<Couple<Variable>>> getStockPate() {
 		return this.stockPate;
+	}
+	public Variable getTransformationCostFeve() {
+		return this.transformationCostFeve;
+	}
+	public Variable getTransformationCostPate() {
+		return this.transformationCostPate;
 	}
 
 	public double getQuantitéFeves(Feve feve) {
@@ -217,9 +227,18 @@ public class Stock {
 	public void retirerChocolat(Chocolat choco, double quantite) {
 		this.majStockChocolat(choco);
 		List<Couple<Variable>> table = this.stockChocolat.get(choco);
-		
+		double quantiteAEnlever = quantite;
+		if (getQuantitéChocolat(choco) >= quantite) {
+			while (quantiteAEnlever != 0) {
+				double prix = this.prixMaxStock(table);
+				if (getQuantitePrixChocolat(choco, prix) >= quantiteAEnlever) {
+					this.retirerChocolatPrix(choco, quantiteAEnlever, prix);
+				} else {
+					
+				}
+			}
+		}
 	}
-
 	public void ajoutChocolat(Chocolat choco, double quantite, double prix) {
 		if (quantite > 0) {
 			this.stockChocolat.get(choco)
