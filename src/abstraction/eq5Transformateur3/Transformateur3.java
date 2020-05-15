@@ -84,6 +84,8 @@ public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurCh
 		// TODO ici devront être mis les paramètres dont je parlais (finalement ce
 		// seront des variables qu'il faudra penser à ajouter ici)
 		List<Variable> res = new ArrayList<Variable>();
+		res.add(this.stock.getTransformationCostFeve());
+		res.add(this.stock.getTransformationCostPate());
 		return res;
 	}
 
