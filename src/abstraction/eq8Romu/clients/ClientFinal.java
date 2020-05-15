@@ -183,6 +183,7 @@ public class ClientFinal implements IActeur {
 		Map<Chocolat, List<ChocolatDeMarque>> chocolatsDeMarqueParType=chocolatsDeMarqueParType();
 		this.attractiviteChocolat = new HashMap<ChocolatDeMarque, Double>();
 		for (ChocolatDeMarque choco : tousLesChocolatsDeMarquePossibles) {
+			System.out.println("-- "+choco.name());
 			switch (choco.getChocolat()) {
 			case CHOCOLAT_BASSE : attractiviteChocolat.put(choco, 4.0/(chocolatsDeMarqueParType.get(Chocolat.CHOCOLAT_BASSE).size()==0? 1.0:chocolatsDeMarqueParType.get(Chocolat.CHOCOLAT_BASSE).size())); break;
 			case CHOCOLAT_MOYENNE : attractiviteChocolat.put(choco, 2.0/(chocolatsDeMarqueParType.get(Chocolat.CHOCOLAT_MOYENNE).size()==0? 1.0:chocolatsDeMarqueParType.get(Chocolat.CHOCOLAT_MOYENNE).size())); break;
@@ -233,6 +234,21 @@ public class ClientFinal implements IActeur {
 			} else {
 				return 0.0;
 			}
+		} else {
+			throw new IllegalArgumentException(" Appel de ClientFinal.getVentes avec etape=="+etape+" alors que les etapes valides sont "+this.historiqueVentes.keySet());
+		}
+	}
+
+	public double getVentes(int etape, Chocolat choco) {
+		if (this.historiqueVentes.keySet().contains(etape)) {
+			Map<ChocolatDeMarque, Double> ventes = this.historiqueVentes.get(etape);
+			double totalVentes=0.0;
+			for (ChocolatDeMarque cdm : ventes.keySet()) {
+				if (cdm.getChocolat().equals(choco)) {
+					totalVentes=totalVentes+ventes.get(cdm);
+				}
+			}
+			return totalVentes;
 		} else {
 			throw new IllegalArgumentException(" Appel de ClientFinal.getVentes avec etape=="+etape+" alors que les etapes valides sont "+this.historiqueVentes.keySet());
 		}
@@ -423,7 +439,7 @@ public class ClientFinal implements IActeur {
 					this.journal.ajouter("PUB de "+distri.getNom());
 					for (ChocolatDeMarque choc : produits) {
 						if (!attractiviteChocolat.containsKey(choc)) {
-							throw new Error(" appele sur l'acteur "+distri.getNom()+" la methode pubSouhaitee retourne une liste contenant un chocolat ne possedant pas d'attractivite");
+							throw new Error(" appele sur l'acteur "+distri.getNom()+" la methode pubSouhaitee retourne une liste contenant un chocolat ne possedant pas d'attractivite:"+choc.name());
 						} else {
 							attractiviteChocolat.put(choc, attractiviteChocolat.get(choc)*(1.0+ (0.15/produits.size())));
 							memorisePubs(distri);
