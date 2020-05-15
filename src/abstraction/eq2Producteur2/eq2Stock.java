@@ -110,7 +110,6 @@ public void seuil_employees() {
 	double ratio = this.nbemployees/this.NbTotalArbres();
 	double ratio_optimal = 1/500;
 	for (int i=0; i<this.getPaquetsArbres().size()+1;i++) {this.getPaquetsArbres().get(i).setProdmax(7.5*ratio*1/ratio_optimal);} 
-	
-	
 }
+
 }
