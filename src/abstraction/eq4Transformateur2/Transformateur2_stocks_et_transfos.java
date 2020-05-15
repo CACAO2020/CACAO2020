@@ -1,4 +1,4 @@
-package abstraction.eq4Transformateur2;
+package abstraction.eq4Transformateur2; 
 
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
