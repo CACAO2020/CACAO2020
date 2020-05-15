@@ -20,7 +20,7 @@ public class VenteChocolat {
 
     public VenteChocolat(Transformateur3 acteur) {
         this.acteur = acteur;
-        this.seuilRentabilite = 0;
+        this.seuilRentabilite = 1000;
         tentativeDeVente = new HashMap<>();
     }
 
