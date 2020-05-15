@@ -78,7 +78,7 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 	}
 
 	public Filiere getFiliere(String nom) {
-		if (nom == "TESTCRIEEPROD1") {
+		if (nom.equals("TESTCRIEEPROD1")) {
 			return new FiliereTestCrieeProd1();
 		}
 		else {
