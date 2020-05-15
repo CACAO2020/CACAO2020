@@ -12,11 +12,6 @@ import abstraction.eq8Romu.produits.Gamme;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;;
 public abstract class VendeurChocolat extends AcheteurCacao implements IVendeurChocolatBourse {
-	
-	/** @author K. GUTIERREZ  */
-	public VendeurChocolat(ActeurEQ3 acteur) {
-		super(acteur);
-	}
 
 	/** @author K. GUTIERREZ  */
 	public double getOffre(Chocolat chocolat, double cours) {

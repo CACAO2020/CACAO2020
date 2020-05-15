@@ -13,5 +13,4 @@ import abstraction.fourni.Filiere;
 public class Transformateur1 extends VendeurChocolat {
 
 
-
 }
