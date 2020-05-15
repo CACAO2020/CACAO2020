@@ -65,6 +65,10 @@ class GestionCriee //implements IVendeurCacaoCriee
 	//Clément
 	public void notifierAucuneProposition(LotCacaoCriee lot) {
 		lastPrixVente -= 20;
+		if(lastPrixVente <= 0)
+		{
+			lastPrixVente = 1;
+		}
 	}
 
 	//Clément
