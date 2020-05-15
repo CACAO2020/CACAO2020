@@ -50,12 +50,12 @@ public class PaquetArbres {
 		double prodmaxForastero_bio = 6;
 		double prodmaxCriollo_bio = 6;
 		if (this.type.equals(Feve.FEVE_BASSE)){
-			return prodmaxTrinitario*(1-Math.exp(this.age))*this.nbreArbres;
+			return prodmaxTrinitario*(1-Math.exp(-this.age))*this.nbreArbres;
 		}
 		if (this.type.equals(Feve.FEVE_MOYENNE)){
-			return prodmaxForastero*(1-Math.exp(this.age))*this.nbreArbres;}
+			return prodmaxForastero*(1-Math.exp(-this.age))*this.nbreArbres;}
 		else 
-			{return prodmaxCriollo*(1-Math.exp(this.age))*this.nbreArbres;}
+			{return prodmaxCriollo*(1-Math.exp(-this.age))*this.nbreArbres;}
 		
 	}
 	
