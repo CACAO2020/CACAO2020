@@ -48,21 +48,20 @@ public class Transformateur2_negoce extends Transformateur2_e1 implements IAchet
 
 	//pour l'instant il essaie d'acheter tout ce qui passe mais à l'avenir on aura un if lot.quantiteentonne <= quantité_dont_on_a_besoin  
 	public double proposerAchat(LotCacaoCriee lot) {
-		double prix = 0;
-		for (IActeur ac : Filiere.LA_FILIERE.getActeurs()) {
-			if (ac instanceof IAcheteurCacaoCriee) {
-				double prop = ((IAcheteurCacaoCriee) ac).proposerAchat(lot);
-				if (prix<prop) {
-					prix = prop;
-				}
-			}
-		}
-		if (prix<this.prixMaxAchatFeves.get(lot.getFeve()).getValeur()&&
-				super.getSolde()*0.5>lot.getQuantiteEnTonnes()*prix) { // ON ACHETE QUE SI LE VALEUR DU LOT EST < 50% DE NOTRE SOLDE (PEUT ETRE MODIFIE
-			return prix+13;
+		Class classeAppelante = null;
+        try { 
+            Exception e = new Exception();
+            String name = ((e.getStackTrace())[1]).getClassName();
+            classeAppelante = Class.forName( name );
+        } catch(Exception e2) {
+            classeAppelante = null; 
+        }
+if (!classeAppelante.equals(SuperviseurCacaoCriee.class)) { throw new Error("la concurrence tente de nous arnaquer"); }
+		if (super.getSolde()*0.5>lot.getQuantiteEnTonnes()*this.prixMaxAchatFeves.get(lot.getFeve()).getValeur()) { // ON ACHETE QUE SI LE VALEUR DU LOT EST < 50% DE NOTRE SOLDE (PEUT ETRE MODIFIE
+			return this.prixMaxAchatFeves.get(lot.getFeve()).getValeur();
 		}
 		else {
-			return 1;
+			return 3;
 		}
 	}
 
