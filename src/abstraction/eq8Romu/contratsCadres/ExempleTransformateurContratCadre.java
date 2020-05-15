@@ -1,40 +1,39 @@
-package abstraction.eq8Romu.clients;
+package abstraction.eq8Romu.contratsCadres;
 
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
-@Deprecated
-public class ExempleAbsDistributeurChocolat implements IActeur {
+
+public class ExempleTransformateurContratCadre implements IActeur {
 	private static int NB_INSTANCES = 0; // Afin d'attribuer un nom different a toutes les instances
 	protected int numero;
-	protected Variable stockChocolat;
+	protected Variable stock;
 	protected Integer cryptogramme;
-	protected Chocolat chocolat;
+	protected Object produit;
 	protected Journal journal;
 
-	public ExempleAbsDistributeurChocolat(Chocolat choco) {	
-		if (choco==null) {
-			throw new IllegalArgumentException("creation d'une instance de ExempleAbsDistributeurChocolat avec choco==null");
+	public ExempleTransformateurContratCadre(Object produit) {	
+		if (produit==null) {
+			throw new IllegalArgumentException("creation d'une instance de ExempleTransformateurContratCadre avec produit==null");
 		}		
 		NB_INSTANCES++;
 		this.numero=NB_INSTANCES;
-		this.chocolat = choco;
-		this.stockChocolat=new Variable(getNom()+" stock "+choco.name(), this, 0, 10000, 1000);
+		this.produit=produit;
+		this.stock=new Variable(getNom()+" stock ", this, 0, 10000, 1000);
 		this.journal = new Journal(this.getNom()+" activites", this);
 	}
 	
 	public String getNom() {
-		return "D.Choco"+this.numero+""+chocolat.name();
+		return "TCC"+this.numero+""+produit.toString();
 	}
 
 	public String getDescription() {
-		return "Distributeur de chocolat "+this.numero+" "+this.chocolat.name();
+		return "TransformateurContratCadre "+this.numero+" "+this.produit.toString();
 	}
 
 	public Color getColor() {
@@ -57,7 +56,7 @@ public class ExempleAbsDistributeurChocolat implements IActeur {
 
 	public List<Variable> getIndicateurs() {
 		List<Variable> res=new ArrayList<Variable>();
-		res.add(this.stockChocolat);
+		res.add(this.stock);
 		return res;
 	}
 

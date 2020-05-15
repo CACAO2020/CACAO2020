@@ -15,12 +15,20 @@ public class PaquetArbres {
 	private int nbreArbres;
 	private int age;
 	private Feve type;
-	
+	private double prodmax;
 	
 	public PaquetArbres(int nbreA, Feve type) {
 		this.nbreArbres = nbreA;
 		this.age = 0;
 		this.type = type;
+		this.prodmax = 7.5;
+	}
+	
+	public double getProdmax() {
+		return this.prodmax;
+	}
+	public void setProdmax(double prodmax) {
+		this.prodmax = prodmax;
 	}
 	
 	public int getNbreArbres() {
@@ -41,21 +49,21 @@ public class PaquetArbres {
 	/**
 	 * 
 	 * @author lucas P
+	 * @author Kristof
 	 */
 	public double production() {
-		double prodmaxTrinitario = 7.5;
-		double prodmaxForastero = 7.5;
-		double prodmaxCriollo = 7.5;
-		double prodmaxTrinitario_bio = 6;
-		double prodmaxForastero_bio = 6;
-		double prodmaxCriollo_bio = 6;
-		if (this.type.equals(Feve.FEVE_BASSE)){
-			return prodmaxTrinitario*(1-Math.exp(-this.age))*this.nbreArbres;
+		if (this.getAge() < 3) {
+			return 0.0;
 		}
-		if (this.type.equals(Feve.FEVE_MOYENNE)){
-			return prodmaxForastero*(1-Math.exp(-this.age))*this.nbreArbres;}
-		else 
-			{return prodmaxCriollo*(1-Math.exp(-this.age))*this.nbreArbres;}
+		else if(this.getAge() < 6) {
+			return ((this.getAge() - 2)*0.25*this.getProdmax());
+		}
+		else if(this.getAge() < 31) {
+			return this.getProdmax();
+		}
+		else {
+			return(this.getProdmax()*(1-(this.getAge() - 30)/15));
+		}
 		
 	}
 	

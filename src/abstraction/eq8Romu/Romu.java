@@ -7,6 +7,7 @@ import java.util.List;
 import abstraction.eq8Romu.cacaoCriee.FiliereTestVentesCacaoCriee;
 import abstraction.eq8Romu.chocolatBourse.FiliereTestVentesChocolatBourse;
 import abstraction.eq8Romu.clients.FiliereTestClientFinal;
+import abstraction.eq8Romu.contratsCadres.FiliereTestContratCadre;
 import abstraction.eq8Romu.ventesCacaoAleatoires.FiliereVentesCacaoAleatoires;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
@@ -50,6 +51,7 @@ public class Romu implements IActeur {
 		filieres.add("TESTCRIEE"); 
 		filieres.add("TESTBOURSE"); 
 		filieres.add("TESTCLIENT"); 
+		filieres.add("TESTCC");//Contrat Cadre 
 		return filieres;
 	}
 
@@ -59,6 +61,7 @@ public class Romu implements IActeur {
 		case "TESTCRIEE" : return new FiliereTestVentesCacaoCriee();
 		case "TESTBOURSE" : return new FiliereTestVentesChocolatBourse();
 		case "TESTCLIENT" : return new FiliereTestClientFinal();
+		case "TESTCC" : return new FiliereTestContratCadre();
 	    default : return null;
 		}
 	}
@@ -87,5 +90,5 @@ public class Romu implements IActeur {
 	
 	public void notificationOperationBancaire(double montant) {
 	}
-
 }
+
