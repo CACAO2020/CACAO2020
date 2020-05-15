@@ -6,7 +6,7 @@ import java.util.Random;
 
 
 /*
- * Créé par Thalie
+ * Cree par Thalie
  */
 
 /*
