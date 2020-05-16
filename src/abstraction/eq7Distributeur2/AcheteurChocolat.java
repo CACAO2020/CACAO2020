@@ -46,6 +46,7 @@ public class AcheteurChocolat extends AbsAcheteurChocolat implements IAcheteurCh
 		} else {
 			journal.ajouter(Journal.texteColore(warningColor, Color.BLACK, "[IMPAIEMENT] Confirmation d'une commande de " + quantiteObtenue + " tonnes de " + chocolat.name() + "."));
 		}
+		demandesChoco.get(chocolat).setValeur(ac, demandesChoco.get(chocolat).getValeur()-quantiteObtenue);
 	}
 	
 	public void receptionner(ChocolatDeMarque chocolat, double quantite) {
@@ -63,20 +64,14 @@ public class AcheteurChocolat extends AbsAcheteurChocolat implements IAcheteurCh
 			// D'abord on consulte les stocks
 			double stockChoco = ac.getStock().getStockChocolat(choco);
 			// Ensuite on demande au vendeur quelle quantité lui est demandée
-			double demandeVendeur = 1.;   //Le temps de progresser dans le fichier vendeur
+			double demandeVendeur = 10.;   //Le temps de progresser dans le fichier vendeur
 			// On compare la demande du vendeur et les stocks
-			double achatsAFaire = max(demandeVendeur - stockChoco, 0.);
-			if (achatsAFaire == 0.) {
-				// Si achatsAFaire < 0 alors on n'achète rien
-			}
-			else {
-				// Sinon on positionne la demande sur achatsAFaire
-			}
-			
+			double achatsAFaire;
 			if (choco.getGamme() == Gamme.BASSE) {
 				achatsAFaire = 0;
-			}
-			
+			} else {
+				achatsAFaire = max(demandeVendeur - stockChoco, 0.);
+			}	
 			demandesChoco.get(choco).setValeur(this, achatsAFaire);
 		}
 	}

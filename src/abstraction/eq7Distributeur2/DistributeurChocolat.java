@@ -69,7 +69,7 @@ public class DistributeurChocolat extends AbsDistributeurChocolat implements IDi
 
 	public double prix(ChocolatDeMarque choco) {
 		double cours;
-		double pourcentageMarge = 5;
+		double pourcentageMarge = 50;
 		if (Filiere.LA_FILIERE.getEtape() > 1) {
             cours = Filiere.LA_FILIERE.getIndicateur("BourseChoco cours " + choco.getChocolat().name()).getHistorique().get(Filiere.LA_FILIERE.getEtape()-1).getValeur();
         } else {
