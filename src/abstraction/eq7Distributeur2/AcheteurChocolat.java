@@ -42,16 +42,16 @@ public class AcheteurChocolat extends AbsAcheteurChocolat implements IAcheteurCh
 
 	public void notifierCommande(Chocolat chocolat, double quantiteObtenue, boolean payee) {
 		if (payee) {
-			journal.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[PAIEMENT] Confirmation d'une commande de " + quantiteObtenue + " tonnes de " + chocolat.name() + "."));
+			journal.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[PAIEMENT] Confirmation d'une commande de " + Journal.doubleSur(quantiteObtenue,2) + " tonnes de " + chocolat.name() + "."));
 		} else {
-			journal.ajouter(Journal.texteColore(warningColor, Color.BLACK, "[IMPAIEMENT] Confirmation d'une commande de " + quantiteObtenue + " tonnes de " + chocolat.name() + "."));
+			journal.ajouter(Journal.texteColore(warningColor, Color.BLACK, "[IMPAIEMENT] Confirmation d'une commande de " + Journal.doubleSur(quantiteObtenue,2) + " tonnes de " + chocolat.name() + "."));
 		}
 		demandesChoco.get(chocolat).setValeur(ac, demandesChoco.get(chocolat).getValeur()-quantiteObtenue);
 	}
 	
 	public void receptionner(ChocolatDeMarque chocolat, double quantite) {
 		ac.getStock().ajouterStockChocolat(chocolat, quantite);
-		journal.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[RÉCEPTION] Réception de " + quantite + " tonnes de " + chocolat.name() + "."));
+		journal.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[RÉCEPTION] Réception de " + Journal.doubleSur(quantite,2) + " tonnes de " + chocolat.name() + "."));
 		ac.getDistributeurChocolat().ajouterProduitAuCatalogue(chocolat);
 	}
 

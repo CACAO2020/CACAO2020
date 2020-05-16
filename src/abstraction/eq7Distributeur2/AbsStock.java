@@ -33,15 +33,10 @@ public class AbsStock {
 	public AbsStock(Distributeur2 ac) {
 
 		this.ac = ac;
-
 		stocksChocolatDeMarque=new HashMap<ChocolatDeMarque, Variable>();
 		stocksChocolat=new HashMap<Chocolat, Variable>();
 		
-		this.journal = new Journal(getNom() + " : Stocks", ac);
-		this.journal.ajouter(Journal.texteColore(titleColor, Color.WHITE, this.getNom() + " : Suivi des stocks de chocolat"));
-		journal.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "Les stocks du distributeur sont enregistrés dans ce journal."));
-		journal.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "On y retrouve les créations de stock (correspondant à la première"));
-		journal.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "entrée d'un type de chocolat), les entrées et les sorties de stock."));
+		initJournaux();
 
 		for (Chocolat choco : Chocolat.values()) {
 			if (!choco.equals(Chocolat.CHOCOLAT_BASSE)) {
@@ -49,13 +44,19 @@ public class AbsStock {
 				journal.ajouter(Journal.texteColore(metaColor, Color.BLACK,"[CRÉATION] Création d'un stock pour le " + choco + "."));
 			}
 		}
-		
 	}
 		
+	public void initJournaux() {
+		this.journal = new Journal(getNom() + " : Stocks", ac);
+		this.journal.ajouter(Journal.texteColore(titleColor, Color.WHITE, this.getNom() + " : Suivi des stocks de chocolat"));
+		journal.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "Les stocks du distributeur sont enregistrés dans ce journal."));
+		journal.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "On y retrouve les créations de stock (correspondant à la première"));
+		journal.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "entrée d'un type de chocolat), les entrées et les sorties de stock."));
+	}
+	
 	public List<Variable> getIndicateurs() {
 		List<Variable> res=new ArrayList<Variable>();
 		for (Chocolat choco : Chocolat.values()) {
-			// On n'affiche pas le stock de chocolat basse qualité car celui-ci ne variera pas
 			if (!choco.equals(Chocolat.CHOCOLAT_BASSE)) {
 				res.add(stocksChocolat.get(choco));
 			}

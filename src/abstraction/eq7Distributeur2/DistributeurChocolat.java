@@ -23,17 +23,11 @@ public class DistributeurChocolat extends AbsDistributeurChocolat implements IDi
 
 	protected Map<Chocolat, Double> prixParDefaut;
 	protected List<ChocolatDeMarque> produitsCatalogue;
-	protected Journal journalCatalogue;
 	
 	public DistributeurChocolat(Distributeur2 ac) {
 		super(ac);
 		produitsCatalogue = new ArrayList<ChocolatDeMarque>();
-		journalCatalogue = new Journal(ac.getNom() + " : Catalogue du distributeur", ac);
-		journalCatalogue.ajouter(Journal.texteColore(titleColor, Color.WHITE, this.getNom() + " : Catalogue du distributeur"));
-		journalCatalogue.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "Ce journal présente le contenu du catalogue du distributeur à chaque étape :"));
-		journalCatalogue.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "types de chocolat en vente, quantités disponibles à la vente et prix à l'unité."));
-		journalCatalogue.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "Il est mis à jour à chaque appel de la commande next() du distributeur,"));
-		journalCatalogue.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "soit APRÈS la vente au client final et AVANT la réception des commandes de l'étape."));
+
 		prixParDefaut = new HashMap<Chocolat, Double>();
 		prixParDefaut.put(Chocolat.CHOCOLAT_MOYENNE, 10000.);
 		prixParDefaut.put(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE, 14000.);
@@ -41,6 +35,8 @@ public class DistributeurChocolat extends AbsDistributeurChocolat implements IDi
 		prixParDefaut.put(Chocolat.CHOCOLAT_HAUTE_EQUITABLE, 20000.);
 	}
 
+	
+	
 	public boolean commercialise(Chocolat choco) {
 		return !choco.getGamme().equals(Gamme.BASSE);
 	}
@@ -73,7 +69,7 @@ public class DistributeurChocolat extends AbsDistributeurChocolat implements IDi
 
 	public double prix(ChocolatDeMarque choco) {
 		double cours;
-		double pourcentageMarge = 50;
+		double pourcentageMarge = 500;
 		if (Filiere.LA_FILIERE.getEtape() > 1) {
             cours = Filiere.LA_FILIERE.getIndicateur("BourseChoco cours " + choco.getChocolat().name()).getHistorique().get(Filiere.LA_FILIERE.getEtape()-1).getValeur();
         } else {
@@ -89,7 +85,7 @@ public class DistributeurChocolat extends AbsDistributeurChocolat implements IDi
 	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant) {
 		if (client!=null) { 
 			ac.getStock().retirerStockChocolat(choco, quantite);
-			journal.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[VENTE] Vente de " + quantite + " tonnes de " + choco.name() + " à " + client.getNom() + " pour " + montant + " (" + montant/quantite + "/tonne)."));
+			journal.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[VENTE] Vente de " + Journal.doubleSur(quantite,2) + " tonnes de " + choco.name() + " à " + client.getNom() + " pour " + Journal.doubleSur(montant,2) + " (" + Journal.doubleSur(montant/quantite,2) + "/tonne)."));
 		}
 	}
 
@@ -99,23 +95,6 @@ public class DistributeurChocolat extends AbsDistributeurChocolat implements IDi
 
 	public List<ChocolatDeMarque> pubSouhaitee() {
 		return null;
-	}
-	
-	public List<Variable> getIndicateurs() {
-		List<Variable> res = new ArrayList<Variable>();
-		return res;
-	}
-
-	public List<Variable> getParametres() {
-		List<Variable> res=new ArrayList<Variable>();
-		return res;
-	}
-
-	public List<Journal> getJournaux() {
-		List<Journal> res = new ArrayList<Journal>();
-		res.add(journal);
-		res.add(journalCatalogue);
-		return res;
 	}
 
 }

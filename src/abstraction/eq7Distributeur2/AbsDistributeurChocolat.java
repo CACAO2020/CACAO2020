@@ -11,10 +11,13 @@ import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
 public class AbsDistributeurChocolat {
+	
 	protected Integer cryptogramme;
-	protected Journal journal;
 
 	protected Distributeur2 ac;
+	
+	protected Journal journalCatalogue;
+	protected Journal journal;
 	
 	public Color titleColor = Color.BLACK;
 	public Color metaColor = Color.CYAN;
@@ -25,10 +28,21 @@ public class AbsDistributeurChocolat {
 	
 	public AbsDistributeurChocolat(Distributeur2 ac) {	
 		this.ac = ac;
-		this.journal = new Journal(this.getNom() + " : Distributeur Chocolat", ac);
+		initJournaux();
+	}
+	
+	public void initJournaux() {
+		journal = new Journal(this.getNom() + " : Distributeur Chocolat", ac);
 		journal.ajouter(Journal.texteColore(titleColor, Color.WHITE, this.getNom() + " : Distributeur Chocolat"));
 		journal.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "Ce journal mémorise les activités du distributeur, vendeur de chocolat au client"));
 		journal.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "final. Il affiche les ventes effectuées et les alertes lorsqu'un rayon est vide."));
+		
+		journalCatalogue = new Journal(ac.getNom() + " : Catalogue du distributeur", ac);
+		journalCatalogue.ajouter(Journal.texteColore(titleColor, Color.WHITE, this.getNom() + " : Catalogue du distributeur"));
+		journalCatalogue.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "Ce journal présente le contenu du catalogue du distributeur à chaque étape :"));
+		journalCatalogue.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "types de chocolat en vente, quantités disponibles à la vente et prix à l'unité."));
+		journalCatalogue.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "Il est mis à jour à chaque appel de la commande next() du distributeur,"));
+		journalCatalogue.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "soit APRÈS la vente au client final et AVANT la réception des commandes de l'étape."));
 	}
 	
 	public String getNom() {
@@ -63,4 +77,20 @@ public class AbsDistributeurChocolat {
 		ac.notificationOperationBancaire(montant);
 	}
 
+	public List<Variable> getIndicateurs() {
+		List<Variable> res = new ArrayList<Variable>();
+		return res;
+	}
+
+	public List<Variable> getParametres() {
+		List<Variable> res=new ArrayList<Variable>();
+		return res;
+	}
+
+	public List<Journal> getJournaux() {
+		List<Journal> res = new ArrayList<Journal>();
+		res.add(journal);
+		res.add(journalCatalogue);
+		return res;
+	}
 }

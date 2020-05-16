@@ -26,7 +26,11 @@ public class AbsAcheteurChocolat {
 	public Color descriptionColor = Color.YELLOW;
 	
 	public AbsAcheteurChocolat(Distributeur2 ac) {
-		this.ac = ac;		
+		this.ac = ac;	
+		initJournaux();
+	}
+	
+	public void initJournaux() {
 		this.journal = new Journal(this.getNom() + " : Acheteur Chocolat Bourse", ac);
 		journal.ajouter(Journal.texteColore(titleColor, Color.WHITE, this.getNom() + " : Acheteur Chocolat Bourse"));
 		journal.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "Ce journal suit les activités de l'acheteur de chocolat à la bourse"));
