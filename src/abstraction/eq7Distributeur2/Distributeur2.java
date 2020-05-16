@@ -29,6 +29,8 @@ public class Distributeur2 implements IActeur, IAcheteurChocolatBourse, IDistrib
 	private DistributeurChocolat distributeurChocolat;
 	private Stock stock;
 
+	public List<Chocolat> nosChoco;
+	
 	public Color titleColor = Color.BLACK;
 	public Color alertColor = Color.RED;
 	public Color descriptionColor = Color.YELLOW;
@@ -38,6 +40,11 @@ public class Distributeur2 implements IActeur, IAcheteurChocolatBourse, IDistrib
 	public Distributeur2() {
 		NB_INSTANCES++;
 		numero = NB_INSTANCES;
+		nosChoco = new ArrayList<Chocolat>();
+		nosChoco.add(Chocolat.CHOCOLAT_MOYENNE);
+		nosChoco.add(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE);
+		nosChoco.add(Chocolat.CHOCOLAT_HAUTE);
+		nosChoco.add(Chocolat.CHOCOLAT_HAUTE_EQUITABLE);
 		acheteurChocolat = new AcheteurChocolat(this);
 		distributeurChocolat = new DistributeurChocolat(this);
 		stock = new Stock(this);

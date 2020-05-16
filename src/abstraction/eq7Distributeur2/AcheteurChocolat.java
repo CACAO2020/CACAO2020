@@ -4,6 +4,10 @@ import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.sun.tools.javac.util.List;
+import com.sun.tools.javac.util.Pair;
+
+import abstraction.eq8Romu.chocolatBourse.CommandeChocolat;
 import abstraction.eq8Romu.chocolatBourse.IAcheteurChocolatBourse;
 import abstraction.eq8Romu.chocolatBourse.SuperviseurChocolatBourse;
 import abstraction.eq8Romu.produits.Chocolat;
@@ -18,14 +22,8 @@ import abstraction.fourni.Variable;
 public class AcheteurChocolat extends AbsAcheteurChocolat implements IAcheteurChocolatBourse, IActeur {
 	//Raphaël Caby
 	
-	protected Map<Chocolat, Variable> demandesChoco;
-	
 	public AcheteurChocolat(Distributeur2 ac) {
 		super(ac);
-		demandesChoco = new HashMap<Chocolat, Variable>();
-		for (Chocolat choco : Chocolat.values()) {
-			demandesChoco.put(choco, new Variable("Demande en " + choco.name(), ac, 0));
-		}
 	}
 	
 	public Map<Chocolat, Variable> getDemandes() {
@@ -44,35 +42,46 @@ public class AcheteurChocolat extends AbsAcheteurChocolat implements IAcheteurCh
 		if (payee) {
 			journal.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[PAIEMENT] Confirmation d'une commande de " + Journal.doubleSur(quantiteObtenue,2) + " tonnes de " + chocolat.name() + "."));
 		} else {
-			journal.ajouter(Journal.texteColore(warningColor, Color.BLACK, "[IMPAIEMENT] Confirmation d'une commande de " + Journal.doubleSur(quantiteObtenue,2) + " tonnes de " + chocolat.name() + "."));
+			journal.ajouter(Journal.texteColore(warningColor, Color.BLACK, "[IMPAIEMENT] La commande de " + Journal.doubleSur(quantiteObtenue,2) + " tonnes de " + chocolat.name() + " est impayée."));
+			commandeImpayee = new Pair<Chocolat, Double>(chocolat, quantiteObtenue);
 		}
 		demandesChoco.get(chocolat).setValeur(ac, demandesChoco.get(chocolat).getValeur()-quantiteObtenue);
 	}
 	
 	public void receptionner(ChocolatDeMarque chocolat, double quantite) {
 		ac.getStock().ajouterStockChocolat(chocolat, quantite);
+		if (commandeImpayee != null) {
+			journal.ajouter(Journal.texteColore(warningColor, Color.BLACK, "[PAIEMENT] La commande impayée de " + Journal.doubleSur(quantite,2) + " tonnes de " + chocolat.name() + " a été payée."));
+			commandeImpayee = null;
+		}
 		journal.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[RÉCEPTION] Réception de " + Journal.doubleSur(quantite,2) + " tonnes de " + chocolat.name() + "."));
 		ac.getDistributeurChocolat().ajouterProduitAuCatalogue(chocolat);
+		chocoReceptionne.get(chocolat.getChocolat()).setValeur(ac, chocoReceptionne.get(chocolat.getChocolat()).getValeur() + quantite);
 	}
 
 	public void initialiser() {
 	}
 	
 	public void next() {
-		// L'opération sera effectuée pour CHAQUE type de chocolat que nous vendons
+		double totalVentesEtapePrecedente;
+		for (Chocolat choco : ac.nosChoco) {
+				double stockChoco = ac.getStock().getStockChocolat(choco);
+				if (Filiere.LA_FILIERE.getEtape() > 0) {
+					totalVentesEtapePrecedente = Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape(), choco);
+				} else {
+					totalVentesEtapePrecedente = 1.;
+				}
+				
+				double demandeVendeur = totalVentesEtapePrecedente*2;
+
+				double achatsAFaire = max(demandeVendeur - stockChoco, 0.);
+				
+				demandesChoco.get(choco).setValeur(this, achatsAFaire);
+		}
 		for (Chocolat choco : Chocolat.values()) {
-			// D'abord on consulte les stocks
-			double stockChoco = ac.getStock().getStockChocolat(choco);
-			// Ensuite on demande au vendeur quelle quantité lui est demandée
-			double demandeVendeur = 10.;   //Le temps de progresser dans le fichier vendeur
-			// On compare la demande du vendeur et les stocks
-			double achatsAFaire;
-			if (choco.getGamme() == Gamme.BASSE) {
-				achatsAFaire = 0;
-			} else {
-				achatsAFaire = max(demandeVendeur - stockChoco, 0.);
-			}	
-			demandesChoco.get(choco).setValeur(this, achatsAFaire);
+			if (!ac.nosChoco.contains(choco)) {
+				demandesChoco.get(choco).setValeur(this, 0.);
+			}
 		}
 	}
 

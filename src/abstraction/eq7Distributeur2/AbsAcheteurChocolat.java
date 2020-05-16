@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.sun.tools.javac.util.Pair;
+
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.ChocolatDeMarque;
 import abstraction.fourni.Filiere;
@@ -16,6 +18,10 @@ import abstraction.fourni.Variable;
 public class AbsAcheteurChocolat {
 	
 	protected Journal journal;
+	
+	protected Map<Chocolat, Variable> demandesChoco;
+	protected Map<Chocolat, Variable> chocoReceptionne;
+	protected Pair<Chocolat, Double> commandeImpayee;
 
 	protected Distributeur2 ac;
 	
@@ -28,6 +34,17 @@ public class AbsAcheteurChocolat {
 	public AbsAcheteurChocolat(Distributeur2 ac) {
 		this.ac = ac;	
 		initJournaux();
+		demandesChoco = new HashMap<Chocolat, Variable>();
+		chocoReceptionne = new HashMap<Chocolat, Variable>();
+		commandeImpayee = null;
+		
+		for (Chocolat choco : Chocolat.values()) {
+			demandesChoco.put(choco, new Variable(getNom() + " : " + choco.name() + " [Demande]", ac, 0));
+		}
+
+		for (Chocolat choco : ac.nosChoco) {
+			chocoReceptionne.put(choco, new Variable(getNom() + " : " + choco.name() + " [Réception]", ac, 0));
+		}
 	}
 	
 	public void initJournaux() {
@@ -72,6 +89,9 @@ public class AbsAcheteurChocolat {
 	
 	public List<Variable> getIndicateurs() {
 		List<Variable> res = new ArrayList<Variable>();
+		for (Chocolat choco : ac.nosChoco) {
+			res.add(chocoReceptionne.get(choco));
+		}
 		return res;
 	}
 

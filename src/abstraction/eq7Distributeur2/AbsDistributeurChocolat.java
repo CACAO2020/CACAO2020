@@ -2,7 +2,9 @@ package abstraction.eq7Distributeur2;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.fourni.Filiere;
@@ -19,6 +21,8 @@ public class AbsDistributeurChocolat {
 	protected Journal journalCatalogue;
 	protected Journal journal;
 	
+	protected Map<Chocolat, Variable> chocoVendu;
+	
 	public Color titleColor = Color.BLACK;
 	public Color metaColor = Color.CYAN;
 	public Color alertColor = Color.RED;
@@ -28,6 +32,10 @@ public class AbsDistributeurChocolat {
 	
 	public AbsDistributeurChocolat(Distributeur2 ac) {	
 		this.ac = ac;
+		chocoVendu = new HashMap<Chocolat, Variable>();
+		for (Chocolat choco : ac.nosChoco) {
+			chocoVendu.put(choco, new Variable(getNom() + " : " + choco.name() + " [Vente]", ac, 0));
+		}
 		initJournaux();
 	}
 	
@@ -79,6 +87,9 @@ public class AbsDistributeurChocolat {
 
 	public List<Variable> getIndicateurs() {
 		List<Variable> res = new ArrayList<Variable>();
+		for (Chocolat choco : ac.nosChoco) {
+			res.add(chocoVendu.get(choco));
+		}
 		return res;
 	}
 

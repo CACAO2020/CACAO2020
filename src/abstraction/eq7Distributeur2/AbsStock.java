@@ -38,11 +38,9 @@ public class AbsStock {
 		
 		initJournaux();
 
-		for (Chocolat choco : Chocolat.values()) {
-			if (!choco.equals(Chocolat.CHOCOLAT_BASSE)) {
-				stocksChocolat.put(choco, new Variable(getNom() + " : STOCK " + choco.name(), ac, 0));
-				journal.ajouter(Journal.texteColore(metaColor, Color.BLACK,"[CRÉATION] Création d'un stock pour le " + choco + "."));
-			}
+		for (Chocolat choco : ac.nosChoco) {
+			stocksChocolat.put(choco, new Variable(getNom() + " : " + choco.name() + " [Stock]", ac, 0));
+			journal.ajouter(Journal.texteColore(metaColor, Color.BLACK,"[CRÉATION] Création d'un stock pour le " + choco + "."));
 		}
 	}
 		
@@ -56,10 +54,8 @@ public class AbsStock {
 	
 	public List<Variable> getIndicateurs() {
 		List<Variable> res=new ArrayList<Variable>();
-		for (Chocolat choco : Chocolat.values()) {
-			if (!choco.equals(Chocolat.CHOCOLAT_BASSE)) {
-				res.add(stocksChocolat.get(choco));
-			}
+		for (Chocolat choco : ac.nosChoco) {
+			res.add(stocksChocolat.get(choco));
 		}
 		return res;
 	}
