@@ -15,7 +15,7 @@ import abstraction.fourni.Variable;
 
 public class AbsAcheteurChocolat {
 	
-	protected Map<Chocolat, Variable> demandesChoco;
+
 	protected List<Chocolat> gammesChocolat;
 
 	protected Journal journal;
@@ -29,7 +29,7 @@ public class AbsAcheteurChocolat {
 	
 	public AbsAcheteurChocolat(Distributeur2 ac) {
 		this.ac = ac;
-		demandesChoco=new HashMap<Chocolat, Variable>();
+
 		
 		gammesChocolat = new ArrayList<Chocolat>();
 		gammesChocolat.add(Chocolat.CHOCOLAT_MOYENNE);
@@ -37,16 +37,12 @@ public class AbsAcheteurChocolat {
 		gammesChocolat.add(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE);
 		gammesChocolat.add(Chocolat.CHOCOLAT_HAUTE_EQUITABLE);
 		
-		for (Chocolat choco : Chocolat.values()) {
-			demandesChoco.put(choco, new Variable("Demande en : " + choco.name(), ac, 0));
-		}
+		
 		this.journal = new Journal(this.getNom() + " : Acheteur Chocolat Bourse", ac);
 		journal.ajouter(Journal.texteColore(titleColor, Color.WHITE, this.getNom() + " : Acheteur Chocolat Bourse"));
 	}
 
-	public Map<Chocolat, Variable> getDemandesChoco() {
-		return demandesChoco;
-	}
+
 
 	public String getNom() {
 		return ac.getNom();

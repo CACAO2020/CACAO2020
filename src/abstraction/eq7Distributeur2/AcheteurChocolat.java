@@ -1,6 +1,7 @@
 package abstraction.eq7Distributeur2;
 
 import java.awt.Color;
+import java.util.HashMap;
 import java.util.Map;
 
 import abstraction.eq8Romu.chocolatBourse.IAcheteurChocolatBourse;
@@ -17,12 +18,22 @@ import abstraction.fourni.Variable;
 public class AcheteurChocolat extends AbsAcheteurChocolat implements IAcheteurChocolatBourse, IActeur {
 	//Raphaël Caby
 	
+	protected Map<Chocolat, Variable> demandesChoco;
+	
 	public AcheteurChocolat(Distributeur2 ac) {
 		super(ac);
+		demandesChoco = new HashMap<Chocolat, Variable>();
+		for (Chocolat choco : Chocolat.values()) {
+			demandesChoco.put(choco, new Variable("Demande en " + choco.name(), ac, 0));
+		}
+	}
+	
+	public Map<Chocolat, Variable> getDemandes() {
+		return demandesChoco;
 	}
 	
 	public double getDemande(Chocolat chocolat, double cours) {
-		return getDemandesChoco().get(chocolat).getValeur();
+		return demandesChoco.get(chocolat).getValeur();
 	}
 
 	public Integer getCryptogramme(SuperviseurChocolatBourse superviseur) {
@@ -40,6 +51,7 @@ public class AcheteurChocolat extends AbsAcheteurChocolat implements IAcheteurCh
 	public void receptionner(ChocolatDeMarque chocolat, double quantite) {
 		ac.getStock().ajouterStockChocolat(chocolat, quantite);
 		journal.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[RÉCEPTION] Réception de " + quantite + " tonnes de " + chocolat.name() + "."));
+		ac.getDistributeurChocolat().ajouterProduitAuCatalogue(chocolat);
 	}
 
 	public void initialiser() {
@@ -65,8 +77,7 @@ public class AcheteurChocolat extends AbsAcheteurChocolat implements IAcheteurCh
 				achatsAFaire = 0;
 			}
 			
-			getDemandesChoco().get(choco).setValeur(this, achatsAFaire);
-
+			demandesChoco.get(choco).setValeur(this, achatsAFaire);
 		}
 	}
 

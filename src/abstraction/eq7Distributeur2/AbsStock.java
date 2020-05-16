@@ -40,8 +40,10 @@ public class AbsStock {
 		this.journal.ajouter(Journal.texteColore(titleColor, Color.WHITE, this.getNom() + " : Suivi des stocks de chocolat"));
 
 		for (Chocolat choco : Chocolat.values()) {
-			stocksChocolat.put(choco, new Variable(getNom() + " : STOCK " + choco.name(), ac, 0));
-			journal.ajouter(Journal.texteColore(metaColor, Color.BLACK,"[CRÉATION] Création d'un stock pour le " + choco + "."));
+			if (!choco.equals(Chocolat.CHOCOLAT_BASSE)) {
+				stocksChocolat.put(choco, new Variable(getNom() + " : STOCK " + choco.name(), ac, 0));
+				journal.ajouter(Journal.texteColore(metaColor, Color.BLACK,"[CRÉATION] Création d'un stock pour le " + choco + "."));
+			}
 		}
 		
 	}

@@ -16,13 +16,19 @@ import abstraction.eq8Romu.produits.ChocolatDeMarque;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
+import abstraction.fourni.Variable;
 
 public class DistributeurChocolat extends AbsDistributeurChocolat implements IDistributeurChocolatDeMarque, IActeur {
 
 	protected Map<Chocolat, Double> prixParDefaut;
+	protected List<ChocolatDeMarque> produitsCatalogue;
+	protected Journal journalCatalogue;
 	
 	public DistributeurChocolat(Distributeur2 ac) {
 		super(ac);
+		produitsCatalogue = new ArrayList<ChocolatDeMarque>();
+		journalCatalogue = new Journal(ac.getNom() + " : Catalogue du distributeur", ac);
+		journalCatalogue.ajouter(Journal.texteColore(titleColor, Color.WHITE, this.getNom() + " : Catalogue du distributeur"));
 		prixParDefaut = new HashMap<Chocolat, Double>();
 		prixParDefaut.put(Chocolat.CHOCOLAT_MOYENNE, 10000.);
 		prixParDefaut.put(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE, 14000.);
@@ -38,14 +44,27 @@ public class DistributeurChocolat extends AbsDistributeurChocolat implements IDi
 	}
 
 	public void next() {
+		dessinerCatalogue();
 	}
-
-	public List<ChocolatDeMarque> getCatalogue() {
-		List<ChocolatDeMarque> res = new ArrayList<ChocolatDeMarque>();
-		for (ChocolatDeMarque choco : ac.getStock().stocksChocolatDeMarque.keySet()) {
-			res.add(choco);
+	
+	public void ajouterProduitAuCatalogue(ChocolatDeMarque choco) {
+		if (produitsCatalogue.contains(choco)) {
+		} else {
+			produitsCatalogue.add(choco);
+			journalCatalogue.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[AJOUT] Le chocolat " + choco.name() + " a été ajouté au catalogue."));
 		}
-		return res;
+	}
+	
+	private void dessinerCatalogue() {
+		journalCatalogue.ajouter(Journal.texteColore(metaColor, Color.BLACK, "[ETAPE " + Filiere.LA_FILIERE.getEtape() + "] Catalogue du distributeur"));
+		journalCatalogue.ajouter(Journal.texteSurUneLargeurDe("Chocolat", 40) + Journal.texteSurUneLargeurDe("Quantité (tonnes)", 20) + Journal.texteSurUneLargeurDe("Prix", 20) + Journal.texteSurUneLargeurDe("", 30));
+		for (ChocolatDeMarque choco : produitsCatalogue) {
+			journalCatalogue.ajouter(Journal.texteSurUneLargeurDe(choco.name(), 40) + Journal.texteSurUneLargeurDe("" + quantiteEnVente(choco), 20) + Journal.texteSurUneLargeurDe("" + prix(choco), 20) + Journal.texteSurUneLargeurDe("", 30));
+		}
+	}
+	
+	public List<ChocolatDeMarque> getCatalogue() {
+		return produitsCatalogue;
 	}
 
 	public double prix(ChocolatDeMarque choco) {
@@ -76,6 +95,23 @@ public class DistributeurChocolat extends AbsDistributeurChocolat implements IDi
 
 	public List<ChocolatDeMarque> pubSouhaitee() {
 		return null;
+	}
+	
+	public List<Variable> getIndicateurs() {
+		List<Variable> res = new ArrayList<Variable>();
+		return res;
+	}
+
+	public List<Variable> getParametres() {
+		List<Variable> res=new ArrayList<Variable>();
+		return res;
+	}
+
+	public List<Journal> getJournaux() {
+		List<Journal> res = new ArrayList<Journal>();
+		res.add(journal);
+		res.add(journalCatalogue);
+		return res;
 	}
 
 }

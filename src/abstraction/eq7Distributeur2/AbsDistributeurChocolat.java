@@ -17,6 +17,7 @@ public class AbsDistributeurChocolat {
 	protected Distributeur2 ac;
 	
 	public Color titleColor = Color.BLACK;
+	public Color metaColor = Color.CYAN;
 	public Color alertColor = Color.RED;
 	public Color warningColor = Color.ORANGE;
 	public Color positiveColor = Color.GREEN;
@@ -57,22 +58,6 @@ public class AbsDistributeurChocolat {
 
 	public void notificationOperationBancaire(double montant) {
 		ac.notificationOperationBancaire(montant);
-	}
-
-	public List<Variable> getIndicateurs() {
-		List<Variable> res = new ArrayList<Variable>();
-		return res;
-	}
-
-	public List<Variable> getParametres() {
-		List<Variable> res=new ArrayList<Variable>();
-		return res;
-	}
-
-	public List<Journal> getJournaux() {
-		List<Journal> res = new ArrayList<Journal>();
-		res.add(journal);
-		return res;
 	}
 
 }
