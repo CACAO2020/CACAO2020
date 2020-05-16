@@ -1,4 +1,4 @@
-package abstraction.eq4Transformateur2;
+package abstraction.eq4Transformateur2; 
 
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
@@ -18,7 +18,7 @@ import abstraction.fourni.Filiere;
 
 //extension gérant les stocks et la transformation
 
-public class Transformateur2_e1 extends Transformateur2 implements IActeur {
+public class Transformateur2_stocks_et_transfos extends Transformateur2 implements IActeur {
 	
 	// Notation : TFEP : transformation fève en pâte
 	// 			  TPEC : transformation pâte en chocolat
@@ -58,10 +58,21 @@ public class Transformateur2_e1 extends Transformateur2 implements IActeur {
 	private Variable coutUnitaireStockPate ; 
 	private Variable coutUnitaireStockChocolat ; 
 	
+	//Coût augmentation de la capacité max
+	
+	private Variable coutAgrandirCapacite ; 
+	
+	//seuil critique de production, qu'il soit trop bas ou trop haut: compris entre 0 et 1, pourcentage par rapport à capacité MAX
+	
+	private Variable seuilSupTFEP;
+	private Variable seuilInfTFEP;
+	private Variable seuilSupTPEC;
+	private Variable seuilInfTPEC;
+	
 	// l'initialisation nécessite de nombreuses variables, qui sont à modifier pour les tests
 	// il faut déterminer ces valeurs en essayant d'être réalistes et cohérents avec les autres équipes
 	
-	public Transformateur2_e1() {
+	public Transformateur2_stocks_et_transfos() {
 		
 		super () ; 
 		
@@ -106,6 +117,14 @@ public class Transformateur2_e1 extends Transformateur2 implements IActeur {
 	
 		//utilise la fonction juste en dessous pour l'initialisation
 		this.valeurDesStocks = new Variable(getNom()+" valeur totale des stocks", this, this.calculeValeurDesStocks()) ;
+	
+		this.coutAgrandirCapacite = new Variable (getNom()+" cout unitaire pour augmenter la capacité max", this, 200);
+		
+		this.seuilInfTFEP=new Variable (getNom()+" seuil pour diminuer capacité MAX Feve -> Pate", this, 0);
+		this.seuilSupTFEP=new Variable (getNom()+" seuil pour augmenter capacité MAX Feve -> Pate", this, 1);
+		this.seuilInfTPEC=new Variable (getNom()+" seuil pour diminuer capacité MAX Pate -> Choco", this, 0);
+		this.seuilSupTPEC=new Variable (getNom()+" seuil pour augmenter capacité MAX Pate -> Choco", this, 1);
+	
 	}
 	
 	// Permet de calculer la valeur des stocks en additionnant la valeur de chaque stock de denrée, obtenu
@@ -220,7 +239,7 @@ public class Transformateur2_e1 extends Transformateur2 implements IActeur {
 	
 	// renvoie la pâte ayant les mêmes caractéristiques que la fève entrée en argument
 	
-	public PateInterne creerPate (Feve feve) {
+	public PateInterne creerPateAPartirDeFeve (Feve feve) {
 		switch (feve.getGamme()) {
 		case BASSE : return PateInterne.PATE_BASSE ; 
 		case MOYENNE :
@@ -255,6 +274,46 @@ public class Transformateur2_e1 extends Transformateur2 implements IActeur {
 				return Chocolat.CHOCOLAT_HAUTE_EQUITABLE ;
 			} else {
 				return Chocolat.CHOCOLAT_HAUTE ;
+			}
+		default : throw new IllegalArgumentException("valeur non trouvée") ;
+		}
+	}
+	
+	// fonctions inverses, utiles dans d'autres fonctions 
+	
+	public PateInterne creerPateAPartirDeChocolat (Chocolat chocolat) {
+		switch (chocolat.getGamme()) {
+		case BASSE : return PateInterne.PATE_BASSE ; 
+		case MOYENNE :
+			if (chocolat.isEquitable()) {
+				return PateInterne.PATE_MOYENNE_EQUITABLE ;
+			} else {
+				return PateInterne.PATE_MOYENNE ;
+			}
+		case HAUTE : 
+			if (chocolat.isEquitable()) {
+				return PateInterne.PATE_HAUTE_EQUITABLE ;
+			} else {
+				return PateInterne.PATE_HAUTE ;
+			}
+		default : throw new IllegalArgumentException("valeur non trouvée") ;
+		}
+	}
+
+	public Feve creerFeve (PateInterne pate) {
+		switch (pate.getGamme()) {
+		case BASSE : return Feve.FEVE_BASSE ; 
+		case MOYENNE :
+			if (pate.isEquitable()) {
+				return Feve.FEVE_MOYENNE_EQUITABLE ;
+			} else {
+				return Feve.FEVE_MOYENNE ;
+			}
+		case HAUTE : 
+			if (pate.isEquitable()) {
+				return Feve.FEVE_HAUTE_EQUITABLE ;
+			} else {
+				return Feve.FEVE_HAUTE ;
 			}
 		default : throw new IllegalArgumentException("valeur non trouvée") ;
 		}
@@ -306,12 +365,12 @@ public class Transformateur2_e1 extends Transformateur2 implements IActeur {
 	public void transformationFeveEnPate (double quantiteFeve, Feve feve) { 
 			double nouveauStockFeve = super.getStockFevesValeur(feve) - quantiteFeve ;
 			if (nouveauStockFeve >= 0) {
-				PateInterne pate = this.creerPate(feve) ;
+				PateInterne pate = this.creerPateAPartirDeFeve(feve) ;
 				double quantitePate = this.getCoeffTFEP()*quantiteFeve ;
 				super.setStockFevesValeur(feve,nouveauStockFeve) ;
 				super.setStockPateValeur(pate, super.getStockPateValeur(pate) + quantitePate ) ;
 				if (quantitePate > 0) {
-					double prix = this.getCoutMoyenFeveValeur(feve)/this.getCoutTFEP(feve);
+					double prix = this.getCoutMoyenFeveValeur(feve)/this.getCoeffTFEP();
 					this.modifierCoutMoyenPate(pate, quantitePate, prix);
 				}
 			} 
@@ -326,7 +385,7 @@ public class Transformateur2_e1 extends Transformateur2 implements IActeur {
 			super.setStockPateValeur(pate,nouveauStockPate) ;
 			super.setStockChocolatValeur(chocolat, super.getStockChocolatValeur(chocolat) + quantiteChocolat ) ;
 			if (quantiteChocolat > 0) {
-				double prix = this.getCoutMoyenPateValeur(pate)/this.getCoutTPEC(pate);
+				double prix = this.getCoutMoyenPateValeur(pate)/this.getCoeffTPEC();
 				this.modifierCoutMoyenPate(pate, quantiteChocolat, prix);
 			}
 		}

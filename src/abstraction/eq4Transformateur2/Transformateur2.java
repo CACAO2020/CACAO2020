@@ -103,19 +103,58 @@ public class Transformateur2 implements IActeur {
 		return this.stockChocolat.get(chocolat).getValeur() ;
 	}
 	
+	public double getStockValeur (Object produit) {
+		if (produit != null) {
+			if (produit instanceof Chocolat) {
+				return this.getStockChocolatValeur((Chocolat) produit) ;
+			}
+			else {if (produit instanceof PateInterne) {
+				return this.getStockPateValeur((PateInterne) produit) ; 
+				}
+				else {if (produit instanceof Feve) {
+					return this.getStockFevesValeur((Feve) produit) ;
+					}
+					else {throw new IllegalArgumentException("instance qui n'est pas un produit utilisé") ;}
+				}
+			}}
+		else {throw new IllegalArgumentException("produit null") ;}
+	}
+	
 	//setters, ici permettant de modifier directement la quantité de stock correspondant à une denrée particulière
 	
 	public void setStockFevesValeur(Feve feve, double valeur) {
-		this.stockFeves.get(feve).setValeur(this, valeur) ;
+		if (valeur < 0) {throw new IllegalArgumentException("stock négatif") ;}
+		else {this.stockFeves.get(feve).setValeur(this, valeur) ;}
 	}
 	
 	public void setStockPateValeur(PateInterne pate, double valeur) {
-		this.stockPate.get(pate).setValeur(this, valeur) ;
+		if (valeur < 0) {throw new IllegalArgumentException("stock négatif") ;}
+		else { this.stockPate.get(pate).setValeur(this, valeur) ; }
 	}
 	
 	public void setStockChocolatValeur(Chocolat chocolat, double valeur) {
-		this.stockChocolat.get(chocolat).setValeur(this, valeur) ;
+		if (valeur < 0) {throw new IllegalArgumentException("stock négatif") ;}
+		else { this.stockChocolat.get(chocolat).setValeur(this, valeur) ;}
 	}
+	
+	public void setStockValeur (Object produit, double valeur) {
+		if (produit != null) {
+			if (produit instanceof Chocolat) {
+				this.setStockChocolatValeur((Chocolat) produit, valeur) ;
+			}
+			else {if (produit instanceof PateInterne) {
+				this.setStockPateValeur((PateInterne) produit, valeur) ; 
+				}
+				else {if (produit instanceof Feve) {
+					this.setStockFevesValeur((Feve) produit, valeur) ;
+					}
+					else {throw new IllegalArgumentException("instance qui n'est pas un produit utilisé") ;}
+				}
+			}}
+		else {throw new IllegalArgumentException("produit null") ;}
+	}
+	
+	//
 
 	public void initialiser() {
 	}
@@ -142,10 +181,7 @@ public class Transformateur2 implements IActeur {
 			res.add(this.stockFeves.get(feve)) ;
 		}
 		for (PateInterne pate :PateInterne.values()) {
-			// à décommenter si getIndicateurs ne doit pas renvoyer de variables internes, utile pour les tests pour le moment
-			//if (pate == PateInterne.PATE_BASSE || pate == PateInterne.PATE_MOYENNE) {
-				res.add(this.stockPate.get(pate)) ;
-			//}
+			res.add(this.stockPate.get(pate)) ;
 		}
 		for (Chocolat chocolat : Chocolat.values()) {
 			res.add(this.stockChocolat.get(chocolat)) ;
