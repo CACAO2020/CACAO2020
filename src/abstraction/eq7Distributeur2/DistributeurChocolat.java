@@ -60,7 +60,7 @@ public class DistributeurChocolat extends AbsDistributeurChocolat implements IDi
 		journalCatalogue.ajouter(Journal.texteColore(metaColor, Color.BLACK, "[ETAPE " + Filiere.LA_FILIERE.getEtape() + "] Catalogue du distributeur"));
 		journalCatalogue.ajouter(Journal.texteSurUneLargeurDe("Chocolat", 40) + Journal.texteSurUneLargeurDe("Quantité (tonnes)", 20) + Journal.texteSurUneLargeurDe("Prix", 20) + Journal.texteSurUneLargeurDe("", 30));
 		for (ChocolatDeMarque choco : produitsCatalogue) {
-			journalCatalogue.ajouter(Journal.texteSurUneLargeurDe(choco.name(), 40) + Journal.texteSurUneLargeurDe("" + quantiteEnVente(choco), 20) + Journal.texteSurUneLargeurDe("" + prix(choco), 20) + Journal.texteSurUneLargeurDe("", 30));
+			journalCatalogue.ajouter(Journal.texteSurUneLargeurDe(choco.name(), 40) + Journal.texteSurUneLargeurDe("" + Journal.doubleSur(quantiteEnVente(choco),2), 20) + Journal.texteSurUneLargeurDe("" + Journal.doubleSur(prix(choco),2), 20) + Journal.texteSurUneLargeurDe("", 30));
 		}
 	}
 	
