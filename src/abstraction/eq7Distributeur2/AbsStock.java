@@ -28,6 +28,7 @@ public class AbsStock {
 	public Color alertColor = Color.RED;
 	public Color addStockColor = Color.GREEN;
 	public Color removeStockColor = Color.ORANGE;
+	public Color descriptionColor = Color.YELLOW;
 	
 	public AbsStock(Distributeur2 ac) {
 
@@ -38,6 +39,9 @@ public class AbsStock {
 		
 		this.journal = new Journal(getNom() + " : Stocks", ac);
 		this.journal.ajouter(Journal.texteColore(titleColor, Color.WHITE, this.getNom() + " : Suivi des stocks de chocolat"));
+		journal.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "Les stocks du distributeur sont enregistrés dans ce journal."));
+		journal.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "On y retrouve les créations de stock (correspondant à la première"));
+		journal.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "entrée d'un type de chocolat), les entrées et les sorties de stock."));
 
 		for (Chocolat choco : Chocolat.values()) {
 			if (!choco.equals(Chocolat.CHOCOLAT_BASSE)) {

@@ -30,6 +30,10 @@ public class DistributeurChocolat extends AbsDistributeurChocolat implements IDi
 		produitsCatalogue = new ArrayList<ChocolatDeMarque>();
 		journalCatalogue = new Journal(ac.getNom() + " : Catalogue du distributeur", ac);
 		journalCatalogue.ajouter(Journal.texteColore(titleColor, Color.WHITE, this.getNom() + " : Catalogue du distributeur"));
+		journalCatalogue.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "Ce journal présente le contenu du catalogue du distributeur à chaque étape :"));
+		journalCatalogue.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "types de chocolat en vente, quantités disponibles à la vente et prix à l'unité."));
+		journalCatalogue.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "Il est mis à jour à chaque appel de la commande next() du distributeur,"));
+		journalCatalogue.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "soit APRÈS la vente au client final et AVANT la réception des commandes de l'étape."));
 		prixParDefaut = new HashMap<Chocolat, Double>();
 		prixParDefaut.put(Chocolat.CHOCOLAT_MOYENNE, 10000.);
 		prixParDefaut.put(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE, 14000.);
@@ -49,8 +53,7 @@ public class DistributeurChocolat extends AbsDistributeurChocolat implements IDi
 	}
 	
 	public void ajouterProduitAuCatalogue(ChocolatDeMarque choco) {
-		if (produitsCatalogue.contains(choco)) {
-		} else {
+		if (!produitsCatalogue.contains(choco)) {
 			produitsCatalogue.add(choco);
 			journalCatalogue.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[AJOUT] Le chocolat " + choco.name() + " a été ajouté au catalogue."));
 		}

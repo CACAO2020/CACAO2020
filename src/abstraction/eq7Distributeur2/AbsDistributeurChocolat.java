@@ -21,11 +21,14 @@ public class AbsDistributeurChocolat {
 	public Color alertColor = Color.RED;
 	public Color warningColor = Color.ORANGE;
 	public Color positiveColor = Color.GREEN;
+	public Color descriptionColor = Color.YELLOW;
 	
 	public AbsDistributeurChocolat(Distributeur2 ac) {	
 		this.ac = ac;
 		this.journal = new Journal(this.getNom() + " : Distributeur Chocolat", ac);
 		journal.ajouter(Journal.texteColore(titleColor, Color.WHITE, this.getNom() + " : Distributeur Chocolat"));
+		journal.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "Ce journal mémorise les activités du distributeur, vendeur de chocolat au client"));
+		journal.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "final. Il affiche les ventes effectuées et les alertes lorsqu'un rayon est vide."));
 	}
 	
 	public String getNom() {

@@ -30,6 +30,9 @@ public class Distributeur2 implements IActeur, IAcheteurChocolatBourse, IDistrib
 	private Stock stock;
 
 	public Color titleColor = Color.BLACK;
+	public Color alertColor = Color.RED;
+	public Color descriptionColor = Color.YELLOW;
+	
 	private Journal journal;
 	
 	public Distributeur2() {
@@ -38,7 +41,10 @@ public class Distributeur2 implements IActeur, IAcheteurChocolatBourse, IDistrib
 		acheteurChocolat = new AcheteurChocolat(this);
 		distributeurChocolat = new DistributeurChocolat(this);
 		stock = new Stock(this);
-		journal = new Journal(getNom() + " : Activités", this);
+		journal = new Journal(getNom() + " : Informations générales", this);
+		journal.ajouter(Journal.texteColore(titleColor, Color.WHITE, "EQ7 : Journal d'activités"));
+		journal.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "Ce journal rapporte les informations majeures concernant"));
+		journal.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "l'acteur (changement de stratégie, faillite, ...)."));
 	}
 	 
 	public int getNumero() {
@@ -70,7 +76,6 @@ public class Distributeur2 implements IActeur, IAcheteurChocolatBourse, IDistrib
 	}
 
 	public void initialiser() {
-		journal.ajouter(Journal.texteColore(titleColor, Color.WHITE, "EQ7 : Journal d'activités"));
 		acheteurChocolat.initialiser();
 		distributeurChocolat.initialiser();
 		stock.initialiser();
@@ -118,9 +123,10 @@ public class Distributeur2 implements IActeur, IAcheteurChocolatBourse, IDistrib
 	public void notificationFaillite(IActeur acteur) {
 		if (this==acteur) {
 			System.out.println("I'll be back... or not... "+this.getNom());
+			journal.ajouter(Journal.texteColore(alertColor, Color.BLACK, "[FAILLITE] L'acteur a fait faillite !"));
 		} else {
 			System.out.println("Poor "+acteur.getNom()+"... We will miss you. "+this.getNom());
-
+			journal.ajouter(Journal.texteColore(alertColor, Color.BLACK, "[FAILLITE] " + acteur.getNom() + " a fait faillite !"));
 		}
 	}	
 
