@@ -13,6 +13,7 @@ import abstraction.eq8Romu.produits.Chocolat;
 //import abstraction.eq8Romu.produits.Gamme;
 //import abstraction.fourni.Filiere;
 import abstraction.eq8Romu.produits.ChocolatDeMarque;
+import abstraction.eq8Romu.produits.Gamme;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
@@ -37,7 +38,7 @@ public class DistributeurChocolat extends AbsDistributeurChocolat implements IDi
 	}
 
 	public boolean commercialise(Chocolat choco) {
-		return ac.getAcheteurChocolat().gammesChocolat.contains(choco);
+		return !choco.getGamme().equals(Gamme.BASSE);
 	}
 	
 	public void initialiser() {

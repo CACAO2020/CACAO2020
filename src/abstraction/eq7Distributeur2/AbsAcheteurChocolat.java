@@ -15,9 +15,6 @@ import abstraction.fourni.Variable;
 
 public class AbsAcheteurChocolat {
 	
-
-	protected List<Chocolat> gammesChocolat;
-
 	protected Journal journal;
 
 	protected Distributeur2 ac;
@@ -28,21 +25,10 @@ public class AbsAcheteurChocolat {
 	public Color positiveColor = Color.GREEN;
 	
 	public AbsAcheteurChocolat(Distributeur2 ac) {
-		this.ac = ac;
-
-		
-		gammesChocolat = new ArrayList<Chocolat>();
-		gammesChocolat.add(Chocolat.CHOCOLAT_MOYENNE);
-		gammesChocolat.add(Chocolat.CHOCOLAT_HAUTE);
-		gammesChocolat.add(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE);
-		gammesChocolat.add(Chocolat.CHOCOLAT_HAUTE_EQUITABLE);
-		
-		
+		this.ac = ac;		
 		this.journal = new Journal(this.getNom() + " : Acheteur Chocolat Bourse", ac);
 		journal.ajouter(Journal.texteColore(titleColor, Color.WHITE, this.getNom() + " : Acheteur Chocolat Bourse"));
 	}
-
-
 
 	public String getNom() {
 		return ac.getNom();
