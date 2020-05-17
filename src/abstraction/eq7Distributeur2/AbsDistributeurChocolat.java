@@ -49,8 +49,9 @@ public class AbsDistributeurChocolat {
 		journalCatalogue.ajouter(Journal.texteColore(titleColor, Color.WHITE, this.getNom() + " : Catalogue du distributeur"));
 		journalCatalogue.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "Ce journal présente le contenu du catalogue du distributeur à chaque étape :"));
 		journalCatalogue.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "types de chocolat en vente, quantités disponibles à la vente et prix à l'unité."));
-		journalCatalogue.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "Il est mis à jour à chaque appel de la commande next() du distributeur,"));
-		journalCatalogue.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "soit APRÈS la vente au client final et AVANT la réception des commandes de l'étape."));
+		journalCatalogue.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "Il est mis à jour à chaque appel de la commande next() du distributeur, c'est pourquoi"));
+		journalCatalogue.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "le catalogue à une étape donnée n'est visible qu'à partir du passage à l'étape suivante."));
+		journalCatalogue.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "L'état du catalogue à une étape correspond à celui proposé au client lors de cette étape."));
 	}
 	
 	public String getNom() {
