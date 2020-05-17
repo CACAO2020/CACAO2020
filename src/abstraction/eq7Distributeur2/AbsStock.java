@@ -39,7 +39,7 @@ public class AbsStock {
 		initJournaux();
 
 		for (Chocolat choco : ac.nosChoco) {
-			stocksChocolat.put(choco, new Variable(getNom() + " : " + choco.name() + " [Stock]", ac, 0));
+			stocksChocolat.put(choco, new Variable(getNom() + " : " + choco.name() + " [Stock i]", ac, 0));
 			journal.ajouter(Journal.texteColore(metaColor, Color.BLACK,"[CRÉATION] Création d'un stock pour le " + choco + "."));
 		}
 	}

@@ -67,6 +67,7 @@ public class AcheteurChocolat extends AbsAcheteurChocolat implements IAcheteurCh
 		double stockAConserver = 5.;
 		double quantiteAVendre;
 		for (Chocolat choco : ac.nosChoco) {
+			chocoReceptionne.get(choco).setValeur(ac, 0.);
 			double stockActuel = ac.getStock().getStockChocolat(choco);
 			if (Filiere.LA_FILIERE.getEtape() > 0) {
 				totalVentesEtapePrecedente = Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape(), choco);

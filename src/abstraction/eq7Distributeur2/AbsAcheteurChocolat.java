@@ -39,11 +39,11 @@ public class AbsAcheteurChocolat {
 		commandeImpayee = null;
 		
 		for (Chocolat choco : Chocolat.values()) {
-			demandesChoco.put(choco, new Variable(getNom() + " : " + choco.name() + " [Demande]", ac, 0));
+			demandesChoco.put(choco, new Variable(getNom() + " : " + choco.name() + " [Demande i-1]", ac, 0));
 		}
 
 		for (Chocolat choco : ac.nosChoco) {
-			chocoReceptionne.put(choco, new Variable(getNom() + " : " + choco.name() + " [Réception]", ac, 0));
+			chocoReceptionne.put(choco, new Variable(getNom() + " : " + choco.name() + " [Réception i-1]", ac, 0));
 		}
 	}
 	

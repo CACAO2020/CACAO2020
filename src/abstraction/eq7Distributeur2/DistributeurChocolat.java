@@ -46,6 +46,15 @@ public class DistributeurChocolat extends AbsDistributeurChocolat implements IDi
 	}
 
 	public void next() {
+		int etape = Filiere.LA_FILIERE.getEtape();
+		for (Chocolat choco : ac.nosChoco) {
+			if (totalChocoVendu.get(choco).getHistorique().getTaille() != etape + 1) {
+				totalChocoVendu.get(choco).setValeur(ac, totalChocoVendu.get(choco).getHistorique().get(etape-1).getValeur());
+			}
+			if (etape > 0) {
+				chocoVendu.get(choco).setValeur(ac, totalChocoVendu.get(choco).getHistorique().get(etape).getValeur() - totalChocoVendu.get(choco).getHistorique().get(etape-1).getValeur());
+			}
+		}
 		dessinerCatalogue();
 	}
 	
@@ -93,7 +102,7 @@ public class DistributeurChocolat extends AbsDistributeurChocolat implements IDi
 		if (client!=null) { 
 			ac.getStock().retirerStockChocolat(choco, quantite);
 			journal.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[VENTE] Vente de " + Journal.doubleSur(quantite,2) + " tonnes de " + choco.name() + " à " + client.getNom() + " pour " + Journal.doubleSur(montant,2) + " (" + Journal.doubleSur(montant/quantite,2) + "/tonne)."));
-			chocoVendu.get(choco.getChocolat()).setValeur(ac, chocoVendu.get(choco.getChocolat()).getValeur() + quantite);
+			totalChocoVendu.get(choco.getChocolat()).setValeur(ac, totalChocoVendu.get(choco.getChocolat()).getValeur() + quantite);
 		}
 	}
 
