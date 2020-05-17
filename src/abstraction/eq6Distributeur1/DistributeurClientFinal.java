@@ -18,14 +18,20 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 	private double margeHGE;
 	private double margeMG;
 	private double margeBG;
+	private double pctageHGE;
+	private double pctageBG;
+	private double pctageMG;
 
-	public DistributeurClientFinal(double capaciteDeVente, double margeHGE, double margeMG, double margeBG,double capaciteStockmax, Map<ChocolatDeMarque, Double> MapStock) {
+	public DistributeurClientFinal(double capaciteDeVente, double margeHGE, double margeMG, double margeBG,double capaciteStockmax, Map<ChocolatDeMarque, Double> MapStock, double pctageHGE, double pctageMG, double pctageBG) {
 		super(capaciteStockmax, MapStock);
 		this.catalogueVente = new HashMap<ChocolatDeMarque, Double>();
 		this.capaciteDeVente = capaciteDeVente;
 		this.margeHGE=margeHGE;
 		this.margeMG=margeMG;
 		this.margeBG=margeBG;
+		this.pctageBG=pctageBG;
+		this.pctageHGE=pctageHGE;
+		this.pctageMG=pctageMG;
 		
 	}
 
@@ -57,14 +63,28 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 	/** @author Luca Pinguet & Mélissa Tamine */
 	
 	public double quantiteEnVente(ChocolatDeMarque choco) {
+		double capaciteHGE=this.capaciteDeVente*this.pctageHGE;
+		double capaciteMG=this.capaciteDeVente*this.pctageMG;
+		double capaciteBG=this.capaciteDeVente*this.pctageBG;
+		
+		double nbmarques=0;
+		
+		for (ChocolatDeMarque chocos : MapStock.keySet()) {
+			if (chocos.getChocolat()==choco.getChocolat()) {
+				nbmarques = nbmarques + 1;
+			}
+			
+		}
+		
+		
 		if (choco.getChocolat()==Chocolat.CHOCOLAT_HAUTE_EQUITABLE) {
-			return Math.min(capaciteDeVente, stockHGE.getValeur());
+			return Math.min(capaciteHGE/nbmarques, this.MapStock.get(choco));
 		}
 		else if (choco.getChocolat()==Chocolat.CHOCOLAT_MOYENNE) {
-			return Math.min(capaciteDeVente, stockMG.getValeur());
+			return Math.min(capaciteMG/nbmarques, this.MapStock.get(choco));
 		}
 		else if (choco.getChocolat()==Chocolat.CHOCOLAT_BASSE) {
-			return Math.min(capaciteDeVente, stockBG.getValeur());
+			return Math.min(capaciteBG/nbmarques, this.MapStock.get(choco));
 		}
 		else {
 			return 0;
@@ -76,18 +96,10 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 	
 	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant) {
 		if (client!=null) { 
-			if (choco.getChocolat()==Chocolat.CHOCOLAT_HAUTE_EQUITABLE) {
-				stockHGE.retirer(client, quantite);
-			}
-			else if (choco.getChocolat()==Chocolat.CHOCOLAT_MOYENNE) {
-				stockMG.retirer(client, quantite);
-			}
-			else if (choco.getChocolat()==Chocolat.CHOCOLAT_BASSE) {
-				stockBG.retirer(client, quantite);
-			}
-		
+			destocker(choco,quantite);
 			}
 		}
+		
 
 	/** @author Luca Pinguet & Mélissa Tamine */
 	public void notificationRayonVide(ChocolatDeMarque choco) {
