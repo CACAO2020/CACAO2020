@@ -22,11 +22,15 @@ import abstraction.fourni.Variable;
 public class DistributeurChocolat extends AbsDistributeurChocolat implements IDistributeurChocolatDeMarque, IActeur {
 
 	protected Map<Chocolat, Double> prixParDefaut;
+	protected Map<ChocolatDeMarque, Variable> prixChoco;
 	protected List<ChocolatDeMarque> produitsCatalogue;
+	protected Map<ChocolatDeMarque, Variable> quantitesEnVente;
 	
 	public DistributeurChocolat(Distributeur2 ac) {
 		super(ac);
 		produitsCatalogue = new ArrayList<ChocolatDeMarque>();
+		quantitesEnVente = new HashMap<ChocolatDeMarque, Variable>();
+		prixChoco = new HashMap<ChocolatDeMarque, Variable>();
 		prixParDefaut = new HashMap<Chocolat, Double>();
 		prixParDefaut.put(Chocolat.CHOCOLAT_MOYENNE, 10000.);
 		prixParDefaut.put(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE, 14000.);
@@ -48,6 +52,8 @@ public class DistributeurChocolat extends AbsDistributeurChocolat implements IDi
 	public void ajouterProduitAuCatalogue(ChocolatDeMarque choco) {
 		if (!produitsCatalogue.contains(choco)) {
 			produitsCatalogue.add(choco);
+			prixChoco.put(choco, new Variable("Prix du " + choco.name(), ac, prixParDefaut.get(choco.getChocolat())));
+			quantitesEnVente.put(choco, new Variable("Quantité de " + choco.name() + " en vente", ac, 0.));
 			journalCatalogue.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[AJOUT] Le chocolat " + choco.name() + " a été ajouté au catalogue."));
 		}
 	}
@@ -56,7 +62,7 @@ public class DistributeurChocolat extends AbsDistributeurChocolat implements IDi
 		journalCatalogue.ajouter(Journal.texteColore(metaColor, Color.BLACK, "[ETAPE " + Filiere.LA_FILIERE.getEtape() + "] Catalogue du distributeur"));
 		journalCatalogue.ajouter(Journal.texteSurUneLargeurDe("Chocolat", 40) + Journal.texteSurUneLargeurDe("Quantité (tonnes)", 20) + Journal.texteSurUneLargeurDe("Prix", 20) + Journal.texteSurUneLargeurDe("", 30));
 		for (ChocolatDeMarque choco : produitsCatalogue) {
-			journalCatalogue.ajouter(Journal.texteSurUneLargeurDe(choco.name(), 40) + Journal.texteSurUneLargeurDe("" + Journal.doubleSur(quantiteEnVente(choco),2), 20) + Journal.texteSurUneLargeurDe("" + Journal.doubleSur(prix(choco),2), 20) + Journal.texteSurUneLargeurDe("", 30));
+			journalCatalogue.ajouter(Journal.texteSurUneLargeurDe(choco.name(), 40) + Journal.texteSurUneLargeurDe("" + Journal.doubleSur(quantitesEnVente.get(choco).getValeur(),2), 20) + Journal.texteSurUneLargeurDe("" + Journal.doubleSur(prixChoco.get(choco).getValeur(),2), 20) + Journal.texteSurUneLargeurDe("", 30));
 		}
 	}
 	
@@ -72,11 +78,15 @@ public class DistributeurChocolat extends AbsDistributeurChocolat implements IDi
         } else {
         	cours = prixParDefaut.get(choco.getChocolat());
         }
-		return (1. + pourcentageMarge/100.) * cours;
+		double prix = (1. + pourcentageMarge/100.) * cours;
+		prixChoco.get(choco).setValeur(ac, prix);
+		return prix ;
 	}
 
 	public double quantiteEnVente(ChocolatDeMarque choco) {
-		return ac.getStock().getStockChocolatDeMarque(choco);
+		double quantite = ac.getStock().getStockChocolatDeMarque(choco) - 1.;
+		quantitesEnVente.get(choco).setValeur(ac, quantite);
+		return quantitesEnVente.get(choco).getValeur();
 	}
 
 	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant) {

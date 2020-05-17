@@ -64,20 +64,23 @@ public class AcheteurChocolat extends AbsAcheteurChocolat implements IAcheteurCh
 	
 	public void next() {
 		double totalVentesEtapePrecedente;
+		double stockAConserver = 5.;
+		double quantiteAVendre;
 		for (Chocolat choco : ac.nosChoco) {
-				double stockChoco = ac.getStock().getStockChocolat(choco);
-				if (Filiere.LA_FILIERE.getEtape() > 0) {
-					totalVentesEtapePrecedente = Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape(), choco);
-				} else {
-					totalVentesEtapePrecedente = 1.;
-				}
-				
-				double demandeVendeur = totalVentesEtapePrecedente*2;
-
-				double achatsAFaire = max(demandeVendeur - stockChoco, 0.);
-				
-				demandesChoco.get(choco).setValeur(this, achatsAFaire);
+			double stockActuel = ac.getStock().getStockChocolat(choco);
+			if (Filiere.LA_FILIERE.getEtape() > 0) {
+				totalVentesEtapePrecedente = Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape(), choco);
+				quantiteAVendre = totalVentesEtapePrecedente*2;
+			} else {
+				totalVentesEtapePrecedente = 1.;
+				quantiteAVendre = 1.;
+			};
+			
+			double achatsAFaire = max(quantiteAVendre + stockAConserver - stockActuel, 0.);
+			
+			demandesChoco.get(choco).setValeur(this, achatsAFaire);
 		}
+		
 		for (Chocolat choco : Chocolat.values()) {
 			if (!ac.nosChoco.contains(choco)) {
 				demandesChoco.get(choco).setValeur(this, 0.);

@@ -31,15 +31,21 @@ public class Distributeur2 implements IActeur, IAcheteurChocolatBourse, IDistrib
 
 	public List<Chocolat> nosChoco;
 	
+	protected double soldeCritique;
+	
 	public Color titleColor = Color.BLACK;
 	public Color alertColor = Color.RED;
 	public Color descriptionColor = Color.YELLOW;
+	public Color positiveColor = Color.GREEN;
+	public Color warningColor = Color.ORANGE;
 	
 	private Journal journal;
+	private Journal journalTransactions;
 	
 	public Distributeur2() {
 		NB_INSTANCES++;
 		numero = NB_INSTANCES;
+		soldeCritique = 0.;
 		nosChoco = new ArrayList<Chocolat>();
 		nosChoco.add(Chocolat.CHOCOLAT_MOYENNE);
 		nosChoco.add(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE);
@@ -48,10 +54,18 @@ public class Distributeur2 implements IActeur, IAcheteurChocolatBourse, IDistrib
 		acheteurChocolat = new AcheteurChocolat(this);
 		distributeurChocolat = new DistributeurChocolat(this);
 		stock = new Stock(this);
+		initJournaux();
+	}
+	
+	public void initJournaux() {
 		journal = new Journal(getNom() + " : Informations générales", this);
 		journal.ajouter(Journal.texteColore(titleColor, Color.WHITE, "EQ7 : Journal d'activités"));
 		journal.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "Ce journal rapporte les informations majeures concernant"));
 		journal.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "l'acteur (changement de stratégie, faillite, ...)."));
+		journalTransactions = new Journal(getNom() + " : Transactions bancaires", this);
+		journalTransactions.ajouter(Journal.texteColore(titleColor, Color.WHITE, "EQ7 : Transactions bancaires"));
+		journalTransactions.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "Ce journal regroupe toutes les opérations bancaires effectuées"));
+		journalTransactions.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "par l'acteur (débits et crédits)."));
 	}
 	 
 	public int getNumero() {
@@ -121,6 +135,7 @@ public class Distributeur2 implements IActeur, IAcheteurChocolatBourse, IDistrib
 	public List<Journal> getJournaux() {
 		List<Journal> res=new ArrayList<Journal>();
 		res.add(journal);
+		res.add(journalTransactions);
 		res.addAll(stock.getJournaux());
 		res.addAll(acheteurChocolat.getJournaux());
 		res.addAll(distributeurChocolat.getJournaux());
@@ -130,7 +145,7 @@ public class Distributeur2 implements IActeur, IAcheteurChocolatBourse, IDistrib
 	public void notificationFaillite(IActeur acteur) {
 		if (this==acteur) {
 			System.out.println("I'll be back... or not... "+this.getNom());
-			journal.ajouter(Journal.texteColore(alertColor, Color.BLACK, "[FAILLITE] L'acteur a fait faillite !"));
+			journal.ajouter(Journal.texteColore(alertColor, Color.BLACK, "[FAILLITE] Cet acteur a fait faillite !"));
 		} else {
 			System.out.println("Poor "+acteur.getNom()+"... We will miss you. "+this.getNom());
 			journal.ajouter(Journal.texteColore(alertColor, Color.BLACK, "[FAILLITE] " + acteur.getNom() + " a fait faillite !"));
@@ -138,6 +153,28 @@ public class Distributeur2 implements IActeur, IAcheteurChocolatBourse, IDistrib
 	}	
 
 	public void notificationOperationBancaire(double montant) {
+		if (montant > 0) {
+			journalTransactions.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[CRÉDIT] Crédit d'une valeur de : " + Journal.doubleSur(montant,2) + "."));
+		} else {
+			journalTransactions.ajouter(Journal.texteColore(warningColor, Color.BLACK, "[DÉBIT] Débit d'une valeur de : " + Journal.doubleSur(-montant,2) + "."));
+		}
+	}
+	
+	public void notificationSolde() {
+		double solde = getSolde();
+		if (solde > soldeCritique) {
+			journal.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[SOLDE] Solde actuel : " + Journal.doubleSur(solde,2) + "."));
+		} else {
+			if (solde > 0) {
+				journal.ajouter(Journal.texteColore(warningColor, Color.BLACK, "[SOLDE] Solde actuel : " + Journal.doubleSur(solde,2) + "."));
+			} else {
+				journal.ajouter(Journal.texteColore(alertColor, Color.BLACK, "[SOLDE] Solde actuel : " + Journal.doubleSur(solde,2) + "."));
+			}
+		}
+	}
+	
+	public double getSolde() {
+		return Filiere.LA_FILIERE.getBanque().getSolde(Filiere.LA_FILIERE.getActeur(getNom()), this.cryptogramme);
 	}
 
 	// Méthodes de l'acheteur de chocolat à la bourse
