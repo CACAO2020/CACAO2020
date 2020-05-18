@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.sun.tools.javac.util.List;
-
 import abstraction.eq8Romu.chocolatBourse.CommandeChocolat;
 import abstraction.eq8Romu.chocolatBourse.IAcheteurChocolatBourse;
 import abstraction.eq8Romu.chocolatBourse.SuperviseurChocolatBourse;
