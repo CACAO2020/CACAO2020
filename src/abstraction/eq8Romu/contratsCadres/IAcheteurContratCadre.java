@@ -17,7 +17,7 @@ public interface IAcheteurContratCadre extends IActeur {
 	 * si l'acheteur est d'accord pour un tel echeancier. Sinon, retourne un nouvel echeancier
 	 * que le superviseur soumettra au vendeur.
 	 */
-	
+	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat);
 
 	/**
 	 * Methode appelee par le SuperviseurVentesContratCadre lors des negociations sur
