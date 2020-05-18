@@ -83,7 +83,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	}
 
 	public Color getColor() {
-		return new Color(240, 195, 15);
+		return new Color(240, 195, 15); 
 	}
 
 	public void initialiser() {
