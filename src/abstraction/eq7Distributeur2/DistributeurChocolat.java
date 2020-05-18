@@ -58,12 +58,8 @@ public class DistributeurChocolat extends AbsDistributeurChocolat implements IDi
 	public void majIndicateursDeVente() {
 		int etape = Filiere.LA_FILIERE.getEtape();
 		for (Chocolat choco : ac.nosChoco) {
-			if (totalChocoVendu.get(choco).getHistorique().getTaille() != etape + 1) {
-				totalChocoVendu.get(choco).setValeur(ac, totalChocoVendu.get(choco).getHistorique().get(etape-1).getValeur());
-			}
-			if (etape > 0) {
-				chocoVendu.get(choco).setValeur(ac, totalChocoVendu.get(choco).getHistorique().get(etape).getValeur() - totalChocoVendu.get(choco).getHistorique().get(etape-1).getValeur());
-			}
+			chocoVendu.get(choco).setValeur(ac, ventesEtapeActuelle.get(choco));
+			ventesEtapeActuelle.put(choco,0.);
 		}
 	}
 	
@@ -174,9 +170,9 @@ public class DistributeurChocolat extends AbsDistributeurChocolat implements IDi
 
 	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant) {
 		if (client!=null) { 
-			ac.getStock().retirerStockChocolat(choco, Double.min(quantite,ac.getStock().getStockChocolatDeMarque(choco)));
+			ac.getStock().retirerStockChocolat(choco, quantite);
 			journal.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[VENTE] Vente de " + Journal.doubleSur(quantite,2) + " tonnes de " + choco.name() + " à " + client.getNom() + " pour " + Journal.doubleSur(montant,2) + " (" + Journal.doubleSur(montant/quantite,2) + "/tonne)."));
-			totalChocoVendu.get(choco.getChocolat()).setValeur(ac, totalChocoVendu.get(choco.getChocolat()).getValeur() + quantite);
+			ventesEtapeActuelle.put(choco.getChocolat(), ventesEtapeActuelle.get(choco.getChocolat()) + quantite);
 		}
 	}
 

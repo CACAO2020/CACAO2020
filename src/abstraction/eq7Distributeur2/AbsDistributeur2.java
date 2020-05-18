@@ -30,6 +30,23 @@ public class AbsDistributeur2 {
 		nosChoco.add(Chocolat.CHOCOLAT_HAUTE_EQUITABLE);
 	}
 	
+	public List<ChocolatDeMarque> tousLesChocolatsDeMarquePossibles() {
+		List<ChocolatDeMarque> resultat = new LinkedList<ChocolatDeMarque>();
+		for (Chocolat choco : Chocolat.values()) {
+			if (nosChoco.contains(choco)) {
+				List<IVendeurChocolatBourse> vendeursChocolatBourse=vendeursChocolatBourse();
+				for (IVendeurChocolatBourse vendeur : vendeursChocolatBourse) {
+					resultat.add( new ChocolatDeMarque(choco, vendeur.getNom()) );
+				}
+				List<IDistributeurChocolatDeMarque> distributeursChocolatDeMarque=distributeursChocolatDeMarque();
+				for (IDistributeurChocolatDeMarque distri : distributeursChocolatDeMarque) {
+					resultat.add( new ChocolatDeMarque(choco, distri.getNom()) );
+				}
+			}
+		}
+		return resultat;
+	}
+	
 	public List<IVendeurChocolatBourse> vendeursChocolatBourse() {
 		List<IVendeurChocolatBourse> res = new LinkedList<IVendeurChocolatBourse>();
 		for (IActeur acteur : Filiere.LA_FILIERE.getActeurs()) {
@@ -48,22 +65,5 @@ public class AbsDistributeur2 {
 			}
 		}
 		return res;
-	}
-	
-	public List<ChocolatDeMarque> tousLesChocolatsDeMarquePossibles() {
-		List<ChocolatDeMarque> resultat = new LinkedList<ChocolatDeMarque>();
-		for (Chocolat choco : Chocolat.values()) {
-			if (nosChoco.contains(choco)) {
-				List<IVendeurChocolatBourse> vendeursChocolatBourse=vendeursChocolatBourse();
-				for (IVendeurChocolatBourse vendeur : vendeursChocolatBourse) {
-					resultat.add( new ChocolatDeMarque(choco, vendeur.getNom()) );
-				}
-				List<IDistributeurChocolatDeMarque> distributeursChocolatDeMarque=distributeursChocolatDeMarque();
-				for (IDistributeurChocolatDeMarque distri : distributeursChocolatDeMarque) {
-					resultat.add( new ChocolatDeMarque(choco, distri.getNom()) );
-				}
-			}
-		}
-		return resultat;
 	}
 }

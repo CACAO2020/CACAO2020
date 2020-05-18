@@ -26,11 +26,7 @@ public class FiliereTest extends Filiere {
 		cf = new ClientFinal();
 		this.ajouterActeur(cf);
 		this.ajouterActeur(new Producteur1());
-		this.ajouterActeur(new Producteur2());
 		this.ajouterActeur(new Transformateur1());
-		this.ajouterActeur(new Transformateur2());
-		this.ajouterActeur(new Transformateur3());
-		this.ajouterActeur(new Distributeur2());
 		this.ajouterActeur(new Distributeur2());
 		this.ajouterActeur(new Romu());
 		SuperviseurCacaoCriee superviseur = new SuperviseurCacaoCriee();
