@@ -17,6 +17,7 @@ import abstraction.eq8Romu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eq8Romu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.Feve;
+import abstraction.eq8Romu.produits.Pate;
 import abstraction.eq8Romu.ventesCacaoAleatoires.IAcheteurCacaoAleatoire;
 import abstraction.eq8Romu.ventesCacaoAleatoires.SuperviseurVentesCacaoAleatoires;
 import abstraction.fourni.Filiere;
@@ -68,15 +69,31 @@ public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurCh
 	}
 
 	public List<String> getNomsFilieresProposees() {
-		return new ArrayList<String>();
+		List<String> filieresPossibles = new ArrayList<String>();
+		filieresPossibles.add("AchatVente");
+		return filieresPossibles;
 	}
 
 	public Filiere getFiliere(String nom) {
-		return null;
+		if (nom.equals("AchatVente")) {
+			return new FiliereTestAchatVente();
+		}
+		else {
+			return null;
+		}
 	}
 
 	public List<Variable> getIndicateurs() {
 		List<Variable> res = new ArrayList<Variable>();
+		for(Feve f: Feve.values()){
+			res.add(new Variable("Stock de " + f, this, this.stock.getQuantiteFeves(f)));
+		}
+		for(Pate p: Pate.values()){
+			res.add(new Variable("Stock de " + p, this, this.stock.getQuantitePate(p)));
+		}
+		for(Chocolat c: Chocolat.values()){
+			res.add(new Variable("Stock de " + c, this, this.stock.getQuantiteChocolat(c)));
+		}
 		return res;
 	}
 
@@ -84,6 +101,8 @@ public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurCh
 		// TODO ici devront être mis les paramètres dont je parlais (finalement ce
 		// seront des variables qu'il faudra penser à ajouter ici)
 		List<Variable> res = new ArrayList<Variable>();
+		res.add(this.stock.getTransformationCostFeve());
+		res.add(this.stock.getTransformationCostPate());
 		return res;
 	}
 
@@ -103,7 +122,7 @@ public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurCh
 
 	public void notificationOperationBancaire(double montant) {
 		String str = montant > 0 ? "On a gagné de l'argent ! " : "On a perdu de l'argent ! ";
-		this.journalEq5.ajouter(str + montant);
+		this.journalEq5.ajouter(str + montant + " Dollars");
 	}
 
 	// Vente de Chocolat en bourse IVenteChocolatBourse
@@ -163,16 +182,21 @@ public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurCh
 
 	
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
-		return this.acheteurPate.contrePropositionDeLAcheteur(contrat);
+		//errorless commit
+		//return this.acheteurPate.contrePropositionDeLAcheteur(contrat);
+		return null;
 	}
 
 	
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
-		return this.acheteurPate.contrePropositionPrixAcheteur(contrat);
+		//errorless commit
+		//return this.acheteurPate.contrePropositionPrixAcheteur(contrat);
+		return 0;
 	}
 
 	
 	public void receptionner(Object produit, double quantite, ExemplaireContratCadre contrat) {
-		this.acheteurPate.receptionner(produit, quantite, contrat);
+		//errorless commit
+		//this.acheteurPate.receptionner(produit, quantite, contrat);
 	}
 }
