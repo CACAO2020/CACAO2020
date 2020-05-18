@@ -50,10 +50,29 @@ public class DistributeurChocolat extends AbsDistributeurChocolat implements IDi
 		// Le distributeur détermine quelle quantité de chaque chocolat de marque l'acheteur par contrats-cadres doit commander
 		majQuantitesACommanderContratCadre();
 		// Le distributeur détermine quelle quantité de chaque chocolat de marque proposer à la vente à l'étape suivante
-		majQuantitesEnVente();
-		
-		//
+		majQuantitesEnVente();		
+		// Le distributeur met à jour les prix de vente de chaque chocolat de marque
 		majPrixDeVente();
+	}
+	
+	public void majIndicateursDeVente() {
+		int etape = Filiere.LA_FILIERE.getEtape();
+		for (Chocolat choco : ac.nosChoco) {
+			if (totalChocoVendu.get(choco).getHistorique().getTaille() != etape + 1) {
+				totalChocoVendu.get(choco).setValeur(ac, totalChocoVendu.get(choco).getHistorique().get(etape-1).getValeur());
+			}
+			if (etape > 0) {
+				chocoVendu.get(choco).setValeur(ac, totalChocoVendu.get(choco).getHistorique().get(etape).getValeur() - totalChocoVendu.get(choco).getHistorique().get(etape-1).getValeur());
+			}
+		}
+	}
+	
+	public void majPublicites() {
+		for (ChocolatDeMarque choco : produitsCatalogue) {
+			if (choco.getChocolat() == Chocolat.CHOCOLAT_MOYENNE_EQUITABLE) {
+				publicites.add(choco);
+			}
+		}
 	}
 	
 	public void majQuantitesACommanderBourse() {
@@ -103,14 +122,6 @@ public class DistributeurChocolat extends AbsDistributeurChocolat implements IDi
 		}
 	}
 	
-	public void majPublicites() {
-		for (ChocolatDeMarque choco : produitsCatalogue) {
-			if (choco.getChocolat() == Chocolat.CHOCOLAT_MOYENNE_EQUITABLE) {
-				publicites.add(choco);
-			}
-		}
-	}
-	
 	public double quantiteEnVente(Chocolat choco) {
 		double res = 0.;
 		for (ChocolatDeMarque produit : produitsCatalogue) {
@@ -120,18 +131,16 @@ public class DistributeurChocolat extends AbsDistributeurChocolat implements IDi
 		}
 		return res;
 	}
-	public void majIndicateursDeVente() {
-		int etape = Filiere.LA_FILIERE.getEtape();
-		for (Chocolat choco : ac.nosChoco) {
-			if (totalChocoVendu.get(choco).getHistorique().getTaille() != etape + 1) {
-				totalChocoVendu.get(choco).setValeur(ac, totalChocoVendu.get(choco).getHistorique().get(etape-1).getValeur());
-			}
-			if (etape > 0) {
-				chocoVendu.get(choco).setValeur(ac, totalChocoVendu.get(choco).getHistorique().get(etape).getValeur() - totalChocoVendu.get(choco).getHistorique().get(etape-1).getValeur());
-			}
-		}
-	}
 	
+	public double quantiteEnVente(ChocolatDeMarque choco) {
+		if (!debutEtape) {
+			debutEtape = true;
+			adapterQuantitesEnVente();
+			dessinerCatalogue();
+		}
+		return quantitesEnVente.get(choco).getValeur();
+	}
+
 	public void ajouterProduitAuCatalogue(ChocolatDeMarque choco) {
 		if (!produitsCatalogue.contains(choco)) {
 			produitsCatalogue.add(choco);
@@ -157,15 +166,10 @@ public class DistributeurChocolat extends AbsDistributeurChocolat implements IDi
 		return prixChoco.get(choco).getValeur();
 	}
 
-	public double quantiteEnVente(ChocolatDeMarque choco) {
-		if (!debutEtape) {
-			debutEtape = true;
-			for (ChocolatDeMarque produit : produitsCatalogue) {
-				quantitesEnVente.get(produit).setValeur(ac, Double.min(quantitesEnVente.get(produit).getValeur(), ac.getStock().getStockChocolatDeMarque(produit)));
-			}
-			dessinerCatalogue();
+	public void adapterQuantitesEnVente() {
+		for (ChocolatDeMarque produit : produitsCatalogue) {
+			quantitesEnVente.get(produit).setValeur(ac, Double.min(quantitesEnVente.get(produit).getValeur(), ac.getStock().getStockChocolatDeMarque(produit)));
 		}
-		return quantitesEnVente.get(choco).getValeur();
 	}
 
 	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant) {

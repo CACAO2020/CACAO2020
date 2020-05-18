@@ -22,14 +22,15 @@ public class AbsDistributeurChocolat {
 	protected Journal journalCatalogue;
 	protected Journal journal;
 	
+	protected Map<ChocolatDeMarque, Variable> quantitesACommanderContratCadre;
+	protected Map<ChocolatDeMarque, Variable> quantitesEnVente;
+	protected Map<ChocolatDeMarque, Variable> prixChoco;
 	protected Map<Chocolat, Variable> totalChocoVendu;
 	protected Map<Chocolat, Variable> chocoVendu;
-	protected Map<Chocolat, Double> prixParDefaut;
-	protected Map<ChocolatDeMarque, Variable> prixChoco;
-	protected List<ChocolatDeMarque> produitsCatalogue;
-	protected Map<ChocolatDeMarque, Variable> quantitesEnVente;
 	protected Map<Chocolat, Variable> quantitesACommanderBourse;
-	protected Map<ChocolatDeMarque, Variable> quantitesACommanderContratCadre;
+	protected Map<Chocolat, Double> prixParDefaut;
+	
+	protected List<ChocolatDeMarque> produitsCatalogue;
 	protected List<ChocolatDeMarque> publicites;
 	
 	protected boolean debutEtape = true;
