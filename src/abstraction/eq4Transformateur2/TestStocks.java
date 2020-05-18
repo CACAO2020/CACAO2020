@@ -19,7 +19,7 @@ import abstraction.fourni.Filiere;
 public class TestStocks {
 	
 	public static void main(String[] args) {
-		Transformateur2_e1 t = new Transformateur2_e1() ;
+		Transformateur2_stocks_et_transfos t = new Transformateur2_stocks_et_transfos () ;
 		List<Variable> listeIndicateurs = t.getIndicateurs() ;
 		for (Variable v : listeIndicateurs) {
 			System.out.println(v.getNom());

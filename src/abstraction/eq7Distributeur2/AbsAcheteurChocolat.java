@@ -6,69 +6,92 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.sun.tools.javac.util.Pair;
 
+import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.ChocolatDeMarque;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
-public class AbsAcheteurChocolat implements IActeur {
-	private Map<ChocolatDeMarque, Variable> demandeChoco;
-	protected Integer cryptogramme;
+public class AbsAcheteurChocolat {
+	
 	protected Journal journal;
+	
+	protected Map<Chocolat, Variable> demandesChoco;
+	protected Map<Chocolat, Variable> chocoReceptionne;
+	protected Pair<Chocolat, Double> commandeImpayee;
 
 	protected Distributeur2 ac;
 	
-	public AbsAcheteurChocolat() {
-		
-	}
-
+	public Color titleColor = Color.BLACK;
+	public Color alertColor = Color.RED;
+	public Color warningColor = Color.ORANGE;
+	public Color positiveColor = Color.GREEN;
+	public Color descriptionColor = Color.YELLOW;
+	
 	public AbsAcheteurChocolat(Distributeur2 ac) {
-		this.ac = ac;
-		demandeChoco=new HashMap<ChocolatDeMarque, Variable>();
-		for (ChocolatDeMarque choco : ac.getStock().stocksChocolat.keySet()) {
-			demandeChoco.put(choco, new Variable("Demande en : " + choco.name(), ac, 0));
+		this.ac = ac;	
+		initJournaux();
+		demandesChoco = new HashMap<Chocolat, Variable>();
+		chocoReceptionne = new HashMap<Chocolat, Variable>();
+		commandeImpayee = null;
+		
+		for (Chocolat choco : Chocolat.values()) {
+			demandesChoco.put(choco, new Variable(getNom() + " : " + choco.name() + " [Demande i-1]", ac, 0));
 		}
-		this.journal = new Journal(this.getNom()+" Acheteur Chocolat Bourse " + ac.getNumero(), ac);
-	}
 
-	public Map<ChocolatDeMarque, Variable> getDemande_choco() {
-		return demandeChoco;
+		for (Chocolat choco : ac.nosChoco) {
+			chocoReceptionne.put(choco, new Variable(getNom() + " : " + choco.name() + " [Réception i-1]", ac, 0));
+		}
+	}
+	
+	public void initJournaux() {
+		this.journal = new Journal(this.getNom() + " : Acheteur Chocolat Bourse", ac);
+		journal.ajouter(Journal.texteColore(titleColor, Color.WHITE, this.getNom() + " : Acheteur Chocolat Bourse"));
+		journal.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "Ce journal suit les activités de l'acheteur de chocolat à la bourse"));
+		journal.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "associé à ce distributeur. Il affiche les commandes effectuées et leur"));
+		journal.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "statut (payée, impayée) ainsi que les réceptions de commandes."));
 	}
 
 	public String getNom() {
-		return "EQ7";
+		return ac.getNom();
 	}
 
 	public String getDescription() {
-		return "Acheteur de chocolat a la bourse "+this.ac.getNumero();
+		return ac.getDescription();
 	}
-	
+
 	public Color getColor() {
 		return ac.getColor();
 	}
 
-	public void initialiser() {
-	}
-
-	public void setCryptogramme(Integer crypto) {
-		this.cryptogramme = crypto;
-	}
-	public void next() {
-		
-	}
-
 	public List<String> getNomsFilieresProposees() {
-		return new ArrayList<String>();
+		return ac.getNomsFilieresProposees();
 	}
 
 	public Filiere getFiliere(String nom) {
-		return null;
+		return ac.getFiliere(nom);
+	}
+
+	public void setCryptogramme(Integer crypto) {
+		ac.setCryptogramme(crypto);
+	}
+
+	public void notificationFaillite(IActeur acteur) {
+		ac.notificationFaillite(acteur);
+	}
+
+	public void notificationOperationBancaire(double montant) {
+		ac.notificationOperationBancaire(montant);
 	}
 	
 	public List<Variable> getIndicateurs() {
 		List<Variable> res = new ArrayList<Variable>();
+		for (Chocolat choco : ac.nosChoco) {
+			res.add(chocoReceptionne.get(choco));
+		}
 		return res;
 	}
 
@@ -83,9 +106,4 @@ public class AbsAcheteurChocolat implements IActeur {
 		return res;
 	}
 	
-	public void notificationFaillite(IActeur acteur) {
-	}
-	
-	public void notificationOperationBancaire(double montant) {
-	}
 } 
