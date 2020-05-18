@@ -23,6 +23,7 @@ public class Stock {
 	private Map<Pate, List<Couple<Variable>>> stockPate;
 	private Variable transformationCostFeve;
 	private Variable transformationCostPate;
+	private List<Variable> indicateurs;
 
 	public Stock(Transformateur3 acteur) {
 		this.acteur = acteur;
@@ -292,19 +293,31 @@ public class Stock {
 			//le stock est transformé donc la matière première est supprimée
 			this.stockFeves.get(feve).clear();
 		}
-		for(Pate pate : Pate.values()){
+		for (Pate pate : Pate.values()) {
 			for (Couple<Variable> pateInfos : this.stockPate.get(pate)) {
 				this.stockChocolat.get(this.getProduct(pate)).add(pateInfos);
 				pateInfos.get2().ajouter(acteur, this.transformationCostPate.getValeur());
-				this.acteur.getTresorier().diminueTresorerie(this.transformationCostPate.getValeur() * pateInfos.get1().getValeur());
+				this.acteur.getTresorier()
+						.diminueTresorerie(this.transformationCostPate.getValeur() * pateInfos.get1().getValeur());
 			}
 			this.stockPate.get(pate).clear();
 		}
+		this.updateIndicateurs();
+
+	}
+
+	public List<Variable> getIndicateurs() {
+		return this.indicateurs;
+	}
+
+	private void updateIndicateurs() {
+		
 	}
 
 	/**
-	 * Fonction pour faire l'association entre fève et chocolat produit
-	 * de même pour pate en surcharge
+	 * Fonction pour faire l'association entre fève et chocolat produit de même pour
+	 * pate en surcharge
+	 * 
 	 * @return Chocolat produit par la fève associée
 	 */
 	private Chocolat getProduct(Feve feve) {

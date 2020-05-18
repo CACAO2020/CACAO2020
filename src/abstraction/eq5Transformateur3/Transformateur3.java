@@ -86,13 +86,13 @@ public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurCh
 	public List<Variable> getIndicateurs() {
 		List<Variable> res = new ArrayList<Variable>();
 		for(Feve f: Feve.values()){
-			res.add(new Variable("Stock de " + f ,this.stock.getQuantiteFeve()));
+			res.add(new Variable("Stock de " + f, this, this.stock.getQuantiteFeves(f)));
 		}
 		for(Pate p: Pate.values()){
-			res.add(new Variable("Stock de " + p ,this.stock.getQuantitePate()));
+			res.add(new Variable("Stock de " + p, this, this.stock.getQuantitePate(p)));
 		}
 		for(Chocolat c: Chocolat.values()){
-			res.add(new Variable("Stock de " + c ,this.stock.getQuantiteChocolat()));
+			res.add(new Variable("Stock de " + c, this, this.stock.getQuantiteChocolat(c)));
 		}
 		return res;
 	}
