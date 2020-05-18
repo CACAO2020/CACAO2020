@@ -37,7 +37,7 @@ public interface IVendeurCacaoCriee extends IActeur {
 	
 	/**
 	 * Methode appelee par le superviseur des ventes de feves 
-	 * suite au paiement par l'acheteur de la proposition.
+	 * suite au paiement par le vendeur de la proposition.
 	 * La methode doit donc a minima retirer du stock le lot de feve qui vient d'etre achete 
 	 * @param proposition, la proposition que le vendeur vient d'honorer en payant la somme due.
 	 */
