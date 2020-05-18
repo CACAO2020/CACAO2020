@@ -19,15 +19,6 @@ public class Stock extends AbsStock implements IStock, IActeur {
 	public Stock(Distributeur2 ac) {
 			super(ac);
 	}
-
-	public void creerStockChocolatDeMarque(ChocolatDeMarque choco) {
-		if (stocksChocolatDeMarque.containsKey(choco)) {
-			journal.ajouter(Journal.texteColore(alertColor, Color.BLACK, "[ÉCHEC CRÉATION] Refus de création d'un stock pour le " + choco.name() + " : le stock existe déjà."));
-		} else {
-			stocksChocolatDeMarque.put(choco, new Variable(ac.getNom() + " : STOCK " + choco.name(), ac, 0.));
-			journal.ajouter(Journal.texteColore(metaColor, Color.BLACK,"[CRÉATION] Création d'un stock pour le " + choco.name() + "."));
-		}
-	}
 	
 	public double getStockChocolat(Chocolat choco) {
 		if (stocksChocolat.containsKey(choco)) {
@@ -47,7 +38,6 @@ public class Stock extends AbsStock implements IStock, IActeur {
 
 	public void ajouterStockChocolat(ChocolatDeMarque chocoDeMarque, double quantite) {
 		if (!stocksChocolatDeMarque.containsKey(chocoDeMarque)) {
-			creerStockChocolatDeMarque(chocoDeMarque);
 		}
 		if (!stocksChocolat.containsKey(chocoDeMarque.getChocolat())) {
 		}
@@ -59,7 +49,6 @@ public class Stock extends AbsStock implements IStock, IActeur {
 
 	public void retirerStockChocolat(ChocolatDeMarque chocoDeMarque, double quantite) {
 		if (!stocksChocolatDeMarque.containsKey(chocoDeMarque)) {
-			creerStockChocolatDeMarque(chocoDeMarque);
 		}
 		if (!stocksChocolat.containsKey(chocoDeMarque.getChocolat())) {
 		}
@@ -71,17 +60,12 @@ public class Stock extends AbsStock implements IStock, IActeur {
 				journal.ajouter(Journal.texteColore(alertColor, Color.BLACK,"[ÉCHEC STOCK -] Tentative de retirer " + Journal.doubleSur(quantite,2) + " tonnes de " + chocoDeMarque.name() + " rejetée (stock actuel : " + Journal.doubleSur(stocksChocolatDeMarque.get(chocoDeMarque).getValeur(),2) + " tonnes)."));
 		}
 	}
-
-	public List<String> getMarques() {
-		List<String> res = new ArrayList<String>();
-		for (ChocolatDeMarque choco : stocksChocolatDeMarque.keySet()) {
-			res.add(choco.getMarque());
-		}
-		return res;
-	}
 	
-	public void initialiser() {
-		
+	public void initialiser() {		
+		for (ChocolatDeMarque choco : ac.tousLesChocolatsDeMarquePossibles()) {
+			stocksChocolatDeMarque.put(choco, new Variable(ac.getNom() + " : STOCK " + choco.name(), ac, 0.));
+			journal.ajouter(Journal.texteColore(metaColor, Color.BLACK,"[CRÉATION] Création d'un stock pour le " + choco.name() + "."));
+		}
 	}
 	
 	public void next() {

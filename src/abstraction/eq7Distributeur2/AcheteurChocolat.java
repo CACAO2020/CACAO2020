@@ -55,7 +55,6 @@ public class AcheteurChocolat extends AbsAcheteurChocolat implements IAcheteurCh
 			commandeImpayee = null;
 		}
 		journal.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[RÉCEPTION] Réception de " + Journal.doubleSur(quantite,2) + " tonnes de " + chocolat.name() + "."));
-		ac.getDistributeurChocolat().ajouterProduitAuCatalogue(chocolat);
 		chocoReceptionne.get(chocolat.getChocolat()).setValeur(ac, chocoReceptionne.get(chocolat.getChocolat()).getValeur() + quantite);
 	}
 
@@ -63,22 +62,16 @@ public class AcheteurChocolat extends AbsAcheteurChocolat implements IAcheteurCh
 	}
 	
 	public void next() {
-		double totalVentesEtapePrecedente;
-		double stockAConserver = 5.;
+		// L'acheteur à la bourse met à jour les quantités de chocolat demandées au superviseur
+		double stockAConserver = 0.;
+		double stockActuel;
 		double quantiteAVendre;
+		double achatsAFaire;
 		for (Chocolat choco : ac.nosChoco) {
 			chocoReceptionne.get(choco).setValeur(ac, 0.);
-			double stockActuel = ac.getStock().getStockChocolat(choco);
-			if (Filiere.LA_FILIERE.getEtape() > 0) {
-				totalVentesEtapePrecedente = Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape(), choco);
-				quantiteAVendre = totalVentesEtapePrecedente*2;
-			} else {
-				totalVentesEtapePrecedente = 1.;
-				quantiteAVendre = 1.;
-			};
-			
-			double achatsAFaire = max(quantiteAVendre + stockAConserver - stockActuel, 0.);
-			
+			stockActuel = ac.getStock().getStockChocolat(choco);
+			quantiteAVendre = ac.getDistributeurChocolat().quantiteEnVente(choco);
+			achatsAFaire = Double.max(quantiteAVendre + stockAConserver - stockActuel, 0.);
 			demandesChoco.get(choco).setValeur(this, achatsAFaire);
 		}
 		
@@ -87,13 +80,6 @@ public class AcheteurChocolat extends AbsAcheteurChocolat implements IAcheteurCh
 				demandesChoco.get(choco).setValeur(this, 0.);
 			}
 		}
-	}
-
-	public double max(double d1, double d2) {
-		if (d1 < d2) {
-			return d2;
-		}
-		return d1;
 	}
 
 }

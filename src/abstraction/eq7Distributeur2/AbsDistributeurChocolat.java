@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import abstraction.eq8Romu.produits.Chocolat;
+import abstraction.eq8Romu.produits.ChocolatDeMarque;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
@@ -23,7 +24,12 @@ public class AbsDistributeurChocolat {
 	
 	protected Map<Chocolat, Variable> totalChocoVendu;
 	protected Map<Chocolat, Variable> chocoVendu;
+	protected Map<Chocolat, Double> prixParDefaut;
+	protected Map<ChocolatDeMarque, Variable> prixChoco;
+	protected List<ChocolatDeMarque> produitsCatalogue;
+	protected Map<ChocolatDeMarque, Variable> quantitesEnVente;
 	
+	protected boolean debutEtape = true;
 	
 	public Color titleColor = Color.BLACK;
 	public Color metaColor = Color.CYAN;
@@ -34,6 +40,14 @@ public class AbsDistributeurChocolat {
 	
 	public AbsDistributeurChocolat(Distributeur2 ac) {	
 		this.ac = ac;
+		produitsCatalogue = new ArrayList<ChocolatDeMarque>();
+		quantitesEnVente = new HashMap<ChocolatDeMarque, Variable>();
+		prixChoco = new HashMap<ChocolatDeMarque, Variable>();
+		prixParDefaut = new HashMap<Chocolat, Double>();
+		prixParDefaut.put(Chocolat.CHOCOLAT_MOYENNE, 10000.);
+		prixParDefaut.put(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE, 14000.);
+		prixParDefaut.put(Chocolat.CHOCOLAT_HAUTE, 15000.);
+		prixParDefaut.put(Chocolat.CHOCOLAT_HAUTE_EQUITABLE, 20000.);
 		totalChocoVendu = new HashMap<Chocolat, Variable>();
 		chocoVendu = new HashMap<Chocolat, Variable>();
 		for (Chocolat choco : ac.nosChoco) {

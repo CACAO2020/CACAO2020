@@ -2,15 +2,18 @@ package abstraction.eq7Distributeur2;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import abstraction.eq8Romu.chocolatBourse.IAcheteurChocolatBourse;
+import abstraction.eq8Romu.chocolatBourse.IVendeurChocolatBourse;
 import abstraction.eq8Romu.chocolatBourse.SuperviseurChocolatBourse;
 import abstraction.eq8Romu.clients.ClientFinal;
 import abstraction.eq8Romu.clients.IDistributeurChocolatDeMarque;
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.ChocolatDeMarque;
 import abstraction.eq8Romu.produits.Feve;
+import abstraction.eq8Romu.produits.Gamme;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
@@ -18,39 +21,26 @@ import abstraction.fourni.Variable;
 import abstraction.eq7Distributeur2.*;
 
 
-public class Distributeur2 implements IActeur, IAcheteurChocolatBourse, IDistributeurChocolatDeMarque {
+public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteurChocolatBourse, IDistributeurChocolatDeMarque {
 	
 	private static int NB_INSTANCES = 0;
 	public int numero;
-	
 	private int cryptogramme;
+	
+	protected double soldeCritique;
 	
 	private AcheteurChocolat acheteurChocolat;
 	private DistributeurChocolat distributeurChocolat;
 	private Stock stock;
-
-	public List<Chocolat> nosChoco;
-	
-	protected double soldeCritique;
-	
-	public Color titleColor = Color.BLACK;
-	public Color alertColor = Color.RED;
-	public Color descriptionColor = Color.YELLOW;
-	public Color positiveColor = Color.GREEN;
-	public Color warningColor = Color.ORANGE;
 	
 	private Journal journal;
 	private Journal journalTransactions;
 	
 	public Distributeur2() {
+		super();
 		NB_INSTANCES++;
 		numero = NB_INSTANCES;
-		soldeCritique = 0.;
-		nosChoco = new ArrayList<Chocolat>();
-		nosChoco.add(Chocolat.CHOCOLAT_MOYENNE);
-		nosChoco.add(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE);
-		nosChoco.add(Chocolat.CHOCOLAT_HAUTE);
-		nosChoco.add(Chocolat.CHOCOLAT_HAUTE_EQUITABLE);
+		soldeCritique = 2.;
 		acheteurChocolat = new AcheteurChocolat(this);
 		distributeurChocolat = new DistributeurChocolat(this);
 		stock = new Stock(this);
@@ -101,11 +91,15 @@ public class Distributeur2 implements IActeur, IAcheteurChocolatBourse, IDistrib
 		distributeurChocolat.initialiser();
 		stock.initialiser();
 	}
-
+	
 	public void next() {
-		acheteurChocolat.next();
 		distributeurChocolat.next();
+		acheteurChocolat.next();
 		stock.next();
+	}
+	
+	public double getSolde() {
+		return Filiere.LA_FILIERE.getBanque().getSolde(Filiere.LA_FILIERE.getActeur(getNom()), this.cryptogramme);
 	}
 
 	public List<String> getNomsFilieresProposees() {
@@ -163,7 +157,7 @@ public class Distributeur2 implements IActeur, IAcheteurChocolatBourse, IDistrib
 	public void notificationSolde() {
 		double solde = getSolde();
 		if (solde > soldeCritique) {
-			journal.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[SOLDE] Solde actuel : " + Journal.doubleSur(solde,2) + "."));
+			journal.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[SOLDE] Solde après vente : " + Journal.doubleSur(solde,2) + "."));
 		} else {
 			if (solde > 0) {
 				journal.ajouter(Journal.texteColore(warningColor, Color.BLACK, "[SOLDE] Solde actuel : " + Journal.doubleSur(solde,2) + "."));
@@ -171,10 +165,6 @@ public class Distributeur2 implements IActeur, IAcheteurChocolatBourse, IDistrib
 				journal.ajouter(Journal.texteColore(alertColor, Color.BLACK, "[SOLDE] Solde actuel : " + Journal.doubleSur(solde,2) + "."));
 			}
 		}
-	}
-	
-	public double getSolde() {
-		return Filiere.LA_FILIERE.getBanque().getSolde(Filiere.LA_FILIERE.getActeur(getNom()), this.cryptogramme);
 	}
 
 	// Méthodes de l'acheteur de chocolat à la bourse
