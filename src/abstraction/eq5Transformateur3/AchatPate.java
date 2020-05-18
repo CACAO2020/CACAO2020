@@ -16,13 +16,13 @@ public class AchatPate {
         this.acteur = acteur;
     }
     public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
-		
+		//TODO: changer les 4 lignes de code, elles sont écrites de façon a ne pas faire d'erreur de compilations 
 		//on releve les parametres importants de l'offre du vendeur
 		int stepDeb = contrat.getEcheancier().getStepDebut();
-		double quantite = contrat.getEcheancier().getQuantite(step);
+		double quantite = contrat.getEcheancier().getQuantite(0);
 		//notre offre initial
-		int stepDeb0 = contrat.getEcheancier().get(0).getStepDebut();
-		double quantite0 = contrat.getEcheancier().get(0).getQuantite(step);
+		int stepDeb0 = contrat.getEcheancier().getStepDebut();
+		double quantite0 = contrat.getEcheancier().getQuantite(0);
 		
 		//si on est d'accord avec la proposition:
 		if(stepDeb == stepDeb0 && Math.abs(quantite - quantite0) < 0.25*quantite0) {
@@ -31,7 +31,7 @@ public class AchatPate {
 		}
 		
 		//sinon, on peut soit arreter les negociations, soit reproproposer
-		else if(/*acheteur met fin aux négo*/) {
+		else if(true/*acheteur met fin aux négo*/) {
 			return null;
 			}
 		

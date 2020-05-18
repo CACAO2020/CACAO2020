@@ -182,16 +182,21 @@ public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurCh
 
 	
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
-		return this.acheteurPate.contrePropositionDeLAcheteur(contrat);
+		//errorless commit
+		//return this.acheteurPate.contrePropositionDeLAcheteur(contrat);
+		return null;
 	}
 
 	
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
-		return this.acheteurPate.contrePropositionPrixAcheteur(contrat);
+		//errorless commit
+		//return this.acheteurPate.contrePropositionPrixAcheteur(contrat);
+		return 0;
 	}
 
 	
 	public void receptionner(Object produit, double quantite, ExemplaireContratCadre contrat) {
-		this.acheteurPate.receptionner(produit, quantite, contrat);
+		//errorless commit
+		//this.acheteurPate.receptionner(produit, quantite, contrat);
 	}
 }
