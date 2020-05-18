@@ -5,6 +5,7 @@ import java.util.Map;
 import abstraction.eq8Romu.chocolatBourse.IAcheteurChocolatBourse;
 import abstraction.eq8Romu.chocolatBourse.SuperviseurChocolatBourse;
 import abstraction.eq8Romu.produits.Chocolat;
+import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.ChocolatDeMarque;
 import abstraction.eq8Romu.produits.Feve;
 import abstraction.fourni.Filiere;
@@ -42,8 +43,8 @@ public class AcheteurChocolat extends AbsAcheteurChocolat implements IAcheteurCh
 	}
 
 	public void next() {
-		for (ChocolatDeMarque choco : ac.getStock().stocksChocolat.keySet()) {
-		// L'opération sera effectuée pour CHAQUE type de chocolat que nous vendons
+		for (Chocolat choco : ) {
+		// L'opération sera effectuée pour CHAQUE gamme de chocolat que nous vendons
 		//D'abord on consulte les stocks
 			double stock_choco = ac.getStock().stocksChocolat.get(choco).getValeur();
 		//Ensuite on demande au vendeur quelle quantité lui est demandée
