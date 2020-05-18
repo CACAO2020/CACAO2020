@@ -62,17 +62,16 @@ public class AcheteurChocolat extends AbsAcheteurChocolat implements IAcheteurCh
 	}
 	
 	public void next() {
-		// L'acheteur à la bourse met à jour les quantités de chocolat demandées au superviseur
-		double stockAConserver = 0.;
-		double stockActuel;
-		double quantiteAVendre;
-		double achatsAFaire;
+		// L'acheteur à la bourse récupère les données du distributeur et met à jour les quantités de chaque type de chocolat à commander
+		majQuantitesACommander();
+	}
+	
+	public void majQuantitesACommander() {
+		double quantiteACommander;
 		for (Chocolat choco : ac.nosChoco) {
 			chocoReceptionne.get(choco).setValeur(ac, 0.);
-			stockActuel = ac.getStock().getStockChocolat(choco);
-			quantiteAVendre = ac.getDistributeurChocolat().quantiteEnVente(choco);
-			achatsAFaire = Double.max(quantiteAVendre + stockAConserver - stockActuel, 0.);
-			demandesChoco.get(choco).setValeur(this, achatsAFaire);
+			quantiteACommander = ac.getDistributeurChocolat().quantitesACommanderBourse.get(choco).getValeur();
+			demandesChoco.get(choco).setValeur(this, quantiteACommander);
 		}
 		
 		for (Chocolat choco : Chocolat.values()) {

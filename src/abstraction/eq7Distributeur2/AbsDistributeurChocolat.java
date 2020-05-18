@@ -28,6 +28,9 @@ public class AbsDistributeurChocolat {
 	protected Map<ChocolatDeMarque, Variable> prixChoco;
 	protected List<ChocolatDeMarque> produitsCatalogue;
 	protected Map<ChocolatDeMarque, Variable> quantitesEnVente;
+	protected Map<Chocolat, Variable> quantitesACommanderBourse;
+	protected Map<ChocolatDeMarque, Variable> quantitesACommanderContratCadre;
+	protected List<ChocolatDeMarque> publicites;
 	
 	protected boolean debutEtape = true;
 	
@@ -41,8 +44,11 @@ public class AbsDistributeurChocolat {
 	public AbsDistributeurChocolat(Distributeur2 ac) {	
 		this.ac = ac;
 		produitsCatalogue = new ArrayList<ChocolatDeMarque>();
+		publicites = new ArrayList<ChocolatDeMarque>();
 		quantitesEnVente = new HashMap<ChocolatDeMarque, Variable>();
 		prixChoco = new HashMap<ChocolatDeMarque, Variable>();
+		quantitesACommanderBourse = new HashMap<Chocolat, Variable>();
+		quantitesACommanderContratCadre = new HashMap<ChocolatDeMarque, Variable>();
 		prixParDefaut = new HashMap<Chocolat, Double>();
 		prixParDefaut.put(Chocolat.CHOCOLAT_MOYENNE, 10000.);
 		prixParDefaut.put(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE, 14000.);
@@ -51,8 +57,9 @@ public class AbsDistributeurChocolat {
 		totalChocoVendu = new HashMap<Chocolat, Variable>();
 		chocoVendu = new HashMap<Chocolat, Variable>();
 		for (Chocolat choco : ac.nosChoco) {
-			totalChocoVendu.put(choco, new Variable(getNom() + " : " + choco.name() + " [Total Ventes]", ac, 0));
-			chocoVendu.put(choco, new Variable(getNom() + " : " + choco.name() + " [Ventes i-1]", ac, 0));		
+			totalChocoVendu.put(choco, new Variable(getNom() + " : " + choco.name() + " [Total Ventes]", ac, 0.));
+			chocoVendu.put(choco, new Variable(getNom() + " : " + choco.name() + " [Ventes i-1]", ac, 0.));
+			quantitesACommanderBourse.put(choco, new Variable(getNom() + " : " + choco.name() + " [Commande Bourse i-1]", ac, 0.));		
 		}
 		initJournaux();
 	}
@@ -109,6 +116,11 @@ public class AbsDistributeurChocolat {
 		for (Chocolat choco : ac.nosChoco) {
 			res.add(chocoVendu.get(choco));
 		}
+		
+		for (Chocolat choco : ac.nosChoco) {
+			res.add(quantitesACommanderBourse.get(choco));
+		}
+		
 		return res;
 	}
 

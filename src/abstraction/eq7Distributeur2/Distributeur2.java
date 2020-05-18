@@ -87,8 +87,8 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	}
 
 	public void initialiser() {
-		acheteurChocolat.initialiser();
 		distributeurChocolat.initialiser();
+		acheteurChocolat.initialiser();
 		stock.initialiser();
 	}
 	
