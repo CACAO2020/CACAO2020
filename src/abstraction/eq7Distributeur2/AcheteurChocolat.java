@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.sun.tools.javac.util.List;
-import com.sun.tools.javac.util.Pair;
 
 import abstraction.eq8Romu.chocolatBourse.CommandeChocolat;
 import abstraction.eq8Romu.chocolatBourse.IAcheteurChocolatBourse;
