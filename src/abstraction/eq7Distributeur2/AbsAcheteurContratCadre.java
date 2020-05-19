@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import abstraction.eq8Romu.contratsCadres.ExemplaireContratCadre;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
@@ -11,6 +12,8 @@ import abstraction.fourni.Variable;
 
 public class AbsAcheteurContratCadre {
 
+	protected List<ExemplaireContratCadre> mesContrats;
+	
 	protected Distributeur2 ac;
 	
 	public Journal journal;
@@ -23,6 +26,7 @@ public class AbsAcheteurContratCadre {
 	
 	public AbsAcheteurContratCadre(Distributeur2 ac) {
 		this.ac = ac;
+		this.mesContrats = new ArrayList<ExemplaireContratCadre>();
 		initJournaux();
 	}
 

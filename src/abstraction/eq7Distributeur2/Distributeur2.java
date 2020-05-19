@@ -13,6 +13,7 @@ import abstraction.eq8Romu.clients.IDistributeurChocolatDeMarque;
 import abstraction.eq8Romu.contratsCadres.Echeancier;
 import abstraction.eq8Romu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eq8Romu.contratsCadres.IAcheteurContratCadre;
+import abstraction.eq8Romu.contratsCadres.SuperviseurVentesContratCadre;
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.ChocolatDeMarque;
 import abstraction.eq8Romu.produits.Feve;
@@ -21,6 +22,7 @@ import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
+import abstraction.eq1Producteur1.FiliereTestCrieeProd1;
 import abstraction.eq7Distributeur2.*;
 
 
@@ -28,7 +30,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	
 	private static int NB_INSTANCES = 0;
 	public int numero;
-	private int cryptogramme;
+	protected int cryptogramme;
 	
 	protected double soldeCritique;
 	
@@ -60,15 +62,19 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		journalTransactions = new Journal(getNom() + " : Transactions bancaires", this);
 		journalTransactions.ajouter(Journal.texteColore(titleColor, Color.WHITE, "EQ7 : Transactions bancaires"));
 		journalTransactions.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "Ce journal regroupe toutes les opérations bancaires effectuées"));
-		journalTransactions.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "par l'acteur (débits et crédits)."));
+		journalTransactions.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "par l'acteur (débits et crédits) ainsi que les alertes de solde."));
 	}
 	 
 	public int getNumero() {
 		return this.numero; 
 	}
 	
-	public AcheteurBourse getAcheteurChocolat() {
+	public AcheteurBourse getAcheteurBourse() {
 		return this.acheteurBourse;
+	}
+	
+	public AcheteurContratCadre getAcheteurContratCadre() {
+		return this.acheteurContratCadre;
 	}
 	
 	public Vendeur getVendeur() {
@@ -104,6 +110,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	public void next() {
 		vendeur.next();
 		acheteurBourse.next();
+		acheteurContratCadre.next();
 		stock.next();
 	}
 	
@@ -112,11 +119,18 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	}
 
 	public List<String> getNomsFilieresProposees() {
-		return new ArrayList<String>();
+		ArrayList<String> filieres = new ArrayList<String>();
+		filieres.add("TESTEQ7");
+		return(filieres);
 	}
 
 	public Filiere getFiliere(String nom) {
-		return Filiere.LA_FILIERE;
+		if (nom.equals("TESTEQ7")) {
+			return new FiliereTest();
+		}
+		else {
+			return Filiere.LA_FILIERE;
+		}
 	}
 
 	public List<Variable> getIndicateurs() {
