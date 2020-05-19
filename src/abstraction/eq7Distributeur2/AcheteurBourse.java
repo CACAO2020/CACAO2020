@@ -76,7 +76,7 @@ public class AcheteurBourse extends AbsAcheteurBourse implements IAcheteurChocol
 		for (Chocolat choco : Chocolat.values()) {
 			if (!ac.nosChoco.contains(choco)) {
 				demandesChoco.get(choco).setValeur(this, 0.);
-			}
+			} 
 		}
 	}
 
