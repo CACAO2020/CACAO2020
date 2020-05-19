@@ -10,6 +10,9 @@ import abstraction.eq8Romu.chocolatBourse.IVendeurChocolatBourse;
 import abstraction.eq8Romu.chocolatBourse.SuperviseurChocolatBourse;
 import abstraction.eq8Romu.clients.ClientFinal;
 import abstraction.eq8Romu.clients.IDistributeurChocolatDeMarque;
+import abstraction.eq8Romu.contratsCadres.Echeancier;
+import abstraction.eq8Romu.contratsCadres.ExemplaireContratCadre;
+import abstraction.eq8Romu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.ChocolatDeMarque;
 import abstraction.eq8Romu.produits.Feve;
@@ -21,7 +24,7 @@ import abstraction.fourni.Variable;
 import abstraction.eq7Distributeur2.*;
 
 
-public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteurChocolatBourse, IDistributeurChocolatDeMarque {
+public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteurChocolatBourse, IAcheteurContratCadre, IDistributeurChocolatDeMarque {
 	
 	private static int NB_INSTANCES = 0;
 	public int numero;
@@ -29,8 +32,9 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	
 	protected double soldeCritique;
 	
-	private AcheteurBourse acheteurChocolat;
-	private Vendeur distributeurChocolat;
+	private AcheteurBourse acheteurBourse;
+	private AcheteurContratCadre acheteurContratCadre;
+	private Vendeur vendeur;
 	private Stock stock;
 	
 	private Journal journal;
@@ -41,8 +45,9 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		NB_INSTANCES++;
 		numero = NB_INSTANCES;
 		soldeCritique = 2.;
-		acheteurChocolat = new AcheteurBourse(this);
-		distributeurChocolat = new Vendeur(this);
+		acheteurBourse = new AcheteurBourse(this);
+		acheteurContratCadre = new AcheteurContratCadre(this);
+		vendeur = new Vendeur(this);
 		stock = new Stock(this);
 		initJournaux();
 	}
@@ -63,11 +68,11 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	}
 	
 	public AcheteurBourse getAcheteurChocolat() {
-		return this.acheteurChocolat;
+		return this.acheteurBourse;
 	}
 	
-	public Vendeur getDistributeurChocolat() {
-		return this.distributeurChocolat;
+	public Vendeur getVendeur() {
+		return this.vendeur;
 	}
 	
 	public Stock getStock() {
@@ -87,18 +92,18 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	}
 
 	public void initialiser() {
-		distributeurChocolat.initialiser();
-		acheteurChocolat.initialiser();
+		vendeur.initialiser();
+		acheteurBourse.initialiser();
 		stock.initialiser();
 		// AJOUT D'UN STOCK INITIAL POUR OBSERVER LES VENTES
-		for (ChocolatDeMarque choco : distributeurChocolat.getCatalogue()) {
+		for (ChocolatDeMarque choco : vendeur.getCatalogue()) {
 			stock.ajouterStockChocolat(choco, 100.);
 		}
 	}
 	
 	public void next() {
-		distributeurChocolat.next();
-		acheteurChocolat.next();
+		vendeur.next();
+		acheteurBourse.next();
 		stock.next();
 	}
 	
@@ -117,16 +122,16 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	public List<Variable> getIndicateurs() {
 		List<Variable> res = new ArrayList<Variable>();
 		res.addAll(stock.getIndicateurs());
-		res.addAll(acheteurChocolat.getIndicateurs());
-		res.addAll(distributeurChocolat.getIndicateurs());
+		res.addAll(acheteurBourse.getIndicateurs());
+		res.addAll(vendeur.getIndicateurs());
 		return res;
 	}
 
 	public List<Variable> getParametres() {
 		List<Variable> res=new ArrayList<Variable>();
 		res.addAll(stock.getParametres());
-		res.addAll(acheteurChocolat.getParametres());
-		res.addAll(distributeurChocolat.getParametres());
+		res.addAll(acheteurBourse.getParametres());
+		res.addAll(vendeur.getParametres());
 		return res;
 	}
 
@@ -135,8 +140,8 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		res.add(journal);
 		res.add(journalTransactions);
 		res.addAll(stock.getJournaux());
-		res.addAll(acheteurChocolat.getJournaux());
-		res.addAll(distributeurChocolat.getJournaux());
+		res.addAll(acheteurBourse.getJournaux());
+		res.addAll(vendeur.getJournaux());
 		return res;
 	}
 
@@ -171,14 +176,14 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		}
 	}
 
-	// Méthodes de l'acheteur de chocolat à la bourse
+	// Méthodes de l'acheteur à la bourse
 	
 	public void setCryptogramme(Integer crypto) {
 		this.cryptogramme = crypto;
 	}
 
 	public double getDemande(Chocolat chocolat, double cours) {
-		return acheteurChocolat.getDemande(chocolat, cours);
+		return acheteurBourse.getDemande(chocolat, cours);
 	}
 
 	public Integer getCryptogramme(SuperviseurChocolatBourse superviseur) {
@@ -186,37 +191,51 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	}
 
 	public void notifierCommande(Chocolat chocolat, double quantiteObtenue, boolean payee) {
-		acheteurChocolat.notifierCommande(chocolat, quantiteObtenue, payee);
+		acheteurBourse.notifierCommande(chocolat, quantiteObtenue, payee);
 	}
 
 	public void receptionner(ChocolatDeMarque chocolat, double quantite) {
-		acheteurChocolat.receptionner(chocolat, quantite);
+		acheteurBourse.receptionner(chocolat, quantite);
 	}
 
-	// Méthodes du distributeur de chocolat de marque
+	// Méthodes du vendeur
 	
 	public List<ChocolatDeMarque> getCatalogue() {
-		return distributeurChocolat.getCatalogue();
+		return vendeur.getCatalogue();
 	}
 
 	public double prix(ChocolatDeMarque choco) {
-		return distributeurChocolat.prix(choco);
+		return vendeur.prix(choco);
 	}
 
 	public double quantiteEnVente(ChocolatDeMarque choco) {
-		return distributeurChocolat.quantiteEnVente(choco);
+		return vendeur.quantiteEnVente(choco);
 	}
 
 	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant) {
-		distributeurChocolat.vendre(client, choco, quantite, montant);
+		vendeur.vendre(client, choco, quantite, montant);
 	}
 
 	public void notificationRayonVide(ChocolatDeMarque choco) {
-		distributeurChocolat.notificationRayonVide(choco);
+		vendeur.notificationRayonVide(choco);
 	}
 
 	public List<ChocolatDeMarque> pubSouhaitee() {
-		return distributeurChocolat.pubSouhaitee();
+		return vendeur.pubSouhaitee();
+	}
+
+	// Méthodes de l'acheteur contrat cadre
+	
+	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
+		return acheteurContratCadre.contrePropositionDeLAcheteur(contrat);
+	}
+
+	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
+		return acheteurContratCadre.contrePropositionPrixAcheteur(contrat);
+	}
+
+	public void receptionner(Object produit, double quantite, ExemplaireContratCadre contrat) {
+		acheteurContratCadre.receptionner(produit, quantite, contrat);
 	}
 
 }
