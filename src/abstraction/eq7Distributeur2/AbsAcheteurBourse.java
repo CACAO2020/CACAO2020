@@ -13,7 +13,7 @@ import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
-public class AbsAcheteurChocolat {
+public class AbsAcheteurBourse {
 	
 	protected Journal journal;
 	
@@ -29,7 +29,7 @@ public class AbsAcheteurChocolat {
 	public Color positiveColor = Color.GREEN;
 	public Color descriptionColor = Color.YELLOW;
 	
-	public AbsAcheteurChocolat(Distributeur2 ac) {
+	public AbsAcheteurBourse(Distributeur2 ac) {
 		this.ac = ac;	
 		initJournaux();
 		demandesChoco = new HashMap<Chocolat, Variable>();

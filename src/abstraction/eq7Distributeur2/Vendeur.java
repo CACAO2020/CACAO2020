@@ -20,9 +20,9 @@ import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
-public class DistributeurChocolat extends AbsDistributeurChocolat implements IDistributeurChocolatDeMarque, IActeur {
+public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque, IActeur {
 
-	public DistributeurChocolat(Distributeur2 ac) {
+	public Vendeur(Distributeur2 ac) {
 		super(ac);
 	}
 	

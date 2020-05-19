@@ -29,8 +29,8 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	
 	protected double soldeCritique;
 	
-	private AcheteurChocolat acheteurChocolat;
-	private DistributeurChocolat distributeurChocolat;
+	private AcheteurBourse acheteurChocolat;
+	private Vendeur distributeurChocolat;
 	private Stock stock;
 	
 	private Journal journal;
@@ -41,8 +41,8 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		NB_INSTANCES++;
 		numero = NB_INSTANCES;
 		soldeCritique = 2.;
-		acheteurChocolat = new AcheteurChocolat(this);
-		distributeurChocolat = new DistributeurChocolat(this);
+		acheteurChocolat = new AcheteurBourse(this);
+		distributeurChocolat = new Vendeur(this);
 		stock = new Stock(this);
 		initJournaux();
 	}
@@ -62,11 +62,11 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		return this.numero; 
 	}
 	
-	public AcheteurChocolat getAcheteurChocolat() {
+	public AcheteurBourse getAcheteurChocolat() {
 		return this.acheteurChocolat;
 	}
 	
-	public DistributeurChocolat getDistributeurChocolat() {
+	public Vendeur getDistributeurChocolat() {
 		return this.distributeurChocolat;
 	}
 	

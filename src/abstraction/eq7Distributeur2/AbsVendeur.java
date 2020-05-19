@@ -13,7 +13,7 @@ import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
-public class AbsDistributeurChocolat {
+public class AbsVendeur {
 	
 	protected Integer cryptogramme;
 
@@ -42,7 +42,7 @@ public class AbsDistributeurChocolat {
 	public Color positiveColor = Color.GREEN;
 	public Color descriptionColor = Color.YELLOW;
 	
-	public AbsDistributeurChocolat(Distributeur2 ac) {	
+	public AbsVendeur(Distributeur2 ac) {	
 		this.ac = ac;
 		produitsCatalogue = new ArrayList<ChocolatDeMarque>();
 		publicites = new ArrayList<ChocolatDeMarque>();
