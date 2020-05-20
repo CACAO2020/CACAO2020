@@ -11,8 +11,8 @@ import abstraction.fourni.Filiere;
 
 public class AchatBourseEQ6 extends Stock implements IAcheteurChocolatBourse{
     
-	public AchatBourseEQ6(double capaciteStockmax, Map<ChocolatDeMarque, Double> MapStock) {
-		super(capaciteStockmax, MapStock);
+	public AchatBourseEQ6(double capaciteStockmax) {
+		super(capaciteStockmax);
 		// TODO Auto-generated constructor stub
 	}
 

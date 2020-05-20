@@ -6,13 +6,17 @@ import java.util.Map;
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.ChocolatDeMarque;
 
-public class Stock  extends Distributeur1 implements IStock { /** @author Avril Thibault et Tamine Mélissa*/
+public class Stock  extends Distributeur1abs implements IStock { /** @author Avril Thibault et Tamine Mélissa*/
 	protected double capaciteStockmax;
 	protected Map<ChocolatDeMarque,Double> MapStock;
 	
-	public Stock (double capaciteStockmax, Map<ChocolatDeMarque,Double> MapStock) {
+		
+	
+	
+	public Stock(double capaciteStockmax) {
 		this.capaciteStockmax = capaciteStockmax;
 		this.MapStock = new HashMap<ChocolatDeMarque,Double>();
+		
 	}
 
 	@Override

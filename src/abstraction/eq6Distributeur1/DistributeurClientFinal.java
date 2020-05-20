@@ -22,8 +22,8 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 	private double pctageBG;
 	private double pctageMG;
 
-	public DistributeurClientFinal(double capaciteDeVente, double margeHGE, double margeMG, double margeBG,double capaciteStockmax, Map<ChocolatDeMarque, Double> MapStock, double pctageHGE, double pctageMG, double pctageBG) {
-		super(capaciteStockmax, MapStock);
+	public DistributeurClientFinal(double capaciteDeVente, double margeHGE, double margeMG, double margeBG,double capaciteStockmax, double pctageHGE, double pctageMG, double pctageBG) {
+		super(capaciteStockmax);
 		this.catalogueVente = new HashMap<ChocolatDeMarque, Double>();
 		this.capaciteDeVente = capaciteDeVente;
 		this.margeHGE=margeHGE;
@@ -38,6 +38,7 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 	/** @author Luca Pinguet & Mélissa Tamine */
 	
 	public List<ChocolatDeMarque> getCatalogue() {
+		System.out.print("getcata");
 		List<ChocolatDeMarque> produits = new ArrayList<ChocolatDeMarque>();
 		for (ChocolatDeMarque chocos : this.MapStock.keySet()) {
 			produits.add(chocos);
