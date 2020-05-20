@@ -6,8 +6,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import abstraction.eq8Romu.cacaoCriee.FiliereTestVentesCacaoCriee;
+import abstraction.eq8Romu.chocolatBourse.FiliereTestVentesChocolatBourse;
+import abstraction.eq8Romu.clients.FiliereTestClientFinal;
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.ChocolatDeMarque;
+import abstraction.eq8Romu.ventesCacaoAleatoires.FiliereVentesCacaoAleatoires;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
@@ -69,11 +73,21 @@ public class Distributeur1abs implements IActeur {
 	}
 	
 	public List<String> getNomsFilieresProposees() {
-		return new ArrayList<String>();
+		ArrayList<String> filieres = new ArrayList<String>();
+		filieres.add("AchatBourseSeul"); //Simulation achat bourse sans concurrence
+		filieres.add("AchatBourseConcu"); //Simulation achat bourse avec concurrence
+		filieres.add("VenteSeul"); //Simulation vente sans concurrence
+		filieres.add("VenteConcu"); //Simulation vente avec concurrence
+		return filieres;
 	}
 
 	public Filiere getFiliere(String nom) {
-		return null;
+		switch (nom) {
+		case "AchatBourseSeul" : return new FiliereAchatSeul();
+		case "AchatBourseConcu" : return new FiliereAchatConcu();
+		case "VenteSeul" : return new FiliereVenteSeul();
+		case "VenteConcu" : return new FiliereVenteConcu();
+		default : return null;}
 	}
 	
 	public List<Variable> getIndicateurs() {

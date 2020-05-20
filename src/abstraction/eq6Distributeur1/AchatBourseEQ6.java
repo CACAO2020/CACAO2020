@@ -21,15 +21,15 @@ public class AchatBourseEQ6 extends Stock implements IAcheteurChocolatBourse{
 	private HashMap<Integer, HashMap<Chocolat, Double>> historiqueBourse;
 	
 	public double DemandeTotal(){
-		double consomationAnnuel = Filiere.LA_FILIERE.getIndicateur("CLIENTFINAL consommation annuelle").getValeur();
+		//double consomationAnnuel = Filiere.LA_FILIERE.getIndicateur("CLIENTFINAL consommation annuelle").getValeur();
 		
-		return consomationAnnuel;
+		return 0.0;
 	}
 	
 	public double EvolutionDemandeChocolat(Chocolat chocolat){ // il faut prendre en compte les ruptures de stocks
 		
 		double anneeYa1AN = Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-24, chocolat );
-		
+		journalEq6.ajouter("il y a 1 an" + anneeYa1AN);
 		if (Filiere.LA_FILIERE.getEtape()>24) {
 			double anneeYa2AN = Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-48, chocolat );//pareil que l'autre, mais pour le chocolat en question, en pourcentage
 			
@@ -55,6 +55,7 @@ public class AchatBourseEQ6 extends Stock implements IAcheteurChocolatBourse{
 			double DeamndeChoco = this.EvolutionDemandeChocolat(chocolat);
 			evolutionCours.get(Filiere.LA_FILIERE.getEtape()).put(chocolat, cours);
 			if (DeamndeChoco<stockChoco) {
+				journalEq6.ajouter("Demande =" + DeamndeChoco + "stock =" + stockChoco + "return 0");
 				return 0;
 				
 			}
@@ -62,13 +63,16 @@ public class AchatBourseEQ6 extends Stock implements IAcheteurChocolatBourse{
 				
 				double quantitéSouhaité =(DeamndeChoco/2 - stockChoco); //on fait l'hypothèse qu'on a la moitié du marché
 				if (quantitéSouhaité*cours <solde) {
+					journalEq6.ajouter("Demande =" + DeamndeChoco + "stock =" + stockChoco + "return quantiteSouhaite" + quantitéSouhaité);
 					return quantitéSouhaité;
 					
 				}
 				else {
+					journalEq6.ajouter("Demande =" + DeamndeChoco + "stock =" + stockChoco + "return max");
 					return max;
 				}
 			}
+			journalEq6.ajouter("Demande =" + DeamndeChoco + "stock =" + stockChoco + "return 0 fin");
 			return 0;
 		}
 	
