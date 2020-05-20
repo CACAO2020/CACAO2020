@@ -73,8 +73,8 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 	
 	public void majQuantitesACommanderBourse() {
 		double quantiteACommanderBourse;
-		double quantiteACommanderBourseMin = 1.;
-		double quantiteACommanderBourseMax = 5.;
+		double quantiteACommanderBourseMin = 0.;
+		double quantiteACommanderBourseMax = 500.;
 		for (Chocolat choco : ac.nosChoco) {
 			quantiteACommanderBourse = Math.random() * (quantiteACommanderBourseMax - quantiteACommanderBourseMin) + quantiteACommanderBourseMin;
 			quantitesACommanderBourse.get(choco).setValeur(ac, quantiteACommanderBourse);
