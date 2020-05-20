@@ -38,9 +38,6 @@ public class AcheteurContratCadre extends AbsAcheteurContratCadre implements IAc
 		SuperviseurVentesContratCadre superviseur = Filiere.LA_FILIERE.getSuperviseurContratCadre();
 		int etape = Filiere.LA_FILIERE.getEtape();		
 		for (ChocolatDeMarque choco : ac.getVendeur().produitsCatalogue) {
-			if (superviseur == null) {
-				System.out.println("arf");
-			}
 			List<IVendeurContratCadre> vendeurs = superviseur.getVendeurs(choco);
 			ExemplaireContratCadre contrat;
 			for (IVendeurContratCadre vendeur : vendeurs) {
