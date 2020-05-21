@@ -24,7 +24,10 @@ public class FiliereAchatSeul extends Filiere {
 		System.out.print(this.getIndicateurs(CBASSE));
 		
 		
-		this.getIndicateur("V.ChocoBourse1CHOCOLAT_BASSE stock CHOCOLAT_BASSE").setValeur(cf, 12345);
+		this.getIndicateur("V.ChocoBourse1CHOCOLAT_BASSE stock CHOCOLAT_BASSE").setValeur(cf, 1000000000);
+		this.getIndicateur("V.ChocoBourse2CHOCOLAT_MOYENNE stock CHOCOLAT_MOYENNE").setValeur(cf, 1000000000);
+		this.getIndicateur("V.ChocoBourse3CHOCOLAT_HAUTE_EQUITABLE stock CHOCOLAT_HAUTE_EQUITABLE").setValeur(cf, 1000000000);
+		
 		
 	}
 	
