@@ -24,7 +24,7 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 
 	public DistributeurClientFinal(double capaciteDeVente, double margeHGE, double margeMG, double margeBG,double capaciteStockmax, double pctageHGE, double pctageMG, double pctageBG) {
 		super(capaciteStockmax);
-		this.catalogueVente = new HashMap<ChocolatDeMarque, Double>();
+		this.catalogueVente = new HashMap<ChocolatDeMarque,Double>();
 		this.capaciteDeVente = capaciteDeVente;
 		this.margeHGE=margeHGE;
 		this.margeMG=margeMG;
@@ -39,17 +39,18 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 	
 	public List<ChocolatDeMarque> getCatalogue() {
 		System.out.print("getcata");
-		List<ChocolatDeMarque> produits = new ArrayList<ChocolatDeMarque>();
+		/**List<ChocolatDeMarque> produits = new ArrayList<ChocolatDeMarque>();
 		for (ChocolatDeMarque chocos : this.MapStock.keySet()) {
 			produits.add(chocos);
 		}
-		return produits;
+		return produits;*/
+		return ClientFinal.tousLesChocolatsDeMarquePossibles();
 	}
 
 	/** @author Luca Pinguet & Mélissa Tamine */
 	
 	public double prix(ChocolatDeMarque choco) {
-		double cours = this.evolutionCours.get(Filiere.LA_FILIERE.getEtape()).get(choco.getChocolat());
+		/**double cours = this.evolutionCours.get(Filiere.LA_FILIERE.getEtape()).get(choco.getChocolat());
 		if (choco.getChocolat()==Chocolat.CHOCOLAT_HAUTE_EQUITABLE) {
 			return cours+margeHGE*cours;}
 		else if (choco.getChocolat()==Chocolat.CHOCOLAT_MOYENNE) {
@@ -57,7 +58,8 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 		else if (choco.getChocolat()==Chocolat.CHOCOLAT_BASSE) {
 			return cours+margeBG*cours;}
 		else {
-			return 0 ;}
+			return 0 ;}*/
+		return Filiere.LA_FILIERE.getIndicateur("BourseChoco cours "+choco.getChocolat().name()).getValeur() * 2;
 		}
 		
 
@@ -65,33 +67,35 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 	
 	public double quantiteEnVente(ChocolatDeMarque choco) {
 		double capaciteHGE=this.capaciteDeVente*this.pctageHGE;
-		double capaciteMG=this.capaciteDeVente*this.pctageMG;
-		double capaciteBG=this.capaciteDeVente*this.pctageBG;
-		
-		double nbmarques=0;
-		
-		for (ChocolatDeMarque chocos : MapStock.keySet()) {
-			if (chocos.getChocolat()==choco.getChocolat()) {
-				nbmarques = nbmarques + 1;
-			}
-			
-		}
-		
-		
-		if (choco.getChocolat()==Chocolat.CHOCOLAT_HAUTE_EQUITABLE) {
-			return Math.min(capaciteHGE/nbmarques, this.MapStock.get(choco));
-		}
-		else if (choco.getChocolat()==Chocolat.CHOCOLAT_MOYENNE) {
-			return Math.min(capaciteMG/nbmarques, this.MapStock.get(choco));
-		}
-		else if (choco.getChocolat()==Chocolat.CHOCOLAT_BASSE) {
-			return Math.min(capaciteBG/nbmarques, this.MapStock.get(choco));
-		}
-		else {
-			return 0;
-		}
+        double capaciteMG=this.capaciteDeVente*this.pctageMG;
+        double capaciteBG=this.capaciteDeVente*this.pctageBG;
+
+        double nbmarques=0;
+
+        for (ChocolatDeMarque chocos : MapStock.keySet()) {
+            if (chocos.getChocolat()==choco.getChocolat()) {
+                nbmarques = nbmarques + 1;
+            }
+
+        }
+
+
+        if (choco.getChocolat()==Chocolat.CHOCOLAT_HAUTE_EQUITABLE) {
+            return this.MapStock.keySet().contains(choco) ? Math.min(capaciteHGE/nbmarques, this.MapStock.get(choco)) : capaciteHGE/nbmarques;
+        }
+        else if (choco.getChocolat()==Chocolat.CHOCOLAT_MOYENNE) {
+            return this.MapStock.keySet().contains(choco) ? Math.min(capaciteMG/nbmarques, this.MapStock.get(choco)):capaciteMG/nbmarques;
+        }
+        else if (choco.getChocolat()==Chocolat.CHOCOLAT_BASSE) {
+        	System.out.print("Map ="+this.MapStock);
+            return this.MapStock.keySet().contains(choco) ? Math.min(capaciteBG/nbmarques, this.MapStock.get(choco)) : capaciteBG/nbmarques;
+        }
+        else {
+            return 0;
+        }
+
+    }
 	
-	}
 	
 	/** @author Luca Pinguet & Mélissa Tamine */
 	
