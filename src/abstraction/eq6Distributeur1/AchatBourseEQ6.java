@@ -79,12 +79,13 @@ public class AchatBourseEQ6 extends Stock implements IAcheteurChocolatBourse{
 	
 		
 	
-		public void notifierCommande(Chocolat chocolat, double quantiteObtenue, boolean payee) {//codé
-			if ( payee == true) {
+		public void notifierCommande(Chocolat chocolat, double quantiteObtenue, boolean payee) {
+			/**if ( payee == true) {
 				HashMap<Chocolat, Double> a = new HashMap<Chocolat, Double>();
 				a.put(chocolat,quantiteObtenue);
-				this.historiqueBourse.put(Filiere.LA_FILIERE.getEtape(),a );      //faut le completer avec Filiere.LA_FILIERE....., on fait un historique
-			}
+				this.historiqueBourse.put(Filiere.LA_FILIERE.getEtape(),a );     
+			}*/
+			/** getChocolat.name().getHistorique().get(int i)*/
 		}
 	
 		
