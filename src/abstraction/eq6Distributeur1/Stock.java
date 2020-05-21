@@ -8,14 +8,14 @@ import abstraction.eq8Romu.produits.ChocolatDeMarque;
 
 public class Stock  extends Distributeur1abs implements IStock { /** @author Avril Thibault et Tamine Mélissa*/
 	protected double capaciteStockmax;
-	protected Map<ChocolatDeMarque,Double> MapStock;
+	//protected Map<ChocolatDeMarque,Double> MapStock;//
 	
 		
 	
 	
 	public Stock(double capaciteStockmax) {
 		this.capaciteStockmax = capaciteStockmax;
-		this.MapStock = new HashMap<ChocolatDeMarque,Double>();
+		//this.MapStock = new HashMap<ChocolatDeMarque,Double>();//
 		
 	}
 	
@@ -59,13 +59,14 @@ public class Stock  extends Distributeur1abs implements IStock { /** @author Avr
 
 	@Override
 	public void stocker(ChocolatDeMarque choco, double quantite) {
+		journalEq6Stock.ajouter("stocker");
 		if (MapStock.keySet().contains(choco)) {
 			this.MapStock.put(choco, this.MapStock.get(choco)+quantite);
 		}
 		else {
 			this.MapStock.put(choco, quantite);
 		}
-		
+		journalEq6Stock.ajouter("" + this.MapStock.keySet());
 	}
 
 	@Override

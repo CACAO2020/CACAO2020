@@ -8,6 +8,7 @@ import java.util.Map;
 
 import abstraction.eq8Romu.cacaoCriee.FiliereTestVentesCacaoCriee;
 import abstraction.eq8Romu.chocolatBourse.FiliereTestVentesChocolatBourse;
+import abstraction.eq8Romu.clients.ClientFinal;
 import abstraction.eq8Romu.clients.FiliereTestClientFinal;
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.ChocolatDeMarque;
@@ -20,23 +21,23 @@ import abstraction.fourni.Variable;
 public class Distributeur1abs implements IActeur {
 
 	protected Integer cryptogramme;
-	protected Journal journalEq6;
+	protected Journal journalEq6, journalEq6Stock;
 	protected Variable stockHGE;
 	protected Variable stockMG;
 	protected Variable stockBG;
 	protected Map<Integer,Map<Chocolat,Double>> evolutionCours;
 	protected Map<ChocolatDeMarque,Double> MapStock;
-	
-	public Distributeur1abs() {
-		this.journalEq6 = new Journal("Eq6 activites", this); 
+
+	public Distributeur1abs() { 
 		this.stockHGE=new Variable(getNom()+" stock "+ Chocolat.CHOCOLAT_HAUTE_EQUITABLE.toString(), this, 0, 1000000000, 1000000);
 		this.stockMG=new Variable(getNom()+"stock"+ Chocolat.CHOCOLAT_MOYENNE.toString(), this, 0, 1000000000, 1000000);
 		this.stockBG=new Variable(getNom()+"stock"+ Chocolat.CHOCOLAT_BASSE.toString(), this, 0, 1000000000, 1000000);
 		this.journalEq6=new Journal(this.getNom()+" activites", this);
+		this.journalEq6Stock=new Journal(this.getNom()+" stock", this);
 		evolutionCours = new HashMap<Integer,Map<Chocolat,Double>>();
 		this.MapStock = new HashMap<ChocolatDeMarque,Double>();
 	}
-	
+
 	public String getNom() {
 		return "IMTermarché";
 	}
@@ -44,16 +45,30 @@ public class Distributeur1abs implements IActeur {
 	public String getDescription() {
 		return "Distributeur bla bla bla";
 	}
-	
+
 	public Color getColor() {
 		return new Color(240, 195, 15);
 	}
-
+	
+	public void stocker(ChocolatDeMarque choco, double quantite) {
+		
+	}
 	public void initialiser() {
+		for (ChocolatDeMarque choco : ClientFinal.tousLesChocolatsDeMarquePossibles()) {
+			if (choco.getChocolat()==Chocolat.CHOCOLAT_HAUTE_EQUITABLE) {
+				journalEq6Stock.ajouter("2345");
+				stocker(choco, 2345);
+			}
+				
+		}
 	}
 
 	public void setCryptogramme(Integer crypto) {
 		this.cryptogramme = crypto;
+	}
+
+	public double quantiteEnStockTypeChoco(Chocolat choco) {
+		return 0;
 	}
 	
 	/** @author Luca Pinguet & Mélissa Tamine */
@@ -63,22 +78,25 @@ public class Distributeur1abs implements IActeur {
 		if (Filiere.LA_FILIERE.getEtape()>=1) {
 			for (ChocolatDeMarque chocos : this.MapStock.keySet()) {
 				journalEq6.ajouter("Le prix moyen du chocolat \""+chocos.name()+"\" a l'etape precedente etait de "+Filiere.LA_FILIERE.prixMoyenEtapePrecedente(chocos));
-			
-		}
+
+			}
 			for (ChocolatDeMarque chocos : this.MapStock.keySet()) {
 				journalEq6.ajouter("Les ventes de chocolat \""+chocos.name()+" il y a un an etaient de "+Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-24, chocos));
-		
-	}
+
+			}
 		}
 		double somme = 0;
+		journalEq6Stock.ajouter("" + this.MapStock.keySet().size());
 		for (ChocolatDeMarque chocos : this.MapStock.keySet()) {
 			somme= somme+ this.MapStock.get(chocos);
-		journalEq6.ajouter("La quantite de chocolat en stock est"+somme);
-			
-			
+			journalEq6Stock.ajouter("La quantite de chocolat en stock est"+somme);
 		}
+		this.stockMG.setValeur(this, quantiteEnStockTypeChoco(Chocolat.CHOCOLAT_MOYENNE));
+		this.stockBG.setValeur(this, quantiteEnStockTypeChoco(Chocolat.CHOCOLAT_BASSE));
+		this.stockHGE.setValeur(this, quantiteEnStockTypeChoco(Chocolat.CHOCOLAT_HAUTE_EQUITABLE));
+		
 	}
-	
+
 	public List<String> getNomsFilieresProposees() {
 		ArrayList<String> filieres = new ArrayList<String>();
 		filieres.add("AchatBourseSeul"); //Simulation achat bourse sans concurrence
@@ -96,10 +114,13 @@ public class Distributeur1abs implements IActeur {
 		case "VenteConcu" : return new FiliereVenteConcu();
 		default : return null;}
 	}
-	
+
 	public List<Variable> getIndicateurs() {
 		List<Variable> res=new ArrayList<Variable>();
-		
+		res.add(stockHGE);
+		res.add(stockBG);
+		res.add(stockMG);
+
 		return res;
 	}
 
@@ -111,17 +132,18 @@ public class Distributeur1abs implements IActeur {
 	public List<Journal> getJournaux() {
 		List<Journal> res=new ArrayList<Journal>();
 		res.add(this.journalEq6);
+		res.add(this.journalEq6Stock);
 		return res;
 	}
 
 	public void notificationFaillite(IActeur acteur) {
 		if (this==acteur) {
-		System.out.println("I'll be back... or not... "+this.getNom());
+			System.out.println("I'll be back... or not... "+this.getNom());
 		} else {
 			System.out.println("Poor "+acteur.getNom()+"... We will miss you. "+this.getNom());
 		}
 	}
-	
+
 	public void notificationOperationBancaire(double montant) {
 	}
 }
