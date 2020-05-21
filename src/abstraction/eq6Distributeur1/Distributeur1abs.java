@@ -92,6 +92,7 @@ public class Distributeur1abs implements IActeur {
 	
 	public List<Variable> getIndicateurs() {
 		List<Variable> res=new ArrayList<Variable>();
+		
 		return res;
 	}
 
