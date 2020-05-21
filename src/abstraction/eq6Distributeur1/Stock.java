@@ -18,6 +18,7 @@ public class Stock  extends Distributeur1abs implements IStock { /** @author Avr
 		this.MapStock = new HashMap<ChocolatDeMarque,Double>();
 		
 	}
+	
 
 	@Override
 	public double quantiteEnStockTypeChoco(Chocolat choco) {

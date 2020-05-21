@@ -70,6 +70,13 @@ public class Distributeur1abs implements IActeur {
 		
 	}
 		}
+		double somme = 0;
+		for (ChocolatDeMarque chocos : this.MapStock.keySet()) {
+			somme= somme+ this.MapStock.get(chocos);
+		journalEq6.ajouter("La quantite de chocolat en stock est"+somme);
+			
+			
+		}
 	}
 	
 	public List<String> getNomsFilieresProposees() {
