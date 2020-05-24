@@ -12,12 +12,16 @@ import abstraction.eq8Romu.cacaoCriee.SuperviseurCacaoCriee;
 import abstraction.eq8Romu.chocolatBourse.IVendeurChocolatBourse;
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.Feve;
+import abstraction.fourni.Filiere;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
 public class Transformateur2_negoce extends Transformateur2_contratCadre implements IAcheteurCacaoCriee, IVendeurChocolatBourse {
 	private Map<Feve, Variable> prixMaxAchatFeves;
 	private Map<Chocolat, Variable> prixMinVenteChocolat;
+	protected Double MARGE_VISEE_CHOCOLAT = 0.5;
+	protected Double MARGE_VISEE_PATE = 0.3;
+
 	
 	public Transformateur2_negoce() {
 		super();
@@ -72,16 +76,18 @@ public class Transformateur2_negoce extends Transformateur2_contratCadre impleme
             classeAppelante = null; 
         }
 if (!classeAppelante.equals(SuperviseurCacaoCriee.class)) { throw new Error("la concurrence tente de nous arnaquer"); }
-		if (super.getSolde()*0.5>lot.getQuantiteEnTonnes()*this.prixMaxAchatFeves.get(lot.getFeve()).getValeur()) { // ON ACHETE QUE SI LE VALEUR DU LOT EST < 50% DE NOTRE SOLDE (PEUT ETRE MODIFIE
-			return this.prixMaxAchatFeves.get(lot.getFeve()).getValeur();
+		double prix = Math.max(this.prixRentableAchatFeve(lot.getFeve()), lot.getPrixMinPourUneTonne());
+		if (super.getSolde()*0.4>lot.getQuantiteEnTonnes()*prix) { // ON ACHETE QUE SI LE VALEUR DU LOT EST < 40% DE NOTRE SOLDE (PEUT ETRE MODIFIE
+			return prix;
 		}
 		else {
-			return 3;
+			return 0;
 		}
 	}
 
 	public void notifierPropositionRefusee(PropositionCriee proposition) {
 		this.journalEq4.ajouter("Apprend que sa proposition de "+Journal.doubleSur(proposition.getPrixPourUneTonne(), 4)+" pour "+Journal.texteColore(proposition.getVendeur(), Journal.doubleSur(proposition.getQuantiteEnTonnes(), 2)+" tonnes de "+proposition.getFeve().name())+Journal.texteColore(Color.red, Color.white, " a ete refusee"));
+		//FAIRE BAISSER LA MARGE VISEE
 	}
 
 	public Integer getCryptogramme(SuperviseurCacaoCriee superviseur) {
@@ -98,7 +104,7 @@ if (!classeAppelante.equals(SuperviseurCacaoCriee.class)) { throw new Error("la 
 		super.setStockFevesValeur(feve, proposition.getQuantiteEnTonnes()+super.getStockFevesValeur(feve));
 		this.journalEq4.ajouter("Apprend que sa proposition de "+Journal.doubleSur(proposition.getPrixPourUneTonne(), 4)+" pour "+Journal.texteColore(proposition.getVendeur(), Journal.doubleSur(proposition.getQuantiteEnTonnes(), 2)+" tonnes de "+proposition.getFeve().name())+Journal.texteColore(Color.green, Color.black," a ete acceptee"));
 		this.journalEq4.ajouter("--> le stock de feve passe a "+Journal.doubleSur(this.stockFeves.get(proposition.getFeve()).getValeur(), 4));
-		
+		//FAIRE AUGMENTER LA MARGE VISEE
 	}
 
 	
@@ -117,11 +123,51 @@ if (!classeAppelante.equals(SuperviseurCacaoCriee.class)) { throw new Error("la 
 		return super.prixApresTPEC(pate, quantiteTransfo/super.getCoeffTPEC()) ;
 	}
 	
+	
+	/* Calcule si un prix d'achat des fèves est rentable en fonction des prix de reventes du marché */
+	public double prixRentablePourReventeChocolat(Feve feve) {
+		if (Filiere.LA_FILIERE.getEtape()>1) {
+		double cout_process_product = this.getCoutProdChocolat(super.creerChocolat(super.creerPateAPartirDeFeve(feve)), 1) - this.getCoutMoyenFeveValeur(feve)*super.getCoeffTFEP()*super.getCoeffTPEC();
+		String indicateur = "BourseChoco cours ";
+		switch (feve.getGamme()) {
+		case BASSE : indicateur += "CHOCOLAT_BASSE" ; 
+		case MOYENNE :
+			if (feve.isEquitable()) {
+				indicateur += "CHOCOLAT_MOYENNE_EQUITABLE" ;
+			} else {
+				indicateur += "CHOCOLAT_MOYENNE" ;
+			}
+		case HAUTE : 
+			if (feve.isEquitable()) {
+				indicateur += "CHOCOLAT_HAUTE_EQUITABLE" ;
+			} else {
+				indicateur += "CHOCOLAT_HAUTE" ;
+			}
+		}
+		double prix_bourse_choco = Filiere.LA_FILIERE.getIndicateur(indicateur).getHistorique().get(Filiere.LA_FILIERE.getEtape()-1).getValeur();
+		return prix_bourse_choco*(1-MARGE_VISEE_CHOCOLAT) - cout_process_product;
+	}
+		else {
+			return 0;
+		}
+	}
+	
+	public double prixRentablePourReventePate(Feve feve) {
+		double cout_process_product = this.getCoutProdPate(super.creerPateAPartirDeFeve(feve), 1) - this.getCoutMoyenFeveValeur(feve)*super.getCoeffTFEP();
+		double prix_moy_revente_pate = super.getPrixMoyReventePate(super.creerPateAPartirDeFeve(feve));
+		return prix_moy_revente_pate*(1-MARGE_VISEE_PATE) - cout_process_product;
+	}
+	
+	public double prixRentableAchatFeve(Feve feve ) {
+		return Math.max(this.prixRentablePourReventeChocolat(feve), this.prixRentablePourReventePate(feve));
+	}
+	
+	
 	/* VENTE CHOCOLAT */
 	// On vend tout notre stock de chocolat à chaque fois * A MODIFIER POUR CHOISIR QTE A VENDRE *
 		public double getOffre(Chocolat chocolat, double cours) {
 			double quantite = this.getStockChocolatValeur(chocolat) ;
-			if (cours >= this.getCoutProdChocolat(chocolat, quantite)*1.2) { //J'AI CHOISI UNE MARGE ABITRAIRE DE 20%, DEVRA VARIER EN FONCTION DU STOCK
+			if (cours >= this.getCoutProdChocolat(chocolat, 1)/MARGE_VISEE_CHOCOLAT) { //J'AI CHOISI UNE MARGE ABITRAIRE DE 20%, DEVRA VARIER EN FONCTION DU STOCK
 				return quantite ;
 			}
 			else {

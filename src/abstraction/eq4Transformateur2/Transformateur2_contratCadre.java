@@ -12,9 +12,12 @@ import abstraction.eq8Romu.produits.Pate;
 import abstraction.fourni.Variable;
 
 public class Transformateur2_contratCadre extends Transformateur2_stocks_et_transfos implements IVendeurContratCadre {
+
 	
-	// NOTES : ne marche que si on a qu'un seul contrat à la fois, sinon les quantités max vont être largement
-	// dépassées
+	/* ***!*** IL PEUT ETRE INTERESSANT LORS DE L'INIT DE NOTRE ACTEUR DE METTRE DES FAUX CONTRATS CADRES
+	 *  POUR QU'ON PUISSANCE LANCER NOS FONCTIONS POUR POUVOIR PROPOSER DES PRIX D'ACHAT
+	 *  PARCE QUE SINON CA VA BUGUER POUR L'ESTIMATION
+	 */
 	
 	//Variables
 	protected List<ExemplaireContratCadre> mesContratEnTantQueVendeur; //ne peut pas être ajouté dans les fonctions d'affichage
@@ -88,6 +91,21 @@ public class Transformateur2_contratCadre extends Transformateur2_stocks_et_tran
 		return valeur ;
 	}
 	
+	//Revoie la moyenne pondérée des prix de revente de notre pate pondérée par la qte a vendre
+	public double getPrixMoyReventePate(PateInterne pate) {
+		if (this.getQuantitePateCCValeur(pate) == 0) {
+			throw new IllegalArgumentException("pas de contrats de pate");
+		}
+		else {
+		double resu = 0;
+		for (ExemplaireContratCadre exemplaireContratCadre : mesContratEnTantQueVendeur) {
+			if ((Pate)exemplaireContratCadre.getProduit() == pate.conversionPateInterne()) {
+			resu += exemplaireContratCadre.getMontantRestantARegler();
+			}
+		}
+		return resu/this.getQuantitePateCCValeur(pate);
+		}
+	}
 	// permet de mettre à jour quantitePateCC grâce à la liste des contrats actuels
 	// il faut mettre à jour à chaque début de tour, le contrats ayant été négociés à la fin du tour précédent
 	
