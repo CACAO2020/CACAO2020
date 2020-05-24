@@ -1,33 +1,108 @@
 package abstraction.eq4Transformateur2;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import abstraction.eq8Romu.contratsCadres.Echeancier;
 import abstraction.eq8Romu.contratsCadres.ExemplaireContratCadre;
-import abstraction.eq8Romu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eq8Romu.contratsCadres.IVendeurContratCadre;
-import abstraction.eq8Romu.produits.Feve;
 import abstraction.eq8Romu.produits.Pate;
-import abstraction.eq8Romu.produits.Chocolat;
+import abstraction.fourni.Variable;
 
-public class Transformateur2_contratCadre extends Transformateur2_negoce implements IVendeurContratCadre {
+public class Transformateur2_contratCadre extends Transformateur2_stocks_et_transfos implements IVendeurContratCadre {
 	
 	// NOTES : ne marche que si on a qu'un seul contrat à la fois, sinon les quantités max vont être largement
 	// dépassées
 	
-	protected List<ExemplaireContratCadre> mesContratEnTantQueVendeur;
+	//Variables
+	protected List<ExemplaireContratCadre> mesContratEnTantQueVendeur; //ne peut pas être ajouté dans les fonctions d'affichage
+	private Map<PateInterne,Variable> quantitePateCC ;
 	
-	private double margePate ;
-	private double facteurQuantiteLimite ;
-	private double stockPateMin ;
+	//Paramètres
+	private Variable margePate ;
+	private Variable facteurQuantiteLimite ;
+	private Variable stockPateMin ;
 	
 	public Transformateur2_contratCadre() {
 		super();
 		this.mesContratEnTantQueVendeur=new LinkedList<ExemplaireContratCadre>();
-		this.margePate = 1.3 ; // marge sur le prix de revente de la pâte
-		this.facteurQuantiteLimite = 0.8 ; // pourcentage de la capacité de production à utiliser sur les contrats cadres
-		this.stockPateMin = 0 ; // quantité de stock minimale pour pouvoir envisager de vendre la pâte
+		
+		this.quantitePateCC = new HashMap<PateInterne, Variable>() ;
+		this.quantitePateCC.put(PateInterne.PATE_BASSE, new Variable(getNom()+" quantité totale de pate basse à fournir pour les contrats cadres", this, 0)) ;
+		this.quantitePateCC.put(PateInterne.PATE_MOYENNE, new Variable(getNom()+" quantité totale de pate moyenne à fournir pour les contrats cadres", this, 0)) ;
+		this.quantitePateCC.put(PateInterne.PATE_HAUTE, new Variable(getNom()+" quantité totale de pate haute à fournir pour les contrats cadres", this, 0)) ;
+		this.quantitePateCC.put(PateInterne.PATE_MOYENNE_EQUITABLE, new Variable(getNom()+" quantité totale de pate moyenne équitable à fournir pour les contrats cadres", this, 0)) ;
+		this.quantitePateCC.put(PateInterne.PATE_HAUTE_EQUITABLE, new Variable(getNom()+" quantité totale de pate haute équitable à fournir pour les contrats cadres", this, 0)) ;
+		
+		this.margePate = new Variable(getNom()+" marge sur le prix de revente de la pâte", this, 1.3) ; 
+		this.facteurQuantiteLimite = new Variable(getNom()+" pourcentage de la capacité de production à utiliser sur les contrats cadres", this, 0.8) ;
+		this.stockPateMin = new Variable(getNom()+" quantité de stock minimale pour pouvoir envisager de vendre la pâte", this, 0) ; 
+	}
+	
+	// récupère les attributs notés comme paramètres, utile pour les tests et sûrement appelé par des fonctions externes
+
+	public List<Variable> getIndicateurs() { 
+		List<Variable> res=super.getIndicateurs();
+		for (PateInterne pate : PateInterne.values()) {
+			res.add(this.quantitePateCC.get(pate)) ;
+		}
+		res.add(this.margePate) ;
+		res.add(this.facteurQuantiteLimite) ;
+		res.add(this.stockPateMin) ;
+		return res;
+	}
+
+	// récupère les attributs notés comme paramètres, utile pour les tests et sûrement appelé par des fonctions externes
+	
+	public List<Variable> getParametres() { //idem
+		List<Variable> res=super.getParametres();
+		return res;
+	}
+	
+	// getters
+	
+	public double getQuantitePateCCValeur(PateInterne pate) {
+		return this.quantitePateCC.get(pate).getValeur();
+	}
+	
+	public double getMargePate() {
+		return this.margePate.getValeur();
+	}
+	
+	public double getFacteurQuantiteLimite() {
+		return this.facteurQuantiteLimite.getValeur();
+	}
+	
+	public double getStockPateMin() {
+		return this.stockPateMin.getValeur();
+	}
+	
+	// renvoie la valeur de la quantite totale de pate à fournir
+	public double getQuantitePateCCTotaleValeur() {
+		double valeur = 0 ;
+		for (PateInterne pate : PateInterne.values()) {
+			valeur += this.getQuantitePateCCValeur(pate) ;
+		}
+		return valeur ;
+	}
+	
+	// permet de mettre à jour quantitePateCC grâce à la liste des contrats actuels
+	// il faut mettre à jour à chaque début de tour, le contrats ayant été négociés à la fin du tour précédent
+	
+	public void majQuantitePateCC () {
+		
+		for (PateInterne pate : PateInterne.values()) {
+			double valeur = 0 ;
+			for (ExemplaireContratCadre contrat : this.mesContratEnTantQueVendeur) {
+				if (contrat.getProduit() == pate) {
+				valeur += contrat.getQuantiteALivrerAuStep() ; }
+			}
+			Variable nouvelleQuantite = this.quantitePateCC.get(pate) ;
+			nouvelleQuantite.setValeur(this, valeur);
+			this.quantitePateCC.replace(pate, nouvelleQuantite) ;
+		}
 	}
 	
 	// permet d'obtenir la pate de type PateInterne correspondant au produit mis en argument
@@ -61,39 +136,43 @@ public class Transformateur2_contratCadre extends Transformateur2_negoce impleme
 		}
 	}
 	
-	// renvoie un échéancier, avec la capacité actuelle (ou prévue, par la suite) permettant d'assurer la 
+	// renvoie un booléen qui vaut true si l'échéancier a été modifié, false sinon
+	// modifie l'échéancier, avec la capacité actuelle (ou prévue, par la suite) permettant d'assurer la 
 	// quantité voulue par l'acheteur pour chaque étape
 	// si parfait == true, retourne l'échéancier idéal pour notre production
 	// on prend une marge et on fixe le seuil plus bas, à 80%, dans le cas d'une rupture d'approvisionnement
 	// on prend une marge sur la première quantité, histoire d'assurer le coup
 	
-	public Echeancier echeancierLimite (Echeancier e, PateInterne pate, boolean parfait) {
+	public boolean echeancierLimite (Echeancier e, PateInterne pate, boolean parfait) {
 		
-		Echeancier echeancier = e ;
-		double quantiteLimite = this.facteurQuantiteLimite*super.getCapaciteMaxTFEP() ;
+		boolean b = false ;
+		double quantiteLimite = this.getFacteurQuantiteLimite()*super.getCapaciteMaxTFEP() ;
+		quantiteLimite -= this.getQuantitePateCCTotaleValeur() ;
 		
 		for (int i = e.getStepDebut() ; i < e.getNbEcheances() ; i++) {
 			if (parfait || e.getQuantite(i)>quantiteLimite) {
-				echeancier.set(i, quantiteLimite);
+				e.set(i, quantiteLimite);
+				b = true ;
 			}
 		}
-		if (super.getStockPateValeur(pate) - e.getQuantite(e.getStepDebut()) < this.stockPateMin) {
-			echeancier.set(e.getStepDebut(), super.getStockPateValeur(pate) - this.stockPateMin) ;
+		if (super.getStockPateValeur(pate) - e.getQuantite(e.getStepDebut()) < this.getStockPateMin()) {
+			e.set(e.getStepDebut(), super.getStockPateValeur(pate) - this.getStockPateMin()) ;
+			b = true ;
 		}
-		
-		return echeancier ;
+		return b ;
 	}
 	
 	// renvoie un échéancier dont les quantités sont la moyenne des quantités des deux échéanciers en argument
+	// pour l'instant on ne l'utilise pas
 	
-	public Echeancier echeancierMoyen (Echeancier e1, Echeancier e2) {
+/*	public Echeancier echeancierMoyen (Echeancier e1, Echeancier e2) {
 			
 			Echeancier e = e1 ;
 			for (int i = e.getStepDebut() ; i < e.getNbEcheances() ; i++) {
 				e.set(i, (e1.getQuantite(i)+e2.getQuantite(i))/2);
 			}
 			return e ;
-		}
+		} */
 
 	public Echeancier contrePropositionDuVendeur(ExemplaireContratCadre contrat) {
 		
@@ -104,21 +183,19 @@ public class Transformateur2_contratCadre extends Transformateur2_negoce impleme
 		if (!this.vend(pate)) { return null ; } // on ne vend pas cette pâte 
 		
 		if (liste.size()<2) { //aucune proposition n'a été faite, on envoie notre échéancier idéal
-			 return this.echeancierLimite(echeancier, pate, true) ;
+			 this.echeancierLimite(echeancier, pate, true) ;
+			 return echeancier ;
 		}
 		else {
-			Echeancier echeancierPrecedent = liste.get(liste.size()-2) ;
-			double norme = this.ecartRelatif(echeancier,echeancierPrecedent) ;
+			/* Echeancier echeancierPrecedent = liste.get(liste.size()-2) ;
+			double norme = this.ecartRelatif(echeancier,echeancierPrecedent) ; */
 			
 			//on accepte après trop d'itérations, on ajustera notre production en conséquence mais on garde 
 			// un écart relatif correct pour pas avoir de valeur aberrante si la demande est trop grande
-			if (liste.size()>30) { 
-				if (norme < 0.3) { 
-					return echeancier ;
-				}
-				else { return null ;}
+			if (liste.size()>1000) { 
+				return null ;
 			}
-			// si l'écart relatif est suffisamment faible, on regarde si la répartition respecte nos limitations
+		/*	// si l'écart relatif est suffisamment faible, on regarde si la répartition respecte nos limitations
 			if (norme < 0.1) {
 				Echeancier e = this.echeancierLimite(echeancier, pate, false) ;
 				if (this.ecartRelatif(echeancier, e) < 0.1) {
@@ -128,7 +205,13 @@ public class Transformateur2_contratCadre extends Transformateur2_negoce impleme
 			// le corrige de manière à respecter nos contraintes de production
 			Echeancier e = this.echeancierMoyen(echeancier, echeancierPrecedent) ;
 			return this.echeancierLimite(e, pate, false) ;
-			}
+			} */
+			
+			
+			//Si l'échancier ne dépasse pas les limites, on accepte. Sinon, on retourne l'échéancier tronqué
+			this.echeancierLimite(echeancier, pate, false) ;
+			return echeancier ;
+		}
 	}
 	
 	// proposition iniatiale pour le prix, pour l'instant simple marge par rapport au coût de production 
@@ -137,7 +220,8 @@ public class Transformateur2_contratCadre extends Transformateur2_negoce impleme
 	public double propositionPrix(ExemplaireContratCadre contrat) {
 		PateInterne pate = this.conversionPate(contrat.getProduit()) ;
 		if (contrat.getQuantiteTotale() == 0) { throw new IllegalArgumentException("quantité totale du contrat nulle") ;}
-		else {return this.margePate*super.getCoutProdPate(pate) ;} 
+		else { 
+			return this.getMargePate()*super.getCoutMoyenPateValeur(pate) ;} 
 			
 				//5000.0 + (1000.0/contrat.getQuantiteTotale());}// plus la quantite est elevee, plus le prix est interessant
 	}
@@ -155,15 +239,20 @@ public class Transformateur2_contratCadre extends Transformateur2_negoce impleme
 			return contrat.getPrixALaTonne() ;
 		}
 		
-		if (liste.size() >= 30) { // s'il y a eu trop d'itérations, on refuse le prix de l'acheteur
+		if (liste.size() >= 1000) { // s'il y a eu trop d'itérations, on refuse le prix de l'acheteur
 			return 0 ;
 		}
 		
 		if (liste.size() >= 2) { //on prend notre prix précédent et on fait la moyenne avec le prix de l'acheteur s'il excède une marge minimum
+			
+			if (liste.get(n-2) < liste.get(n-1)) {
+				return contrat.getPrixALaTonne() ;
+			}
+			
 			prixVoulu = (liste.get(n-2) + liste.get(n-1))/2 ;
 			double ecartRelatif = Math.abs(liste.get(n-2) - liste.get(n-1))/liste.get(n-1) ;
 			
-			if (prixVoulu < 1.1*super.getCoutProdPate(pate)) { //marge minimum à 10%
+			if (prixVoulu < 1.1*super.getCoutMoyenPateValeur(pate)) { //marge minimum à 10%
 				return 0 ;
 			} else { 
 				if (ecartRelatif < 0.1) { // si l'écart relatif est inférieur à 10% (arbitraire), on ne chipote plus
@@ -180,6 +269,7 @@ public class Transformateur2_contratCadre extends Transformateur2_negoce impleme
 
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
 		this.mesContratEnTantQueVendeur.add(contrat);
+		this.majQuantitePateCC(); 
 	}
 	
 	public void next() {
@@ -198,7 +288,7 @@ public class Transformateur2_contratCadre extends Transformateur2_negoce impleme
 	public boolean vend(Object produit) {
 		PateInterne pate = this.conversionPate(produit) ;
 		if (pate != null) {
-			return super.getStockPateValeur(pate) > this.stockPateMin ; // quantité de stock minimale
+			return super.getStockPateValeur(pate) > this.getStockPateMin() ; // quantité de stock minimale
 		}
 		else { return false ; }
 	}

@@ -1,11 +1,7 @@
 package abstraction.eq4Transformateur2; 
 
-import abstraction.fourni.IActeur;
-import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
-import java.awt.Color;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,12 +9,10 @@ import java.util.Map;
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.Feve;
 import abstraction.eq8Romu.produits.Gamme;
-import abstraction.eq8Romu.produits.Pate;
-import abstraction.fourni.Filiere;
 
 //extension gérant les stocks et la transformation
 
-public class Transformateur2_stocks_et_transfos extends Transformateur2 implements IActeur {
+public class Transformateur2_stocks_et_transfos extends Transformateur2 {
 	
 	// Notation : TFEP : transformation fève en pâte
 	// 			  TPEC : transformation pâte en chocolat
@@ -38,9 +32,6 @@ public class Transformateur2_stocks_et_transfos extends Transformateur2 implemen
 	private Map<PateInterne, Variable> coutMoyenPate ; 
 	private Map<Chocolat, Variable> coutMoyenChocolat ;
 	
-	// donne la valeur totale des stocks
-	private Variable valeurDesStocks ;
-	
 	
 	//paramètres
 	
@@ -49,25 +40,13 @@ public class Transformateur2_stocks_et_transfos extends Transformateur2 implemen
 	private Map<Gamme, Variable> coutsUnitairesTFEP ; 
 	private Map<Gamme, Variable> coutsUnitairesTPEC ; 
 	
+	// coûts d'entretien d'une unité (capacité en tonne) de la capacité max (infrastructures et salaires)
+	
+	private Variable coutUnitaireEntretienTFEP ; 
+	private Variable coutUnitaireEntretienTPEC ; 
+	
 	private Variable coeffTFEP ; //équivalent en pâte d'une unité de fèves
 	private Variable coeffTPEC ; //équivalent en chocolat d'une unité de pate
-	
-	// coût d'entretien des stocks par unité (tonne), ne dépend que du type de denrée
-	
-	private Variable coutUnitaireStockFeves ; 
-	private Variable coutUnitaireStockPate ; 
-	private Variable coutUnitaireStockChocolat ; 
-	
-	//Coût augmentation de la capacité max
-	
-	private Variable coutAgrandirCapacite ; 
-	
-	//seuil critique de production, qu'il soit trop bas ou trop haut: compris entre 0 et 1, pourcentage par rapport à capacité MAX
-	
-	private Variable seuilSupTFEP;
-	private Variable seuilInfTFEP;
-	private Variable seuilSupTPEC;
-	private Variable seuilInfTPEC;
 	
 	// l'initialisation nécessite de nombreuses variables, qui sont à modifier pour les tests
 	// il faut déterminer ces valeurs en essayant d'être réalistes et cohérents avec les autres équipes
@@ -76,13 +55,10 @@ public class Transformateur2_stocks_et_transfos extends Transformateur2 implemen
 		
 		super () ; 
 		
-		this.capaciteMaxTFEP = new Variable(getNom()+" limite transformation feve en pate", this, 100) ;
-		this.capaciteMaxTPEC = new Variable(getNom()+" limite transformation pate en chocolat", this, 200) ;
+		this.capaciteMaxTFEP = new Variable(getNom()+" limite transformation feve en pate", this, 250) ;
+		this.capaciteMaxTPEC = new Variable(getNom()+" limite transformation pate en chocolat", this, 500) ;
 		this.coeffTFEP = new Variable(getNom()+" équivalent en pâte d'une unité de fèves", this, 1) ;
 		this.coeffTPEC = new Variable(getNom()+" équivalent en chocolat d'une unité de chocolat", this, 1) ;
-		this.coutUnitaireStockFeves = new Variable(getNom()+" cout unitaire dû à l'entretien des stocks de feves", this, 1) ;
-		this.coutUnitaireStockPate = new Variable(getNom()+" cout unitaire dû à l'entretien des stocks de pate", this, 1) ;
-		this.coutUnitaireStockChocolat = new Variable(getNom()+" cout unitaire dû à l'entretien des stocks de chocolat", this, 1) ;
 				
 		this.coutsUnitairesTFEP = new HashMap<Gamme, Variable>() ;
 		this.coutsUnitairesTFEP.put(Gamme.BASSE, new Variable(getNom()+" cout unitaire de transformation de basse qualité fèves vers pâte)", this, 1)) ;
@@ -93,7 +69,10 @@ public class Transformateur2_stocks_et_transfos extends Transformateur2 implemen
 		this.coutsUnitairesTPEC.put(Gamme.BASSE, new Variable(getNom()+" cout unitaire de transformation de basse qualité pâte vers chocolat)", this, 1)) ;
 		this.coutsUnitairesTPEC.put(Gamme.MOYENNE, new Variable(getNom()+" cout unitaire de transformation de moyenne qualité pâte vers chocolat)", this, 1)) ;
 		this.coutsUnitairesTPEC.put(Gamme.HAUTE, new Variable(getNom()+" cout unitaire de transformation de haute qualité pâte vers chocolat)", this, 1)) ;
-	
+		
+		this.coutUnitaireEntretienTFEP  = new Variable(getNom()+" cout unitaire d'entretien de la capacité de transformation de fève en pâte", this, 1) ;
+		this.coutUnitaireEntretienTPEC  = new Variable(getNom()+" cout unitaire d'entretien de la capacité de transformation de pâte en chocolat", this, 1) ;
+		
 		this.coutMoyenFeves = new HashMap<Feve, Variable>() ;
 		this.coutMoyenFeves.put(Feve.FEVE_BASSE, new Variable(getNom()+" cout unitaire moyen à l'achat des feves basses", this, 1)) ;
 		this.coutMoyenFeves.put(Feve.FEVE_MOYENNE, new Variable(getNom()+" cout unitaire moyen à l'achat des feves moyennes", this, 2)) ;
@@ -115,34 +94,6 @@ public class Transformateur2_stocks_et_transfos extends Transformateur2 implemen
 		this.coutMoyenChocolat.put(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE, new Variable(getNom()+" cout unitaire moyen à l'achat de chocolat moyenne equitable", this, 3)) ;
 		this.coutMoyenChocolat.put(Chocolat.CHOCOLAT_HAUTE_EQUITABLE, new Variable(getNom()+" cout unitaire moyen à l'achat de chocolat haute equitable", this, 4)) ;
 	
-		//utilise la fonction juste en dessous pour l'initialisation
-		this.valeurDesStocks = new Variable(getNom()+" valeur totale des stocks", this, this.calculeValeurDesStocks()) ;
-	
-		this.coutAgrandirCapacite = new Variable (getNom()+" cout unitaire pour augmenter la capacité max", this, 200);
-		
-		this.seuilInfTFEP=new Variable (getNom()+" seuil pour diminuer capacité MAX Feve -> Pate", this, 0);
-		this.seuilSupTFEP=new Variable (getNom()+" seuil pour augmenter capacité MAX Feve -> Pate", this, 1);
-		this.seuilInfTPEC=new Variable (getNom()+" seuil pour diminuer capacité MAX Pate -> Choco", this, 0);
-		this.seuilSupTPEC=new Variable (getNom()+" seuil pour augmenter capacité MAX Pate -> Choco", this, 1);
-	
-	}
-	
-	// Permet de calculer la valeur des stocks en additionnant la valeur de chaque stock de denrée, obtenu
-	// grâce au coût moyen de la denrée et de la quantité en stock
-		// A effectuer à chaque fin de tour
-	
-	public double calculeValeurDesStocks () {
-		double valeur = 0 ;
-		for (Feve feve :Feve.values()) {
-			valeur += this.getCoutMoyenFeveValeur(feve) * super.getStockFevesValeur(feve) ;
-		}
-		for (PateInterne pate :PateInterne.values()) {
-			valeur += this.getCoutMoyenPateValeur(pate) * super.getStockPateValeur(pate) ;
-		}
-		for (Chocolat chocolat : Chocolat.values()) {
-			valeur += this.getCoutMoyenChocolatValeur(chocolat) * super.getStockChocolatValeur(chocolat) ;
-		}
-		return valeur ;
 	}
 	
 	// getters : ici, permettent de récupérer la valeur du coût unitaire de transformation de fève en pâte
@@ -167,6 +118,14 @@ public class Transformateur2_stocks_et_transfos extends Transformateur2 implemen
 		return this.coeffTPEC.getValeur();
 	}
 	
+	public double getCoutUnitaireEntretienTFEP() {
+		return this.coutUnitaireEntretienTFEP.getValeur();
+	}
+
+	public double getCoutUnitaireEntretienTPEC() {
+		return this.coutUnitaireEntretienTPEC.getValeur();
+	}
+	
 	public double getCapaciteMaxTFEP() {
 		return this.capaciteMaxTFEP.getValeur();
 	}
@@ -175,16 +134,22 @@ public class Transformateur2_stocks_et_transfos extends Transformateur2 implemen
 		return this.capaciteMaxTPEC.getValeur();
 	}
 	
-	// getters : ici, donne le coût total de transformation pour les deux étapes
-	// On considère que le coût est indépendant de la quantité produite. En effet, seule la capacité
-	// maximale, ie les installations et les salaires, sont un coût pour l'entreprise.
+	// getters : ici, donne le coût unitaire d'entretien de la capacité de transformation pour les deux transformation
+	// A chaque étape, la quantité totale transformée change, et donc le coût unitaire dû à l'entretien des salaires
+	//  et infrastructures peut varier
 	
-	public double getCoutTFEP (Feve feve) {
-		return this.getCoutUnitaireTFEP(feve.getGamme()) * this.capaciteMaxTPEC.getValeur() ;
+	public double getCoutUnitaireEntretienTFEPauStep (double quantiteTotaleFevesATransfo) {
+		if (quantiteTotaleFevesATransfo != 0) {
+			return this.getCoutUnitaireEntretienTFEP() * this.capaciteMaxTFEP.getValeur() / quantiteTotaleFevesATransfo ;
+		}
+		else { throw new IllegalArgumentException ("quantite totale nulle") ; }
 	}
 	
-	public double getCoutTPEC (PateInterne pate) {
-		return this.getCoutUnitaireTPEC(pate.getGamme())  * this.capaciteMaxTPEC.getValeur() ;
+	public double getCoutUnitaireEntretienTPECauStep (double quantiteTotalePateATransfo) {
+		if (quantiteTotalePateATransfo != 0) {
+			return this.getCoutUnitaireEntretienTPEC() * this.capaciteMaxTPEC.getValeur() / quantiteTotalePateATransfo ;
+		}
+		else { throw new IllegalArgumentException ("quantite totale nulle") ; }
 	}
 	
 	// getters : ici, permettent de récupérer directement la valeur du coût unitaire moyen des stocks,
@@ -362,85 +327,140 @@ public class Transformateur2_stocks_et_transfos extends Transformateur2 implemen
 	// on détermine le prix unitaire de la denrée correspondante, et on modifie le cout moyen des stocks 
 	// de cette denrée en conséquence
 	
-	public void transformationFeveEnPate (double quantiteFeve, Feve feve) { 
+	// ATTENTION : la transformation doit être faite en une fois, sinon le coût de transformation n'est pas fiable
+	
+	public double prixApresTFEP (Feve feve, double quantiteTotaleFeveTransfo) {
+		if (quantiteTotaleFeveTransfo == 0) {
+			throw new IllegalArgumentException ("Quantité à transformer nulle") ;
+		}
+		double prix = this.getCoutMoyenFeveValeur(feve) ;
+		prix += this.getCoutUnitaireEntretienTFEPauStep(quantiteTotaleFeveTransfo) ;
+		prix += this.getCoutUnitaireTFEP(feve.getGamme()) ;
+		prix = prix / this.getCoeffTFEP() ;
+		return prix ;
+	}
+	
+	public void transformationFeveEnPate (double quantiteFeve, Feve feve, double quantiteTotaleFeveTransfo) { 
 			double nouveauStockFeve = super.getStockFevesValeur(feve) - quantiteFeve ;
 			if (nouveauStockFeve >= 0) {
 				PateInterne pate = this.creerPateAPartirDeFeve(feve) ;
 				double quantitePate = this.getCoeffTFEP()*quantiteFeve ;
-				super.setStockFevesValeur(feve,nouveauStockFeve) ;
-				super.setStockPateValeur(pate, super.getStockPateValeur(pate) + quantitePate ) ;
 				if (quantitePate > 0) {
-					double prix = this.getCoutMoyenFeveValeur(feve)/this.getCoeffTFEP();
+					double prix = this.prixApresTFEP(feve, quantiteTotaleFeveTransfo);
+					/*System.out.println("prix");
+					System.out.println(prix);*/
 					this.modifierCoutMoyenPate(pate, quantitePate, prix);
 				}
+				super.setStockFevesValeur(feve,nouveauStockFeve) ;
+				super.setStockPateValeur(pate, super.getStockPateValeur(pate) + quantitePate ) ;
 			} 
 			else {throw new IllegalArgumentException("stock negatif") ;} 
 		}
 	
-	public void transformationPateEnChocolat (double quantitePate, PateInterne pate) {
+	public double prixApresTPEC (PateInterne pate, double quantiteTotalePateTransfo) {
+		if (quantiteTotalePateTransfo == 0) {
+			throw new IllegalArgumentException ("Quantité à transformer nulle") ;
+		}
+		double prix = this.getCoutMoyenPateValeur(pate) ;
+		prix += this.getCoutUnitaireEntretienTPECauStep(quantiteTotalePateTransfo) ;
+			prix += this.getCoutUnitaireTPEC(pate.getGamme()) ;
+			prix = prix / this.getCoeffTPEC() ;
+			return prix ;
+		}
+	
+	public void transformationPateEnChocolat (double quantitePate, PateInterne pate, double quantiteTotalePateTransfo) {
 		double nouveauStockPate = super.getStockPateValeur(pate) - quantitePate ;
 		if (nouveauStockPate >= 0) {
 			Chocolat chocolat = this.creerChocolat(pate) ;
 			double quantiteChocolat = this.getCoeffTPEC()*quantitePate ;
+			if (quantiteChocolat > 0) {
+				double prix = this.prixApresTPEC(pate, quantiteTotalePateTransfo );
+				/*System.out.println("prix");
+				System.out.println(prix);*/
+				this.modifierCoutMoyenChocolat(chocolat, quantiteChocolat, prix);
+			}
 			super.setStockPateValeur(pate,nouveauStockPate) ;
 			super.setStockChocolatValeur(chocolat, super.getStockChocolatValeur(chocolat) + quantiteChocolat ) ;
-			if (quantiteChocolat > 0) {
-				double prix = this.getCoutMoyenPateValeur(pate)/this.getCoeffTPEC();
-				this.modifierCoutMoyenPate(pate, quantiteChocolat, prix);
-			}
 		}
 		else {throw new IllegalArgumentException("stock negatif") ;} 
 	}
+	
+	public double getQuantiteTFEP (Map<Feve, Double> quantites) {
+		double quantiteTotale = 0 ;
+		for (Feve feve : quantites.keySet()) {
+			quantiteTotale += quantites.get(feve) ;
+		}
+		return quantiteTotale ;
+	}
+	
+	public double getQuantiteTPEC (Map<PateInterne, Double> quantites) {
+		double quantiteTotale = 0 ;
+		for (PateInterne pate : quantites.keySet()) {
+			quantiteTotale += quantites.get(pate) ;
+		}
+		return quantiteTotale ;
+	}
+	
+	// on corrige les quantités de denrée données par le dictionnaire. Tant que la capacité est
+		// suffisante, on garde les quantites prévues, et si elle ne l'est plus on limite avec la capacité max
+	// return false si saturation de la capacité de production, true sinon
+	
+	//il pourrait être intéressant de mettre un ordre de priorité dans les gammes
+	
+	public boolean correctionQuantitesTFEP (Map<Feve,Double> quantitesFeve) { 
+		double quantiteFeveTotale = 0 ;
+		boolean b = true ;
+		Map<Feve,Double> quantitesCorrige = quantitesFeve ;
+		for (Feve feve : quantitesFeve.keySet()) {
+			if (super.getStockFevesValeur(feve) < quantitesFeve.get(feve)) {
+				quantitesFeve.replace(feve, super.getStockFevesValeur(feve)) ;
+			}
+			if (this.capaciteInsuffisanteTFEP(quantiteFeveTotale + quantitesFeve.get(feve))) {
+				double quantiteFeve = this.getCapaciteMaxTFEP() - quantiteFeveTotale ;
+				quantitesCorrige.replace(feve, quantiteFeve) ;
+				quantiteFeveTotale += quantiteFeve ;
+				b = false ;
+			}
+			else { quantiteFeveTotale += quantitesFeve.get(feve) ; }
+		}
+		return b ; 
+	} 
+	
+	public boolean correctionQuantitesTPEC (Map<PateInterne,Double> quantitesPate) { 
+		double quantitePateTotale = 0 ;
+		Map<PateInterne,Double> quantitesCorrige = quantitesPate ;
+		for (PateInterne pate : quantitesPate.keySet()) {
+			if (super.getStockPateValeur(pate) < quantitesPate.get(pate)) {
+				quantitesPate.replace(pate, super.getStockPateValeur(pate)) ;
+			}
+			if (this.capaciteInsuffisanteTPEC(quantitePateTotale + quantitesPate.get(pate))) {
+				double quantiteFeve = this.getCapaciteMaxTPEC() - quantitePateTotale ;
+				quantitesCorrige.replace(pate, quantiteFeve) ;
+				quantitePateTotale += quantitesPate.get(pate) ;
+				return false ;
+			}
+			else { quantitePateTotale += quantitesPate.get(pate) ; }
+		}
+		return true ; 
+	} 
 
 // fonctions de transformation
 	
 	//argument : dictionnaire donnant la quantité à transformer pour chaque type de denrée
-	// on transforme chaque quantité de denrée donnée par le dictionnaire tant que la capacité est
-	// suffisante, et si elle ne l'est plus on transforme ce qu'il est encore possible de transformer
-	
-	// return false si saturation de la capacité de production, true sinon
-	
-	public boolean transformationFeves (Map<Feve,Double> quantitesFeve) { 
-		double quantiteFeveTotale = 0 ;
+	// on le corrige, puis on effectue la transformation pour chaque denrée 
+			
+	public void transformationFeves (Map<Feve,Double> quantitesFeve) { 
+		this.correctionQuantitesTFEP(quantitesFeve) ;
 		for (Feve feve : quantitesFeve.keySet()) {
-			if (this.capaciteInsuffisanteTFEP(quantiteFeveTotale + quantitesFeve.get(feve))) {
-				double quantiteFeve = this.getCapaciteMaxTFEP() - quantiteFeveTotale ;
-				this.transformationFeveEnPate (quantiteFeve, feve) ;
-				quantiteFeveTotale = quantiteFeveTotale + quantitesFeve.get(feve) ;
-				return false ;
-			}
-			else {
-				quantiteFeveTotale = quantiteFeveTotale + quantitesFeve.get(feve) ;
-				this.transformationFeveEnPate (quantitesFeve.get(feve), feve) ; }
-		}
-		return true ; 
+			this.transformationFeveEnPate (quantitesFeve.get(feve), feve, this.getQuantiteTFEP(quantitesFeve)) ;
+		} 
 	}
 	
-	public boolean transformationPate (Map<PateInterne,Double> quantitesPate) { 
-		double quantitePateTotale = 0 ;
+	public void transformationPate (Map<PateInterne,Double> quantitesPate) { 
+		this.correctionQuantitesTPEC(quantitesPate) ;
 		for (PateInterne pate : quantitesPate.keySet()) {
-			if (this.capaciteInsuffisanteTPEC(quantitePateTotale + quantitesPate.get(pate))) {
-				double quantitePate = this.getCapaciteMaxTPEC() - quantitePateTotale ;
-				this.transformationPateEnChocolat (quantitePate, pate) ;
-				quantitePateTotale = quantitePateTotale + quantitesPate.get(pate) ;
-				return false ;
-			}
-			else {
-				quantitePateTotale = quantitePateTotale + quantitesPate.get(pate) ;
-				this.transformationPateEnChocolat (quantitesPate.get(pate), pate) ; }
-		}
-		return true ; 
-	}
-
-// calcule l'ensemble des coûts dûs à l'entretien des stocks
-	// à exécuter à chaque fin de tour
-	
-	public double coutStocks () {  
-		double cout = 0 ;
-		cout += this.coutUnitaireStockFeves.getValeur()*super.getStockTotalFeves() ; 
-		cout += this.coutUnitaireStockPate.getValeur()*super.getStockTotalPate() ; 
-		cout += this.coutUnitaireStockChocolat.getValeur()*super.getStockTotalChocolat() ; 
-		return cout ;
+			this.transformationPateEnChocolat (quantitesPate.get(pate), pate, this.getQuantiteTPEC(quantitesPate)) ;
+		} 
 	}
 	
 }
