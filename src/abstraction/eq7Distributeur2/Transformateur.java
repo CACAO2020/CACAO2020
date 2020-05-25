@@ -8,6 +8,7 @@ import abstraction.eq8Romu.chocolatBourse.IVendeurChocolatBourse;
 import abstraction.eq8Romu.chocolatBourse.SuperviseurChocolatBourse;
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.ChocolatDeMarque;
+import abstraction.fourni.Banque;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
@@ -15,16 +16,22 @@ import abstraction.fourni.Variable;
 
 public class Transformateur implements IAcheteurChocolatBourse, IVendeurChocolatBourse {
 
+	private Variable stockFeves;
+	private Variable stockChocolat;
+	private Integer cryptogramme;
+	private String nom;
+	private Banque laBanque; 
+	
 	@Override
 	public String getNom() {
 		// TODO Auto-generated method stub
-		return null;
+		return this.nom;
 	}
 
 	@Override
 	public String getDescription() {
 		// TODO Auto-generated method stub
-		return null;
+		return "Transformateur"+this.getNom();
 	}
 
 	@Override
