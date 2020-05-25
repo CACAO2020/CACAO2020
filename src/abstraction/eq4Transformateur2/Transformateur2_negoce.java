@@ -2,7 +2,7 @@ package abstraction.eq4Transformateur2;
 
 import java.awt.Color;
 import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import abstraction.eq8Romu.cacaoCriee.IAcheteurCacaoCriee;
@@ -12,15 +12,10 @@ import abstraction.eq8Romu.cacaoCriee.SuperviseurCacaoCriee;
 import abstraction.eq8Romu.chocolatBourse.IVendeurChocolatBourse;
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.Feve;
-import abstraction.eq8Romu.produits.Gamme;
-import abstraction.eq8Romu.ventesCacaoAleatoires.IAcheteurCacaoAleatoire;
-import abstraction.eq8Romu.ventesCacaoAleatoires.IVendeurCacaoAleatoire;
-import abstraction.fourni.Filiere;
-import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
-public class Transformateur2_negoce extends Transformateur2_stocks_et_transfos implements IAcheteurCacaoCriee, IVendeurChocolatBourse {
+public class Transformateur2_negoce extends Transformateur2_contratCadre implements IAcheteurCacaoCriee, IVendeurChocolatBourse {
 	private Map<Feve, Variable> prixMaxAchatFeves;
 	private Map<Chocolat, Variable> prixMinVenteChocolat;
 	
@@ -41,6 +36,26 @@ public class Transformateur2_negoce extends Transformateur2_stocks_et_transfos i
 		this.prixMinVenteChocolat.put(Chocolat.CHOCOLAT_HAUTE, new Variable(getNom()+" prix min vente chocolat haute", this, 0)) ;
 		this.prixMinVenteChocolat.put(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE, new Variable(getNom()+" prix min vente chocolat moyenne equitable", this, 100)) ;
 		this.prixMinVenteChocolat.put(Chocolat.CHOCOLAT_HAUTE_EQUITABLE, new Variable(getNom()+" prix min vente chocolat haute equitable", this, 0)) ;
+	}
+	
+	// récupère les attributs notés comme paramètres, utile pour les tests et sûrement appelé par des fonctions externes
+
+	public List<Variable> getIndicateurs() { 
+		List<Variable> res=super.getIndicateurs();
+		for (Feve feve :Feve.values()) {
+			res.add(this.prixMaxAchatFeves.get(feve)) ;
+		}
+		for (Chocolat chocolat : Chocolat.values()) {
+			res.add(this.prixMinVenteChocolat.get(chocolat)) ;
+		}
+		return res;
+	}
+
+	// récupère les attributs notés comme paramètres, utile pour les tests et sûrement appelé par des fonctions externes
+	
+	public List<Variable> getParametres() { //idem
+		List<Variable> res=super.getParametres();
+		return res;
 	}
 
 
@@ -88,27 +103,26 @@ if (!classeAppelante.equals(SuperviseurCacaoCriee.class)) { throw new Error("la 
 
 	
 	/* CALCUL DES COUTS DE PRODUCTION */
+	// à effectuer avant de réaliser les transformations, pour déterminer quelle quantité il faut transformer effectivement
 	
-	//Calcule le cout de production d'une tonne de pate
-	public double getCoutProdPate(PateInterne pate) {
+	//Renvoie le cout de production d'une tonne de pate
+	public double getCoutProdPate(PateInterne pate, double quantiteTransfo) {
 		Feve feve = super.creerFeve(pate) ;
-		return (super.getCoutMoyenFeveValeur(feve) + super.getCoutTFEP(feve)/super.getStockFevesValeur(feve))/super.getCoeffTFEP();
+		return super.prixApresTFEP(feve, quantiteTransfo/super.getCoeffTFEP());
 	}
 	
-	//Calcule le cout de production d'une tonne de chocolat
-	public double getCoutProdChocolat(Chocolat chocolat) {
+	//Renvoie le cout de production d'une tonne de chocolat 
+	public double getCoutProdChocolat(Chocolat chocolat, double quantiteTransfo) {
 		PateInterne pate = super.creerPateAPartirDeChocolat(chocolat) ;
-		Feve feve = super.creerFeve(pate) ;
-		double coutTFEPparPate = super.getCoutTFEP(feve)/(super.getStockPateValeur(pate)*super.getCoeffTFEP()) ;
-		double coutTPECparPate = super.getCoutTPEC(pate)/super.getStockPateValeur(pate) ;
-		return (super.getCoutMoyenPateValeur(pate) + coutTFEPparPate + coutTPECparPate)/super.getCoeffTPEC() ;
+		return super.prixApresTPEC(pate, quantiteTransfo/super.getCoeffTPEC()) ;
 	}
 	
 	/* VENTE CHOCOLAT */
 	// On vend tout notre stock de chocolat à chaque fois * A MODIFIER POUR CHOISIR QTE A VENDRE *
 		public double getOffre(Chocolat chocolat, double cours) {
-			if (cours >= this.getCoutProdChocolat(chocolat)*1.2) { //J'AI CHOISI UNE MARGE ABITRAIRE DE 20%, DEVRA VARIER EN FONCTION DU STOCK
-				return this.getStockChocolatValeur(chocolat);
+			double quantite = this.getStockChocolatValeur(chocolat) ;
+			if (cours >= this.getCoutProdChocolat(chocolat, quantite)*1.2) { //J'AI CHOISI UNE MARGE ABITRAIRE DE 20%, DEVRA VARIER EN FONCTION DU STOCK
+				return quantite ;
 			}
 			else {
 				return 0;
