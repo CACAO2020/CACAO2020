@@ -63,8 +63,8 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 		// IA : quantité en vente = alpha * stockActuel + beta
 		double quantiteEnVente;
 		double stockActuel;
-		double alpha = 0.5;
-		double beta = 1.;
+		double alpha = 0.9;
+		double beta = 5.;
 		for (ChocolatDeMarque choco : produitsCatalogue) {
 			stockActuel = ac.getStock().getStockChocolatDeMarque(choco);
 			quantiteEnVente = alpha*stockActuel + beta ;
@@ -89,7 +89,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 		double cours;
 		double pourcentageMarge;
 		for (ChocolatDeMarque choco : produitsCatalogue) {
-			pourcentageMarge = 5.;
+			pourcentageMarge = 10.;
 			if (Filiere.LA_FILIERE.getEtape() > 1) {
 	            cours = Filiere.LA_FILIERE.getIndicateur("BourseChoco cours " + choco.getChocolat().name()).getHistorique().get(Filiere.LA_FILIERE.getEtape()-1).getValeur();
 	        } else {

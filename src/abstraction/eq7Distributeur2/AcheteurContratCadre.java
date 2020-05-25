@@ -73,7 +73,7 @@ public class AcheteurContratCadre extends AbsAcheteurContratCadre implements IAc
 	}
 	
 	public void notifierNouveauContrat(ExemplaireContratCadre contrat) {
-		journal.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[NOUVEAU CONTRAT] Vendeur : " + contrat.getVendeur().getNom() + "; Produit : " + produitToString(contrat.getProduit()) + "; Quantité  : " + contrat.getQuantiteTotale() + "; Echéancier : " + echeancierToString(contrat.getEcheancier()) + "."));
+		journal.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[NOUVEAU CONTRAT] Vendeur : " + contrat.getVendeur().getNom() + "; Produit : " + produitToString(contrat.getProduit()) + "; Quantité  : " + Journal.doubleSur(contrat.getQuantiteTotale(),2) + "; Echéancier : " + echeancierToString(contrat.getEcheancier()) + "."));
 	}
 	
 	public String produitToString(Object produit) {
