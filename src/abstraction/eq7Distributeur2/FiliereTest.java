@@ -40,7 +40,10 @@ public class FiliereTest extends Filiere {
 		this.ajouterActeur(new ExempleVendeurChocolatBourse(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE));
 		this.ajouterActeur(new ExempleVendeurChocolatBourse(Chocolat.CHOCOLAT_HAUTE));
 		this.ajouterActeur(new ExempleVendeurChocolatBourse(Chocolat.CHOCOLAT_HAUTE_EQUITABLE));
-		//this.ajouterActeur(new ExempleTransformateurContratCadreVendeur(Chocolat.CHOCOLAT_HAUTE_EQUITABLE));
+		this.ajouterActeur(new ExempleTransformateurContratCadreVendeurAcheteur(Chocolat.CHOCOLAT_MOYENNE));
+		this.ajouterActeur(new ExempleTransformateurContratCadreVendeurAcheteur(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE));
+		this.ajouterActeur(new ExempleTransformateurContratCadreVendeurAcheteur(Chocolat.CHOCOLAT_HAUTE));
+		this.ajouterActeur(new ExempleTransformateurContratCadreVendeurAcheteur(Chocolat.CHOCOLAT_HAUTE_EQUITABLE));
 		this.ajouterActeur(new Distributeur2());
 		this.ajouterActeur(new Romu());
 		SuperviseurCacaoCriee superviseur = new SuperviseurCacaoCriee();

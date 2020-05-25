@@ -14,7 +14,7 @@ import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
-public class Stock extends AbsStock implements IStock, IActeur {
+public class Stock extends AbsStock implements IStock {
 	
 	public Stock(Distributeur2 ac) {
 			super(ac);
@@ -66,10 +66,6 @@ public class Stock extends AbsStock implements IStock, IActeur {
 			stocksChocolatDeMarque.put(choco, new Variable(ac.getNom() + " : STOCK " + choco.name(), ac, 0.));
 			journal.ajouter(Journal.texteColore(metaColor, Color.BLACK,"[CRÉATION] Création d'un stock pour le " + choco.name() + "."));
 		}
-	}
-	
-	public void next() {
-		
 	}
 	
 }

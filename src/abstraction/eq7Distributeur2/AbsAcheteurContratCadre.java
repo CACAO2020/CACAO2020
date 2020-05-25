@@ -17,12 +17,14 @@ public class AbsAcheteurContratCadre {
 	protected Distributeur2 ac;
 	
 	public Journal journal;
+	public Journal journalContrats;
 	
 	public Color titleColor = Color.BLACK;
 	public Color alertColor = Color.RED;
 	public Color warningColor = Color.ORANGE;
 	public Color positiveColor = Color.GREEN;
 	public Color descriptionColor = Color.YELLOW;
+	public Color metaColor = Color.CYAN;
 	
 	public AbsAcheteurContratCadre(Distributeur2 ac) {
 		this.ac = ac;
@@ -34,8 +36,10 @@ public class AbsAcheteurContratCadre {
 		this.journal = new Journal(this.getNom() + " : Acheteur Contrat Cadre", ac);
 		journal.ajouter(Journal.texteColore(titleColor, Color.WHITE, this.getNom() + " : Acheteur Contrat Cadre"));
 		journal.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "Ce journal suit les activités de l'acheteur de chocolat par contrats-cadres"));
-		journal.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "associé à ce distributeur. Il affiche les commandes effectuées et leur"));
-		journal.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "statut (payée, impayée) ainsi que les réceptions de commandes."));
+		journal.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "associé à ce distributeur."));
+		this.journalContrats = new Journal(this.getNom() + " : Journal Contrats", ac);
+		journalContrats.ajouter(Journal.texteColore(titleColor, Color.WHITE, this.getNom() + " : Journal Contrats"));
+		journalContrats.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "Ce journal suit les contrats de l'acheteur par contrat-cadre."));
 	}
 	
 	public List<Variable> getIndicateurs() {
@@ -51,6 +55,7 @@ public class AbsAcheteurContratCadre {
 	public List<Journal> getJournaux() {
 		List<Journal> res = new ArrayList<Journal>();
 		res.add(journal);
+		res.add(journalContrats);
 		return res;
 	}
 

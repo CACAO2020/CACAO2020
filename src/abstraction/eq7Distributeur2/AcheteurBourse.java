@@ -20,6 +20,10 @@ import abstraction.fourni.Variable;
 public class AcheteurBourse extends AbsAcheteurBourse implements IAcheteurChocolatBourse, IActeur {
 	//Raphaël Caby
 	
+	public void next() {
+		
+	}
+	
 	public AcheteurBourse(Distributeur2 ac) {
 		super(ac);
 	}
@@ -27,17 +31,12 @@ public class AcheteurBourse extends AbsAcheteurBourse implements IAcheteurChocol
 	public void initialiser() {
 	}
 	
-	public void next() {
-		// L'acheteur à la bourse récupère les données du distributeur et met à jour les quantités de chaque type de chocolat à commander
-		majQuantitesACommander();
-	}
-	
 	public Map<Chocolat, Variable> getDemandes() {
-		return demandesChoco;
+		return quantitesACommander;
 	}
 	
 	public double getDemande(Chocolat chocolat, double cours) {
-		return demandesChoco.get(chocolat).getValeur();
+		return quantitesACommander.get(chocolat).getValeur();
 	}
 
 	public Integer getCryptogramme(SuperviseurChocolatBourse superviseur) {
@@ -51,7 +50,7 @@ public class AcheteurBourse extends AbsAcheteurBourse implements IAcheteurChocol
 			journal.ajouter(Journal.texteColore(warningColor, Color.BLACK, "[IMPAIEMENT] La commande de " + Journal.doubleSur(quantiteObtenue,2) + " tonnes de " + chocolat.name() + " est impayée."));
 			commandeImpayee = new Pair<Chocolat, Double>(chocolat, quantiteObtenue);
 		}
-		demandesChoco.get(chocolat).setValeur(ac, demandesChoco.get(chocolat).getValeur()-quantiteObtenue);
+		quantitesACommander.get(chocolat).setValeur(ac, quantitesACommander.get(chocolat).getValeur()-quantiteObtenue);
 	}
 	
 	public void receptionner(ChocolatDeMarque chocolat, double quantite) {
@@ -64,7 +63,7 @@ public class AcheteurBourse extends AbsAcheteurBourse implements IAcheteurChocol
 		journal.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[RÉCEPTION] Réception de " + Journal.doubleSur(quantite,2) + " tonnes de " + chocolat.name() + "."));
 		chocoReceptionne.get(chocolat.getChocolat()).setValeur(ac, chocoReceptionne.get(chocolat.getChocolat()).getValeur() + quantite);
 	}
-	
+	/*
 	public void majQuantitesACommander() {
 		double quantiteACommander;
 		for (Chocolat choco : ac.nosChoco) {
@@ -78,6 +77,16 @@ public class AcheteurBourse extends AbsAcheteurBourse implements IAcheteurChocol
 				demandesChoco.get(choco).setValeur(this, 0.);
 			} 
 		}
+	}*/
+	
+	public void majAchatsBourse() {
+		double quantiteACommander;
+		double quantiteACommanderMin = 0.;
+		double quantiteACommanderMax = 500.;
+		for (Chocolat choco : ac.nosChoco) {
+			chocoReceptionne.get(choco).setValeur(ac, 0.);
+			quantiteACommander = Math.random() * (quantiteACommanderMax - quantiteACommanderMin) + quantiteACommanderMin;
+			quantitesACommander.get(choco).setValeur(ac, quantiteACommander);
+		}
 	}
-
 }

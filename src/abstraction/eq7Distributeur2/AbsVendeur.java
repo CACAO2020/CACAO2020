@@ -33,8 +33,6 @@ public class AbsVendeur {
 	protected List<ChocolatDeMarque> produitsCatalogue;
 	protected List<ChocolatDeMarque> publicites;
 	
-	protected boolean debutEtape = true;
-	
 	public Color titleColor = Color.BLACK;
 	public Color metaColor = Color.CYAN;
 	public Color alertColor = Color.RED;

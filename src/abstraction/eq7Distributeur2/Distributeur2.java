@@ -42,6 +42,8 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	private Journal journal;
 	private Journal journalTransactions;
 	
+	protected boolean debutEtape = true;
+	
 	public Distributeur2() {
 		super();
 		NB_INSTANCES++;
@@ -108,10 +110,19 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	}
 	
 	public void next() {
-		vendeur.next();
-		acheteurBourse.next();
-		acheteurContratCadre.next();
-		stock.next();
+		this.debutEtape = false;
+		// Le vendeur met à jour ses indicateurs de vente (dont ont besoin les acheteurs)
+		vendeur.majIndicateursDeVente();
+		// L'acheteur à la bourse déterminé quelle quantité de chaque type de chocolat commander
+		acheteurBourse.majAchatsBourse();
+		// L'acheteur par contrats-cadres met à jour ses contrats
+		acheteurContratCadre.majAchatsContratCadre();	
+		// Le vendeur choisit les campagnes de pub à mener lors de l'étape courante
+		vendeur.majPublicites();
+		// Le vendeur détermine quelle quantité de chaque chocolat de marque proposer à la vente à l'étape suivante
+		vendeur.majQuantitesEnVente();		
+		// Le vendeur met à jour les prix de vente de chaque chocolat de marque
+		vendeur.majPrixDeVente();
 	}
 	
 	public double getSolde() {
@@ -137,6 +148,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		List<Variable> res = new ArrayList<Variable>();
 		res.addAll(stock.getIndicateurs());
 		res.addAll(acheteurBourse.getIndicateurs());
+		res.addAll(acheteurContratCadre.getIndicateurs());
 		res.addAll(vendeur.getIndicateurs());
 		return res;
 	}
@@ -145,6 +157,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		List<Variable> res=new ArrayList<Variable>();
 		res.addAll(stock.getParametres());
 		res.addAll(acheteurBourse.getParametres());
+		res.addAll(acheteurContratCadre.getParametres());
 		res.addAll(vendeur.getParametres());
 		return res;
 	}
@@ -155,6 +168,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		res.add(journalTransactions);
 		res.addAll(stock.getJournaux());
 		res.addAll(acheteurBourse.getJournaux());
+		res.addAll(acheteurContratCadre.getJournaux());
 		res.addAll(vendeur.getJournaux());
 		return res;
 	}

@@ -38,25 +38,12 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 			quantitesACommanderContratCadre.put(choco, new Variable(getNom() + " : " + choco.name() + " [Commande Contrat-Cadre i-1]", ac, 0.));	
 		}
 	}
-
+	
 	public void next() {
-		debutEtape = false;
-		// Le distributeur met à jour ses indicateurs de vente (dont a besoin l'acheteur)
-		majIndicateursDeVente();
-		// Le distributeur choisit les campagnes de pub à mener lors de l'étape courante
-		majPublicites();
-		// Le distributeur détermine quelle quantité de chaque type de chocolat l'acheteur à la bourse doit commander
-		majQuantitesACommanderBourse();
-		// Le distributeur détermine quelle quantité de chaque chocolat de marque l'acheteur par contrats-cadres doit commander
-		majQuantitesACommanderContratCadre();
-		// Le distributeur détermine quelle quantité de chaque chocolat de marque proposer à la vente à l'étape suivante
-		majQuantitesEnVente();		
-		// Le distributeur met à jour les prix de vente de chaque chocolat de marque
-		majPrixDeVente();
+		
 	}
 	
 	public void majIndicateursDeVente() {
-		int etape = Filiere.LA_FILIERE.getEtape();
 		for (Chocolat choco : ac.nosChoco) {
 			chocoVendu.get(choco).setValeur(ac, ventesEtapeActuelle.get(choco));
 			ventesEtapeActuelle.put(choco,0.);
@@ -65,30 +52,9 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 	
 	public void majPublicites() {
 		for (ChocolatDeMarque choco : produitsCatalogue) {
-			if (choco.getChocolat() == Chocolat.CHOCOLAT_MOYENNE_EQUITABLE) {
+			if (choco.getChocolat() == Chocolat.CHOCOLAT_MOYENNE_EQUITABLE ||choco.getChocolat() == Chocolat.CHOCOLAT_HAUTE_EQUITABLE) {
 				publicites.add(choco);
 			}
-		}
-	}
-	
-	public void majQuantitesACommanderBourse() {
-		double quantiteACommanderBourse;
-		double quantiteACommanderBourseMin = 0.;
-		double quantiteACommanderBourseMax = 500.;
-		for (Chocolat choco : ac.nosChoco) {
-			quantiteACommanderBourse = Math.random() * (quantiteACommanderBourseMax - quantiteACommanderBourseMin) + quantiteACommanderBourseMin;
-			quantitesACommanderBourse.get(choco).setValeur(ac, quantiteACommanderBourse);
-			// Quantité : somme d'une quantité relative au stock actuel et d'une autre relative aux commandes de l'étape
-			// Le distributeur va vouloir certaines quantités de tel choco de marque => contrats-cadres
-			// mais aussi certaines quantités de choco d'un type particulier (sans se préoccuper de la marque) => bourse
-		}
-	}
-	
-	public void majQuantitesACommanderContratCadre() {
-		double quantiteACommanderContratCadre;
-		for (ChocolatDeMarque choco : produitsCatalogue) {
-			quantiteACommanderContratCadre = 0;
-			quantitesACommanderContratCadre.get(choco).setValeur(ac, quantiteACommanderContratCadre);
 		}
 	}
 	
@@ -129,8 +95,8 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 	}
 	
 	public double quantiteEnVente(ChocolatDeMarque choco) {
-		if (!debutEtape) {
-			debutEtape = true;
+		if (!ac.debutEtape) {
+			ac.debutEtape = true;
 			adapterQuantitesEnVente();
 			dessinerCatalogue();
 		}

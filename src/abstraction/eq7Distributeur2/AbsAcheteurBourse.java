@@ -17,7 +17,7 @@ public class AbsAcheteurBourse {
 	
 	protected Journal journal;
 	
-	protected Map<Chocolat, Variable> demandesChoco;
+	protected Map<Chocolat, Variable> quantitesACommander;
 	protected Map<Chocolat, Variable> chocoReceptionne;
 	protected Pair<Chocolat, Double> commandeImpayee;
 
@@ -32,12 +32,12 @@ public class AbsAcheteurBourse {
 	public AbsAcheteurBourse(Distributeur2 ac) {
 		this.ac = ac;	
 		initJournaux();
-		demandesChoco = new HashMap<Chocolat, Variable>();
+		quantitesACommander = new HashMap<Chocolat, Variable>();
 		chocoReceptionne = new HashMap<Chocolat, Variable>();
 		commandeImpayee = null;
 		
 		for (Chocolat choco : Chocolat.values()) {
-			demandesChoco.put(choco, new Variable(getNom() + " : " + choco.name() + " [Demande i-1]", ac, 0));
+			quantitesACommander.put(choco, new Variable(getNom() + " : " + choco.name() + " [Demande i-1]", ac, 0));
 		}
 
 		for (Chocolat choco : ac.nosChoco) {
