@@ -62,7 +62,7 @@ public class AcheteurBourse extends AbsAcheteurBourse implements IAcheteurChocol
 
 		}
 		journal.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[RÉCEPTION] Réception de " + Journal.doubleSur(quantite,2) + " tonnes de " + chocolat.name() + "."));
-		chocoReceptionne.get(chocolat.getChocolat()).setValeur(ac, chocoReceptionne.get(chocolat.getChocolat()).getValeur() + quantite);
+		ac.getStock().chocoReceptionne.get(chocolat.getChocolat()).setValeur(ac, ac.getStock().chocoReceptionne.get(chocolat.getChocolat()).getValeur() + quantite);
 	}
 	
 	public void majAchatsBourse() {
@@ -71,7 +71,7 @@ public class AcheteurBourse extends AbsAcheteurBourse implements IAcheteurChocol
 		double quantiteACommander;
 		double quantiteARecevoirParContrats = 0.;
 		for (Chocolat choco : ac.nosChoco) {
-			chocoReceptionne.get(choco).setValeur(ac, 0.);
+			ac.getStock().chocoReceptionne.get(choco).setValeur(ac, 0.);
 			Chocolat typeChoco;
 			for (ExemplaireContratCadre contrat : ac.getAcheteurContratCadre().nosContrats) {
 				if (contrat.getProduit() instanceof Chocolat) {

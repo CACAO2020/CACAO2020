@@ -140,11 +140,11 @@ public class AcheteurContratCadre extends AbsAcheteurContratCadre implements IAc
 		if (produit instanceof ChocolatDeMarque) {
 			journal.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[RÉCEPTION] Réception de " + Journal.doubleSur(quantite,2) + " tonnes de " + ((ChocolatDeMarque)produit).name() + " par " + contrat.getVendeur().getNom() + "."));
 			ac.getStock().ajouterStockChocolat((ChocolatDeMarque)produit, quantite);
-			ac.getAcheteurBourse().chocoReceptionne.get(((ChocolatDeMarque)produit).getChocolat()).setValeur(ac, ac.getAcheteurBourse().chocoReceptionne.get(((ChocolatDeMarque)produit).getChocolat()).getValeur() + quantite);
+			ac.getStock().chocoReceptionne.get(((ChocolatDeMarque)produit).getChocolat()).setValeur(ac, ac.getStock().chocoReceptionne.get(((ChocolatDeMarque)produit).getChocolat()).getValeur() + quantite);
 		} else if (produit instanceof Chocolat)  {
 			journal.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[RÉCEPTION] Réception de " + Journal.doubleSur(quantite,2) + " tonnes de " + ((Chocolat)produit).name() + " par " + contrat.getVendeur().getNom() + "."));
 			ac.getStock().ajouterStockChocolat(new ChocolatDeMarque((Chocolat)produit, getNom()), quantite);
-			ac.getAcheteurBourse().chocoReceptionne.get((Chocolat)produit).setValeur(ac, ac.getAcheteurBourse().chocoReceptionne.get((Chocolat)produit).getValeur() + quantite);
+			ac.getStock().chocoReceptionne.get((Chocolat)produit).setValeur(ac, ac.getStock().chocoReceptionne.get((Chocolat)produit).getValeur() + quantite);
 		}
 	}
 

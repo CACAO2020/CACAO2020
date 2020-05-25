@@ -18,6 +18,7 @@ public class AbsStock {
 
 	protected Map<ChocolatDeMarque, Variable> stocksChocolatDeMarque;
 	protected Map<Chocolat, Variable> stocksChocolat;
+	protected Map<Chocolat, Variable> chocoReceptionne;
 	
 	protected Journal journal;
 	
@@ -35,12 +36,13 @@ public class AbsStock {
 		this.ac = ac;
 		stocksChocolatDeMarque=new HashMap<ChocolatDeMarque, Variable>();
 		stocksChocolat=new HashMap<Chocolat, Variable>();
-		
+		chocoReceptionne = new HashMap<Chocolat, Variable>();
 		initJournaux();
 
 		for (Chocolat choco : ac.nosChoco) {
 			stocksChocolat.put(choco, new Variable(getNom() + " : " + choco.name() + " [Stock i]", ac, 0));
 			journal.ajouter(Journal.texteColore(metaColor, Color.BLACK,"[CRÉATION] Création d'un stock pour le " + choco + "."));
+			chocoReceptionne.put(choco, new Variable(getNom() + " : " + choco.name() + " [Réception i-1]", ac, 0));
 		}
 	}
 		
@@ -56,6 +58,9 @@ public class AbsStock {
 		List<Variable> res=new ArrayList<Variable>();
 		for (Chocolat choco : ac.nosChoco) {
 			res.add(stocksChocolat.get(choco));
+		}
+		for (Chocolat choco : ac.nosChoco) {
+			res.add(chocoReceptionne.get(choco));
 		}
 		return res;
 	}
