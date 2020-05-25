@@ -4,18 +4,20 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import abstraction.eq8Romu.chocolatBourse.IVendeurChocolatBourse;
+import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.ventesCacaoAleatoires.IVendeurCacaoAleatoire;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
-public class Producteur implements IActeur, IVendeurCacaoAleatoire {
+public class Producteur implements IActeur, IVendeurChocolatBourse {
 	
 	private Variable stockFeves;
 	private Variable productionMax;
 	private Variable prixMin;
-	private Variable prixInteressant;
+	private Variable prixInteressant; 
 	@SuppressWarnings("unused")
 	private Integer cryptogramme;
 	private Journal journalPVA1;
@@ -41,7 +43,7 @@ public class Producteur implements IActeur, IVendeurCacaoAleatoire {
 	}
 
 	public String getDescription() {
-		return "Producteur Ventes Aleatoires "+this.getNom();
+		return "Producteur"+this.getNom();
 	}
 
 	public Color getColor() {
@@ -56,19 +58,7 @@ public class Producteur implements IActeur, IVendeurCacaoAleatoire {
 		double production =  Math.random()*this.productionMax.getValeur();
 		this.stockFeves.ajouter(this, production);
 		this.journalPVA1.ajouter("Production de "+production);
-	}
 
-	public double quantiteEnVente(double prix) {
-		if (prix>=this.prixInteressant.getValeur()) { // Met tout le stock en vente si le prix est interessant
-            this.journalPVA1.ajouter("met en vente "+this.stockFeves.getValeur()+" au prix de "+prix);
-			return this.stockFeves.getValeur();
-		} else if (prix<this.prixMin.getValeur()) { // Ne met rien en vente si le prix est inferieur au prix minimal
-            this.journalPVA1.ajouter("met en vente 0 au prix de "+prix);
-			return 0;
-		} else { // Met la moitie du stock en vente si le prix est correct (superieur au prix min mais inferieur au prix interessant)
-            this.journalPVA1.ajouter("met en vente "+(this.stockFeves.getValeur()/2.0)+" au prix de "+prix);
-			return this.stockFeves.getValeur()/2.0;
-		}
 	}
 
 	public void notificationVente(double quantite, double prix) {
@@ -113,6 +103,18 @@ public class Producteur implements IActeur, IVendeurCacaoAleatoire {
 	}
 
 	public void notificationOperationBancaire(double montant) {
+	}
+
+	@Override
+	public double getOffre(Chocolat chocolat, double cours) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void livrer(Chocolat chocolat, double quantite) {
+		// TODO Auto-generated method stub
+		
 	}
 }
 
