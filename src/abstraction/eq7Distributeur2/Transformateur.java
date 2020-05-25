@@ -1,6 +1,7 @@
 package abstraction.eq7Distributeur2;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.List;
 
 import abstraction.eq8Romu.chocolatBourse.IAcheteurChocolatBourse;
@@ -21,6 +22,7 @@ public class Transformateur implements IAcheteurChocolatBourse, IVendeurChocolat
 	private Integer cryptogramme;
 	private String nom;
 	private Banque laBanque; 
+	private Chocolat choco;
 	
 	@Override
 	public String getNom() {
@@ -37,25 +39,28 @@ public class Transformateur implements IAcheteurChocolatBourse, IVendeurChocolat
 	@Override
 	public Color getColor() {
 		// TODO Auto-generated method stub
-		return null;
+		return new Color(128, 128, 255);
 	}
 
 	@Override
 	public void initialiser() {
-		// TODO Auto-generated method stub
+		this.laBanque = Filiere.LA_FILIERE.getBanque();
 		
 	}
 
 	@Override
 	public void next() {
-		// TODO Auto-generated method stub
+		double quantiteTransformee = Math.random()*Math.min(100, this.stockFeves.getValeur()); // on suppose qu'on a un stock infini de sucre
+		this.stockFeves.retirer(this, quantiteTransformee);
+		this.stockChocolat.ajouter(this, (2*quantiteTransformee));// 50% cacao, 50% sucre
+		this.laBanque.virer(this, cryptogramme, this.laBanque, quantiteTransformee*1.0234); // sucre, main d'oeuvre, autres frais
 		
 	}
 
 	@Override
 	public List<String> getNomsFilieresProposees() {
 		// TODO Auto-generated method stub
-		return null;
+		return new ArrayList<String>();
 	}
 
 	@Override
@@ -66,31 +71,37 @@ public class Transformateur implements IAcheteurChocolatBourse, IVendeurChocolat
 
 	@Override
 	public List<Variable> getIndicateurs() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Variable> res=new ArrayList<Variable>();
+		res.add(this.stockFeves);
+		res.add(stockChocolat);
+		return res;
 	}
 
 	@Override
 	public List<Variable> getParametres() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Variable> res=new ArrayList<Variable>();
+		return res;
 	}
 
 	@Override
 	public List<Journal> getJournaux() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Journal> res=new ArrayList<Journal>();
+		return res;
 	}
 
 	@Override
 	public void setCryptogramme(Integer crypto) {
-		// TODO Auto-generated method stub
+		this.cryptogramme = crypto;
 		
 	}
 
 	@Override
 	public void notificationFaillite(IActeur acteur) {
-		// TODO Auto-generated method stub
+		if (this==acteur) {
+			System.out.println("I'll be back... or not... "+this.getNom());
+			} else {
+				System.out.println("Poor "+acteur.getNom()+"... We will miss you. "+this.getNom());
+			}
 		
 	}
 
@@ -102,14 +113,18 @@ public class Transformateur implements IAcheteurChocolatBourse, IVendeurChocolat
 
 	@Override
 	public double getDemande(Chocolat chocolat, double cours) {
-		// TODO Auto-generated method stub
-		return 0;
+		double solde = Filiere.LA_FILIERE.getBanque().getSolde(this,  cryptogramme);
+		double max = solde/cours;
+		//return 500; // si il retourne 500 sans verifier si il peut se le permettre il va parvenir a un impaye qu'il devra regler pour pouvoir a nouveau acheter a la bourse
+		return Math.random()*max;// les cours vont s'effondrer car les acheteurs vont tres vite ne plus avoir assez d'argent pour acheter. Augmentez le solde des acheteurs via l'interface si vous voulez voir les cours repartir à la hausse
 	}
 
 	@Override
 	public Integer getCryptogramme(SuperviseurChocolatBourse superviseur) {
-		// TODO Auto-generated method stub
-		return null;
+		if (superviseur!=null) {
+			return cryptogramme;
+		}
+		return Integer.valueOf(0);
 	}
 
 	@Override
@@ -120,19 +135,23 @@ public class Transformateur implements IAcheteurChocolatBourse, IVendeurChocolat
 
 	@Override
 	public void receptionner(ChocolatDeMarque chocolat, double quantite) {
-		// TODO Auto-generated method stub
+		stockFeves.ajouter(this, quantite);
 		
 	}
 
 	@Override
 	public double getOffre(Chocolat chocolat, double cours) {
-		// TODO Auto-generated method stub
-		return 0;
+		if (chocolat==choco) {
+			return this.stockChocolat.getValeur();
+		}
+		else {
+			return 0.0;
+		}
 	}
 
 	@Override
 	public void livrer(Chocolat chocolat, double quantite) {
-		// TODO Auto-generated method stub
+		stockChocolat.retirer(this, quantite);
 		
 	}
 
