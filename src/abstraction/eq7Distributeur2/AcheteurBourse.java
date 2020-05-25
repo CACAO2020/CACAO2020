@@ -7,6 +7,7 @@ import java.util.Map;
 import abstraction.eq8Romu.chocolatBourse.CommandeChocolat;
 import abstraction.eq8Romu.chocolatBourse.IAcheteurChocolatBourse;
 import abstraction.eq8Romu.chocolatBourse.SuperviseurChocolatBourse;
+import abstraction.eq8Romu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.ChocolatDeMarque;
@@ -61,31 +62,29 @@ public class AcheteurBourse extends AbsAcheteurBourse implements IAcheteurChocol
 
 		}
 		journal.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[RÉCEPTION] Réception de " + Journal.doubleSur(quantite,2) + " tonnes de " + chocolat.name() + "."));
-		chocoReceptionne.get(chocolat.getChocolat()).setValeur(ac, chocoReceptionne.get(chocolat.getChocolat()).getValeur() + quantite);
+		ac.getStock().chocoReceptionne.get(chocolat.getChocolat()).setValeur(ac, ac.getStock().chocoReceptionne.get(chocolat.getChocolat()).getValeur() + quantite);
 	}
-	/*
-	public void majQuantitesACommander() {
-		double quantiteACommander;
-		for (Chocolat choco : ac.nosChoco) {
-			chocoReceptionne.get(choco).setValeur(ac, 0.);
-			quantiteACommander = ac.getVendeur().quantitesACommanderBourse.get(choco).getValeur();
-			demandesChoco.get(choco).setValeur(this, quantiteACommander);
-		}
-		
-		for (Chocolat choco : Chocolat.values()) {
-			if (!ac.nosChoco.contains(choco)) {
-				demandesChoco.get(choco).setValeur(this, 0.);
-			} 
-		}
-	}*/
 	
 	public void majAchatsBourse() {
+		// IA : quantité à commander = quantité demandée par le vendeur MOINS les quantités reçues à l'étape suivante grâce aux contrats actuels
+		double quantiteTotaleACommander;
 		double quantiteACommander;
-		double quantiteACommanderMin = 0.;
-		double quantiteACommanderMax = 500.;
+		double quantiteARecevoirParContrats = 0.;
 		for (Chocolat choco : ac.nosChoco) {
-			chocoReceptionne.get(choco).setValeur(ac, 0.);
-			quantiteACommander = Math.random() * (quantiteACommanderMax - quantiteACommanderMin) + quantiteACommanderMin;
+			ac.getStock().chocoReceptionne.get(choco).setValeur(ac, 0.);
+			Chocolat typeChoco;
+			for (ExemplaireContratCadre contrat : ac.getAcheteurContratCadre().nosContrats) {
+				if (contrat.getProduit() instanceof Chocolat) {
+					typeChoco = ((Chocolat)contrat.getProduit());
+				} else {
+					typeChoco = ((ChocolatDeMarque)contrat.getProduit()).getChocolat();
+				}
+				if (choco == typeChoco) {
+					quantiteARecevoirParContrats += contrat.getQuantiteALivrerAuStep();
+				}
+			}
+			quantiteTotaleACommander = ac.getVendeur().getQuantiteACommander(choco);
+			quantiteACommander = quantiteTotaleACommander - quantiteARecevoirParContrats; 
 			quantitesACommander.get(choco).setValeur(ac, quantiteACommander);
 		}
 	}

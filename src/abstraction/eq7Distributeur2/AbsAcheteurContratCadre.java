@@ -12,7 +12,7 @@ import abstraction.fourni.Variable;
 
 public class AbsAcheteurContratCadre {
 
-	protected List<ExemplaireContratCadre> mesContrats;
+	protected List<ExemplaireContratCadre> nosContrats;
 	
 	protected Distributeur2 ac;
 	
@@ -28,7 +28,7 @@ public class AbsAcheteurContratCadre {
 	
 	public AbsAcheteurContratCadre(Distributeur2 ac) {
 		this.ac = ac;
-		this.mesContrats = new ArrayList<ExemplaireContratCadre>();
+		this.nosContrats = new ArrayList<ExemplaireContratCadre>();
 		initJournaux();
 	}
 

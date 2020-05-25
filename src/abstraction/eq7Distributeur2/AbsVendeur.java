@@ -22,11 +22,10 @@ public class AbsVendeur {
 	protected Journal journalCatalogue;
 	protected Journal journal;
 	
-	protected Map<ChocolatDeMarque, Variable> quantitesACommanderContratCadre;
+	protected Map<ChocolatDeMarque, Variable> quantitesACommander;
 	protected Map<ChocolatDeMarque, Variable> quantitesEnVente;
 	protected Map<ChocolatDeMarque, Variable> prixChoco;
 	protected Map<Chocolat, Variable> chocoVendu;
-	protected Map<Chocolat, Variable> quantitesACommanderBourse;
 	protected Map<Chocolat, Double> prixParDefaut;
 	protected Map<Chocolat, Double> ventesEtapeActuelle;
 	
@@ -46,8 +45,7 @@ public class AbsVendeur {
 		publicites = new ArrayList<ChocolatDeMarque>();
 		quantitesEnVente = new HashMap<ChocolatDeMarque, Variable>();
 		prixChoco = new HashMap<ChocolatDeMarque, Variable>();
-		quantitesACommanderBourse = new HashMap<Chocolat, Variable>();
-		quantitesACommanderContratCadre = new HashMap<ChocolatDeMarque, Variable>();
+		quantitesACommander = new HashMap<ChocolatDeMarque, Variable>();
 		ventesEtapeActuelle = new HashMap<Chocolat, Double>();
 		prixParDefaut = new HashMap<Chocolat, Double>();
 		prixParDefaut.put(Chocolat.CHOCOLAT_MOYENNE, 10000.);
@@ -57,8 +55,7 @@ public class AbsVendeur {
 		chocoVendu = new HashMap<Chocolat, Variable>();
 		for (Chocolat choco : ac.nosChoco) {
 			ventesEtapeActuelle.put(choco, 0.);
-			chocoVendu.put(choco, new Variable(getNom() + " : " + choco.name() + " [Ventes i-1]", ac, 0.));
-			quantitesACommanderBourse.put(choco, new Variable(getNom() + " : " + choco.name() + " [Commande Bourse i-1]", ac, 0.));		
+			chocoVendu.put(choco, new Variable(getNom() + " : " + choco.name() + " [Ventes i-1]", ac, 0.));	
 		}
 		initJournaux();
 	}
@@ -114,12 +111,7 @@ public class AbsVendeur {
 		List<Variable> res = new ArrayList<Variable>();
 		for (Chocolat choco : ac.nosChoco) {
 			res.add(chocoVendu.get(choco));
-		}
-		
-		for (Chocolat choco : ac.nosChoco) {
-			res.add(quantitesACommanderBourse.get(choco));
-		}
-		
+		}	
 		return res;
 	}
 
