@@ -50,9 +50,11 @@ public class FiliereTest extends Filiere {
 		this.superviseurCC=new SuperviseurVentesContratCadre();
 		this.ajouterActeur(this.superviseurCC);
 	}
+	
 	public SuperviseurVentesContratCadre getSuperviseurContratCadre() {
 		return this.superviseurCC;
 	}
+	
 	public IActeur getActeur(String nom) {
 		if (!nom.equals("Sup.C.Criee")) {
 			return super.getActeur(nom); 
@@ -60,4 +62,5 @@ public class FiliereTest extends Filiere {
 			return null;
 		}
 	}
+	
 }

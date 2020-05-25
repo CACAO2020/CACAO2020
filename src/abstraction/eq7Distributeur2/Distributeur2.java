@@ -113,14 +113,14 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		this.debutEtape = false;
 		// Le vendeur met à jour ses indicateurs de vente (dont ont besoin les acheteurs)
 		vendeur.majIndicateursDeVente();
+		// Le vendeur détermine quelle quantité de chaque chocolat de marque proposer à la vente à l'étape suivante
+		vendeur.majQuantitesEnVente();		
 		// L'acheteur à la bourse déterminé quelle quantité de chaque type de chocolat commander
 		acheteurBourse.majAchatsBourse();
 		// L'acheteur par contrats-cadres met à jour ses contrats
 		acheteurContratCadre.majAchatsContratCadre();	
 		// Le vendeur choisit les campagnes de pub à mener lors de l'étape courante
 		vendeur.majPublicites();
-		// Le vendeur détermine quelle quantité de chaque chocolat de marque proposer à la vente à l'étape suivante
-		vendeur.majQuantitesEnVente();		
 		// Le vendeur met à jour les prix de vente de chaque chocolat de marque
 		vendeur.majPrixDeVente();
 	}
