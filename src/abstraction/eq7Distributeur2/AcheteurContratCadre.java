@@ -31,13 +31,13 @@ public class AcheteurContratCadre extends AbsAcheteurContratCadre implements IAc
 
 	public void supprimerContratsObsoletes() {
 		List<ExemplaireContratCadre> contratsObsoletes=new LinkedList<ExemplaireContratCadre>();
-		for (ExemplaireContratCadre contrat : mesContrats) {
+		for (ExemplaireContratCadre contrat : nosContrats) {
 			if (contrat.getQuantiteRestantALivrer() == 0.0 && contrat.getMontantRestantARegler() == 0.0) {
 				contratsObsoletes.add(contrat);
 				journal.ajouter(Journal.texteColore(warningColor, Color.BLACK, "[OBSOLESCENCE] Le contrat avec " + contrat.getVendeur().getNom() + " pour le " + contrat.getProduit() + " a été retiré."));
 			}
 		}
-		this.mesContrats.removeAll(contratsObsoletes);
+		this.nosContrats.removeAll(contratsObsoletes);
 	}
 	
 	public void proposerContratsChocoDeMarque() {
@@ -49,7 +49,7 @@ public class AcheteurContratCadre extends AbsAcheteurContratCadre implements IAc
 			for (IVendeurContratCadre vendeur : vendeurs) {
 				contrat = superviseur.demande(ac, vendeur, choco, new Echeancier(etape+1, 10, 5.0), ac.cryptogramme);
 				if (contrat != null) {
-					mesContrats.add(contrat);
+					nosContrats.add(contrat);
 					notifierNouveauContrat(contrat);
 				}
 			}
@@ -65,7 +65,7 @@ public class AcheteurContratCadre extends AbsAcheteurContratCadre implements IAc
 			for (IVendeurContratCadre vendeur : vendeurs) {
 				contrat = superviseur.demande(ac, vendeur, choco, new Echeancier(etape+1, 10, 5.0), ac.cryptogramme);
 				if (contrat != null) {
-					mesContrats.add(contrat);
+					nosContrats.add(contrat);
 					notifierNouveauContrat(contrat);
 				}
 			}
@@ -102,7 +102,7 @@ public class AcheteurContratCadre extends AbsAcheteurContratCadre implements IAc
 	public void majJournalContrats() {
 		journalContrats.ajouter(Journal.texteColore(metaColor, Color.BLACK, "[ETAPE " + Filiere.LA_FILIERE.getEtape() + "] Contrats en cours"));
 		journalContrats.ajouter(Journal.texteSurUneLargeurDe("Vendeur", 30) + Journal.texteSurUneLargeurDe("Chocolat", 30) + Journal.texteSurUneLargeurDe("Quantité", 10) + Journal.texteSurUneLargeurDe("Echéancier", 100) + Journal.texteSurUneLargeurDe("", 30));
-		for (ExemplaireContratCadre contrat : mesContrats) {
+		for (ExemplaireContratCadre contrat : nosContrats) {
 			journalContrats.ajouter(Journal.texteSurUneLargeurDe(contrat.getVendeur().getNom(), 30) + Journal.texteSurUneLargeurDe(produitToString(contrat.getProduit()),30) + Journal.texteSurUneLargeurDe(Journal.doubleSur(contrat.getQuantiteTotale(), 2),10) + Journal.texteSurUneLargeurDe(echeancierToString(contrat.getEcheancier()), 100) + Journal.texteSurUneLargeurDe("", 30));
 		}
 	}
