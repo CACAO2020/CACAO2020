@@ -70,7 +70,7 @@ public class AbsStock {
 		return res;
 	}
 
-	public List<Journal> getJournaux() {
+	public List<Journal> getJournaux() { 
 		List<Journal> res = new ArrayList<Journal>();
 		res.add(journal);
 		return res;
