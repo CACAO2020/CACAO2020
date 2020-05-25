@@ -33,9 +33,6 @@ public class FiliereTest extends Filiere {
 		super();
 		cf = new ClientFinal();
 		this.ajouterActeur(cf);
-		//this.ajouterActeur(new ProducteurVentesAleatoires("PVA", new Color(128,255,128)));
-		//this.ajouterActeur(new TransformateurVentesAleatoires("TVA"));
-		//this.ajouterActeur(new ExempleTransformateurContratCadreVendeur(Chocolat.CHOCOLAT_MOYENNE));
 		this.ajouterActeur(new ExempleVendeurChocolatBourse(Chocolat.CHOCOLAT_MOYENNE));
 		this.ajouterActeur(new ExempleVendeurChocolatBourse(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE));
 		this.ajouterActeur(new ExempleVendeurChocolatBourse(Chocolat.CHOCOLAT_HAUTE));
