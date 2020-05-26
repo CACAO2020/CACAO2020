@@ -107,7 +107,6 @@ public class Transformateur implements IAcheteurChocolatBourse, IVendeurChocolat
 
 	@Override
 	public void notificationOperationBancaire(double montant) {
-		// TODO Auto-generated method stub
 		
 	}
 
