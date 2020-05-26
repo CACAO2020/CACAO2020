@@ -16,9 +16,6 @@ public class Producteur implements IActeur, IVendeurChocolatBourse {
 	
 	private Variable stockFeves;
 	private Variable productionMax;
-	private Variable prixMin;
-	private Variable prixInteressant; 
-	@SuppressWarnings("unused")
 	private Integer cryptogramme;
 	private Journal journalPVA1;
 	private String nom;
@@ -29,8 +26,6 @@ public class Producteur implements IActeur, IVendeurChocolatBourse {
 		this.couleur = couleur;
 		this.stockFeves=new Variable(getNom()+" stock feves", this, 0, 10000, 1000);
 		this.productionMax=new Variable(getNom()+" production max par step", this, 0, 1000, 200);
-		this.prixMin=new Variable(getNom()+" prix min", this, 0, 5.0, 1.8);
-		this.prixInteressant=new Variable(getNom()+" prix interessant", this, 0, 12.0, 2.0);
 		this.journalPVA1 = new Journal(this.getNom()+" activites", this);
 	}
 	
@@ -83,8 +78,6 @@ public class Producteur implements IActeur, IVendeurChocolatBourse {
 	public List<Variable> getParametres() {
 		List<Variable> res=new ArrayList<Variable>();
 		res.add(this.productionMax);
-		res.add(this.prixMin);
-		res.add(this.prixInteressant);
 		return res;
 	}
 
@@ -107,13 +100,12 @@ public class Producteur implements IActeur, IVendeurChocolatBourse {
 
 	@Override
 	public double getOffre(Chocolat chocolat, double cours) {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.stockFeves.getValeur();
 	}
 
 	@Override
 	public void livrer(Chocolat chocolat, double quantite) {
-		// TODO Auto-generated method stub
+		stockFeves.retirer(this, quantite);
 		
 	}
 }
