@@ -121,10 +121,10 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		vendeur.majPrixDeVente();
 		// Le vendeur choisit les campagnes de pub à mener lors de l'étape courante
 		vendeur.majPublicites();
-		// L'acheteur à la bourse détermine quelle quantité de chaque type de chocolat commander
-		acheteurBourse.majAchatsBourse();
 		// L'acheteur par contrats-cadres met à jour ses contrats
 		acheteurContratCadre.majAchatsContratCadre();	
+		// L'acheteur à la bourse détermine quelle quantité de chaque type de chocolat commander
+		acheteurBourse.majAchatsBourse();
 	}
 	
 	public double getSolde() {
