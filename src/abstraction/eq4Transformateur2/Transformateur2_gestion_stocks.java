@@ -2,12 +2,15 @@ package abstraction.eq4Transformateur2;
 
 import java.util.List;
 
+import abstraction.eq8Romu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.Feve;
 import abstraction.eq8Romu.produits.Gamme;
+import abstraction.eq8Romu.produits.Pate;
+import abstraction.fourni.Filiere;
 import abstraction.fourni.Variable;
 
-public class Transformateur2_gestion_stocks extends Transformateur2_negoce {
+public class Transformateur2_gestion_stocks extends Transformateur2_contratCadre {
 	
 	// donne la valeur totale des stocks
 	private Variable valeurDesStocks ;
@@ -90,5 +93,63 @@ public class Transformateur2_gestion_stocks extends Transformateur2_negoce {
 			cout += this.coutUnitaireStockPate.getValeur()*super.getStockTotalPate() ; 
 			cout += this.coutUnitaireStockChocolat.getValeur()*super.getStockTotalChocolat() ; 
 			return cout ;
+		}
+		
+	//  Nombre de tours d'autonmies restants pour couvrir les echeanciers de nos contrats cadres	
+		public int nbToursAutonomiePate(PateInterne pate) {
+			int resu = -1;
+			double pate_echeancier = 0;
+			int step = Filiere.LA_FILIERE.getEtape();
+			List<ExemplaireContratCadre> contratsDeCeType = super.getContratDeCeType(pate);
+			while (pate_echeancier < super.getStockPateValeur(pate)) {
+				resu++;
+				double qte_tour = 0;
+				for (ExemplaireContratCadre ex : contratsDeCeType) {
+					qte_tour += super.getQuantiteALivrerAuStep(ex, step + resu);
+				}
+				if (qte_tour == 0) {
+					return 100;			// On a assez pour subvenir à toutes le echeances
+				}
+				else {
+					pate_echeancier += qte_tour;
+				}
+			}
+			return resu;
+		}
+		
+		public int nbTourAutonomiePateEtFeves(PateInterne pate) {
+			int resu = -1;
+			double pate_echeancier = 0;
+			int step = Filiere.LA_FILIERE.getEtape();
+			List<ExemplaireContratCadre> contratsDeCeType = super.getContratDeCeType(pate);
+			while (pate_echeancier < super.getStockPateValeur(pate)) {
+				resu++;
+				double qte_tour = 0;
+				for (ExemplaireContratCadre ex : contratsDeCeType) {
+					qte_tour += super.getQuantiteALivrerAuStep(ex, step + resu);
+				}
+				if (qte_tour == 0) {
+					return 1000;			// On a assez pour subvenir à toutes le echeances
+				}
+				else {
+					pate_echeancier += qte_tour;
+				}
+			}
+			double equivalent_feves = (pate_echeancier - super.getStockPateValeur(pate))/super.getCoeffTFEP();
+			Feve feve = super.creerFeve(pate);
+			while (equivalent_feves < super.getStockFevesValeur(feve)) {
+				resu++;
+				double qte_tour = 0;
+				for (ExemplaireContratCadre ex : contratsDeCeType) {
+					qte_tour += super.getQuantiteALivrerAuStep(ex, step + resu);
+				}
+				if (qte_tour == 0) {
+					return 1000;			// On a assez pour subvenir à toutes le echeances
+				}
+				else {
+					equivalent_feves += qte_tour/super.getCoeffTFEP();
+				}
+			}
+			return resu;
 		}
 }

@@ -82,6 +82,21 @@ public class Transformateur2_contratCadre extends Transformateur2_stocks_et_tran
 		return this.stockPateMin.getValeur();
 	}
 	
+	public List<ExemplaireContratCadre> getContratDeCeType(PateInterne pateI) {
+		Pate pate = pateI.conversionPateInterne();
+		List<ExemplaireContratCadre> resu = new LinkedList<ExemplaireContratCadre>();
+		for (ExemplaireContratCadre ex : mesContratEnTantQueVendeur) {
+			if (ex.getProduit() == pate) {
+				resu.add(ex);
+			}
+		}
+		return resu;
+	}
+	
+	public double getQuantiteALivrerAuStep(ExemplaireContratCadre e, int i) {
+		return e.getEcheancier().getQuantite(i);
+	}
+	
 	// renvoie la valeur de la quantite totale de pate à fournir
 	public double getQuantitePateCCTotaleValeur() {
 		double valeur = 0 ;

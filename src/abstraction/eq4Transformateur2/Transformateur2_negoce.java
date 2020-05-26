@@ -16,7 +16,7 @@ import abstraction.fourni.Filiere;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
-public class Transformateur2_negoce extends Transformateur2_contratCadre implements IAcheteurCacaoCriee, IVendeurChocolatBourse {
+public class Transformateur2_negoce extends Transformateur2_gestion_stocks implements IAcheteurCacaoCriee, IVendeurChocolatBourse {
 	private Map<Feve, Variable> prixMaxAchatFeves;
 	private Map<Chocolat, Variable> prixMinVenteChocolat;
 	protected Double MARGE_VISEE_CHOCOLAT = 0.5;
@@ -145,7 +145,7 @@ if (!classeAppelante.equals(SuperviseurCacaoCriee.class)) { throw new Error("la 
 			}
 		}
 		double prix_bourse_choco = Filiere.LA_FILIERE.getIndicateur(indicateur).getHistorique().get(Filiere.LA_FILIERE.getEtape()-1).getValeur();
-		return prix_bourse_choco*(1-MARGE_VISEE_CHOCOLAT) - cout_process_product;
+		return prix_bourse_choco/(1+MARGE_VISEE_CHOCOLAT) - cout_process_product;
 	}
 		else {
 			return 0;
@@ -167,10 +167,11 @@ if (!classeAppelante.equals(SuperviseurCacaoCriee.class)) { throw new Error("la 
 	// On vend tout notre stock de chocolat à chaque fois * A MODIFIER POUR CHOISIR QTE A VENDRE *
 		public double getOffre(Chocolat chocolat, double cours) {
 			double quantite = this.getStockChocolatValeur(chocolat) ;
-			if (cours >= this.getCoutProdChocolat(chocolat, 1)/MARGE_VISEE_CHOCOLAT) { //J'AI CHOISI UNE MARGE ABITRAIRE DE 20%, DEVRA VARIER EN FONCTION DU STOCK
+			if (cours >= this.getCoutProdChocolat(chocolat, 1)*(1+MARGE_VISEE_CHOCOLAT)) {
 				return quantite ;
 			}
 			else {
+				MARGE_VISEE_CHOCOLAT = Math.max(0.1, MARGE_VISEE_CHOCOLAT-0.1);
 				return 0;
 			}
 		}
