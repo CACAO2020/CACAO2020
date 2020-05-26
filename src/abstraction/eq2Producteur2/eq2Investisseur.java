@@ -34,6 +34,5 @@ public class eq2Investisseur extends eq2Vendeur {
 		double payeEmployes = this.NbTotalArbres()*0.05;
 		Filiere.LA_FILIERE.getBanque().virer(this,this.getCrypto(),Filiere.LA_FILIERE.getBanque(),payeEmployes);
 	}
-
 }
 

@@ -13,8 +13,6 @@ import abstraction.eq8Romu.produits.Pate;
 import abstraction.fourni.Filiere;
 
 public class Producteur2 extends eq2Investisseur implements IActeur {
-	
-	private List<PaquetArbres> PaquetsArbres; // la liste des paquets d'arbres de notre acteur
 
 	public Producteur2() {
 		super();
@@ -54,7 +52,6 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 	 */
 	public void RefreshStocks() {
 		for (int i = 0; i < this.getPaquetsArbres().size(); i++) {
-			System.out.println(i);
 			this.addQtFeve(this.getPaquetsArbres().get(i).getType(),this.getPaquetsArbres().get(i).production());
 		}
 	}
@@ -72,10 +69,7 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 		}
 		return res;
 	}
-	public List<Variable> getParametres(){
-		List<Variable> res=new ArrayList<Variable>();
-		res.add(new Variable("production_arbres",this,this.getPaquetsArbres().get(0).getProdmax()));
-		return res;
-	}
+	
+
 
 }

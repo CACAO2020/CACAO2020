@@ -21,7 +21,7 @@ public class eq2Acteur implements IActeur {
 	private List<Variable> parametres;
 
 	public eq2Acteur() {
-		this.journalEq2 = new Journal("Journal Principal", this);
+		this.journalEq2 = new Journal("Journal Principal Eq2", this);
 		this.PaquetsArbres = new ArrayList<PaquetArbres>();
 		this.parametres = new ArrayList<Variable>();
 		this.PaquetsArbres.add(new PaquetArbres(100,Feve.FEVE_MOYENNE));
@@ -65,8 +65,11 @@ public class eq2Acteur implements IActeur {
 
 	@Override
 	public void initialiser() {
-		// TODO Auto-generated method stub
-		
+		// Au début de la partie, on va commencer avec quelques arbres déjà plantés
+		this.getPaquetsArbres().add(new PaquetArbres(100, Feve.FEVE_BASSE, 10));
+		this.getPaquetsArbres().add(new PaquetArbres(100, Feve.FEVE_MOYENNE, 12));
+		this.getPaquetsArbres().add(new PaquetArbres(100, Feve.FEVE_HAUTE, 7));
+
 	}
 
 	@Override
@@ -98,8 +101,9 @@ public class eq2Acteur implements IActeur {
 		List<Variable> res=new ArrayList<Variable>();
 		return res;
 	}
-
-	@Override
+	public Journal getJournalPrincipal() {
+		return this.journalEq2;
+	}
 	public List<Journal> getJournaux() {
 		List<Journal> res=new ArrayList<Journal>();
 		res.add(this.journalEq2);

@@ -19,6 +19,12 @@ public class PaquetArbres {
 		this.type = type;
 		this.prodmax = 7.5;
 	}
+	public PaquetArbres(int nbreA, Feve type, int age) {
+		this.nbreArbres = nbreA;
+		this.age = age;
+		this.type = type;
+		this.prodmax = 7.5;
+	}
 	
 	public double getProdmax() {
 		return this.prodmax;

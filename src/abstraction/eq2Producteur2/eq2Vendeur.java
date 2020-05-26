@@ -294,6 +294,12 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 		this.prixTCE = prixTCE;
 	}
 	
+	public List<Journal> getJournaux() {
+		List<Journal> res=new ArrayList<Journal>();
+		res.addAll(super.getJournaux());
+		res.add(this.journal_des_ventes);
+		return res;
+	}
 
 }
 	
