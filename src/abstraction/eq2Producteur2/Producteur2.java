@@ -53,8 +53,9 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 	 * cette fonction calcule la production d'un cycle et la rajoute au stock
 	 */
 	public void RefreshStocks() {
-		for (int i = 0; i < this.PaquetsArbres.size(); i++) {
-			this.addQtFeve(this.PaquetsArbres.get(i).getType(),this.PaquetsArbres.get(i).production());
+		for (int i = 0; i < this.getPaquetsArbres().size(); i++) {
+			System.out.println(i);
+			this.addQtFeve(this.getPaquetsArbres().get(i).getType(),this.getPaquetsArbres().get(i).production());
 		}
 	}
 	//cette fonction va essayer de calculer la valeur de notre stock a partir des prix de la criée precedente (pour le moment), il pourra etre amelioré.(lucas p)
