@@ -14,12 +14,13 @@ import abstraction.fourni.Filiere;
 
 public class Producteur2 extends eq2Investisseur implements IActeur {
 
+	private Journal journal_de_production;
+	
 	public Producteur2() {
 		super();
+		this.journal_de_production = new Journal("Journal de Production",this);
 	}
 
-	public void initialiser() {
-	}
 	/**
 	 * Cette methode est appellee a chaque nouveau tour
 	 */
@@ -53,6 +54,7 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 	public void RefreshStocks() {
 		for (int i = 0; i < this.getPaquetsArbres().size(); i++) {
 			this.addQtFeve(this.getPaquetsArbres().get(i).getType(),this.getPaquetsArbres().get(i).production());
+			this.journal_de_production.ajouter("Production de " + this.getPaquetsArbres().get(i).production() + " fèves de type: " + this.getPaquetsArbres().get(i).getType() );
 		}
 	}
 	//cette fonction va essayer de calculer la valeur de notre stock a partir des prix de la criée precedente (pour le moment), il pourra etre amelioré.(lucas p)
@@ -67,6 +69,12 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 		for (Pate pate: this.getStockPate().keySet()) {
 			res.add(this.getStockPate().get(pate));
 		}
+		return res;
+	}
+	public List<Journal> getJournaux() {
+		List<Journal> res=new ArrayList<Journal>();
+		res.addAll(super.getJournaux());
+		res.add(this.journal_de_production);
 		return res;
 	}
 	
