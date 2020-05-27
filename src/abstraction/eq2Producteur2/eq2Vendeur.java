@@ -59,23 +59,25 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 	    double prixtrinie = 0;
 	    double prixcrio = 0;
 	    double prixcrioe = 0;
+	    
 	    for (int i = 0; i < Stock.size();i++) { //changer ça vu que c'est plus une liste de couples mais un dictionnaire (en fait y'a peut-être pas besoin de le changer)
-	    	if (Stock.get(i).getNom() == "forastero") {
+	    	if (Stock.get(i).getNom() == "EQ2Feve.FEVE_BASSE") {
 	    		masseFora = masseFora + Stock.get(i).getValeur();
 	    	}
-	    	if (Stock.get(i).getNom() == "trinitario") {
+	    	if (Stock.get(i).getNom() == "EQ2Feve.FEVE_MOYENNE") {
 	    		masseTrini = masseTrini + Stock.get(i).getValeur();
 	    	}
-	    	if (Stock.get(i).getNom() == "trinitario_equitable") {
+	    	if (Stock.get(i).getNom() == "EQ2Feve.FEVE_MOYENNE_EQUITABLE") {
 	    		masseTriniE = masseTriniE + Stock.get(i).getValeur();
 	    	}
-	    	if (Stock.get(i).getNom() == "criollo") {
+	    	if (Stock.get(i).getNom() == "EQ2Feve.FEVE_HAUTE") {
 	    		masseCrio = masseCrio + Stock.get(i).getValeur();
 	    	}
-	    	if (Stock.get(i).getNom() == "criollo_equitable") {
+	    	if (Stock.get(i).getNom() == "EQ2Feve.FEVE_HAUTE_EQUITABLE") {
 	    		masseCrioE = masseCrioE + Stock.get(i).getValeur();
 	    	}
 	    }
+	    this.journal_des_ventes.ajouter("masseFora="+masseFora+"  masseTrini="+masseTrini+"  masseTriniE"+masseTriniE+"  masseCrio="+masseCrio+"  masseCrioE="+masseCrioE);
 	    prixfora = masseFora*this.getPrixTF().getValeur();
 	    prixtrini = masseTrini*this.getPrixTT().getValeur();
 	    prixtrinie = masseTriniE*this.getPrixTTE().getValeur();
@@ -146,27 +148,8 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 	    	}
 	    		
 	    }
-	    else if (masseFora <0.5) {
-	    	this.journal_des_ventes.ajouter("masse fora trop faible");
-	    	return null;
-	    }
-	    else if (masseTrini <0.5) {
-	    	this.journal_des_ventes.ajouter("masse trini trop faible");
-	    	return null;
-	    }
-	    else if (masseCrio <0.5) {
-	    	this.journal_des_ventes.ajouter("masse crio trop faible");
-	    	return null;
-	    }
-	    else if (masseTriniE <0.5) {
-	    	this.journal_des_ventes.ajouter("masse triniE trop faible");
-	    	return null;
-	    }
-	    else if (masseCrioE<0.5) {
-	    	this.journal_des_ventes.ajouter("masse crioE trop faible");
-	    	return null;
-	    }
 	    else {
+	    	this.journal_des_ventes.ajouter("Aucun lot n'a été proposé à la vente");
 	    	return null;
 	    }
 	}
