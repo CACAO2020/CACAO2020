@@ -38,7 +38,7 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 		this.prixTCE = new Variable("prixTCE",this,3200);
 		this.prixvente = 0;
 		this.propalsnonvendues = new Variable("propalsnonvendues",this,999999999);//première valeur super haute pour permettre ventes
-		this.journal_des_ventes = new Journal("journal des ventes", this);
+		this.journal_des_ventes = new Journal("Journal des ventes", this);
 	}
 	/*faudrait rajouter un truc qui set les prix en fonction de ce qu'il s'est passé au cycle d'avant et de notre rentabilité
 	 * 
@@ -146,8 +146,29 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 	    	}
 	    		
 	    }
-	    
-	    return null;
+	    else if (masseFora <0.5) {
+	    	this.journal_des_ventes.ajouter("masse fora trop faible");
+	    	return null;
+	    }
+	    else if (masseTrini <0.5) {
+	    	this.journal_des_ventes.ajouter("masse trini trop faible");
+	    	return null;
+	    }
+	    else if (masseCrio <0.5) {
+	    	this.journal_des_ventes.ajouter("masse crio trop faible");
+	    	return null;
+	    }
+	    else if (masseTriniE <0.5) {
+	    	this.journal_des_ventes.ajouter("masse triniE trop faible");
+	    	return null;
+	    }
+	    else if (masseCrioE<0.5) {
+	    	this.journal_des_ventes.ajouter("masse crioE trop faible");
+	    	return null;
+	    }
+	    else {
+	    	return null;
+	    }
 	}
 	
 
