@@ -28,7 +28,7 @@ public class eq2Acteur implements IActeur {
 		this.journalEq2 = new Journal("Journal Principal Eq2", this);
 		this.PaquetsArbres = new ArrayList<PaquetArbres>();
 		this.parametres = new ArrayList<Variable>();
-		this.PaquetsArbres.add(new PaquetArbres(100,Feve.FEVE_MOYENNE));
+		this.PaquetsArbres = new ArrayList<PaquetArbres>();
 	}
 
 	
