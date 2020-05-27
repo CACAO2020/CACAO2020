@@ -77,12 +77,15 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 	    		masseCrioE = masseCrioE + Stock.get(i).getValeur();
 	    	}
 	    }
-	    //this.journal_des_ventes.ajouter("masseFora="+masseFora+"  masseTrini="+masseTrini+"  masseTriniE"+masseTriniE+"  masseCrio="+masseCrio+"  masseCrioE="+masseCrioE); pour débugger
+	    //this.journal_des_ventes.ajouter("masseFora="+masseFora+"  masseTrini="+masseTrini+"  masseTriniE"+masseTriniE+"  masseCrio="+masseCrio+"  masseCrioE="+masseCrioE); //pour débugger
+
 	    prixfora = masseFora*this.getPrixTF().getValeur();
 	    prixtrini = masseTrini*this.getPrixTT().getValeur();
 	    prixtrinie = masseTriniE*this.getPrixTTE().getValeur();
 	    prixcrio = masseCrio*this.getPrixTC().getValeur();
 	    prixcrioe = masseCrioE*this.getPrixTCE().getValeur();
+	    //this.journal_des_ventes.ajouter("prixfora="+prixfora+"  prixTrini="+prixtrini+"  prixTriniE"+prixtrinie+"  prixCrio="+prixcrio+"  prixCrioE="+prixcrioe); //pour débugger
+
 	    if (prixfora > prixtrini && prixfora > prixcrio && masseFora > 0.5 && prixfora > prixtrinie && prixfora > prixcrioe) {
 	    	if (this.getPropal()>prixfora) {
 	    		this.setPrixVente(prixfora);
