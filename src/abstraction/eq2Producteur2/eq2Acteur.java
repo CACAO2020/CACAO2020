@@ -4,7 +4,11 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import abstraction.eq8Romu.chocolatBourse.FiliereTestVentesChocolatBourse;
+import abstraction.eq8Romu.clients.FiliereTestClientFinal;
+import abstraction.eq8Romu.contratsCadres.FiliereTestContratCadre;
 import abstraction.eq8Romu.produits.Feve;
+import abstraction.eq8Romu.ventesCacaoAleatoires.FiliereVentesCacaoAleatoires;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
@@ -80,15 +84,29 @@ public class eq2Acteur implements IActeur {
 	}
 
 	@Override
-	public List<String> getNomsFilieresProposees() {
-			return new ArrayList<String>();
-	}
+	public List<String> getNomsFilieresProposees() { //jfais des tests
+		//return new ArrayList<String>();
+		ArrayList<String> filieres = new ArrayList<String>();
+		filieres.add("VCA"); // Ventes  Cacao Aleatoires
+		filieres.add("TESTCRIEEEQ2"); 
+		filieres.add("TESTBOURSE"); 
+		filieres.add("TESTCLIENT"); 
+		filieres.add("TESTCC");//Contrat Cadre 
+		return filieres;
+}
 
-	@Override
-	public Filiere getFiliere(String nom) {
-		// TODO Auto-generated method stub
-		return null;
+@Override
+public Filiere getFiliere(String nom) {
+	switch (nom) {
+	case "VCA" : return new FiliereVentesCacaoAleatoires();
+	case "TESTCRIEEEQ2" : return new TesteurVenteCriée();
+	case "TESTBOURSE" : return new FiliereTestVentesChocolatBourse();
+	case "TESTCLIENT" : return new FiliereTestClientFinal();
+	case "TESTCC" : return new FiliereTestContratCadre();
+    default : return null;
 	}
+}
+
 
 	@Override
 	public List<Variable> getIndicateurs() {
