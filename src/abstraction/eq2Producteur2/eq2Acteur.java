@@ -74,10 +74,9 @@ public class eq2Acteur implements IActeur {
 
 	@Override
 	public void next() {
-		for (int i = 0; i < this.getPaquetsArbres().size(); i++) {
-			this.getPaquetsArbres().get(i).setAge(this.getPaquetsArbres().get(i).getAge() + 1);
+		
 		}
-	}
+	
 
 	@Override
 	public List<String> getNomsFilieresProposees() {
