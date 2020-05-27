@@ -17,13 +17,13 @@ public class PaquetArbres {
 		this.nbreArbres = nbreA;
 		this.age = 0;
 		this.type = type;
-		this.prodmax = 7.5;
+		this.prodmax = 0.0075;
 	}
 	public PaquetArbres(int nbreA, Feve type, double age) {
 		this.nbreArbres = nbreA;
 		this.age = age;
 		this.type = type;
-		this.prodmax = 7.5;
+		this.prodmax = 0.0075;
 	}
 	
 	public double getProdmax() {
@@ -68,7 +68,6 @@ public class PaquetArbres {
 			return 0;
 		}
 		else {
-			System.out.println(this.getAge());
 			return(production_max*(1.0-(this.getAge() - 30.0)/ 15.0));
 		}
 		
