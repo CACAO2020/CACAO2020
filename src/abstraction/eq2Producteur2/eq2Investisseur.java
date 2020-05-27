@@ -13,7 +13,7 @@ import abstraction.eq8Romu.produits.Feve;
 
 public class eq2Investisseur extends eq2Vendeur {
 
-	private int prixArbre; 
+	private double prixArbre; 
 
 	public eq2Investisseur() {
 		super();
@@ -33,6 +33,9 @@ public class eq2Investisseur extends eq2Vendeur {
 	public void PayerEmployes() {
 		double payeEmployes = this.NbTotalArbres()*0.05;
 		Filiere.LA_FILIERE.getBanque().virer(this,this.getCrypto(),Filiere.LA_FILIERE.getBanque(),payeEmployes);
+	}
+	public double getprixArbre() {
+		return this.prixArbre;
 	}
 }
 

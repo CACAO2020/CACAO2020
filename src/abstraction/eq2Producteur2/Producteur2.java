@@ -71,6 +71,13 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 		}
 		return res;
 	}
+	
+	public List<Variable> getParametres() {
+		List<Variable> res=new ArrayList<Variable>();
+		res.add(new Variable("cout_arbre",this,this.getprixArbre()));
+		return res;
+	}
+		
 	public List<Journal> getJournaux() {
 		List<Journal> res=new ArrayList<Journal>();
 		res.addAll(super.getJournaux());
