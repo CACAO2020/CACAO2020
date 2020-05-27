@@ -64,7 +64,7 @@ public class PaquetArbres {
 			return this.getProdmax();
 		}
 		else {
-			return(this.getProdmax()*(1-(this.getAge() - 30)/15));
+			return(this.getProdmax()*(1-(this.getAge() - 30)/45));
 		}
 		
 	}
