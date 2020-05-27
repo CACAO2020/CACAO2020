@@ -174,35 +174,35 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 			if (max_actuel < propositions.get(i).getPrixPourLeLot()) {
 				max_actuel = propositions.get(i).getPrixPourLeLot();
 				indice = i;
-			}
+			} //rajouter prix de vente du lot au journal pour être sur
 		}
 		if (propositions.get(indice).getLot().getFeve()==Feve.FEVE_BASSE) { //changer le abs pour qu'ils puissent nous l'acheter plus cher
-			if ((Math.abs(propositions.get(indice).getPrixPourUneTonne() - this.getPrixTF().getValeur()))/100 <= 0.05) {
-				this.journal_des_ventes.ajouter("Nous acceptons la proposition d'achat de l'acteur "+propositions.get(indice).getAcheteur());
+			if ((propositions.get(indice).getPrixPourUneTonne() > this.getPrixTF().getValeur()) || (Math.abs(propositions.get(indice).getPrixPourUneTonne() - this.getPrixTF().getValeur()))/100 <= 0.05) {
+				this.journal_des_ventes.ajouter("EQ2 accepte la proposition d'achat de l'acteur "+propositions.get(indice).getAcheteur());
 				return propositions.get(indice);
 			}
 		}
 		else if (propositions.get(indice).getLot().getFeve()==Feve.FEVE_MOYENNE) {
-			if ((Math.abs(propositions.get(indice).getPrixPourUneTonne() - this.getPrixTT().getValeur()))/100 <= 0.05) {
-				this.journal_des_ventes.ajouter("Nous acceptons la proposition d'achat de l'acteur "+propositions.get(indice).getAcheteur());
+			if (propositions.get(indice).getPrixPourUneTonne() > this.getPrixTT().getValeur() || (Math.abs(propositions.get(indice).getPrixPourUneTonne() - this.getPrixTT().getValeur()))/100 <= 0.05) {
+				this.journal_des_ventes.ajouter("EQ2 accepte la proposition d'achat de l'acteur "+propositions.get(indice).getAcheteur());
 				return propositions.get(indice);
 			}
 		}
 		else if (propositions.get(indice).getLot().getFeve()==Feve.FEVE_MOYENNE_EQUITABLE) {
-			if ((Math.abs(propositions.get(indice).getPrixPourUneTonne() - this.getPrixTTE().getValeur()))/100 <= 0.05) {
-				this.journal_des_ventes.ajouter("Nous acceptons la proposition d'achat de l'acteur "+propositions.get(indice).getAcheteur());
+			if (propositions.get(indice).getPrixPourUneTonne() > this.getPrixTTE().getValeur() || (Math.abs(propositions.get(indice).getPrixPourUneTonne() - this.getPrixTTE().getValeur()))/100 <= 0.05) {
+				this.journal_des_ventes.ajouter("EQ2 accepte la proposition d'achat de l'acteur "+propositions.get(indice).getAcheteur());
 				return propositions.get(indice);
 			}
 		}
 		else if (propositions.get(indice).getLot().getFeve()==Feve.FEVE_HAUTE) {
-			if ((Math.abs(propositions.get(indice).getPrixPourUneTonne() - this.getPrixTC().getValeur()))/100 <= 0.05) {
-				this.journal_des_ventes.ajouter("Nous acceptons la proposition d'achat de l'acteur "+propositions.get(indice).getAcheteur());
+			if (propositions.get(indice).getPrixPourUneTonne() > this.getPrixTC().getValeur() || (Math.abs(propositions.get(indice).getPrixPourUneTonne() - this.getPrixTC().getValeur()))/100 <= 0.05) {
+				this.journal_des_ventes.ajouter("EQ2 accepte la proposition d'achat de l'acteur "+propositions.get(indice).getAcheteur());
 				return propositions.get(indice);
 			}
 		}
 		else if (propositions.get(indice).getLot().getFeve()==Feve.FEVE_HAUTE_EQUITABLE) {
-			if ((Math.abs(propositions.get(indice).getPrixPourUneTonne() - this.getPrixTCE().getValeur()))/100 <= 0.05) {
-				this.journal_des_ventes.ajouter("Nous acceptons la proposition d'achat de l'acteur "+propositions.get(indice).getAcheteur());
+			if (propositions.get(indice).getPrixPourUneTonne() > this.getPrixTCE().getValeur() || (Math.abs(propositions.get(indice).getPrixPourUneTonne() - this.getPrixTCE().getValeur()))/100 <= 0.05) {
+				this.journal_des_ventes.ajouter("EQ2 accepte la proposition d'achat de l'acteur "+propositions.get(indice).getAcheteur());
 				return propositions.get(indice);
 			}
 		}

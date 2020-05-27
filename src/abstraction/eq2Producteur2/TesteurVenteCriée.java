@@ -11,9 +11,9 @@ public class TesteurVenteCriée extends Filiere {
 
 	public TesteurVenteCriée() {
 		super();
-		this.ajouterActeur(new ExempleVendeurCacaoCriee(Feve.FEVE_BASSE, 1.0, 20.0, 0.65));
-		this.ajouterActeur(new ExempleVendeurCacaoCriee(Feve.FEVE_BASSE, 1.0, 20.0, 0.75));
-		this.ajouterActeur(new ExempleVendeurCacaoCriee(Feve.FEVE_HAUTE, 0.5, 10.0, 0.95));
+		this.ajouterActeur(new ExempleVendeurCacaoCriee(Feve.FEVE_BASSE, 1.0, 20.0, 0.65*1000));
+		this.ajouterActeur(new ExempleVendeurCacaoCriee(Feve.FEVE_BASSE, 1.0, 20.0, 0.75*1000));
+		this.ajouterActeur(new ExempleVendeurCacaoCriee(Feve.FEVE_HAUTE, 0.5, 10.0, 0.95*1000));
 		this.ajouterActeur(new eq2Vendeur());
 		this.ajouterActeur(new ExempleAcheteurCacaoCriee());
 		this.ajouterActeur(new ExempleAcheteurCacaoCriee());
