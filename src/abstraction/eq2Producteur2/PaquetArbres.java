@@ -63,6 +63,9 @@ public class PaquetArbres {
 		else if(this.getAge() < 31) {
 			return this.getProdmax();
 		}
+		else if(this.getAge() > 45) {
+			return 0;
+		}
 		else {
 			return(this.getProdmax()*(1-(this.getAge() - 30)/15));
 		}

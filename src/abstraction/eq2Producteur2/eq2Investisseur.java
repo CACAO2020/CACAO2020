@@ -35,8 +35,10 @@ public class eq2Investisseur extends eq2Vendeur {
 	 * Paye les employes en fonction du nombre d'arbres
 	 */
 	public void PayerEmployes() {
-		double payeEmployes = this.NbTotalArbres()*0.05;
-		Filiere.LA_FILIERE.getBanque().virer(this,this.getCrypto(),Filiere.LA_FILIERE.getBanque(),payeEmployes);
+		if (this.NbTotalArbres() > 0) {
+			double payeEmployes = this.NbTotalArbres()*0.05;
+			Filiere.LA_FILIERE.getBanque().virer(this,this.getCrypto(),Filiere.LA_FILIERE.getBanque(),payeEmployes);
+		}
 	}
 	public double getprixArbre() {
 		return this.prixArbre;
