@@ -9,7 +9,7 @@ public class PaquetArbres {
 	 */
 	
 	private int nbreArbres;
-	private int age;
+	private double age;
 	private Feve type;
 	private double prodmax;
 	
@@ -19,7 +19,7 @@ public class PaquetArbres {
 		this.type = type;
 		this.prodmax = 7.5;
 	}
-	public PaquetArbres(int nbreA, Feve type, int age) {
+	public PaquetArbres(int nbreA, Feve type, double age) {
 		this.nbreArbres = nbreA;
 		this.age = age;
 		this.type = type;
@@ -37,11 +37,11 @@ public class PaquetArbres {
 		return this.nbreArbres;
 	}
 	
-	public int getAge() {
+	public double getAge() {
 		return this.age;
 	}
 	
-	public void setAge(int newAge) {
+	public void setAge(double newAge) {
 		this.age = newAge;
 	}
 	
@@ -68,7 +68,8 @@ public class PaquetArbres {
 			return 0;
 		}
 		else {
-			return(production_max*(1-(this.getAge() - 30)/15));
+			System.out.println(this.getAge());
+			return(production_max*(1.0-(this.getAge() - 30.0)/ 15.0));
 		}
 		
 	}
