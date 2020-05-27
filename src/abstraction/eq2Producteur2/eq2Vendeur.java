@@ -77,7 +77,7 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 	    		masseCrioE = masseCrioE + Stock.get(i).getValeur();
 	    	}
 	    }
-	    this.journal_des_ventes.ajouter("masseFora="+masseFora+"  masseTrini="+masseTrini+"  masseTriniE"+masseTriniE+"  masseCrio="+masseCrio+"  masseCrioE="+masseCrioE);
+	    //this.journal_des_ventes.ajouter("masseFora="+masseFora+"  masseTrini="+masseTrini+"  masseTriniE"+masseTriniE+"  masseCrio="+masseCrio+"  masseCrioE="+masseCrioE); pour débugger
 	    prixfora = masseFora*this.getPrixTF().getValeur();
 	    prixtrini = masseTrini*this.getPrixTT().getValeur();
 	    prixtrinie = masseTriniE*this.getPrixTTE().getValeur();
@@ -90,9 +90,9 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 	    		return new LotCacaoCriee(this, Feve.FEVE_BASSE, masseFora, this.getPrixTF().getValeur());
 	    	}
 	    	else {
-	    		this.setPrixVente(this.getPropal()-500);
-	    		this.journal_des_ventes.ajouter("Proposition de vente d'un lot de forastero de " + (this.getPropal()-500)/this.getPrixTF().getValeur() + "tonnes, pour "+this.getPrixVente()+"$");
-	    		return new LotCacaoCriee(this, Feve.FEVE_BASSE, (this.getPropal()-500)/this.getPrixTF().getValeur(), this.getPrixTF().getValeur());
+	    		this.setPrixVente(this.getPropal());
+	    		this.journal_des_ventes.ajouter("Proposition de vente d'un lot de forastero de " + (this.getPropal())/this.getPrixTF().getValeur() + "tonnes, pour "+this.getPrixVente()+"$");
+	    		return new LotCacaoCriee(this, Feve.FEVE_BASSE, (this.getPropal())/this.getPrixTF().getValeur(), this.getPrixTF().getValeur());
 	    	}
 	    		
 	    }
@@ -103,9 +103,9 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 	    		return new LotCacaoCriee(this, Feve.FEVE_MOYENNE, masseTrini, this.getPrixTT().getValeur());
 	    	}
 	    	else {
-	    		this.setPrixVente(this.getPropal()-500);
-	    		this.journal_des_ventes.ajouter("Proposition de vente d'un lot de trinitario de " + (this.getPropal()-500)/this.getPrixTT().getValeur() + "tonnes, pour "+this.getPrixVente()+"$");
-	    		return new LotCacaoCriee(this, Feve.FEVE_MOYENNE, (this.getPropal()-500)/this.getPrixTT().getValeur(), this.getPrixTT().getValeur());
+	    		this.setPrixVente(this.getPropal());
+	    		this.journal_des_ventes.ajouter("Proposition de vente d'un lot de trinitario de " + (this.getPropal())/this.getPrixTT().getValeur() + "tonnes, pour "+this.getPrixVente()+"$");
+	    		return new LotCacaoCriee(this, Feve.FEVE_MOYENNE, (this.getPropal())/this.getPrixTT().getValeur(), this.getPrixTT().getValeur());
 	    	}
 	    		
 	    }
@@ -116,9 +116,9 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 	    		return new LotCacaoCriee(this, Feve.FEVE_MOYENNE_EQUITABLE, masseTriniE, this.getPrixTTE().getValeur());
 	    	}
 	    	else {
-	    		this.setPrixVente(this.getPropal()-500);
-	    		this.journal_des_ventes.ajouter("Proposition de vente d'un lot de trinitario équitable de " + (this.getPropal()-500)/this.getPrixTTE().getValeur() + "tonnes, pour "+this.getPrixVente()+"$");
-	    		return new LotCacaoCriee(this, Feve.FEVE_MOYENNE_EQUITABLE, (this.getPropal()-500)/this.getPrixTTE().getValeur(), this.getPrixTTE().getValeur());
+	    		this.setPrixVente(this.getPropal());
+	    		this.journal_des_ventes.ajouter("Proposition de vente d'un lot de trinitario équitable de " + (this.getPropal())/this.getPrixTTE().getValeur() + "tonnes, pour "+this.getPrixVente()+"$");
+	    		return new LotCacaoCriee(this, Feve.FEVE_MOYENNE_EQUITABLE, (this.getPropal())/this.getPrixTTE().getValeur(), this.getPrixTTE().getValeur());
 	    	}
 	    		
 	    }
@@ -129,9 +129,9 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 	    		return new LotCacaoCriee(this, Feve.FEVE_HAUTE, masseCrio, this.getPrixTC().getValeur());
 	    	}
 	    	else {
-	    		this.setPrixVente(this.getPropal()-500);
-	    		this.journal_des_ventes.ajouter("Proposition de vente d'un lot de criollo de " + (this.getPropal()-500)/this.getPrixTC().getValeur() + "tonnes, pour "+this.getPrixVente()+"$");
-	    		return new LotCacaoCriee(this, Feve.FEVE_HAUTE, (this.getPropal()-500)/this.getPrixTC().getValeur(), this.getPrixTC().getValeur());
+	    		this.setPrixVente(this.getPropal());
+	    		this.journal_des_ventes.ajouter("Proposition de vente d'un lot de criollo de " + (this.getPropal())/this.getPrixTC().getValeur() + "tonnes, pour "+this.getPrixVente()+"$");
+	    		return new LotCacaoCriee(this, Feve.FEVE_HAUTE, (this.getPropal())/this.getPrixTC().getValeur(), this.getPrixTC().getValeur());
 	    	}
 	    		
 	    }
@@ -142,9 +142,9 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 	    		return new LotCacaoCriee(this, Feve.FEVE_HAUTE_EQUITABLE, masseCrioE, this.getPrixTCE().getValeur());
 	    	}
 	    	else {
-	    		this.setPrixVente(this.getPropal()-500);
-	    		this.journal_des_ventes.ajouter("Proposition de vente d'un lot de criollo équitable de " + (this.getPropal()-500)/this.getPrixTCE().getValeur() + "tonnes, pour "+this.getPrixVente()+"$");
-	    		return new LotCacaoCriee(this, Feve.FEVE_HAUTE_EQUITABLE, (this.getPropal()-500)/this.getPrixTCE().getValeur(), this.getPrixTCE().getValeur());
+	    		this.setPrixVente(this.getPropal());
+	    		this.journal_des_ventes.ajouter("Proposition de vente d'un lot de criollo équitable de " + (this.getPropal())/this.getPrixTCE().getValeur() + "tonnes, pour "+this.getPrixVente()+"$");
+	    		return new LotCacaoCriee(this, Feve.FEVE_HAUTE_EQUITABLE, (this.getPropal())/this.getPrixTCE().getValeur(), this.getPrixTCE().getValeur());
 	    	}
 	    		
 	    }
@@ -156,8 +156,8 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 	
 
 	@Override
-	public void notifierAucuneProposition(LotCacaoCriee lot) { //500 encore arbitraire, surement trop élevée
-		this.setPropal(this.getPrixVente()-500);
+	public void notifierAucuneProposition(LotCacaoCriee lot) { //1000 arbitraire
+		this.setPropal(this.getPrixVente()-1000);
 		this.journal_des_ventes.ajouter("Aucune proposition de lot n'a abouti à une vente");
 		
 	}
