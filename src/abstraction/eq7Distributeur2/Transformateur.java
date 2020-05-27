@@ -24,9 +24,7 @@ public class Transformateur implements IAcheteurChocolatBourse, IVendeurChocolat
 	private Banque laBanque; 
 	private Chocolat choco;
 	
-	public Transformateur(Chocolat choco) {
-		this.choco = choco;
-	}
+	
 	
 	@Override
 	public String getNom() {
