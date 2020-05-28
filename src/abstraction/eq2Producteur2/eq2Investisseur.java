@@ -55,6 +55,7 @@ public class eq2Investisseur extends eq2Vendeur {
 			this.AchatArbres((int)Math.floor(ecart*proportiontrinie), Feve.FEVE_MOYENNE_EQUITABLE);
 			this.AchatArbres((int)Math.floor(ecart*proportioncrio), Feve.FEVE_HAUTE);
 			this.AchatArbres((int)Math.floor(ecart*proportioncrioe), Feve.FEVE_HAUTE_EQUITABLE);
+			this.journal_achats.ajouter("on a acheté des arbres car trop peu d'arbres");
 		}
 		else if ((Filiere.LA_FILIERE.getBanque().getSolde(this,this.getCrypto())) > 1000) { //on investit pas si on a moins de 1000$
 			double investissement_max = Filiere.LA_FILIERE.getBanque().getSolde(this,this.getCrypto())*0.2;
@@ -64,6 +65,7 @@ public class eq2Investisseur extends eq2Vendeur {
 			this.AchatArbres((int)Math.floor(nbre_arbresmax*proportiontrinie), Feve.FEVE_MOYENNE_EQUITABLE);
 			this.AchatArbres((int)Math.floor(nbre_arbresmax*proportioncrio), Feve.FEVE_HAUTE);
 			this.AchatArbres((int)Math.floor(nbre_arbresmax*proportioncrioe), Feve.FEVE_HAUTE_EQUITABLE);
+			this.journal_achats.ajouter("on a acheté des arbres parce qu'on a de la maille");
 		}}
 		
 	}
