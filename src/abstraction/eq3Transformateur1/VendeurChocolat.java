@@ -26,7 +26,7 @@ public abstract class VendeurChocolat extends AcheteurCacao implements IVendeurC
 	
 	/** @author K. GUTIERREZ  */
 	public void livrer(Chocolat chocolat, double quantite) {
-		this.setStockChocolat(chocolat, this.getStockChocolat(chocolat)-quantite);
+		this.setStockChocolat(chocolat,-quantite);
 	}
 
 }
