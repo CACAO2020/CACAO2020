@@ -80,7 +80,7 @@ public abstract class AcheteurCacao extends Transformation implements abstractio
  */
 
 	public double proposerAchat(LotCacaoCriee lot, double cours) {
-		if (lot.getPrixMinPourUneTonne()*lot.getQuantiteEnTonnes()<=(cours*lot.getQuantiteEnTonnes() - 10000)*0.9) {
+		if (lot.getPrixMinPourUneTonne()*lot.getQuantiteEnTonnes()<=(cours*lot.getQuantiteEnTonnes() - 10000)*0.9) { // 0.9 représente la marge de +10% ciblée
 			double prix = lot.getPrixMinPourUneTonne()*lot.getQuantiteEnTonnes()*(coefficient(lot.getFeve())+0.15*nb_proposition.get(gammeString(lot.getFeve())));
 			nb_proposition.replace(gammeString(lot.getFeve()), nb_proposition.get(gammeString(lot.getFeve())) + 1);
 			return prix;
