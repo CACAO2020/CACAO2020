@@ -2,7 +2,7 @@ package abstraction.eq4Transformateur2;
 
 import java.awt.Color;
 import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import abstraction.eq8Romu.cacaoCriee.IAcheteurCacaoCriee;
@@ -12,15 +12,10 @@ import abstraction.eq8Romu.cacaoCriee.SuperviseurCacaoCriee;
 import abstraction.eq8Romu.chocolatBourse.IVendeurChocolatBourse;
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.Feve;
-import abstraction.eq8Romu.produits.Gamme;
-import abstraction.eq8Romu.ventesCacaoAleatoires.IAcheteurCacaoAleatoire;
-import abstraction.eq8Romu.ventesCacaoAleatoires.IVendeurCacaoAleatoire;
-import abstraction.fourni.Filiere;
-import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
-public class Transformateur2_negoce extends Transformateur2_e1 implements IAcheteurCacaoCriee, IVendeurChocolatBourse {
+public class Transformateur2_negoce extends Transformateur2_contratCadre implements IAcheteurCacaoCriee, IVendeurChocolatBourse {
 	private Map<Feve, Variable> prixMaxAchatFeves;
 	private Map<Chocolat, Variable> prixMinVenteChocolat;
 	
@@ -41,6 +36,26 @@ public class Transformateur2_negoce extends Transformateur2_e1 implements IAchet
 		this.prixMinVenteChocolat.put(Chocolat.CHOCOLAT_HAUTE, new Variable(getNom()+" prix min vente chocolat haute", this, 0)) ;
 		this.prixMinVenteChocolat.put(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE, new Variable(getNom()+" prix min vente chocolat moyenne equitable", this, 100)) ;
 		this.prixMinVenteChocolat.put(Chocolat.CHOCOLAT_HAUTE_EQUITABLE, new Variable(getNom()+" prix min vente chocolat haute equitable", this, 0)) ;
+	}
+	
+	// récupère les attributs notés comme paramètres, utile pour les tests et sûrement appelé par des fonctions externes
+
+	public List<Variable> getIndicateurs() { 
+		List<Variable> res=super.getIndicateurs();
+		for (Feve feve :Feve.values()) {
+			res.add(this.prixMaxAchatFeves.get(feve)) ;
+		}
+		for (Chocolat chocolat : Chocolat.values()) {
+			res.add(this.prixMinVenteChocolat.get(chocolat)) ;
+		}
+		return res;
+	}
+
+	// récupère les attributs notés comme paramètres, utile pour les tests et sûrement appelé par des fonctions externes
+	
+	public List<Variable> getParametres() { //idem
+		List<Variable> res=super.getParametres();
+		return res;
 	}
 
 
@@ -75,9 +90,12 @@ if (!classeAppelante.equals(SuperviseurCacaoCriee.class)) { throw new Error("la 
 		}
 		return Integer.valueOf(0);
 	}
-
+	
+	// une fois que l'offre est acceptée, notifie la vente, met à jour les stocks et leur valeur
 	public void notifierVente(PropositionCriee proposition) {
-		super.modifierCoutMoyenFeves(proposition.getFeve(), proposition.getQuantiteEnTonnes(), proposition.getPrixPourLeLot());
+		Feve feve = proposition.getFeve() ;
+		super.modifierCoutMoyenFeves(feve, proposition.getQuantiteEnTonnes(), proposition.getPrixPourLeLot());
+		super.setStockFevesValeur(feve, proposition.getQuantiteEnTonnes()+super.getStockFevesValeur(feve));
 		this.journalEq4.ajouter("Apprend que sa proposition de "+Journal.doubleSur(proposition.getPrixPourUneTonne(), 4)+" pour "+Journal.texteColore(proposition.getVendeur(), Journal.doubleSur(proposition.getQuantiteEnTonnes(), 2)+" tonnes de "+proposition.getFeve().name())+Journal.texteColore(Color.green, Color.black," a ete acceptee"));
 		this.journalEq4.ajouter("--> le stock de feve passe a "+Journal.doubleSur(this.stockFeves.get(proposition.getFeve()).getValeur(), 4));
 		
@@ -85,51 +103,26 @@ if (!classeAppelante.equals(SuperviseurCacaoCriee.class)) { throw new Error("la 
 
 	
 	/* CALCUL DES COUTS DE PRODUCTION */
+	// à effectuer avant de réaliser les transformations, pour déterminer quelle quantité il faut transformer effectivement
 	
-	//Calcule le cout de production d'une tonne de pate
-	public double coutProdPate(PateInterne pate) {
-		if (pate == PateInterne.PATE_BASSE) {
-			return super.getCoutMoyenFeveValeur(Feve.FEVE_BASSE) + super.getCoutTFEP(Feve.FEVE_BASSE)/super.getCoeffTFEP();
-		}
-		else if (pate == PateInterne.PATE_MOYENNE) {
-			return super.getCoutMoyenFeveValeur(Feve.FEVE_MOYENNE) + super.getCoutTFEP(Feve.FEVE_MOYENNE)/super.getCoeffTFEP();
-		}
-		else if (pate == PateInterne.PATE_HAUTE) {
-			return super.getCoutMoyenFeveValeur(Feve.FEVE_HAUTE) + super.getCoutTFEP(Feve.FEVE_HAUTE)/super.getCoeffTFEP();
-		}
-		else if (pate == PateInterne.PATE_MOYENNE_EQUITABLE) {
-			return super.getCoutMoyenFeveValeur(Feve.FEVE_MOYENNE_EQUITABLE) + super.getCoutTFEP(Feve.FEVE_MOYENNE_EQUITABLE)/super.getCoeffTFEP();
-		}
-		else {
-			return super.getCoutMoyenFeveValeur(Feve.FEVE_HAUTE_EQUITABLE) + super.getCoutTFEP(Feve.FEVE_HAUTE_EQUITABLE)/super.getCoeffTFEP();
-		}
+	//Renvoie le cout de production d'une tonne de pate
+	public double getCoutProdPate(PateInterne pate, double quantiteTransfo) {
+		Feve feve = super.creerFeve(pate) ;
+		return super.prixApresTFEP(feve, quantiteTransfo/super.getCoeffTFEP());
 	}
 	
-	//Calcule le cout de production d'une tonne de chocolat
-	public double coutProdChocolat(Chocolat choco) {
-		switch (choco.getGamme()) {
-		case BASSE : return this.getCoutTPEC(PateInterne.PATE_BASSE) + this.coutProdPate(PateInterne.PATE_BASSE)/super.getCoeffTPEC() ; 
-		case MOYENNE :
-			if (choco.isEquitable()) {
-				return this.getCoutTPEC(PateInterne.PATE_MOYENNE_EQUITABLE) + this.coutProdPate(PateInterne.PATE_MOYENNE_EQUITABLE)/super.getCoeffTPEC() ;
-			} else {
-				return this.getCoutTPEC(PateInterne.PATE_MOYENNE) + this.coutProdPate(PateInterne.PATE_MOYENNE)/super.getCoeffTPEC() ;
-			}
-		case HAUTE : 
-			if (choco.isEquitable()) {
-				return this.getCoutTPEC(PateInterne.PATE_HAUTE_EQUITABLE) + this.coutProdPate(PateInterne.PATE_HAUTE_EQUITABLE)/super.getCoeffTPEC() ;
-			} else {
-				return this.getCoutTPEC(PateInterne.PATE_HAUTE) + this.coutProdPate(PateInterne.PATE_HAUTE)/super.getCoeffTPEC() ;
-			}
-		default : throw new IllegalArgumentException("valeur non trouvée") ;
-		}
+	//Renvoie le cout de production d'une tonne de chocolat 
+	public double getCoutProdChocolat(Chocolat chocolat, double quantiteTransfo) {
+		PateInterne pate = super.creerPateAPartirDeChocolat(chocolat) ;
+		return super.prixApresTPEC(pate, quantiteTransfo/super.getCoeffTPEC()) ;
 	}
 	
 	/* VENTE CHOCOLAT */
 	// On vend tout notre stock de chocolat à chaque fois * A MODIFIER POUR CHOISIR QTE A VENDRE *
 		public double getOffre(Chocolat chocolat, double cours) {
-			if (cours >= this.coutProdChocolat(chocolat)*1.2) { //J'AI CHOISI UNE MARGE ABITRAIRE DE 20%, DEVRA VARIER EN FONCTION DU STOCK
-				return this.getStockChocolatValeur(chocolat);
+			double quantite = this.getStockChocolatValeur(chocolat) ;
+			if (cours >= this.getCoutProdChocolat(chocolat, quantite)*1.2) { //J'AI CHOISI UNE MARGE ABITRAIRE DE 20%, DEVRA VARIER EN FONCTION DU STOCK
+				return quantite ;
 			}
 			else {
 				return 0;
@@ -143,8 +136,8 @@ if (!classeAppelante.equals(SuperviseurCacaoCriee.class)) { throw new Error("la 
 			}
 			else {throw new IllegalArgumentException("stock insuffisant");}
 		}
-
-
 		
+		// une fois que la vente est acceptée, notifie la vente, met à jour les stocks
+		// fonction à faire
 		
 }
