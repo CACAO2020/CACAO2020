@@ -82,6 +82,5 @@ public abstract class ActeurEQ3 implements IActeur{
 		}
 	}
 	
-	public void notificationOperationBancaire(double montant) {
-	}
+	
 }

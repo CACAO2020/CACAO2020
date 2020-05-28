@@ -6,7 +6,7 @@ import abstraction.fourni.Filiere;
 
 public class TestStock extends Transformateur1{
 	public static void main(String[] args) {
-		Stock stock=new Transformateur1();
+		Transformateur1 stock=new Transformateur1();
 		System.out.println("TEST METHODES GET (a l'etat initial)");
 		System.out.println("");
 		System.out.println("Map stock Chocolat "+stock.getStockChocolat());

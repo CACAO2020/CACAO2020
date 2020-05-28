@@ -16,6 +16,7 @@ public class Transformateur1 extends VendeurChocolat {
 		return new Color(52, 152, 219);
 	}
 	public void next() {
+
 	}
 	public List<Variable> getIndicateurs() {
 		List<Variable> res=new ArrayList<Variable>();
@@ -23,5 +24,6 @@ public class Transformateur1 extends VendeurChocolat {
 		res.add(this.stockTotalChocolat);
 		return res;
 	}
+	
 
 }
