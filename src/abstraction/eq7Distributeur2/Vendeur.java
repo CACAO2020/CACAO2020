@@ -139,7 +139,11 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 			adapterQuantitesEnVente();
 			dessinerCatalogue();
 		}
-		return quantitesEnVente.get(choco).getValeur();
+		if (Filiere.LA_FILIERE.getEtape() == 0) {
+			return quantiteAVendreParDefaut;
+		} else {
+			return quantitesEnVente.get(choco).getValeur();
+		}
 	}
 
 	public void ajouterProduitAuCatalogue(ChocolatDeMarque choco) {

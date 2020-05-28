@@ -79,7 +79,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		stock.initialiser();
 		// AJOUT D'UN STOCK INITIAL POUR OBSERVER LES VENTES
 		for (ChocolatDeMarque choco : vendeur.getCatalogue()) {
-			stock.ajouterStockChocolat(choco, 100.);
+			stock.ajouterStockChocolat(choco, vendeur.quantiteAVendreParDefaut);
 		}
 	}
 	

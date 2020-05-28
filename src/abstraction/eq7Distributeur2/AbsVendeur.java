@@ -39,6 +39,9 @@ public class AbsVendeur {
 	// Prix par défaut à appliquer à chaque type de chocolat
 	protected Map<Chocolat, Double> prixParDefaut;
 	
+	// Quantité par défaut à vendre pour chaque chocolat de marque
+	protected double quantiteAVendreParDefaut;
+	
 	// Enregistre les quantités de chaque type de chocolat vendues à l'étape courante
 	protected Map<Chocolat, Double> ventesEtapeActuelle;
 	
@@ -58,6 +61,7 @@ public class AbsVendeur {
 	
 	public AbsVendeur(Distributeur2 ac) {	
 		this.ac = ac;
+		quantiteAVendreParDefaut = 100.;
 		produitsCatalogue = new ArrayList<ChocolatDeMarque>();
 		publicites = new ArrayList<ChocolatDeMarque>();
 		quantitesEnVente = new HashMap<ChocolatDeMarque, Variable>();
