@@ -56,11 +56,11 @@ public abstract class Stock extends Tresorerie {
 			else{
 				this.stockFeves.put(feve,quantite);
 			}
-			this.stockTotalFeves.setValeur(this, quantite);
+			this.stockTotalFeves.setValeur(this,this.stockTotalFeves.getValeur()+ quantite);
 		}
 		else if((this.stockFeves.containsKey(feve))&&(quantite+this.stockFeves.get(feve)>=0)) {
 			this.stockFeves.put(feve,quantite+this.stockFeves.get(feve));
-			this.stockTotalFeves.setValeur(this, quantite);
+			this.stockTotalFeves.setValeur(this, this.stockTotalFeves.getValeur()+ quantite);
 		}
 	}
 	public Map<Feve,Double> getStockFeves() {
@@ -80,11 +80,11 @@ public abstract class Stock extends Tresorerie {
 			else {
 				this.stockChocolat.put(chocolat,quantite);
 			}
-			this.stockTotalChocolat.setValeur(this, quantite);
+			this.stockTotalChocolat.setValeur(this, this.stockTotalChocolat.getValeur()+ quantite);
 		}
 		else if((this.stockChocolat.containsKey(chocolat))&&(quantite+this.stockChocolat.get(chocolat)>=0)) {
 			this.stockChocolat.put(chocolat,quantite+this.stockChocolat.get(chocolat));
-			this.stockTotalChocolat.setValeur(this, quantite);
+			this.stockTotalChocolat.setValeur(this, this.stockTotalChocolat.getValeur()+quantite);
 		}
 	}
 	public Map<Chocolat,Double> getStockChocolat() {
@@ -105,11 +105,11 @@ public abstract class Stock extends Tresorerie {
 			else {
 				this.stockPateInterne.put(chocolat,quantite);
 			}
-			this.stockTotalPateInterne.setValeur(this, quantite);
+			this.stockTotalPateInterne.setValeur(this,this.stockTotalPateInterne.getValeur()+ quantite);
 		}
 		else if((this.stockPateInterne.containsKey(chocolat))&&(quantite+this.stockPateInterne.get(chocolat)>=0)) {
 			this.stockPateInterne.put(chocolat,quantite+this.stockPateInterne.get(chocolat));
-			this.stockTotalPateInterne.setValeur(this, quantite);
+			this.stockTotalPateInterne.setValeur(this, this.stockTotalPateInterne.getValeur()+ quantite);
 		}
 	}
 	public Map<Chocolat,Double> getStockPateInterne(){

@@ -6,9 +6,9 @@ import abstraction.eq8Romu.produits.Gamme;
 
 /** @author AMAURY COUDRAY*/
 public abstract class Transformation extends Stock {
-	
+
 	/* gestion TRANSFORMATION */
-	
+
 	public Chocolat equivalentChocoFeve(Feve feve) {
 		if(feve.isEquitable()) {
 			if(feve.getGamme()==Gamme.HAUTE) {
@@ -24,18 +24,24 @@ public abstract class Transformation extends Stock {
 		}
 		return Chocolat.CHOCOLAT_BASSE;
 	}
-	
+
 	public  void transformationFevePate(Feve feve, Double quantite) {
-		if((quantite>=0)&&(this.getStockFeves().containsKey(feve))&&(this.getStockFeves(feve)>=quantite)) {
-				this.setStockFeves(feve, -quantite);
-				this.setStockPateInterne(this.equivalentChocoFeve(feve), quantite);
-				
+		if((quantite>0)&&
+				(this.getStockFeves().containsKey(feve))&&
+				(this.getStockFeves(feve)>=quantite)&&
+				(this.depense(quantite*6000))) {
+			this.setStockFeves(feve, -quantite);
+			this.setStockPateInterne(this.equivalentChocoFeve(feve), quantite);
+
 		}
 	}
 	public  void transformationPateChocolat(Chocolat chocolat, Double quantite) {
-		if((quantite>=0)&&(this.getStockPateInterne().containsKey(chocolat))&&(this.getStockPateInterne(chocolat)>=quantite)) {
-				this.setStockPateInterne(chocolat, -quantite);
-				this.setStockChocolat(chocolat,quantite);
+		if((quantite>0)&&
+				(this.getStockPateInterne().containsKey(chocolat))&&
+				(this.getStockPateInterne(chocolat)>=quantite)&&
+				(this.depense(quantite*4000))) {
+			this.setStockPateInterne(chocolat, -quantite);
+			this.setStockChocolat(chocolat,quantite);
 		}
 	}
 }

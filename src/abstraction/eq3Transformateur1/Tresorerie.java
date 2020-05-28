@@ -16,8 +16,8 @@ public abstract class Tresorerie extends ActeurEQ3 {
 	public void setMontantCompte(double nouveauMontant) {
 		MontantCompte = nouveauMontant;
 	}
-	public void depense(double montant) {
-		Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme, Filiere.LA_FILIERE.getBanque(), montant);
+	public boolean depense(double montant) {
+		return Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme, Filiere.LA_FILIERE.getBanque(), montant);
 	}
 	public void notificationOperationBancaire(double montant) {
 		setMontantCompte(montant+this.getMontantCompte());
