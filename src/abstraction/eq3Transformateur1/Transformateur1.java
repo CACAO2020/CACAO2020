@@ -7,6 +7,7 @@ import java.util.List;
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
+import abstraction.eq8Romu.cacaoCriee.LotCacaoCriee;
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.Feve;
 import abstraction.fourni.Filiere;
@@ -59,6 +60,11 @@ public class Transformateur1 extends VendeurChocolat {
 		res.add(this.stockTotalChocolat);
 		res.add(this.stockTotalPateInterne);
 		return res;
+	}
+	@Override
+	public double proposerAchat(LotCacaoCriee lot) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 	
 
