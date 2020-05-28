@@ -2,7 +2,7 @@ package abstraction.eq8Romu.produits;
 
 public enum Pate {
 	PATE_BASSE(Gamme.BASSE),
-	FEVE_MOYENNE(Gamme.MOYENNE);
+	PATE_MOYENNE(Gamme.MOYENNE);
 
 	private Gamme gamme;
 	

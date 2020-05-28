@@ -3,6 +3,11 @@ package abstraction.fourni;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import abstraction.eq8Romu.clients.ClientFinal;
+import abstraction.eq8Romu.contratsCadres.SuperviseurVentesContratCadre;
+import abstraction.eq8Romu.produits.Chocolat;
+import abstraction.eq8Romu.produits.ChocolatDeMarque;
 import presentation.FenetrePrincipale;
 
 import java.awt.Color;
@@ -74,6 +79,10 @@ public class Filiere {
 		return this.laBanque;
 	}
 
+	public SuperviseurVentesContratCadre getSuperviseurContratCadre() {
+		return null;
+	}
+
 	private void incEtape() {
 		int old = this.etape;
 		this.etape++;
@@ -100,7 +109,36 @@ public class Filiere {
 	public String getDate() {
 		return this.getJour()+" "+this.getMois()+" "+this.getAnnee();
 	}
+	
+	public double prixMoyenEtapePrecedente(ChocolatDeMarque choco) {
+		for (IActeur acteur : this.acteurs) {
+			if (acteur instanceof ClientFinal) {
+				if (getEtape()<1) {
+					throw new IllegalArgumentException("Il n'est pas possible d'appeler prixMoyenEtapePrecedente a la premiere etape");
+				}
+				return ((ClientFinal)acteur).prixMoyenEtapePrecedente(choco);
+			}
+		}
+		throw new IllegalArgumentException("il n'est possible d'appeler prixMoyenEtapePrecedente que pour une filiere comportant une instance de ClientFinal");
+	}
+	
+	public double getVentes(int etape, ChocolatDeMarque choco) {
+		for (IActeur acteur : this.acteurs) {
+			if (acteur instanceof ClientFinal) {
+				return ((ClientFinal)acteur).getVentes(etape, choco);
+			}
+		}
+		throw new IllegalArgumentException("il n'est possible d'appeler getVentes que pour une filiere comportant une instance de ClientFinal");
+	}
 
+	public double getVentes(int etape, Chocolat choco) {
+		for (IActeur acteur : this.acteurs) {
+			if (acteur instanceof ClientFinal) {
+				return ((ClientFinal)acteur).getVentes(etape, choco);
+			}
+		}
+		throw new IllegalArgumentException("il n'est possible d'appeler getVentes que pour une filiere comportant une instance de ClientFinal");
+	}
 	/**
 	 * Ajoute l'acteur ac a la filiere si il n'existe pas deja un acteur portant le meme nom
 	 * Leve une erreur si le parametre est null ou est le nom d'un acteur deja dans la filiere
@@ -327,7 +365,6 @@ public class Filiere {
 	 * Cette methode incremente le numero d'etape puis appelle la methode next() de chaque acteur du monde.
 	 */
 	public void next() {
-		this.incEtape();
 		this.journalFiliere.ajouter("Next() : Passage a l'etape suivante====================== ");
 		for (IActeur a : this.acteurs) {
 			if (!this.laBanque.aFaitFaillite(a)) {
@@ -339,6 +376,7 @@ public class Filiere {
 				}
 			}
 		}
+		this.incEtape();
 	}
 
 	public void addObserver(PropertyChangeListener obs) {
