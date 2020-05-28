@@ -25,6 +25,7 @@ public abstract class Transformation extends Stock {
 		return Chocolat.CHOCOLAT_BASSE;
 	}
 
+
 	public  void transformationFevePate(Feve feve, Double quantite) {
 		if((quantite>0)&&
 				(this.getStockFeves().containsKey(feve))&&

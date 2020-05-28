@@ -20,92 +20,48 @@ public abstract class AcheteurCacao extends Transformation implements abstractio
 	private HashMap<String,Double> nb_proposition;
 
 
-	public AcheteurCacao() {
-		HashMap<String,Double> map = new HashMap<String,Double>();
-		map.put("Haute", (double) 0);
-		map.put("Moyenne_equitable", (double) 0);
-		map.put("Haute_equitable",(double) 0);
-		map.put("Moyenne", (double) 0);
-		this.nb_proposition = map;
-	}
-	
-	/** @author K. GUTIERREZ  */
-	public double coefficient(Feve feve) {
-		if (feve.getGamme() == Gamme.HAUTE) {
-			if (feve.isEquitable()) {
-				return 1;
-			}
-			else {
-				return 0.85;
-			}
-		}
-		else if (feve.getGamme() == Gamme.MOYENNE) {
-			if (feve.isEquitable()) {
-				return 0.85;
-			}
-			else {
-				return 0.7;
-			}
-		}
-		return 0;
-	}
-	
-	/** @author K. GUTIERREZ  */
-	public String gammeString(Feve feve) {
-		if (feve.getGamme() == Gamme.HAUTE) {
-			if (feve.isEquitable()) {
-				return "Haute_equitable";
-			}
-			else {
-				return "Haute";
-			}
-		}
-		else if (feve.getGamme() == Gamme.MOYENNE) {
-			if (feve.isEquitable()) {
-				return "Moyenne_equitable";
-			}
-			else {
-				return "Moyenne";
-			}
-		}
-		return "";
-	}
-	
 
 
-/** @author Nathan Olborski 
- * On garde en mémoire le nombre de propositions faites pour chaque type de fève qu'on souhaite acheter avec une HashMap,
- * Ensuite on augmente le prix à chaque fois qu'une proposition est refusée en commençant avec le prix minimum ou un prix plus bas
+	/** @author amaury */
+	public double proposerAchat(LotCacaoCriee lot) {
+		System.out.println(lot.getFeve());
+		if((this.getStockFeves().containsKey((lot.getFeve()))==false)||
+				(this.getStockFeves((lot.getFeve()))==0)||
+				(this.getStockPateInterne().containsKey(this.equivalentChocoFeve(lot.getFeve()))==false)||
+				(this.getStockFeves(lot.getFeve())<=this.getStockPateInterne(this.equivalentChocoFeve(lot.getFeve())))){
+			if(lot.getPrixMinPourUneTonne()*lot.getQuantiteEnTonnes()<this.getMontantCompte()&&
+					(lot.getPrixMinPourUneTonne()<=(Filiere.LA_FILIERE.getIndicateur("BourseChoco cours "+equivalentChocoFeve(lot.getFeve())).getValeur()-10000)*0.9)) {
+				if(((lot.getPrixMinPourUneTonne()+(Filiere.LA_FILIERE.getIndicateur("BourseChoco cours "+equivalentChocoFeve(lot.getFeve())).getValeur()-10000)*0.9))/2<this.getMontantCompte()) {
+					return ((lot.getPrixMinPourUneTonne()+(Filiere.LA_FILIERE.getIndicateur("BourseChoco cours "+equivalentChocoFeve(lot.getFeve())).getValeur()-10000)*0.9))/2;
+				}
+				else {
+					return lot.getPrixMinPourUneTonne();	
+				}
+				
+			}
 
- */
-
-	public double proposerAchat(LotCacaoCriee lot, double cours) {
-		if (lot.getPrixMinPourUneTonne()*lot.getQuantiteEnTonnes()<=(cours*lot.getQuantiteEnTonnes() - 10000)*0.9) { // 0.9 représente la marge de +10% ciblée
-			double prix = lot.getPrixMinPourUneTonne()*lot.getQuantiteEnTonnes()*(coefficient(lot.getFeve())+0.15*nb_proposition.get(gammeString(lot.getFeve())));
-			nb_proposition.replace(gammeString(lot.getFeve()), nb_proposition.get(gammeString(lot.getFeve())) + 1);
-			return prix;
 		}
-		return 0;
-		
+		return 0.0;
+
 	}
-/** @author Nathan Olborski
- * On fait un simple print de la notification de vente ou de refus de vente, on pourra ajouter cette notification au journal quand l'attribut journal sera mis en protected et qu'on y aura accès dans cette classe
- */
+	/** @author Nathan Olborski
+	 * On fait un simple print de la notification de vente ou de refus de vente, on pourra ajouter cette notification au journal quand l'attribut journal sera mis en protected et qu'on y aura accès dans cette classe
+	 */
 	public void notifierPropositionRefusee(PropositionCriee proposition) {
-			System.out.println("La proposition " + proposition.getLot().toString() + ", de " + proposition.getVendeur().toString() + ", au prix" + proposition.getPrixPourLeLot()
-					+ "a été refusée");
+		System.out.println("La proposition " + proposition.getLot().toString() + ", de " + proposition.getVendeur().toString() + ", au prix" + proposition.getPrixPourLeLot()
+		+ "a été refusée");
 	}
-	
+
 	public void notifierVente(PropositionCriee proposition) {
 		this.setCoutFeves(proposition.getLot().getFeve(), this.calculCoutFeve(proposition.getLot().getFeve(), proposition.getQuantiteEnTonnes(), proposition.getPrixPourUneTonne()));
 		this.setStockFeves(proposition.getLot().getFeve(), proposition.getQuantiteEnTonnes());
 		System.out.println("Lot " + proposition.getLot().toString() + ", de " + proposition.getVendeur().toString() + ", au prix" + proposition.getPrixPourLeLot() + " a été effectué");
-		
+
 	}
 
-/** @author Nathan Olborski
- * Simple getter, on voit ici l'intérêt d'avoir nos variables en protected 
- */
+	/** @author Nathan Olborski
+	 * Simple getter, on voit ici l'intérêt d'avoir nos variables en protected 
+	 */
 	public Integer getCryptogramme(SuperviseurCacaoCriee superviseur) {
 		if (superviseur != null) {
 			return this.cryptogramme;}
