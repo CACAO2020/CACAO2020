@@ -26,7 +26,7 @@ public class Transformateur1 extends VendeurChocolat {
 	public Color getColor() {
 		return new Color(52, 152, 219);
 	}
-	public void descisionTransformation() {
+	public void decisionTransformation() {
 		for(Chocolat chocolat:this.getStockPateInterne().keySet()) {
 			if(this.getStockPateInterne(chocolat)*4000<=this.getMontantCompte()){
 				this.transformationPateChocolat(chocolat, this.getStockPateInterne(chocolat));
@@ -45,12 +45,12 @@ public class Transformateur1 extends VendeurChocolat {
 		}
 	}
 	public void next() {
-		this.descisionTransformation();
+		this.decisionTransformation();
 		System.out.println("cout des feves"+this.getCoutFeves());
-		System.out.println("cout des pates internes"+this.getCoutPateInterne());
-		System.out.println("cout des chocolat"+this.getCoutChocolat());
-		System.out.println("stock chocoalt"+this.getStockChocolat());
-		System.out.println("treso "+this.getMontantCompte());
+		System.out.println("cout de la pate interne"+this.getCoutPateInterne());
+		System.out.println("cout des chocolats"+this.getCoutChocolat());
+		System.out.println("stock chocolat"+this.getStockChocolat());
+		System.out.println("tresorerie "+this.getMontantCompte());
 	}
 	
 	public List<Variable> getIndicateurs() {
