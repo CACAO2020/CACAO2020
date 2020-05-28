@@ -52,12 +52,12 @@ class GestionCriee //implements IVendeurCacaoCriee
 	private LotCacaoCriee makeLot(Feve typeFeve, double quantiteAVendre)
 	{
 		double PrixMoy = this.prixMoyenDernierreVentes(typeFeve);
-		this.producteur1.ajouterJournaux("[GestionCriee] - Mise en vente de : " + quantiteAVendre + " au prix de " + (PrixMoy+4)*quantiteAVendre);
+		this.producteur1.ajouterJournaux("[GestionCriee] - Mise en vente de : " + quantiteAVendre + " au prix de " + (PrixMoy+0.004)*quantiteAVendre);
 		if(quantiteAVendre == 0)
 		{
 			return null;
 		}
-		LotCacaoCriee lot = new LotCacaoCriee(this.producteur1, typeFeve, quantiteAVendre, quantiteAVendre * (PrixMoy+4));
+		LotCacaoCriee lot = new LotCacaoCriee(this.producteur1, typeFeve, quantiteAVendre, quantiteAVendre * (PrixMoy+0.004));
 		this.miseEnVenteLog.add(lot);
 		return lot;
 	}
@@ -87,18 +87,18 @@ class GestionCriee //implements IVendeurCacaoCriee
 	public void notifierAucuneProposition(LotCacaoCriee lot) {
 		if(lot.getFeve() == Feve.FEVE_BASSE)
 		{
-			this.lastPrixVenteFeveBasse -= 20;
+			this.lastPrixVenteFeveBasse -= 10;
 			if(this.lastPrixVenteFeveBasse <= 0)
 			{
-				this.lastPrixVenteFeveBasse = 1;
+				this.lastPrixVenteFeveBasse = 0.001;
 			}
 		}
 		else
 		{
-			this.lastPrixVenteFeveMoyenne -= 20;
+			this.lastPrixVenteFeveMoyenne -= 10;
 			if(this.lastPrixVenteFeveMoyenne <= 0)
 			{
-				this.lastPrixVenteFeveMoyenne = 1;
+				this.lastPrixVenteFeveMoyenne = 0.001;
 			}
 		}
 	}
@@ -106,7 +106,7 @@ class GestionCriee //implements IVendeurCacaoCriee
 	//Clément
 	public PropositionCriee choisir(List<PropositionCriee> propositions) {
 		int n = propositions.size();
-		double prixMax = 0.02; // On set le prix max a quelque chose de différent par sécurité pour ne pas accepter des lots de prix 0
+		double prixMax = 0.0000002; // On set le prix max a quelque chose de différent par sécurité pour ne pas accepter des lots de prix 0
 		int indPrixMax = -1;
 		for(int i = 0; i < n; i++)
 		{
