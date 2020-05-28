@@ -33,28 +33,36 @@ public class eq2Investisseur extends eq2Vendeur {
 	}
 	/** décide si on achète des arbres à ce tour ou non, à appeler à chaque next**/
 	public void decideAchatArbres() { //si nbre d'arbres arrive en-dessous d'un minimum et qu'on peut en acheter : on rachète ce type d'arbre, ou bien qu'on a assez d'argent, on achète ce qui s'est le mieux vendu sur toutes les ventes depuis x temps.
-		int nbrearbresbasse = 0;
-		int nbrearbresmoyenne = 0;
-		int nbrearbresmoyenneequitable = 0;
-		int nbrearbreshaute = 0;
-		int nbrearbreshauteequitable = 0;
+		                              //mettons qu'on commence avec 10 hectares (propriété de taille très raisonnable) --> 11 110 arbres, entre 5 et 6 employés
+		                              //on détermine les proportions de fèves qui se sont le mieux vendues les tours précédents pour savoir quoi planter
+		int nbrearbres = 0;
 		List<PaquetArbres> arbres = this.getPaquetsArbres();
 		for (int i = 0; i < arbres.size(); i++) {
-			if (arbres.get(i).getType() == Feve.FEVE_BASSE) {
-				nbrearbresbasse = nbrearbresbasse + arbres.get(i).getNbreArbres();
-			}
-			else if (arbres.get(i).getType() == Feve.FEVE_MOYENNE){
-				nbrearbresmoyenne = nbrearbresmoyenne + arbres.get(i).getNbreArbres();
-			}
-			else if (arbres.get(i).getType() == Feve.FEVE_MOYENNE_EQUITABLE) {
-				nbrearbresmoyenneequitable = nbrearbresmoyenneequitable + arbres.get(i).getNbreArbres();
-			}
-			else if (arbres.get(i).getType() == Feve.FEVE_HAUTE) {
-				nbrearbreshaute = nbrearbreshaute + arbres.get(i).getNbreArbres();
-			}
-			else if (arbres.get(i).getType() == Feve.FEVE_HAUTE_EQUITABLE) {
-				nbrearbreshauteequitable = nbrearbreshauteequitable + arbres.get(i).getNbreArbres();
-			}
+			nbrearbres = nbrearbres + arbres.get(i).getNbreArbres();
+		}
+		int totalventesréalisées = this.getcompteurcrio()+this.getcompteurcrioe()+this.getcompteurfora()+this.getcompteurtrini()+this.getcompteurtrinie();
+		double proportionfora = this.getcompteurfora()/totalventesréalisées;
+		double proportiontrini = this.getcompteurtrini()/totalventesréalisées;
+		double proportioncrio = this.getcompteurcrio()/totalventesréalisées;
+		double proportiontrinie = this.getcompteurtrinie()/totalventesréalisées;
+		double proportioncrioe = this.getcompteurcrioe()/totalventesréalisées;
+		
+		if (nbrearbres < 11100 && Filiere.LA_FILIERE.getBanque().getSolde(this,this.getCrypto()) > 0) {
+			int ecart = 11100 - nbrearbres;
+			this.AchatArbres((int)Math.floor(ecart*proportionfora), Feve.FEVE_BASSE);
+			this.AchatArbres((int)Math.floor(ecart*proportiontrini), Feve.FEVE_MOYENNE);
+			this.AchatArbres((int)Math.floor(ecart*proportiontrinie), Feve.FEVE_MOYENNE_EQUITABLE);
+			this.AchatArbres((int)Math.floor(ecart*proportioncrio), Feve.FEVE_HAUTE);
+			this.AchatArbres((int)Math.floor(ecart*proportioncrioe), Feve.FEVE_HAUTE_EQUITABLE);
+		}
+		else if ((Filiere.LA_FILIERE.getBanque().getSolde(this,this.getCrypto())) > 1000) { //on investit pas si on a moins de 1000$
+			double investissement_max = Filiere.LA_FILIERE.getBanque().getSolde(this,this.getCrypto())*0.2;
+			int nbre_arbresmax = (int)Math.floor(investissement_max/this.getprixArbre());
+			this.AchatArbres((int)Math.floor(nbre_arbresmax*proportionfora), Feve.FEVE_BASSE);
+			this.AchatArbres((int)Math.floor(nbre_arbresmax*proportiontrini), Feve.FEVE_MOYENNE);
+			this.AchatArbres((int)Math.floor(nbre_arbresmax*proportiontrinie), Feve.FEVE_MOYENNE_EQUITABLE);
+			this.AchatArbres((int)Math.floor(nbre_arbresmax*proportioncrio), Feve.FEVE_HAUTE);
+			this.AchatArbres((int)Math.floor(nbre_arbresmax*proportioncrioe), Feve.FEVE_HAUTE_EQUITABLE);
 		}
 		
 	}
