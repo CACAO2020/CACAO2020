@@ -8,6 +8,7 @@ import java.util.Map;
 
 import abstraction.eq8Romu.cacaoCriee.PropositionCriee;
 import abstraction.eq8Romu.cacaoCriee.SuperviseurCacaoCriee;
+import abstraction.eq8Romu.chocolatBourse.SuperviseurChocolatBourse;
 import abstraction.eq8Romu.produits.Feve;
 import abstraction.eq8Romu.produits.Gamme;
 import abstraction.fourni.Filiere;
@@ -28,6 +29,48 @@ public abstract class AcheteurCacao extends Transformation implements abstractio
 		this.nb_proposition = map;
 	}
 	
+	/** @author K. GUTIERREZ  */
+	public double coefficient(Feve feve) {
+		if (feve.getGamme() == Gamme.HAUTE) {
+			if (feve.isEquitable()) {
+				return 1;
+			}
+			else {
+				return 0.85;
+			}
+		}
+		else if (feve.getGamme() == Gamme.MOYENNE) {
+			if (feve.isEquitable()) {
+				return 0.85;
+			}
+			else {
+				return 0.7;
+			}
+		}
+		return 0;
+	}
+	
+	/** @author K. GUTIERREZ  */
+	public String gammeString(Feve feve) {
+		if (feve.getGamme() == Gamme.HAUTE) {
+			if (feve.isEquitable()) {
+				return "Haute_equitable";
+			}
+			else {
+				return "Haute";
+			}
+		}
+		else if (feve.getGamme() == Gamme.MOYENNE) {
+			if (feve.isEquitable()) {
+				return "Moyenne_equitable";
+			}
+			else {
+				return "Moyenne";
+			}
+		}
+		return "";
+	}
+	
 
 
 /** @author Nathan Olborski 
@@ -36,25 +79,10 @@ public abstract class AcheteurCacao extends Transformation implements abstractio
 
  */
 
-	public double proposerAchat(LotCacaoCriee lot) {
-		if ((lot.getFeve().getGamme() == Gamme.HAUTE)&&(lot.getFeve().isEquitable())) {
-			double prix = lot.getPrixMinPourUneTonne()*lot.getQuantiteEnTonnes()*(1.00+0.15*nb_proposition.get("Haute_equitable"));
-			nb_proposition.replace("Haute_equitable", nb_proposition.get("Haute_equitable") + 1);
-			return prix;
-		}
-		else if ((lot.getFeve().getGamme() == Gamme.HAUTE)&&(!lot.getFeve().isEquitable())) {
-			double prix = lot.getPrixMinPourUneTonne()*lot.getQuantiteEnTonnes()*(0.85+0.15*nb_proposition.get("Haute"));
-			nb_proposition.replace("Haute", nb_proposition.get("Haute") + 1);
-			return prix;
-		}
-		else if ((lot.getFeve().getGamme() == Gamme.MOYENNE)&&(lot.getFeve().isEquitable())) {
-			double prix = lot.getPrixMinPourUneTonne()*lot.getQuantiteEnTonnes()*(0.85+0.15*nb_proposition.get("Moyenne_equitable"));
-			nb_proposition.replace("Moyenne_equitable", nb_proposition.get("Moyenne_equitable") + 1);
-			return prix;
-		}
-		else if ((lot.getFeve().getGamme() == Gamme.MOYENNE)&&(!lot.getFeve().isEquitable())) {
-			double prix = lot.getPrixMinPourUneTonne()*lot.getQuantiteEnTonnes()*(0.7+0.15*nb_proposition.get("Moyenne"));
-			nb_proposition.replace("Moyenne", nb_proposition.get("Moyenne") + 1);
+	public double proposerAchat(LotCacaoCriee lot, double cours) {
+		if (lot.getPrixMinPourUneTonne()*lot.getQuantiteEnTonnes()<=(cours*lot.getQuantiteEnTonnes() - 10000)*0.9) {
+			double prix = lot.getPrixMinPourUneTonne()*lot.getQuantiteEnTonnes()*(coefficient(lot.getFeve())+0.15*nb_proposition.get(gammeString(lot.getFeve())));
+			nb_proposition.replace(gammeString(lot.getFeve()), nb_proposition.get(gammeString(lot.getFeve())) + 1);
 			return prix;
 		}
 		return 0;
