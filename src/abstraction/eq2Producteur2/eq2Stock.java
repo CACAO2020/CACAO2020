@@ -21,7 +21,7 @@ public class eq2Stock extends eq2Acteur{
  * cette classe gère les StockFeves de fèves et de pâte, les masses sont exprimées en tonnes
  */
 	
-	private Variable coutStockFeveage;
+	private Variable coutStockFeve;
 	private HashMap<Feve,Variable> StockFeve;
 	private HashMap<Pate,Variable> StockPate;
 	private double nbemployees;
@@ -32,7 +32,7 @@ public class eq2Stock extends eq2Acteur{
 	 * 	 */
 	public eq2Stock() {
 		super();
-		this.coutStockFeveage = new Variable ("cout",this,100);
+		this.coutStockFeve = new Variable ("cout",this,100);
 		this.StockFeve = new HashMap<Feve,Variable>();
 		this.StockPate = new HashMap<Pate,Variable>();
 		this.StockFeve.put(Feve.FEVE_BASSE, new Variable("EQ2Feve.FEVE_BASSE",this, 10.0));
@@ -58,8 +58,11 @@ public void addStockPate(Pate pate, double quantité) {
 	 
  }
 
-public void setCoutStockFeveage(double cout) {
-	this.coutStockFeveage.setValeur(this, cout);
+public void setCoutStockFeve(double cout) {
+	this.coutStockFeve.setValeur(this, cout);
+}
+public Variable getCoutStockFeve() {
+	return this.coutStockFeve;
 }
 public void setQtFeve(Feve feve, double quantite) {
 	this.getStockFeve().get(feve).setValeur(this, quantite);
