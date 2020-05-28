@@ -87,6 +87,11 @@ public class Transformateur2_gestion_stocks extends Transformateur2_contratCadre
 	// calcule l'ensemble des coûts dûs à l'entretien des stocks
 		// à exécuter à chaque fin de tour
 		
+	public double coutStocksChoc() {
+		return this.coutUnitaireStockChocolat.getValeur()*super.getStockTotalChocolat();
+	}
+	
+	
 		public double coutStocks () {  
 			double cout = 0 ;
 			cout += this.coutUnitaireStockFeves.getValeur()*super.getStockTotalFeves() ; 
@@ -108,7 +113,7 @@ public class Transformateur2_gestion_stocks extends Transformateur2_contratCadre
 					qte_tour += super.getQuantiteALivrerAuStep(ex, step + resu);
 				}
 				if (qte_tour == 0) {
-					return 100;			// On a assez pour subvenir à toutes le echeances
+					return 1000;			// On a assez pour subvenir à toutes le echeances
 				}
 				else {
 					pate_echeancier += qte_tour;

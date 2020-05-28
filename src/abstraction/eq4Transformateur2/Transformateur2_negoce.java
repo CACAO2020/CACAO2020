@@ -12,34 +12,32 @@ import abstraction.eq8Romu.cacaoCriee.SuperviseurCacaoCriee;
 import abstraction.eq8Romu.chocolatBourse.IVendeurChocolatBourse;
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.Feve;
+import abstraction.eq8Romu.produits.Pate;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
 public class Transformateur2_negoce extends Transformateur2_gestion_stocks implements IAcheteurCacaoCriee, IVendeurChocolatBourse {
-	private Map<Feve, Variable> prixMaxAchatFeves;
-	private Map<Chocolat, Variable> prixMinVenteChocolat;
-	protected Double MARGE_VISEE_CHOCOLAT = 0.5;
-	protected Double MARGE_VISEE_PATE = 0.3;
+	protected Map<PateInterne, Variable> MARGE_VISEE_PATE;
+	protected Map<Chocolat, Variable> MARGE_VISEE_CHOCOLAT;
 
 	
 	public Transformateur2_negoce() {
 		super();
 		
-		this.prixMaxAchatFeves = new HashMap<Feve, Variable>() ;
-		this.prixMaxAchatFeves.put(Feve.FEVE_BASSE, new Variable(getNom()+" prix achat feves basses", this, 200)) ;
-		this.prixMaxAchatFeves.put(Feve.FEVE_MOYENNE, new Variable(getNom()+" prix achat feves moyennes", this, 200)) ;
-		this.prixMaxAchatFeves.put(Feve.FEVE_HAUTE, new Variable(getNom()+" prix achat feves hautes", this, 200)) ;
-		this.prixMaxAchatFeves.put(Feve.FEVE_MOYENNE_EQUITABLE,new Variable(getNom()+" prix achat feves moyennes equitables", this, 200)) ;
-		this.prixMaxAchatFeves.put(Feve.FEVE_HAUTE_EQUITABLE, new Variable(getNom()+" prix achat feves hautes equitables", this, 200)) ;
+		this.MARGE_VISEE_PATE = new HashMap<PateInterne, Variable>() ;
+		this.MARGE_VISEE_PATE.put(PateInterne.PATE_BASSE, new Variable(getNom()+" marge visee pate basse", this, 0.20)) ;
+		this.MARGE_VISEE_PATE.put(PateInterne.PATE_MOYENNE, new Variable(getNom()+" marge visee pate moyenne", this, 0.20)) ;
+		this.MARGE_VISEE_PATE.put(PateInterne.PATE_MOYENNE_EQUITABLE, new Variable(getNom()+" marge visee pate moyenne equitable", this, 1)) ;
+		this.MARGE_VISEE_PATE.put(PateInterne.PATE_HAUTE_EQUITABLE,new Variable(getNom()+" marge visee pate haute equitable", this, 1)) ;
+		this.MARGE_VISEE_PATE.put(PateInterne.PATE_HAUTE, new Variable(getNom()+" marge visee pate haute", this, 1)) ;
 		
-		
-		this.prixMinVenteChocolat = new HashMap<Chocolat, Variable>() ;
-		this.prixMinVenteChocolat.put(Chocolat.CHOCOLAT_BASSE, new Variable(getNom()+" prix min vente chocolat basse", this, 100)) ;
-		this.prixMinVenteChocolat.put(Chocolat.CHOCOLAT_MOYENNE, new Variable(getNom()+" prix min vente chocolat moyenne", this, 100)) ;
-		this.prixMinVenteChocolat.put(Chocolat.CHOCOLAT_HAUTE, new Variable(getNom()+" prix min vente chocolat haute", this, 0)) ;
-		this.prixMinVenteChocolat.put(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE, new Variable(getNom()+" prix min vente chocolat moyenne equitable", this, 100)) ;
-		this.prixMinVenteChocolat.put(Chocolat.CHOCOLAT_HAUTE_EQUITABLE, new Variable(getNom()+" prix min vente chocolat haute equitable", this, 0)) ;
+		this.MARGE_VISEE_CHOCOLAT = new HashMap<Chocolat, Variable>() ;
+		this.MARGE_VISEE_CHOCOLAT.put(Chocolat.CHOCOLAT_BASSE, new Variable(getNom()+" marge visee chocolat basse", this, 1.5*MARGE_VISEE_PATE.get(PateInterne.PATE_BASSE).getValeur())) ;
+		this.MARGE_VISEE_CHOCOLAT.put(Chocolat.CHOCOLAT_MOYENNE, new Variable(getNom()+" marge visee chocolat moyenne", this, 1.5*MARGE_VISEE_PATE.get(PateInterne.PATE_MOYENNE).getValeur())) ;
+		this.MARGE_VISEE_CHOCOLAT.put(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE, new Variable(getNom()+" marge visee chocolat moyenne equitable", this, 1)) ;
+		this.MARGE_VISEE_CHOCOLAT.put(Chocolat.CHOCOLAT_HAUTE,new Variable(getNom()+" marge visee chocolat haute", this, 1)) ;
+		this.MARGE_VISEE_CHOCOLAT.put(Chocolat.CHOCOLAT_HAUTE_EQUITABLE, new Variable(getNom()+" marge visee chocolat haute equitable", this, 1)) ;
 	}
 	
 	// récupère les attributs notés comme paramètres, utile pour les tests et sûrement appelé par des fonctions externes
@@ -47,10 +45,8 @@ public class Transformateur2_negoce extends Transformateur2_gestion_stocks imple
 	public List<Variable> getIndicateurs() { 
 		List<Variable> res=super.getIndicateurs();
 		for (Feve feve :Feve.values()) {
-			res.add(this.prixMaxAchatFeves.get(feve)) ;
 		}
 		for (Chocolat chocolat : Chocolat.values()) {
-			res.add(this.prixMinVenteChocolat.get(chocolat)) ;
 		}
 		return res;
 	}
@@ -76,8 +72,8 @@ public class Transformateur2_negoce extends Transformateur2_gestion_stocks imple
             classeAppelante = null; 
         }
 if (!classeAppelante.equals(SuperviseurCacaoCriee.class)) { throw new Error("la concurrence tente de nous arnaquer"); }
-		double prix = Math.max(this.prixRentableAchatFeve(lot.getFeve()), lot.getPrixMinPourUneTonne());
-		if (super.getSolde()*0.4>lot.getQuantiteEnTonnes()*prix) { // ON ACHETE QUE SI LE VALEUR DU LOT EST < 40% DE NOTRE SOLDE (PEUT ETRE MODIFIE
+		double prix = this.prixRentableAchatFeve(lot.getFeve());
+		if (super.getSolde()*0.5>lot.getQuantiteEnTonnes()*prix) { // ON ACHETE QUE SI LE VALEUR DU LOT EST < 50% DE NOTRE SOLDE (PEUT ETRE MODIFIE
 			return prix;
 		}
 		else {
@@ -87,7 +83,7 @@ if (!classeAppelante.equals(SuperviseurCacaoCriee.class)) { throw new Error("la 
 
 	public void notifierPropositionRefusee(PropositionCriee proposition) {
 		this.journalEq4.ajouter("Apprend que sa proposition de "+Journal.doubleSur(proposition.getPrixPourUneTonne(), 4)+" pour "+Journal.texteColore(proposition.getVendeur(), Journal.doubleSur(proposition.getQuantiteEnTonnes(), 2)+" tonnes de "+proposition.getFeve().name())+Journal.texteColore(Color.red, Color.white, " a ete refusee"));
-		//FAIRE BAISSER LA MARGE VISEE
+		this.setMargeVisee(super.creerPateAPartirDeFeve(proposition.getFeve()));
 	}
 
 	public Integer getCryptogramme(SuperviseurCacaoCriee superviseur) {
@@ -102,6 +98,7 @@ if (!classeAppelante.equals(SuperviseurCacaoCriee.class)) { throw new Error("la 
 		Feve feve = proposition.getFeve() ;
 		super.modifierCoutMoyenFeves(feve, proposition.getQuantiteEnTonnes(), proposition.getPrixPourLeLot());
 		super.setStockFevesValeur(feve, proposition.getQuantiteEnTonnes()+super.getStockFevesValeur(feve));
+		this.setMargeVisee(super.creerPateAPartirDeFeve(proposition.getFeve()));
 		this.journalEq4.ajouter("Apprend que sa proposition de "+Journal.doubleSur(proposition.getPrixPourUneTonne(), 4)+" pour "+Journal.texteColore(proposition.getVendeur(), Journal.doubleSur(proposition.getQuantiteEnTonnes(), 2)+" tonnes de "+proposition.getFeve().name())+Journal.texteColore(Color.green, Color.black," a ete acceptee"));
 		this.journalEq4.ajouter("--> le stock de feve passe a "+Journal.doubleSur(this.stockFeves.get(proposition.getFeve()).getValeur(), 4));
 		//FAIRE AUGMENTER LA MARGE VISEE
@@ -145,7 +142,7 @@ if (!classeAppelante.equals(SuperviseurCacaoCriee.class)) { throw new Error("la 
 			}
 		}
 		double prix_bourse_choco = Filiere.LA_FILIERE.getIndicateur(indicateur).getHistorique().get(Filiere.LA_FILIERE.getEtape()-1).getValeur();
-		return prix_bourse_choco/(1+MARGE_VISEE_CHOCOLAT) - cout_process_product;
+		return prix_bourse_choco/(1+MARGE_VISEE_CHOCOLAT.get(super.creerChocolat(super.creerPateAPartirDeFeve(feve))).getValeur()) - cout_process_product;
 	}
 		else {
 			return 0;
@@ -155,7 +152,7 @@ if (!classeAppelante.equals(SuperviseurCacaoCriee.class)) { throw new Error("la 
 	public double prixRentablePourReventePate(Feve feve) {
 		double cout_process_product = this.getCoutProdPate(super.creerPateAPartirDeFeve(feve), 1) - this.getCoutMoyenFeveValeur(feve)*super.getCoeffTFEP();
 		double prix_moy_revente_pate = super.getPrixMoyReventePate(super.creerPateAPartirDeFeve(feve));
-		return prix_moy_revente_pate*(1-MARGE_VISEE_PATE) - cout_process_product;
+		return prix_moy_revente_pate*(1-MARGE_VISEE_PATE.get(super.creerPateAPartirDeFeve(feve)).getValeur()) - cout_process_product;
 	}
 	
 	public double prixRentableAchatFeve(Feve feve ) {
@@ -164,14 +161,19 @@ if (!classeAppelante.equals(SuperviseurCacaoCriee.class)) { throw new Error("la 
 	
 	
 	/* VENTE CHOCOLAT */
-	// On vend tout notre stock de chocolat à chaque fois * A MODIFIER POUR CHOISIR QTE A VENDRE *
+	// On gagne 50% de la marge visee pour vend moitié de notre stock, si on vend + de 100% de la marge visee on vend tout
 		public double getOffre(Chocolat chocolat, double cours) {
+			double marge = this.margeChoc();
 			double quantite = this.getStockChocolatValeur(chocolat) ;
-			if (cours >= this.getCoutProdChocolat(chocolat, 1)*(1+MARGE_VISEE_CHOCOLAT)) {
-				return quantite ;
+			if ((cours >= this.getCoutProdChocolat(chocolat, 1)*(1+marge*0.5)) &&
+					(cours < this.getCoutProdChocolat(chocolat, 1)*(1+marge))) {
+				return quantite/2 ;
+			}
+			else if (cours >= this.getCoutProdChocolat(chocolat, 1)*(1+marge)) {
+				return quantite;
 			}
 			else {
-				MARGE_VISEE_CHOCOLAT = Math.max(0.1, MARGE_VISEE_CHOCOLAT-0.1);
+				marge = Math.max(0.1, marge-0.1);
 				return 0;
 			}
 		}
@@ -186,5 +188,26 @@ if (!classeAppelante.equals(SuperviseurCacaoCriee.class)) { throw new Error("la 
 		
 		// une fois que la vente est acceptée, notifie la vente, met à jour les stocks
 		// fonction à faire
+		
+		/* ADAPTATION DE LA MARGE */
+		public void setMargeVisee(PateInterne pate) {
+			int nbTourAuto = super.nbTourAutonomiePateEtFeves(pate);
+			if (nbTourAuto != 1000) {
+				double marge = Math.max(Math.min(nbTourAuto-1-super.getNombreDeTourDautoMin()/super.getNombreDeTourDautoMax(), 2), -0.1);
+				MARGE_VISEE_PATE.get(pate).setValeur(this, marge);
+			}
+		}
+		
+		public double margeChoc() {
+			double rapport = super.coutStocksChoc()/super.getSolde();
+			double visee = 0.01/rapport;								//Stock coute 2% de notre solde par tour -> marge esperee de 50%, 1% -> 100%, 5% -> 20%, 10% -> 10%
+			if (rapport > 0.11) {
+				visee = -2;
+			}
+			else if (rapport < 0.005) { 								//visee capee a 200%
+				visee = 2;
+			}
+			return visee;
+		}
 		
 }

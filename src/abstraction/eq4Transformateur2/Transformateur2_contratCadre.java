@@ -106,7 +106,7 @@ public class Transformateur2_contratCadre extends Transformateur2_stocks_et_tran
 		return valeur ;
 	}
 	
-	//Revoie la moyenne pondérée des prix de revente de notre pate pondérée par la qte a vendre
+	//Renvoie la moyenne pondérée des prix de revente de notre pate pondérée par la qte a vendre
 	public double getPrixMoyReventePate(PateInterne pate) {
 		if (this.getQuantitePateCCValeur(pate) == 0) {
 			throw new IllegalArgumentException("pas de contrats de pate");
