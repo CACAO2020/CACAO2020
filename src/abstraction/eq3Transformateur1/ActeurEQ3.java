@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import abstraction.eq8Romu.cacaoCriee.FiliereTestVentesCacaoCriee;
+import abstraction.eq8Romu.chocolatBourse.FiliereTestVentesChocolatBourse;
 import abstraction.eq8Romu.ventesCacaoAleatoires.FiliereVentesCacaoAleatoires;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
-public class ActeurEQ3 implements IActeur{
+public abstract class ActeurEQ3 implements IActeur{
 	protected Variable stockFeves;
 	protected Variable stockChocolat;
 	protected Integer cryptogramme;
@@ -35,10 +36,7 @@ public class ActeurEQ3 implements IActeur{
 				+ "L'équipe se garde la liberté d'acheter de la pâte de moyenne gamme";
 		
 	}
-	
-	public Color getColor() {
-		return new Color(52, 152, 219);
-	}
+
 
 	public void initialiser() {
 	}
@@ -46,30 +44,24 @@ public class ActeurEQ3 implements IActeur{
 	public void setCryptogramme(Integer crypto) {
 		this.cryptogramme = crypto;
 	}
-	public void next() {
-	}
+	
 
 	public List<String> getNomsFilieresProposees() {
 		ArrayList<String> filieres = new ArrayList<String>();
-		filieres.add("ACHATCACAOCRIE");
-		filieres.add("VENTECHOCOLATBOURSE");
+		filieres.add("testAchat");
+
 		return filieres;
 	}
 
 	public Filiere getFiliere(String nom) {
 		switch (nom) {
-		case "ACHATCACAOCRIE" : return new FiliereVentesCacaoAleatoires();
-		case "VENTECHOCOLATBOURSE" : return new FiliereTestVentesCacaoCriee();
+		case "testAchat" : return new FiliereAchatTest();
+
 		default : return null;
 		}
 	}
 	
-	public List<Variable> getIndicateurs() {
-		List<Variable> res=new ArrayList<Variable>();
-		res.add(this.stockFeves);
-		res.add(stockChocolat);
-		return res;
-	}
+	
 
 	public List<Variable> getParametres() {
 		List<Variable> res=new ArrayList<Variable>();
@@ -90,6 +82,5 @@ public class ActeurEQ3 implements IActeur{
 		}
 	}
 	
-	public void notificationOperationBancaire(double montant) {
-	}
+	
 }
