@@ -270,7 +270,7 @@ public class Banque implements IActeur {
 			this.journalBanque.ajouter(Color.RED, Color.WHITE," Appel de virer de Banque avec l'acteur dont le compte est a crediter qui a fait faillite : "+Journal.texteColore(acteurACrediter.getColor(), Color.BLACK, acteurACrediter.getNom()));
 			return false;
 		} else{
-			if (!acteurADebiter.equals("CLIENTFINAL")) {
+			if (!acteurADebiter.getNom().equals("CLIENTFINAL")) {
 				comptes.get(acteurADebiter).retirer(this, montant);
 				acteurADebiter.notificationOperationBancaire(-montant);
 			}
