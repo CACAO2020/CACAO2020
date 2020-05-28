@@ -2,10 +2,11 @@ package abstraction.eq3Transformateur1;
 
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.Feve;
+import abstraction.fourni.Filiere;
 
-public class TestStock extends Stock{
+public class TestStock extends Transformateur1{
 	public static void main(String[] args) {
-		Stock stock=new Stock();
+		Stock stock=new Transformateur1();
 		System.out.println("TEST METHODES GET (a l'etat initial)");
 		System.out.println("");
 		System.out.println("Map stock Chocolat "+stock.getStockChocolat());
@@ -67,6 +68,8 @@ public class TestStock extends Stock{
 		System.out.println("Map Stock feves "+stock.getStockFeves());
 		System.out.println("Map Stock Pate interne "+stock.getStockPateInterne());
 		System.out.println("Map stock Chocolat "+stock.getStockChocolat());
+		System.out.println(" "+stock.getNom());
+
 	}
 	
 	

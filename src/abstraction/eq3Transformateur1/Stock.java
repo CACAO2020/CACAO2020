@@ -10,7 +10,7 @@ import abstraction.eq8Romu.produits.Gamme;
 import abstraction.fourni.Variable;
 
 /** @author AMAURY COUDRAY*/
-public class Stock extends ActeurEQ3 {
+public abstract class Stock extends ActeurEQ3 {
 
 
 	/* quantite de chaque type de FEVE/CHocolat/PATE */
@@ -39,7 +39,7 @@ public class Stock extends ActeurEQ3 {
 		this.stockFeves.put(Feve.FEVE_MOYENNE,15.0);
 		this.stockChocolat.put(Chocolat.CHOCOLAT_MOYENNE,15.0);
 		this.coutFeves.put(Feve.FEVE_MOYENNE, 10.0);
-		this.coutChocolat.put(Chocolat.CHOCOLAT_MOYENNE,20.0);
+		this.coutChocolat.put(Chocolat.CHOCOLAT_MOYENNE,2002.0);
 		this.stockTotalFeves=new Variable("stock total de feves de "+getNom(),this,15.0);
 		this.stockTotalChocolat=new Variable("stock total de chocolat de "+getNom(),this,15.0);
 		this.stockTotalPateInterne=new Variable("stock total de pate interne de "+getNom(),this,0.0);

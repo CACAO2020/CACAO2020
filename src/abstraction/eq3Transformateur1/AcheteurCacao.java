@@ -15,7 +15,7 @@ import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
-public class AcheteurCacao extends Stock implements abstraction.eq8Romu.cacaoCriee.IAcheteurCacaoCriee{
+public abstract class AcheteurCacao extends Stock implements abstraction.eq8Romu.cacaoCriee.IAcheteurCacaoCriee{
 	private static int NB_INSTANCES = 0; // Afin d'attribuer un nom different a toutes les instances
 	private HashMap<String,Double> nb_proposition;
 	private ActeurEQ3 acteur;
