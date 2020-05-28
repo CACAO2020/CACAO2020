@@ -41,11 +41,11 @@ public class eq2Stock extends eq2Acteur{
 	}
 	
 public void addStockFeve(Feve feve, double quantité) {
-	String type = "EQ2"+feve;
+	String type = "EQ2Feve."+feve;
 	this.StockFeve.put(feve,new Variable(type,this,quantité));
 }
 public void addStockPate(Pate pate, double quantité) {
-	String type = "EQ2"+pate;
+	String type = "EQ2Pate."+pate;
 	this.StockPate.put(pate,new Variable(type,this,quantité));
 }
 	
