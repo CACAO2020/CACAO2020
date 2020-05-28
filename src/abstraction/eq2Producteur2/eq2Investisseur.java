@@ -31,6 +31,10 @@ public class eq2Investisseur extends eq2Vendeur {
 			this.journal_achats.ajouter("Achat de " + nbrArbres + " arbres de type: " + feve.getGamme());
 		}
 	}
+	/** décide si on achète des arbres à ce tour ou non, à appeler à chaque next**/
+	public void decideAchatArbres() { //si nbre d'arbres arrive en-dessous d'un minimum et qu'on peut en acheter : on rachète ce type d'arbre, ou bien qu'on a assez d'argent, on achète ce qui s'est le mieux vendu sur toutes les ventes depuis x temps.
+		
+	}
 	/*
 	 * Paye les employes en fonction du nombre d'arbres
 	 */
