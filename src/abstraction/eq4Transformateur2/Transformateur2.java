@@ -12,9 +12,6 @@ import java.util.Map;
 
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.Feve;
-import abstraction.eq8Romu.produits.Gamme;
-import abstraction.eq8Romu.produits.Pate;
-import abstraction.eq8Romu.chocolatBourse.IVendeurChocolatBourse;
 import abstraction.fourni.Filiere;
 
 public class Transformateur2 implements IActeur {
@@ -53,23 +50,23 @@ public class Transformateur2 implements IActeur {
 		this.stockFeves = new HashMap<Feve, Variable>() ;
 		this.stockFeves.put(Feve.FEVE_BASSE, new Variable(getNom()+" stock feves basses", this, 50)) ;
 		this.stockFeves.put(Feve.FEVE_MOYENNE, new Variable(getNom()+" stock feves moyennes", this, 50)) ;
-		this.stockFeves.put(Feve.FEVE_HAUTE, new Variable(getNom()+" stock feves hautes", this, 0)) ;
+		this.stockFeves.put(Feve.FEVE_HAUTE, new Variable(getNom()+" stock feves hautes", this, 50)) ;
 		this.stockFeves.put(Feve.FEVE_MOYENNE_EQUITABLE,new Variable(getNom()+" stock feves moyennes equitables", this, 50)) ;
-		this.stockFeves.put(Feve.FEVE_HAUTE_EQUITABLE, new Variable(getNom()+" stock feves hautes equitables", this, 0)) ;
+		this.stockFeves.put(Feve.FEVE_HAUTE_EQUITABLE, new Variable(getNom()+" stock feves hautes equitables", this, (50))) ;
 		
 		this.stockPate = new HashMap<PateInterne, Variable>() ;
 		this.stockPate.put(PateInterne.PATE_BASSE, new Variable(getNom()+" stock pate basse", this, 50)) ;
 		this.stockPate.put(PateInterne.PATE_MOYENNE, new Variable(getNom()+" stock pate moyenne", this, 50)) ;
-		this.stockPate.put(PateInterne.PATE_HAUTE, new Variable(getNom()+" stock pate haute", this, 0)) ;
+		this.stockPate.put(PateInterne.PATE_HAUTE, new Variable(getNom()+" stock pate haute", this, 50)) ;
 		this.stockPate.put(PateInterne.PATE_MOYENNE_EQUITABLE, new Variable(getNom()+" stock pate moyenne equitable", this, 50));
-		this.stockPate.put(PateInterne.PATE_HAUTE_EQUITABLE, new Variable(getNom()+" stock pate haute equitable", this, 0));
+		this.stockPate.put(PateInterne.PATE_HAUTE_EQUITABLE, new Variable(getNom()+" stock pate haute equitable", this, 50));
 		
 		this.stockChocolat = new HashMap<Chocolat, Variable>() ;
 		this.stockChocolat.put(Chocolat.CHOCOLAT_BASSE, new Variable(getNom()+" stock chocolat basse", this, 100)) ;
 		this.stockChocolat.put(Chocolat.CHOCOLAT_MOYENNE, new Variable(getNom()+" stock chocolat moyenne", this, 100)) ;
-		this.stockChocolat.put(Chocolat.CHOCOLAT_HAUTE, new Variable(getNom()+" stock chocolat haute", this, 0)) ;
+		this.stockChocolat.put(Chocolat.CHOCOLAT_HAUTE, new Variable(getNom()+" stock chocolat haute", this, 100)) ;
 		this.stockChocolat.put(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE, new Variable(getNom()+" stock chocolat moyenne equitable", this, 100)) ;
-		this.stockChocolat.put(Chocolat.CHOCOLAT_HAUTE_EQUITABLE, new Variable(getNom()+" stock chocolat haute equitable", this, 0)) ;
+		this.stockChocolat.put(Chocolat.CHOCOLAT_HAUTE_EQUITABLE, new Variable(getNom()+" stock chocolat haute equitable", this, 100)) ;
 		
 		this.cryptogramme = 4 ;
 		this.journalEq4 = new Journal("Eq4 activites", this);
@@ -103,19 +100,60 @@ public class Transformateur2 implements IActeur {
 		return this.stockChocolat.get(chocolat).getValeur() ;
 	}
 	
+	public double getStockValeur (Object produit) {
+		if (produit != null) {
+			if (produit instanceof Chocolat) {
+				return this.getStockChocolatValeur((Chocolat) produit) ;
+			}
+			else {if (produit instanceof PateInterne) {
+				return this.getStockPateValeur((PateInterne) produit) ; 
+				}
+				else {if (produit instanceof Feve) {
+					return this.getStockFevesValeur((Feve) produit) ;
+					}
+					else {throw new IllegalArgumentException("instance qui n'est pas un produit utilisé") ;}
+				}
+			}}
+		else {throw new IllegalArgumentException("produit null") ;}
+	}
+	
 	//setters, ici permettant de modifier directement la quantité de stock correspondant à une denrée particulière
+	//on continue à les utiliser si on est dans un programme concernant une denrée particulière, pour éviter des
+	//erreurs de recopie. Par contre, s'il n'y a aucune distinction, on utilise getStockValeur ou setStockValeur
 	
 	public void setStockFevesValeur(Feve feve, double valeur) {
-		this.stockFeves.get(feve).setValeur(this, valeur) ;
+		if (valeur < 0) {throw new IllegalArgumentException("stock négatif") ;}
+		else {this.stockFeves.get(feve).setValeur(this, valeur) ;}
 	}
 	
 	public void setStockPateValeur(PateInterne pate, double valeur) {
-		this.stockPate.get(pate).setValeur(this, valeur) ;
+		if (valeur < 0) {throw new IllegalArgumentException("stock négatif") ;}
+		else { this.stockPate.get(pate).setValeur(this, valeur) ; }
 	}
 	
 	public void setStockChocolatValeur(Chocolat chocolat, double valeur) {
-		this.stockChocolat.get(chocolat).setValeur(this, valeur) ;
+		if (valeur < 0) {throw new IllegalArgumentException("stock négatif") ;}
+		else { this.stockChocolat.get(chocolat).setValeur(this, valeur) ;}
 	}
+	
+	public void setStockValeur (Object produit, double valeur) {
+		if (produit != null) {
+			if (produit instanceof Chocolat) {
+				this.setStockChocolatValeur((Chocolat) produit, valeur) ;
+			}
+			else {if (produit instanceof PateInterne) {
+				this.setStockPateValeur((PateInterne) produit, valeur) ; 
+				}
+				else {if (produit instanceof Feve) {
+					this.setStockFevesValeur((Feve) produit, valeur) ;
+					}
+					else {throw new IllegalArgumentException("instance qui n'est pas un produit utilisé") ;}
+				}
+			}}
+		else {throw new IllegalArgumentException("produit null") ;}
+	}
+	
+	//
 
 	public void initialiser() {
 	}
@@ -142,10 +180,7 @@ public class Transformateur2 implements IActeur {
 			res.add(this.stockFeves.get(feve)) ;
 		}
 		for (PateInterne pate :PateInterne.values()) {
-			// à décommenter si getIndicateurs ne doit pas renvoyer de variables internes, utile pour les tests pour le moment
-			//if (pate == PateInterne.PATE_BASSE || pate == PateInterne.PATE_MOYENNE) {
-				res.add(this.stockPate.get(pate)) ;
-			//}
+			res.add(this.stockPate.get(pate)) ;
 		}
 		for (Chocolat chocolat : Chocolat.values()) {
 			res.add(this.stockChocolat.get(chocolat)) ;
@@ -195,6 +230,18 @@ public class Transformateur2 implements IActeur {
 		return quantite ;
 	}
 	
+	public double getStockTotalFevesParGamme (Feve feve) {
+		switch (feve.getGamme()) {
+		case BASSE :
+			return this.getStockFevesValeur(Feve.FEVE_BASSE) ;
+		case MOYENNE :
+			return this.getStockFevesValeur(Feve.FEVE_MOYENNE) + this.getStockFevesValeur(Feve.FEVE_MOYENNE_EQUITABLE) ;
+		case HAUTE :
+			return this.getStockFevesValeur(Feve.FEVE_HAUTE) + this.getStockFevesValeur(Feve.FEVE_HAUTE_EQUITABLE) ;
+		default : throw new IllegalArgumentException("pas de gamme trouvée") ;
+		}
+	}
+	
 	public double getStockTotalPate () {
 		double quantite = 0 ;
 		for (PateInterne pate : PateInterne.values()) {
@@ -203,11 +250,35 @@ public class Transformateur2 implements IActeur {
 		return quantite ;
 	}
 	
+	public double getStockTotalPateParGamme (PateInterne pate) {
+		switch (pate.getGamme()) {
+		case BASSE :
+			return this.getStockPateValeur(PateInterne.PATE_BASSE) ;
+		case MOYENNE :
+			return this.getStockPateValeur(PateInterne.PATE_MOYENNE) + this.getStockPateValeur(PateInterne.PATE_MOYENNE_EQUITABLE) ;
+		case HAUTE :
+			return this.getStockPateValeur(PateInterne.PATE_HAUTE) + this.getStockPateValeur(PateInterne.PATE_HAUTE_EQUITABLE) ;
+		default : throw new IllegalArgumentException("pas de gamme trouvée") ;
+		}
+	}
+	
 	public double getStockTotalChocolat () {
 		double quantite = 0 ;
 		for (Chocolat chocolat : Chocolat.values()) {
 			quantite += this.getStockChocolatValeur(chocolat) ;
 		}
 		return quantite ;
+	}
+	
+	public double getStockTotalChocolatParGamme (Chocolat chocolat) {
+		switch (chocolat.getGamme()) {
+		case BASSE :
+			return this.getStockChocolatValeur(Chocolat.CHOCOLAT_BASSE) ;
+		case MOYENNE :
+			return this.getStockChocolatValeur(Chocolat.CHOCOLAT_MOYENNE) + this.getStockChocolatValeur(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE) ;
+		case HAUTE :
+			return this.getStockChocolatValeur(Chocolat.CHOCOLAT_HAUTE) + this.getStockChocolatValeur(Chocolat.CHOCOLAT_HAUTE_EQUITABLE) ;
+		default : throw new IllegalArgumentException("pas de gamme trouvée") ;
+		}
 	}
 }
