@@ -269,6 +269,7 @@ public class Transformateur2 implements IActeur {
 		return quantite ;
 	}
 
+
 	
 	public double getStockTotalChocolatParGamme (Chocolat chocolat) {
 		switch (chocolat.getGamme()) {
