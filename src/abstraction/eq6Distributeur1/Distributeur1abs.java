@@ -43,7 +43,7 @@ public class Distributeur1abs implements IActeur {
 	}
 
 	public String getDescription() {
-		return "Distributeur bla bla bla";
+		return "Distributeur bla bla bla"; 
 	}
 
 	public Color getColor() {
