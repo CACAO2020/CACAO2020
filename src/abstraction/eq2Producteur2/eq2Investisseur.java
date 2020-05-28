@@ -41,6 +41,7 @@ public class eq2Investisseur extends eq2Vendeur {
 			nbrearbres = nbrearbres + arbres.get(i).getNbreArbres();
 		}
 		int totalventesréalisées = this.getcompteurcrio()+this.getcompteurcrioe()+this.getcompteurfora()+this.getcompteurtrini()+this.getcompteurtrinie();
+		if(totalventesréalisées !=0) {
 		double proportionfora = this.getcompteurfora()/totalventesréalisées;
 		double proportiontrini = this.getcompteurtrini()/totalventesréalisées;
 		double proportioncrio = this.getcompteurcrio()/totalventesréalisées;
@@ -63,7 +64,7 @@ public class eq2Investisseur extends eq2Vendeur {
 			this.AchatArbres((int)Math.floor(nbre_arbresmax*proportiontrinie), Feve.FEVE_MOYENNE_EQUITABLE);
 			this.AchatArbres((int)Math.floor(nbre_arbresmax*proportioncrio), Feve.FEVE_HAUTE);
 			this.AchatArbres((int)Math.floor(nbre_arbresmax*proportioncrioe), Feve.FEVE_HAUTE_EQUITABLE);
-		}
+		}}
 		
 	}
 	/*
