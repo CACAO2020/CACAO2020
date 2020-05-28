@@ -31,18 +31,36 @@ public class FiliereTest extends Filiere {
 	
 	public FiliereTest() {
 		super();
+		
+		// CLIENT FINAL
 		cf = new ClientFinal();
 		this.ajouterActeur(cf);
+		
+		// PRODUCTEURS
+		this.ajouterActeur(new Producteur(Chocolat.CHOCOLAT_MOYENNE));
+		this.ajouterActeur(new Producteur(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE));
+		this.ajouterActeur(new Producteur(Chocolat.CHOCOLAT_HAUTE));
+		this.ajouterActeur(new Producteur(Chocolat.CHOCOLAT_HAUTE_EQUITABLE));
+		
+		// TRANSFORMATEURS BOURSE
 		this.ajouterActeur(new Transformateur(Chocolat.CHOCOLAT_MOYENNE));
 		this.ajouterActeur(new Transformateur(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE));
 		this.ajouterActeur(new Transformateur(Chocolat.CHOCOLAT_HAUTE));
 		this.ajouterActeur(new Transformateur(Chocolat.CHOCOLAT_HAUTE_EQUITABLE));
+		
+		// TRANSFORMATEURS CONTRAT-CADRE
 		this.ajouterActeur(new ExempleTransformateurContratCadreVendeurAcheteur(Chocolat.CHOCOLAT_MOYENNE));
 		this.ajouterActeur(new ExempleTransformateurContratCadreVendeurAcheteur(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE));
 		this.ajouterActeur(new ExempleTransformateurContratCadreVendeurAcheteur(Chocolat.CHOCOLAT_HAUTE));
 		this.ajouterActeur(new ExempleTransformateurContratCadreVendeurAcheteur(Chocolat.CHOCOLAT_HAUTE_EQUITABLE));
+		
+		// DISTRIBUTEUR (NOUS)
 		this.ajouterActeur(new Distributeur2());
+		
+		// ROMU
 		this.ajouterActeur(new Romu());
+		
+		// SUPERVISEURS
 		SuperviseurCacaoCriee superviseur = new SuperviseurCacaoCriee();
 		this.ajouterActeur(superviseur);
 		SuperviseurChocolatBourse superviseurBourse = new SuperviseurChocolatBourse();

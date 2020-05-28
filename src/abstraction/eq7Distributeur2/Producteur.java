@@ -14,17 +14,15 @@ import abstraction.fourni.Variable;
 
 public class Producteur implements IActeur, IVendeurChocolatBourse {
 	
-	private Variable stockFeves;
+	private Variable stockChocolat;
 	private Variable productionMax;
 	private Integer cryptogramme;
 	private Journal journalPVA1;
-	private String nom;
-	private Color couleur;
+	private Chocolat choco;
 
-	public Producteur(String nom, Color couleur) {
-		this.nom = nom;
-		this.couleur = couleur;
-		this.stockFeves=new Variable(getNom()+" stock feves", this, 0, 10000, 1000);
+	public Producteur(Chocolat choco) {
+		this.choco = choco;
+		this.stockChocolat=new Variable(getNom()+" stock chocolat", this, 0, 10000, 1000);
 		this.productionMax=new Variable(getNom()+" production max par step", this, 0, 1000, 200);
 		this.journalPVA1 = new Journal(this.getNom()+" activites", this);
 	}
@@ -34,7 +32,7 @@ public class Producteur implements IActeur, IVendeurChocolatBourse {
 	}
 	
 	public String getNom() {
-		return this.nom;
+		return "P " + this.choco.name();
 	}
 
 	public String getDescription() {
@@ -42,7 +40,7 @@ public class Producteur implements IActeur, IVendeurChocolatBourse {
 	}
 
 	public Color getColor() {
-		return this.couleur;
+		return new Color(128, 128, 255);
 	}
 
 	public void initialiser() {
@@ -51,14 +49,14 @@ public class Producteur implements IActeur, IVendeurChocolatBourse {
 	public void next() {
 		// production
 		double production =  Math.random()*this.productionMax.getValeur();
-		this.stockFeves.ajouter(this, production);
+		this.stockChocolat.ajouter(this, production);
 		this.journalPVA1.ajouter("Production de "+production);
 
 	}
 
 	public void notificationVente(double quantite, double prix) {
-		this.stockFeves.retirer(this, quantite);// Le superviseur nous informe de la quantite qu'on vient de vendre --> on la retire du stock
-        this.journalPVA1.ajouter("vente de "+quantite+" au prix de "+prix+" le stock devient "+this.stockFeves.getValeur());
+		this.stockChocolat.retirer(this, quantite);// Le superviseur nous informe de la quantite qu'on vient de vendre --> on la retire du stock
+        this.journalPVA1.ajouter("vente de "+quantite+" au prix de "+prix+" le stock devient "+this.stockChocolat.getValeur());
 	}
 
 	public List<String> getNomsFilieresProposees() {
@@ -66,12 +64,12 @@ public class Producteur implements IActeur, IVendeurChocolatBourse {
 	}
 
 	public Filiere getFiliere(String nom) {
-		return null;
+		return Filiere.LA_FILIERE;
 	}
 
 	public List<Variable> getIndicateurs() {
 		List<Variable> res=new ArrayList<Variable>();
-		res.add(this.stockFeves);
+		res.add(this.stockChocolat);
 		return res;
 	}
 
@@ -98,14 +96,12 @@ public class Producteur implements IActeur, IVendeurChocolatBourse {
 	public void notificationOperationBancaire(double montant) {
 	}
 
-	@Override
 	public double getOffre(Chocolat chocolat, double cours) {
-		return this.stockFeves.getValeur();
+		return this.stockChocolat.getValeur();
 	}
 
-	@Override
 	public void livrer(Chocolat chocolat, double quantite) {
-		stockFeves.retirer(this, quantite);
+		stockChocolat.retirer(this, quantite);
 		
 	}
 }
