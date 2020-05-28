@@ -24,6 +24,7 @@ public abstract class AcheteurCacao extends Transformation implements abstractio
 		map.put("Haute", (double) 0);
 		map.put("Moyenne_equitable", (double) 0);
 		map.put("Haute_equitable",(double) 0);
+		map.put("Moyenne", (double) 0);
 		this.nb_proposition = map;
 	}
 	
@@ -51,7 +52,13 @@ public abstract class AcheteurCacao extends Transformation implements abstractio
 			nb_proposition.replace("Moyenne_equitable", nb_proposition.get("Moyenne_equitable") + 1);
 			return prix;
 		}
+		else if ((lot.getFeve().getGamme() == Gamme.MOYENNE)&&(!lot.getFeve().isEquitable())) {
+			double prix = lot.getPrixMinPourUneTonne()*lot.getQuantiteEnTonnes()*(0.7+0.15*nb_proposition.get("Moyenne"));
+			nb_proposition.replace("Moyenne", nb_proposition.get("Moyenne") + 1);
+			return prix;
+		}
 		return 0;
+		
 	}
 /** @author Nathan Olborski
  * On fait un simple print de la notification de vente ou de refus de vente, on pourra ajouter cette notification au journal quand l'attribut journal sera mis en protected et qu'on y aura accès dans cette classe
