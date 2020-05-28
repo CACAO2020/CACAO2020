@@ -110,8 +110,12 @@ public class Producteur implements IActeur, IVendeurCacaoCriee {
 
 
 	public LotCacaoCriee getLotEnVente() {
-		LotCacaoCriee lot = new LotCacaoCriee(this, this.feve, this.stockFeves.getValeur()/2, 1.);
-		return lot;
+		if (this.stockFeves.getValeur()/2 <= LotCacaoCriee.QUANTITE_MIN) {
+			return null;
+		} else {
+			LotCacaoCriee lot = new LotCacaoCriee(this, this.feve, this.stockFeves.getValeur()/2, 1.);
+			return lot;
+		}
 	}
 
 	public void notifierAucuneProposition(LotCacaoCriee lot) {
@@ -127,7 +131,7 @@ public class Producteur implements IActeur, IVendeurCacaoCriee {
 	}
 
 	public void notifierVente(PropositionCriee proposition) {
-		
+		this.stockFeves.retirer(proposition.getAcheteur(), proposition.getQuantiteEnTonnes());
 	}
 }
 
