@@ -4,6 +4,10 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import abstraction.eq8Romu.cacaoCriee.IAcheteurCacaoCriee;
+import abstraction.eq8Romu.cacaoCriee.LotCacaoCriee;
+import abstraction.eq8Romu.cacaoCriee.PropositionCriee;
+import abstraction.eq8Romu.cacaoCriee.SuperviseurCacaoCriee;
 import abstraction.eq8Romu.chocolatBourse.IAcheteurChocolatBourse;
 import abstraction.eq8Romu.chocolatBourse.IVendeurChocolatBourse;
 import abstraction.eq8Romu.chocolatBourse.SuperviseurChocolatBourse;
@@ -15,8 +19,9 @@ import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
-public class Transformateur implements IAcheteurChocolatBourse, IVendeurChocolatBourse {
+public class Transformateur implements IAcheteurCacaoCriee, IVendeurChocolatBourse {
 
+	private Variable stockFeves;
 	private Variable stockChocolat;
 	private Integer cryptogramme;
 	private Banque laBanque; 
@@ -24,7 +29,8 @@ public class Transformateur implements IAcheteurChocolatBourse, IVendeurChocolat
 	
 	public Transformateur(Chocolat choco) {
 		this.choco = choco;
-		this.stockChocolat = new Variable("Stock chocolat" + getNom(), this, 100000);
+		this.stockFeves = new Variable("Stock fèves " + getNom(), this, 50);
+		this.stockChocolat = new Variable("Stock chocolat " + getNom(), this, 0);
 	}
 	
 	public String getNom() {
@@ -45,10 +51,12 @@ public class Transformateur implements IAcheteurChocolatBourse, IVendeurChocolat
 	}
 
 	public void next() {
-		double quantiteTransformee = Math.random()*Math.min(100, this.stockChocolat.getValeur()); // on suppose qu'on a un stock infini de sucre
-		this.stockChocolat.ajouter(this, (2*quantiteTransformee));// 50% cacao, 50% sucre
-		this.laBanque.virer(this, cryptogramme, this.laBanque, quantiteTransformee*1.0234); // sucre, main d'oeuvre, autres frais
-		
+		double quantiteTransformee = Math.random()*Math.min(100, this.stockFeves.getValeur()); // on suppose qu'on a un stock infini de sucre
+		this.stockFeves.retirer(this, quantiteTransformee);
+		this.stockChocolat.ajouter(this, 2*quantiteTransformee);// 50% cacao, 50% sucre
+		if (quantiteTransformee != 0) {
+			this.laBanque.virer(this, cryptogramme, this.laBanque, quantiteTransformee*1.0234); // sucre, main d'oeuvre, autres frais
+		}
 	}
 
 	public List<String> getNomsFilieresProposees() {
@@ -61,6 +69,7 @@ public class Transformateur implements IAcheteurChocolatBourse, IVendeurChocolat
 
 	public List<Variable> getIndicateurs() {
 		List<Variable> res=new ArrayList<Variable>();
+		res.add(stockFeves);
 		res.add(stockChocolat);
 		return res;
 	}
@@ -110,11 +119,6 @@ public class Transformateur implements IAcheteurChocolatBourse, IVendeurChocolat
 		
 	}
 
-	public void receptionner(ChocolatDeMarque chocolat, double quantite) {
-		stockChocolat.ajouter(this, quantite);
-		
-	}
-
 	public double getOffre(Chocolat chocolat, double cours) {
 		if (chocolat==choco) {
 			return this.stockChocolat.getValeur();
@@ -126,6 +130,25 @@ public class Transformateur implements IAcheteurChocolatBourse, IVendeurChocolat
 
 	public void livrer(Chocolat chocolat, double quantite) {
 		stockChocolat.retirer(this, quantite);
+	}
+
+
+	public double proposerAchat(LotCacaoCriee lot) {
+		return lot.getPrixMinPourUneTonne()*lot.getQuantiteEnTonnes();
+	}
+
+
+	public void notifierPropositionRefusee(PropositionCriee proposition) {
+		
+	}
+
+
+	public Integer getCryptogramme(SuperviseurCacaoCriee superviseur) {
+		return this.cryptogramme;
+	}
+
+	public void notifierVente(PropositionCriee proposition) {
+		this.stockFeves.ajouter(proposition.getVendeur(), proposition.getQuantiteEnTonnes());
 	}
 
 }

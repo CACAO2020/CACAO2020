@@ -18,6 +18,7 @@ import abstraction.eq8Romu.contratsCadres.ExempleTransformateurContratCadreVende
 import abstraction.eq8Romu.contratsCadres.ExempleTransformateurContratCadreVendeurAcheteur;
 import abstraction.eq8Romu.contratsCadres.SuperviseurVentesContratCadre;
 import abstraction.eq8Romu.produits.Chocolat;
+import abstraction.eq8Romu.produits.Feve;
 import abstraction.eq8Romu.ventesCacaoAleatoires.ProducteurVentesAleatoires;
 import abstraction.eq8Romu.ventesCacaoAleatoires.TransformateurVentesAleatoires;
 import abstraction.fourni.Filiere;
@@ -37,10 +38,10 @@ public class FiliereTest extends Filiere {
 		this.ajouterActeur(cf);
 		
 		// PRODUCTEURS
-		this.ajouterActeur(new Producteur(Chocolat.CHOCOLAT_MOYENNE));
-		this.ajouterActeur(new Producteur(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE));
-		this.ajouterActeur(new Producteur(Chocolat.CHOCOLAT_HAUTE));
-		this.ajouterActeur(new Producteur(Chocolat.CHOCOLAT_HAUTE_EQUITABLE));
+		this.ajouterActeur(new Producteur(Feve.FEVE_MOYENNE));
+		this.ajouterActeur(new Producteur(Feve.FEVE_MOYENNE_EQUITABLE));
+		this.ajouterActeur(new Producteur(Feve.FEVE_HAUTE));
+		this.ajouterActeur(new Producteur(Feve.FEVE_HAUTE_EQUITABLE));
 		
 		// TRANSFORMATEURS BOURSE
 		this.ajouterActeur(new Transformateur(Chocolat.CHOCOLAT_MOYENNE));
