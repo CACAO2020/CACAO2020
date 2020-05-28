@@ -91,4 +91,3 @@ public class Romu implements IActeur {
 	public void notificationOperationBancaire(double montant) {
 	}
 }
-
