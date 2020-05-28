@@ -24,7 +24,7 @@ public abstract class AcheteurCacao extends Transformation implements abstractio
 
 	/** @author amaury */
 	public double proposerAchat(LotCacaoCriee lot) {
-		System.out.println(lot.getFeve());
+
 		if((this.getStockFeves().containsKey((lot.getFeve()))==false)||
 				(this.getStockFeves((lot.getFeve()))==0)||
 				(this.getStockPateInterne().containsKey(this.equivalentChocoFeve(lot.getFeve()))==false)||
