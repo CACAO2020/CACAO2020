@@ -12,13 +12,19 @@ import abstraction.fourni.Variable;
 
 public class AbsAcheteurContratCadre {
 
+	// Stocke la liste des exemplaires des contrats en cours
 	protected List<ExemplaireContratCadre> nosContrats;
 	
+	// Référence à l'acteur principal
 	protected Distributeur2 ac;
 	
+	// Journal principal
 	public Journal journal;
+	
+	// Journal des contrats
 	public Journal journalContrats;
 	
+	// Couleurs d'arrière-plan pour les messages des journaux
 	public Color titleColor = Color.BLACK;
 	public Color alertColor = Color.RED;
 	public Color warningColor = Color.ORANGE;
@@ -32,6 +38,7 @@ public class AbsAcheteurContratCadre {
 		initJournaux();
 	}
 
+	// Initialise les journaux
 	public void initJournaux() {
 		this.journal = new Journal(this.getNom() + " : Acheteur Contrat Cadre", ac);
 		journal.ajouter(Journal.texteColore(titleColor, Color.WHITE, this.getNom() + " : Acheteur Contrat Cadre"));
@@ -42,16 +49,19 @@ public class AbsAcheteurContratCadre {
 		journalContrats.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "Ce journal suit les contrats de l'acheteur par contrat-cadre."));
 	}
 	
+	// Renvoie les indicateurs
 	public List<Variable> getIndicateurs() {
 		List<Variable> res=new ArrayList<Variable>();
 		return res;
 	}
 
+	// Renvoie les paramètres
 	public List<Variable> getParametres() {
 		List<Variable> res=new ArrayList<Variable>();
 		return res;
 	}
 
+	// Renvoie les journaux
 	public List<Journal> getJournaux() {
 		List<Journal> res = new ArrayList<Journal>();
 		res.add(journal);
@@ -59,6 +69,7 @@ public class AbsAcheteurContratCadre {
 		return res;
 	}
 
+	// Méthodes renvoyant aux méthodes de l'acteur principal
 	public String getNom() {
 		return ac.getNom();
 	}

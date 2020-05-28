@@ -30,6 +30,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	
 	private static int NB_INSTANCES = 0;
 	public int numero;
+	
 	protected int cryptogramme;
 	
 	protected double soldeCritique;
@@ -56,6 +57,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		initJournaux();
 	}
 	
+	// Initialise les journaux
 	public void initJournaux() {
 		journal = new Journal(getNom() + " : Informations générales", this);
 		journal.ajouter(Journal.texteColore(titleColor, Color.WHITE, "EQ7 : Journal d'activités"));
@@ -66,37 +68,9 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		journalTransactions.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "Ce journal regroupe toutes les opérations bancaires effectuées"));
 		journalTransactions.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "par l'acteur (débits et crédits) ainsi que les alertes de solde."));
 	}
-	 
+	
 	public int getNumero() {
 		return this.numero; 
-	}
-	
-	public AcheteurBourse getAcheteurBourse() {
-		return this.acheteurBourse;
-	}
-	
-	public AcheteurContratCadre getAcheteurContratCadre() {
-		return this.acheteurContratCadre;
-	}
-	
-	public Vendeur getVendeur() {
-		return this.vendeur;
-	}
-	
-	public Stock getStock() {
-		return this.stock;
-	}
-		
-	public String getNom() {
-		return "EQ7";
-	}
-
-	public String getDescription() {
-		return "Distributeur Ecocoa de Liège, chocolatier responsable";
-	}
-
-	public Color getColor() {
-		return new Color(240, 195, 15); 
 	}
 
 	public void initialiser() {
@@ -116,54 +90,24 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		acheteurBourse.next();
 	}
 	
+	public String getNom() {
+		return "EQ7";
+	}
+
+	public String getDescription() {
+		return "Distributeur Ecocoa de Liège, chocolatier responsable";
+	}
+
+	public Color getColor() {
+		return new Color(240, 195, 15); 
+	}
+	
+	// Renvoie le solde actuel de l'acteur
 	public double getSolde() {
 		return Filiere.LA_FILIERE.getBanque().getSolde(Filiere.LA_FILIERE.getActeur(getNom()), this.cryptogramme);
 	}
-
-	public List<String> getNomsFilieresProposees() {
-		ArrayList<String> filieres = new ArrayList<String>();
-		filieres.add("TESTEQ7");
-		return(filieres);
-	}
-
-	public Filiere getFiliere(String nom) {
-		if (nom.equals("TESTEQ7")) {
-			return new FiliereTest();
-		}
-		else {
-			return Filiere.LA_FILIERE;
-		}
-	}
-
-	public List<Variable> getIndicateurs() {
-		List<Variable> res = new ArrayList<Variable>();
-		res.addAll(stock.getIndicateurs());
-		res.addAll(acheteurBourse.getIndicateurs());
-		res.addAll(acheteurContratCadre.getIndicateurs());
-		res.addAll(vendeur.getIndicateurs());
-		return res;
-	}
-
-	public List<Variable> getParametres() {
-		List<Variable> res=new ArrayList<Variable>();
-		res.addAll(stock.getParametres());
-		res.addAll(acheteurBourse.getParametres());
-		res.addAll(acheteurContratCadre.getParametres());
-		res.addAll(vendeur.getParametres());
-		return res;
-	}
-
-	public List<Journal> getJournaux() {
-		List<Journal> res=new ArrayList<Journal>();
-		res.add(journal);
-		res.add(journalTransactions);
-		res.addAll(stock.getJournaux());
-		res.addAll(acheteurBourse.getJournaux());
-		res.addAll(acheteurContratCadre.getJournaux());
-		res.addAll(vendeur.getJournaux());
-		return res;
-	}
-
+	
+	// Informe de la faillite d'un acteur dans le journal principal
 	public void notificationFaillite(IActeur acteur) {
 		if (this==acteur) {
 			System.out.println("I'll be back... or not... "+this.getNom());
@@ -174,6 +118,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		}
 	}	
 
+	// Affiche les détails d'une opération bancaire dans le journal des transactions
 	public void notificationOperationBancaire(double montant) {
 		if (montant > 0) {
 			journalTransactions.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[CRÉDIT] Crédit d'une valeur de : " + Journal.doubleSur(montant,2) + "."));
@@ -182,6 +127,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		}
 	}
 	
+	// Affiche le solde dans le journal principal
 	public void notificationSolde() {
 		double solde = getSolde();
 		if (solde > soldeCritique) {
@@ -195,8 +141,73 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		}
 	}
 
-	// Méthodes de l'acheteur à la bourse
+	// Renvoie la liste des filières proposées par l'acteur
+	public List<String> getNomsFilieresProposees() {
+		ArrayList<String> filieres = new ArrayList<String>();
+		filieres.add("TESTEQ7");
+		return(filieres);
+	}
+
+	// Renvoie une instance d'une filière d'après son nom
+	public Filiere getFiliere(String nom) {
+		if (nom.equals("TESTEQ7")) {
+			return new FiliereTest();
+		}
+		else {
+			return Filiere.LA_FILIERE;
+		}
+	}
+
+	// Renvoie les indicateurs
+	public List<Variable> getIndicateurs() {
+		List<Variable> res = new ArrayList<Variable>();
+		res.addAll(stock.getIndicateurs());
+		res.addAll(acheteurBourse.getIndicateurs());
+		res.addAll(acheteurContratCadre.getIndicateurs());
+		res.addAll(vendeur.getIndicateurs());
+		return res;
+	}
+
+	// Renvoie les paramètres
+	public List<Variable> getParametres() {
+		List<Variable> res=new ArrayList<Variable>();
+		res.addAll(stock.getParametres());
+		res.addAll(acheteurBourse.getParametres());
+		res.addAll(acheteurContratCadre.getParametres());
+		res.addAll(vendeur.getParametres());
+		return res;
+	}
+
+	// Renvoie les journaux
+	public List<Journal> getJournaux() {
+		List<Journal> res=new ArrayList<Journal>();
+		res.add(journal);
+		res.add(journalTransactions);
+		res.addAll(stock.getJournaux());
+		res.addAll(acheteurBourse.getJournaux());
+		res.addAll(acheteurContratCadre.getJournaux());
+		res.addAll(vendeur.getJournaux());
+		return res;
+	}
+
+	// Renvoie les instances des acteurs associés à ce distributeur
+	public AcheteurBourse getAcheteurBourse() {
+		return this.acheteurBourse;
+	}
 	
+	public AcheteurContratCadre getAcheteurContratCadre() {
+		return this.acheteurContratCadre;
+	}
+	
+	public Vendeur getVendeur() {
+		return this.vendeur;
+	}
+	
+	public Stock getStock() {
+		return this.stock;
+	}
+
+	// Méthodes renvoyant aux méthodes de l'acheteur à la bourse
 	public void setCryptogramme(Integer crypto) {
 		this.cryptogramme = crypto;
 	}
@@ -217,8 +228,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		acheteurBourse.receptionner(chocolat, quantite);
 	}
 
-	// Méthodes du vendeur
-	
+	// Méthodes renvoyant aux méthodes du vendeur
 	public List<ChocolatDeMarque> getCatalogue() {
 		return vendeur.getCatalogue();
 	}
@@ -243,8 +253,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		return vendeur.pubSouhaitee();
 	}
 
-	// Méthodes de l'acheteur contrat cadre
-	
+	// Méthodes renvoyant aux méthodes de l'acheteur contrat cadre
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
 		return acheteurContratCadre.contrePropositionDeLAcheteur(contrat);
 	}

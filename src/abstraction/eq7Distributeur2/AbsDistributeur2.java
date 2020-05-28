@@ -15,8 +15,10 @@ import abstraction.fourni.IActeur;
 
 public class AbsDistributeur2 {
 
+	// Liste des types de chocolats achetés et vendus par le distributeur
 	public List<Chocolat> nosChoco;
 	
+	// Couleurs d'arrière-plan pour les messages des journaux
 	public Color titleColor = Color.BLACK;
 	public Color alertColor = Color.RED;
 	public Color descriptionColor = Color.YELLOW;
@@ -31,6 +33,7 @@ public class AbsDistributeur2 {
 		nosChoco.add(Chocolat.CHOCOLAT_HAUTE_EQUITABLE);
 	}
 	
+	// Renvoie tous les chocolats de marque possibles parmi ceux commercialisés par le distributeur
 	public List<ChocolatDeMarque> tousLesChocolatsDeMarquePossibles() {
 		List<ChocolatDeMarque> resultat = new LinkedList<ChocolatDeMarque>();
 		for (Chocolat choco : Chocolat.values()) {
@@ -48,6 +51,7 @@ public class AbsDistributeur2 {
 		return resultat;
 	}
 	
+	// Renvoie la liste des vendeurs de chocolat à la bourse
 	public List<IVendeurChocolatBourse> vendeursChocolatBourse() {
 		List<IVendeurChocolatBourse> res = new LinkedList<IVendeurChocolatBourse>();
 		for (IActeur acteur : Filiere.LA_FILIERE.getActeurs()) {
@@ -58,6 +62,7 @@ public class AbsDistributeur2 {
 		return res;
 	}
 	
+	// Renvoie la liste des distributeurs de chocolat
 	public List<IDistributeurChocolatDeMarque> distributeursChocolatDeMarque() {
 		List<IDistributeurChocolatDeMarque> res = new LinkedList<IDistributeurChocolatDeMarque>();
 		for (IActeur acteur : Filiere.LA_FILIERE.getActeurs()) {

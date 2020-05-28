@@ -15,13 +15,19 @@ import abstraction.fourni.Variable;
 
 public class AbsAcheteurBourse {
 	
+	// Journal principal
 	protected Journal journal;
 	
+	// Stockage des quantités commandées à chaque étape
 	protected Map<Chocolat, Variable> quantitesACommander;
+	
+	// Stockage de la commande impayée si elle existe
 	protected Pair<Chocolat, Double> commandeImpayee;
 
+	// Référence à l'acteur principal
 	protected Distributeur2 ac;
 	
+	// Couleurs d'arrière-plan pour les messages des journaux
 	public Color titleColor = Color.BLACK;
 	public Color alertColor = Color.RED;
 	public Color warningColor = Color.ORANGE;
@@ -33,12 +39,12 @@ public class AbsAcheteurBourse {
 		initJournaux();
 		quantitesACommander = new HashMap<Chocolat, Variable>();
 		commandeImpayee = null;
-		
 		for (Chocolat choco : Chocolat.values()) {
 			quantitesACommander.put(choco, new Variable(getNom() + " : " + choco.name() + " [Demande i-1]", ac, 0));
 		}
 	}
 	
+	// Initialise les journaux
 	public void initJournaux() {
 		this.journal = new Journal(this.getNom() + " : Acheteur Chocolat Bourse", ac);
 		journal.ajouter(Journal.texteColore(titleColor, Color.WHITE, this.getNom() + " : Acheteur Bourse"));
@@ -47,6 +53,26 @@ public class AbsAcheteurBourse {
 		journal.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "statut (payée, impayée) ainsi que les réceptions de commandes."));
 	}
 
+	// Renvoie les indicateurs
+	public List<Variable> getIndicateurs() {
+		List<Variable> res = new ArrayList<Variable>();
+		return res;
+	}
+
+	// Renvoie les paramètres
+	public List<Variable> getParametres() {
+		List<Variable> res=new ArrayList<Variable>();
+		return res;
+	}
+
+	// Renvoie les journaux
+	public List<Journal> getJournaux() {
+		List<Journal> res = new ArrayList<Journal>();
+		res.add(journal);
+		return res;
+	}
+	
+	// Méthodes renvoyant aux méthodes de l'acteur principal
 	public String getNom() {
 		return ac.getNom();
 	}
@@ -77,22 +103,6 @@ public class AbsAcheteurBourse {
 
 	public void notificationOperationBancaire(double montant) {
 		ac.notificationOperationBancaire(montant);
-	}
-	
-	public List<Variable> getIndicateurs() {
-		List<Variable> res = new ArrayList<Variable>();
-		return res;
-	}
-
-	public List<Variable> getParametres() {
-		List<Variable> res=new ArrayList<Variable>();
-		return res;
-	}
-
-	public List<Journal> getJournaux() {
-		List<Journal> res = new ArrayList<Journal>();
-		res.add(journal);
-		return res;
 	}
 	
 } 
