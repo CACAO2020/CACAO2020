@@ -20,61 +20,93 @@ import abstraction.fourni.Filiere;
 class GestionCriee //implements IVendeurCacaoCriee 
 {
 	
-	private double lastPrixMin;
-	private double lastPrixVente;
+	private double lastPrixVenteFeveBasse;
+	private double lastPrixVenteFeveMoyenne;
+	private boolean venteBasseSurCeTour;
+	/**
+	 * Booleen qui symbolise si l'ont vend des fèves de basse qualité sur se tour
+	 * puisque l'on ne peut mettre en vent qu'un lot par tour
+	 */
+	
 	private Producteur1 producteur1;
 	private List<LotCacaoCriee> miseEnVenteLog;
 	private List<PropositionCriee> venduLog;
 	
-	public GestionCriee(final Producteur1 sup) //Clément
+	public GestionCriee(Producteur1 sup) //Clément
 	{
 		//Prix par unité
-		this.lastPrixMin = 0;
-		this.lastPrixVente = 0;
+		this.lastPrixVenteFeveBasse = 0;
+		this.lastPrixVenteFeveMoyenne = 0;
 		this.producteur1 = sup;
 		this.venduLog = new ArrayList<PropositionCriee>();
 		this.miseEnVenteLog = new ArrayList<LotCacaoCriee>();
+		this.venteBasseSurCeTour = false;
 	}
 	
-	public GestionCriee(final double lastPrixMinInit, final double lastPrixVenteInit, final IActeur sup) //Clément
+	public GestionCriee(double lastPrixMinInit, double lastPrixVenteInit, IActeur sup) //Clément
 	{
-		this.lastPrixMin = lastPrixMinInit;
-		this.lastPrixVente = lastPrixVenteInit;
+		this.lastPrixVenteFeveBasse = lastPrixVenteInit;
 	}
 
 
-	private LotCacaoCriee makeLot(Feve typeFeve)
+	private LotCacaoCriee makeLot(Feve typeFeve, double quantiteAVendre)
 	{
-		this.producteur1.ajouterJournaux("[GestionCriee] - Mise en vente de : " + producteur1.getStock(typeFeve));
-		double quantiteAVendre = producteur1.getStock(typeFeve);
+		double PrixMoy = this.prixMoyenDernierreVentes(typeFeve);
+		this.producteur1.ajouterJournaux("[GestionCriee] - Mise en vente de : " + quantiteAVendre + " au prix de " + (PrixMoy+4)*quantiteAVendre);
 		if(quantiteAVendre == 0)
 		{
 			return null;
 		}
-		this.lastPrixMin = lastPrixVente+10;
-		LotCacaoCriee lot = new LotCacaoCriee(this.producteur1, typeFeve, quantiteAVendre, quantiteAVendre * (lastPrixVente+10));
+		LotCacaoCriee lot = new LotCacaoCriee(this.producteur1, typeFeve, quantiteAVendre, quantiteAVendre * (PrixMoy+4));
 		this.miseEnVenteLog.add(lot);
 		return lot;
 	}
 
 	//Clément 
 	public LotCacaoCriee getLotEnVente() {
-		return makeLot(Feve.FEVE_BASSE);
+		if(venteBasseSurCeTour)
+		{
+			this.venteBasseSurCeTour = !this.venteBasseSurCeTour;
+			return makeLot(Feve.FEVE_BASSE, producteur1.getStock(Feve.FEVE_BASSE));
+		}
+		else
+		{
+			this.venteBasseSurCeTour = !this.venteBasseSurCeTour;
+			return makeLot(Feve.FEVE_MOYENNE, producteur1.getStock(Feve.FEVE_MOYENNE));
+		}
+
+
 	}
 	
 	//Clément
+	/** 
+	* Si on obtient aucunne proposition pour un lot, alors
+	* On diminue le prix min acceptable en changeant directement
+	* la variable lastPrixFeve... 
+	*/
 	public void notifierAucuneProposition(LotCacaoCriee lot) {
-		lastPrixVente -= 20;
-		if(lastPrixVente <= 0)
+		if(lot.getFeve() == Feve.FEVE_BASSE)
 		{
-			lastPrixVente = 1;
+			this.lastPrixVenteFeveBasse -= 20;
+			if(this.lastPrixVenteFeveBasse <= 0)
+			{
+				this.lastPrixVenteFeveBasse = 1;
+			}
+		}
+		else
+		{
+			this.lastPrixVenteFeveMoyenne -= 20;
+			if(this.lastPrixVenteFeveMoyenne <= 0)
+			{
+				this.lastPrixVenteFeveMoyenne = 1;
+			}
 		}
 	}
 
 	//Clément
 	public PropositionCriee choisir(List<PropositionCriee> propositions) {
 		int n = propositions.size();
-		double prixMax = 0.02;
+		double prixMax = 0.02; // On set le prix max a quelque chose de différent par sécurité pour ne pas accepter des lots de prix 0
 		int indPrixMax = -1;
 		for(int i = 0; i < n; i++)
 		{
@@ -105,5 +137,31 @@ class GestionCriee //implements IVendeurCacaoCriee
 		this.producteur1.ajouterJournaux("[GestionCriee] - Vente de : " + proposition.getQuantiteEnTonnes() + " de type : " + typeFeve);
 		this.producteur1.removeStock(proposition.getQuantiteEnTonnes(), typeFeve);
 		this.venduLog.add(proposition);
+	}
+
+	/**
+	 * Calcul le prix moyen sur les dernières ventes
+	 * @return prix_moyen
+	 */
+	public double prixMoyenDernierreVentes(Feve typeFeve)
+	{
+		int n = this.venduLog.size();
+		if(n == 0)
+		{
+			return 0;
+		}
+		int i = 0;
+		int j = 0;
+		double moyenne = 0;
+		while(i <= n && i <= 10)
+		{
+			if(this.venduLog.get(n-i-1).getFeve() == typeFeve)
+			{
+				moyenne += this.venduLog.get(n-i-1).getPrixPourUneTonne();
+				j++;
+			}
+			i++;
+		}
+		return moyenne / (double) j;
 	}
 }
