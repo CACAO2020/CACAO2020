@@ -55,20 +55,20 @@ public class PaquetArbres {
 	 */
 	public double production() {
 		double production_max = this.getProdmax()*this.getNbreArbres(); 
-		if (this.getAge() < 3) {
+		if (this.getAge() < 3*24) {
 			return 0.0;
 		}
-		else if(this.getAge() < 6) {
+		else if(this.getAge() < 6*24) {
 			return ((this.getAge() - 2)*0.25*production_max);
 		}
-		else if(this.getAge() < 31) {
+		else if(this.getAge() < 31*24) {
 			return production_max;
 		}
-		else if(this.getAge() > 45) {
+		else if(this.getAge() > 45*24) {
 			return 0;
 		}
 		else {
-			return(production_max*(1.0-(this.getAge() - 30.0)/ 15.0));
+			return(production_max*(1.0-(this.getAge()*24 - 30.0*24.0)/ 15.0));
 		}
 		
 	}
