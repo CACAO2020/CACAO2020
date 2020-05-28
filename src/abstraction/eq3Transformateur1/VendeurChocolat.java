@@ -16,9 +16,12 @@ public abstract class VendeurChocolat extends AcheteurCacao implements IVendeurC
 	/** @author K. GUTIERREZ  */
 	public double getOffre(Chocolat chocolat, double cours) {
 		if(this.getStockChocolat().containsKey(chocolat)) {
+			System.out.println("on peut faire une offre " + cours+" "+ this.getCoutChocolat(chocolat));
 			if(cours<this.getCoutChocolat(chocolat)) {
+				System.out.println("on en fait pas");
 				return 0.0;
 			}
+			
 			return this.getStockChocolat(chocolat);
 		}
 		return 0.0;

@@ -16,9 +16,8 @@ import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
 public abstract class AcheteurCacao extends Transformation implements abstraction.eq8Romu.cacaoCriee.IAcheteurCacaoCriee{
-	private static int NB_INSTANCES = 0; // Afin d'attribuer un nom different a toutes les instances
 	private HashMap<String,Double> nb_proposition;
-	private ActeurEQ3 acteur;
+
 
 	public AcheteurCacao() {
 		HashMap<String,Double> map = new HashMap<String,Double>();
@@ -28,15 +27,7 @@ public abstract class AcheteurCacao extends Transformation implements abstractio
 		this.nb_proposition = map;
 	}
 	
-	public void next() {
-		double total=0.0;
-		for (Feve feve :Feve.values()) {
-			if (stockFeves.get(feve)!=null) {
-				total=total+stockFeves.get(feve);
-			}
-		}
-		this.stockTotalFeves.setValeur(this, total);
-	}
+
 
 /** @author Nathan Olborski 
  * On garde en mémoire le nombre de propositions faites pour chaque type de fève qu'on souhaite acheter avec une HashMap,
