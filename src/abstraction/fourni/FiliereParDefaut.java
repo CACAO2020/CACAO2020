@@ -68,4 +68,3 @@ public class FiliereParDefaut extends Filiere {
 	}
 
 }
-
