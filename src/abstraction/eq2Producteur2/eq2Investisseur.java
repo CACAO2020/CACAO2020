@@ -33,6 +33,29 @@ public class eq2Investisseur extends eq2Vendeur {
 	}
 	/** décide si on achète des arbres à ce tour ou non, à appeler à chaque next**/
 	public void decideAchatArbres() { //si nbre d'arbres arrive en-dessous d'un minimum et qu'on peut en acheter : on rachète ce type d'arbre, ou bien qu'on a assez d'argent, on achète ce qui s'est le mieux vendu sur toutes les ventes depuis x temps.
+		int nbrearbresbasse = 0;
+		int nbrearbresmoyenne = 0;
+		int nbrearbresmoyenneequitable = 0;
+		int nbrearbreshaute = 0;
+		int nbrearbreshauteequitable = 0;
+		List<PaquetArbres> arbres = this.getPaquetsArbres();
+		for (int i = 0; i < arbres.size(); i++) {
+			if (arbres.get(i).getType() == Feve.FEVE_BASSE) {
+				nbrearbresbasse = nbrearbresbasse + arbres.get(i).getNbreArbres();
+			}
+			else if (arbres.get(i).getType() == Feve.FEVE_MOYENNE){
+				nbrearbresmoyenne = nbrearbresmoyenne + arbres.get(i).getNbreArbres();
+			}
+			else if (arbres.get(i).getType() == Feve.FEVE_MOYENNE_EQUITABLE) {
+				nbrearbresmoyenneequitable = nbrearbresmoyenneequitable + arbres.get(i).getNbreArbres();
+			}
+			else if (arbres.get(i).getType() == Feve.FEVE_HAUTE) {
+				nbrearbreshaute = nbrearbreshaute + arbres.get(i).getNbreArbres();
+			}
+			else if (arbres.get(i).getType() == Feve.FEVE_HAUTE_EQUITABLE) {
+				nbrearbreshauteequitable = nbrearbreshauteequitable + arbres.get(i).getNbreArbres();
+			}
+		}
 		
 	}
 	/*
