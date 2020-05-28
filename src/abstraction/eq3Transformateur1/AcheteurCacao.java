@@ -71,6 +71,7 @@ public abstract class AcheteurCacao extends Transformation implements abstractio
 	}
 	
 	public void notifierVente(PropositionCriee proposition) {
+		this.setCoutFeves(proposition.getLot().getFeve(), this.calculCoutFeve(proposition.getLot().getFeve(), proposition.getQuantiteEnTonnes(), proposition.getPrixPourUneTonne()));
 		this.setStockFeves(proposition.getLot().getFeve(), proposition.getQuantiteEnTonnes());
 		System.out.println("Lot " + proposition.getLot().toString() + ", de " + proposition.getVendeur().toString() + ", au prix" + proposition.getPrixPourLeLot() + " a été effectué");
 		

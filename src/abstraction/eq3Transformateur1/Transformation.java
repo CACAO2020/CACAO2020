@@ -30,6 +30,7 @@ public abstract class Transformation extends Stock {
 				(this.getStockFeves().containsKey(feve))&&
 				(this.getStockFeves(feve)>=quantite)&&
 				(this.depense(quantite*6000))) {
+			this.setCoutPateInterne(this.equivalentChocoFeve(feve),this.calculCoutPateInterne(this.equivalentChocoFeve(feve), quantite, quantite*(6000+this.getCoutFeves(feve))));
 			this.setStockFeves(feve, -quantite);
 			this.setStockPateInterne(this.equivalentChocoFeve(feve), quantite);
 
@@ -40,6 +41,7 @@ public abstract class Transformation extends Stock {
 				(this.getStockPateInterne().containsKey(chocolat))&&
 				(this.getStockPateInterne(chocolat)>=quantite)&&
 				(this.depense(quantite*4000))) {
+			this.setCoutChocolat(chocolat, this.calculCoutChocolat(chocolat, quantite, (4000+this.getCoutPateInterne(chocolat))*quantite));
 			this.setStockPateInterne(chocolat, -quantite);
 			this.setStockChocolat(chocolat,quantite);
 		}

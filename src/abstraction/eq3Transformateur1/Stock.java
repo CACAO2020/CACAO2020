@@ -35,15 +35,10 @@ public abstract class Stock extends Tresorerie {
 		this.coutFeves=new HashMap<Feve,Double>();
 		/*
 		 * FAKE VALEUR pour le moment
+		 * this.stockChocolat.put(Chocolat.CHOCOLAT_MOYENNE,15.0);
+		 * 	this.coutChocolat.put(Chocolat.CHOCOLAT_MOYENNE,2002.0);
 		 */
-		this.stockFeves.put(Feve.FEVE_MOYENNE,15.0);
-		this.stockChocolat.put(Chocolat.CHOCOLAT_MOYENNE,15.0);
-		this.coutFeves.put(Feve.FEVE_MOYENNE, 10.0);
-		this.coutChocolat.put(Chocolat.CHOCOLAT_MOYENNE,2002.0);
-		this.stockTotalFeves=new Variable("stock total de feves de "+getNom(),this,15.0);
-		this.stockTotalChocolat=new Variable("stock total de chocolat de "+getNom(),this,15.0);
-		this.stockTotalPateInterne=new Variable("stock total de pate interne de "+getNom(),this,0.0);
-
+		
 	}
 	
 	/* gestion FEVE */
