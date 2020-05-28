@@ -26,7 +26,8 @@ public class AcheteurContratCadre extends AbsAcheteurContratCadre implements IAc
 	}
 	
 	public void next() {
-		
+		// L'acheteur par contrats-cadres met à jour ses contrats
+		majAchatsContratCadre();	
 	}
 
 	public void supprimerContratsObsoletes() {

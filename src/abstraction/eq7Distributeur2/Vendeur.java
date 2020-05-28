@@ -40,7 +40,16 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 	}
 	
 	public void next() {
-		
+		// Le vendeur met à jour ses indicateurs de vente (dont ont besoin les acheteurs)
+		majIndicateursDeVente();
+		// Le vendeur détermine quelle quantité de chaque chocolat de marque proposer à la vente à l'étape suivante
+		majQuantitesEnVente();
+		// Le vendeur met à jour la liste des quantités de chocolat à commander
+		majQuantitesACommander();
+		// Le vendeur met à jour les prix de vente de chaque chocolat de marque
+		majPrixDeVente();
+		// Le vendeur choisit les campagnes de pub à mener lors de l'étape courante
+		majPublicites();
 	}
 	
 	public void majIndicateursDeVente() {

@@ -22,7 +22,8 @@ public class AcheteurBourse extends AbsAcheteurBourse implements IAcheteurChocol
 	//Raphaël Caby
 	
 	public void next() {
-		
+		// L'acheteur à la bourse détermine quelle quantité de chaque type de chocolat commander
+		majAchatsBourse();
 	}
 	
 	public AcheteurBourse(Distributeur2 ac) {
