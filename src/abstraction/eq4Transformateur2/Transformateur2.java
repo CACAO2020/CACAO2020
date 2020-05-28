@@ -16,6 +16,7 @@ import abstraction.fourni.Filiere;
 
 public class Transformateur2 implements IActeur {
 	
+	
 	//variables : ce sont les stocks, sous la forme de dictionnaires. A chaque type de denrée correspond
 	//une Variable, dont la valeur est un double. Cela nous donne les quantités de stocks pour chaque type
 	//de denrée.
@@ -268,8 +269,6 @@ public class Transformateur2 implements IActeur {
 		}
 		return quantite ;
 	}
-
-
 	
 	public double getStockTotalChocolatParGamme (Chocolat chocolat) {
 		switch (chocolat.getGamme()) {
@@ -283,4 +282,3 @@ public class Transformateur2 implements IActeur {
 		}
 	}
 }
-
