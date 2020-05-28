@@ -43,17 +43,13 @@ public class Transformateur1 extends VendeurChocolat {
 			}
 			else {
 				this.transformationFevePate(feve, this.getMontantCompte()/8000);
+
 			}
 		}
 	}
 	public void next() {
 		this.decisionTransformation();
-		System.out.println("cout des feves"+this.getCoutFeves());
-		System.out.println("cout de la pate interne"+this.getCoutPateInterne());
-		System.out.println("cout des chocolats"+this.getCoutChocolat());
-		System.out.println("stock chocolat"+this.getStockChocolat());
-		System.out.println("tresorerie "+this.getMontantCompte());
-		
+
 
 	}
 	

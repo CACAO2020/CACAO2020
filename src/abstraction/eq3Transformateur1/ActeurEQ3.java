@@ -49,14 +49,12 @@ public abstract class ActeurEQ3 implements IActeur{
 	public List<String> getNomsFilieresProposees() {
 		ArrayList<String> filieres = new ArrayList<String>();
 		filieres.add("testAchat");
-
 		return filieres;
 	}
 
 	public Filiere getFiliere(String nom) {
 		switch (nom) {
 		case "testAchat" : return new FiliereAchatTest();
-
 		default : return null;
 		}
 	}
