@@ -38,10 +38,13 @@ public class Usine {
 		}
 		else return 0.0;
 	}
+<<<<<<< HEAD
 	public double Amortissement() {
 		if (this.getAge()<=15) {
 			return 100; //a remplacer par un pourcentage du cout d'achat
 		}
 		else {return 0;}
 	}
+=======
+>>>>>>> branch 'master' of https://github.com/kristofszentes/CACAO2020.git
 }
