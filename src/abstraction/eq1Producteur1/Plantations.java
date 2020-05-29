@@ -176,7 +176,7 @@ public class Plantations {
 		ArrayList<Double> l2 = this.getArbresT();
 		double pas = 1/24;
 		boolean bool = true;
-		if (l1.size()==0 ) {
+		if (l1.size()!=0 ) {
 			for (int i=0; i<l1.size(); i+=1) {
 				l1.set(i, (Double) l1.get(i)+pas);
 			}
@@ -193,7 +193,7 @@ public class Plantations {
 		}
 		this.setArbresF(l1);
 		
-		if (l2.size()==0) {
+		if (l2.size()!=0) {
 			for (int i=0; i<l2.size(); i+=1) {
 				l2.set(i, (Double) l2.get(i)+pas);
 			}
