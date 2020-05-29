@@ -50,8 +50,8 @@ class GestionCriee //implements IVendeurCacaoCriee
 		this.venduLog = new ArrayList<PropositionCriee>();
 		this.miseEnVenteLog = new ArrayList<LotCacaoCriee>();
 		this.venteBasseSurCeTour = false;
-		v1PrixBasse = 2500;
-		v1PrixMoyenne = 1900;
+		v1PrixBasse = 120;
+		v1PrixMoyenne = 130;
 	}
 	
 	public GestionCriee(double lastPrixMinInit, double lastPrixVenteInit, IActeur sup) //Clément
@@ -66,11 +66,11 @@ class GestionCriee //implements IVendeurCacaoCriee
 		double prixVente = 0; //quantiteAVendre * (PrixMoy+0.004);
 		if(typeFeve == Feve.FEVE_BASSE)
 		{
-			prixVente = this.v1PrixBasse;
+			prixVente = this.v1PrixBasse*quantiteAVendre;
 		}
 		else
 		{
-			prixVente = this.v1PrixMoyenne;
+			prixVente = this.v1PrixMoyenne*quantiteAVendre;
 		}
 		this.producteur1.ajouterJournaux("[GestionCriee] - Mise en vente de : " + typeFeve + " en quantité "+ quantiteAVendre + " au prix minimum de" + prixVente);
 		if(quantiteAVendre == 0)
