@@ -35,7 +35,7 @@ public class Stock extends AbsStock implements IStock {
 			return 0.;
 		}
 	}
-	//ajoute les quantités necessaires de chocolat des stocks correspondant
+	//ajoute les quantités necessaires de chocolat des stocks correspondant 
 	public void ajouterStockChocolat(ChocolatDeMarque chocoDeMarque, double quantite) {
 		if (!stocksChocolatDeMarque.containsKey(chocoDeMarque)) {
 		}
