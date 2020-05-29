@@ -57,7 +57,7 @@ public class eq2Investisseur extends eq2Vendeur {
 			this.AchatArbres((int)Math.floor(ecart*proportioncrioe), Feve.FEVE_HAUTE_EQUITABLE);
 			this.journal_achats.ajouter("on a acheté des arbres car trop peu d'arbres");
 		}
-		else if ((Filiere.LA_FILIERE.getBanque().getSolde(this,this.getCrypto())) > 100000) { //pb : achète trop d'arbres qui produisent pas avant 6 ans, faillite
+		else if ((Filiere.LA_FILIERE.getBanque().getSolde(this,this.getCrypto())) > (this.NbTotalArbres()*0.05)*500) { //pb : achète trop d'arbres qui produisent pas avant 6 ans, faillite
 			double investissement_max = Filiere.LA_FILIERE.getBanque().getSolde(this,this.getCrypto())*0.005;
 			double nbre_arbresmax = Math.floor(investissement_max/this.getprixArbre());
 			this.AchatArbres((int)Math.floor(nbre_arbresmax*proportionfora), Feve.FEVE_BASSE);
