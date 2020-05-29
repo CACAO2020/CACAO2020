@@ -13,7 +13,7 @@ import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
-
+//cette classe permet de gerer les mouvement de stock
 public class Stock extends AbsStock implements IStock {
 	
 	public Stock(Distributeur2 ac) {
@@ -35,7 +35,7 @@ public class Stock extends AbsStock implements IStock {
 			return 0.;
 		}
 	}
-
+	//ajoute les quantités necessaires de chocolat des stocks correspondant 
 	public void ajouterStockChocolat(ChocolatDeMarque chocoDeMarque, double quantite) {
 		if (!stocksChocolatDeMarque.containsKey(chocoDeMarque)) {
 		}
@@ -46,7 +46,7 @@ public class Stock extends AbsStock implements IStock {
 		journal.ajouter(Journal.texteColore(addStockColor, Color.BLACK, "[STOCK +] " + Journal.doubleSur(quantite,2) + " tonnes de " + chocoDeMarque.name() + " ont été ajoutées au stock (nouveau stock : " + Journal.doubleSur(stocksChocolatDeMarque.get(chocoDeMarque).getValeur(),2) + " tonnes)."));
 		
 	}
-
+//retire les quantités necessaires de chocolat des stocks correspondant (avec la prise en compte des potentiels echecs de mouvements)
 	public void retirerStockChocolat(ChocolatDeMarque chocoDeMarque, double quantite) {
 		if (!stocksChocolatDeMarque.containsKey(chocoDeMarque)) {
 		}
@@ -60,7 +60,7 @@ public class Stock extends AbsStock implements IStock {
 				journal.ajouter(Journal.texteColore(alertColor, Color.BLACK,"[ÉCHEC STOCK -] Tentative de retirer " + Journal.doubleSur(quantite,2) + " tonnes de " + chocoDeMarque.name() + " rejetée (stock actuel : " + Journal.doubleSur(stocksChocolatDeMarque.get(chocoDeMarque).getValeur(),2) + " tonnes)."));
 		}
 	}
-	
+	//ajoute une valeur a un stock en cas d'achat fructueux auprès d'un transformateur
 	public void initialiser() {		
 		for (ChocolatDeMarque choco : ac.tousLesChocolatsDeMarquePossibles()) {
 			stocksChocolatDeMarque.put(choco, new Variable(ac.getNom() + " : STOCK " + choco.name(), ac, 0.));
