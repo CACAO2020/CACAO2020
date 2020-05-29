@@ -182,11 +182,15 @@ public class Plantations {
 		boolean bool = true;
 		while (bool) {
 			int i = l1.size()-1;
-			double age = (double) l1.get(i);
-			if (age>45) {
-				l1.remove(i);
-			} else {
-				bool = false;
+			if (l1!= new ArrayList<Double>()) {
+				double age = (double) l1.get(i);
+				if (age>45) {
+					l1.remove(i);
+				} else {
+					bool = false;
+				}
+			}  else {
+				bool=false;
 			}
 		}
 		this.setArbresF(l1);
@@ -197,9 +201,13 @@ public class Plantations {
 		bool = true;
 		while (bool) {
 			int i = l2.size()-1;
-			double age = (double) l2.get(i);
-			if (age>45) {
-				l2.remove(i);
+			if (l2 != new ArrayList<Double>()) {
+				double age = (double) l2.get(i);
+				if (age>45) {
+					l2.remove(i);
+				} else {
+					bool = false;
+				}
 			} else {
 				bool = false;
 			}
