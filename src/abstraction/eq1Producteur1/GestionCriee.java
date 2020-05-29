@@ -50,8 +50,8 @@ class GestionCriee //implements IVendeurCacaoCriee
 		this.venduLog = new ArrayList<PropositionCriee>();
 		this.miseEnVenteLog = new ArrayList<LotCacaoCriee>();
 		this.venteBasseSurCeTour = false;
-		v1PrixBasse = 30;
-		v1PrixMoyenne = 30;
+		v1PrixBasse = 120;
+		v1PrixMoyenne = 130;
 	}
 	
 	public GestionCriee(double lastPrixMinInit, double lastPrixVenteInit, IActeur sup) //Clément
