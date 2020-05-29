@@ -175,41 +175,37 @@ public class Plantations {
 		ArrayList<Double> l1 = this.getArbresF();
 		ArrayList<Double> l2 = this.getArbresT();
 		double pas = 1/24;
-		
-		for (int i=0; i<l1.size(); i+=1) {
-			l1.set(i, (Double) l1.get(i)+pas);
-		}
 		boolean bool = true;
-		while (bool) {
-			if (l1!= new ArrayList<Double>()) {
-			int i = l1.size()-1;
+		if (l1.size()!=0 ) {
+			for (int i=0; i<l1.size(); i+=1) {
+				l1.set(i, (Double) l1.get(i)+pas);
+			}
+			bool = true;
+			while (bool) {
+				int i = l1.size()-1;
 				double age = (double) l1.get(i);
 				if (age>45) {
 					l1.remove(i);
 				} else {
 					bool = false;
 				}
-			}  else {
-				bool=false;
 			}
 		}
 		this.setArbresF(l1);
 		
-		for (int i=0; i<l2.size(); i+=1) {
-			l2.set(i, (Double) l2.get(i)+pas);
-		}
-		bool = true;
-		while (bool) {
-			if (l2 != new ArrayList<Double>()) {
-			int i = l2.size()-1;
+		if (l2.size()!=0) {
+			for (int i=0; i<l2.size(); i+=1) {
+				l2.set(i, (Double) l2.get(i)+pas);
+			}
+			bool = true;
+			while (bool) {
+				int i = l2.size()-1;
 				double age = (double) l2.get(i);
 				if (age>45) {
 					l2.remove(i);
 				} else {
 					bool = false;
 				}
-			} else {
-				bool = false;
 			}
 		}
 		this.setArbresT(l2);
