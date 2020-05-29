@@ -63,7 +63,7 @@ class GestionCriee //implements IVendeurCacaoCriee
 	private LotCacaoCriee makeLot(Feve typeFeve, double quantiteAVendre)
 	{
 		double PrixMoy = this.prixMoyenDernierreVentes(typeFeve);
-		double prixVente = 0;//quantiteAVendre * (PrixMoy+0.004);
+		double prixVente = 0; //quantiteAVendre * (PrixMoy+0.004);
 		if(typeFeve == Feve.FEVE_BASSE)
 		{
 			prixVente = this.v1PrixBasse;
