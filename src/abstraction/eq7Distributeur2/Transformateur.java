@@ -20,7 +20,7 @@ import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
 
-// cette classe a ete créee pour simuler un transformateur dans la filiere test
+// cette classe a ete créee pour simuler un transformateur dans la filiere test 
 public class Transformateur implements IAcheteurCacaoCriee, IVendeurChocolatBourse {
 
 	private Variable stockFeves;
