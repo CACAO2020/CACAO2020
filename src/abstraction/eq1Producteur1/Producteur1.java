@@ -27,6 +27,7 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 	private Journal journalEq1;
 	private GestionCriee venteCriee;
 	private Plantations plantation;
+	private Budget budget;
 
 	public Producteur1() {
 		this.stockFevesForastero=new Variable(getNom()+" stock feves Forastero", this, 0, 10000, 1000);
@@ -34,6 +35,7 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 		this.journalEq1 = new Journal("Eq1 activites", this);
 		this.venteCriee = new GestionCriee(this);
 		this.plantation = new Plantations();
+		this.budget = new Budget(1000, 24, 0.0, 0.0, 0.0, 0.0);
 	}
 
 	public void setCryptogramme(Integer crypto) {
@@ -58,6 +60,7 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 	}
 
 	public void initialiser() {
+		this.plantation.initialiserArbres(10000, 2000);
 	}
 	
 	// Modifiee par Melanie pour l'ajout des differents stocks de feves
@@ -80,6 +83,16 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 		// Ecriture de l'état dans les logs.
 		this.journalEq1.ajouter("Quantité de stock de Trinitario : " + this.getStock(Feve.FEVE_MOYENNE));
 		this.journalEq1.ajouter("Quantité de stock de Forastero : " + this.getStock(Feve.FEVE_BASSE));
+		ArrayList<Double> recolte = new ArrayList<Double>();
+		ArrayList<Integer> nouveautes = new ArrayList<Integer>();
+		nouveautes.add((Integer) 0);
+		nouveautes.add((Integer) 0);
+		int newArbresForastero = nouveautes.get(0);
+		int newArbresTrinitario = nouveautes.get(1);
+		recolte = this.plantation.plantation_cyclique(newArbresForastero, newArbresTrinitario, this.budget.getEmployes());
+		nouveautes = this.budget.budget_cyclique(this.stockFevesForastero.getValeur(), this.stockFevesTrinitario.getValeur());
+		this.addStock(recolte.get(0), Feve.FEVE_BASSE);
+		this.addStock(recolte.get(1), Feve.FEVE_MOYENNE);
 	}
 
 	// Modification pour ajout de la filiere TestCrieeProd1

@@ -31,7 +31,7 @@ class GestionCriee //implements IVendeurCacaoCriee
 	private double lastPrixVenteFeveMoyenne;
 	private boolean venteBasseSurCeTour;
 	/**
-	 * Booleen qui symbolise si l'ont vend des fèves de basse qualité sur se tour
+	 * Booleen qui symbolise si l'ont vend des fèves de basse qualité sur ce tour
 	 * puisque l'on ne peut mettre en vent qu'un lot par tour
 	 */
 	

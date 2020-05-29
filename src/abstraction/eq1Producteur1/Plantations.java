@@ -6,7 +6,7 @@ import java.util.Random;
 
 
 /*
- * Créé par Thalie
+ * Cree par Thalie
  */
 
 /*
@@ -58,7 +58,7 @@ import java.util.Random;
  * void actualiserAge()
  * ArrayList<Double> recolte()
  * 
- * ArrayList<Double cyclique()
+ * ArrayList<Double plantation_cyclique()
  */
 
 
@@ -298,7 +298,7 @@ public class Plantations {
 	
 	
 	
-	public ArrayList<Double> cyclique(int newF, int newT, int nb_emp) {
+	public ArrayList<Double> plantation_cyclique(int newF, int newT, int nb_emp) {
 		this.setNombreRecolteurs(nb_emp);
 		this.setNouveauxF(newF);
 		this.setNouveauxT(newT);
