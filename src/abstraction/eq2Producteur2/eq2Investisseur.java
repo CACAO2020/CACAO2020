@@ -24,7 +24,7 @@ public class eq2Investisseur extends eq2Vendeur {
 	}
 
 	public void AchatArbres(int nbrArbres, Feve feve){
-		if (Filiere.LA_FILIERE.getBanque().getSolde(this,this.getCrypto())> nbrArbres*this.prixArbre) {
+		if (Filiere.LA_FILIERE.getBanque().getSolde(this,this.getCrypto())> nbrArbres*this.prixArbre && nbrArbres > 0) {
 			this.ajoutPaquetArbres(new PaquetArbres(nbrArbres, feve));
 			Filiere.LA_FILIERE.getBanque().virer(this,this.getCrypto(),Filiere.LA_FILIERE.getBanque(),nbrArbres*this.prixArbre);
 			
