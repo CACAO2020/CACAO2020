@@ -83,8 +83,8 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 			stock.ajouterStockChocolat(choco, vendeur.quantiteAVendreParDefaut);
 		}
 	}
-	//La méthode next, qui lance les appels des fonctions next de chaque sous-acteur. Le vendeur en premier pour évaluer la quantité de chocolat
-	// que les acheteurs doivent obtenir
+	// La méthode next, qui lance les appels des fonctions next de chaque sous-acteur
+	// Le vendeur est appelé en premier pour évaluer la quantité de chocolat que les acheteurs doivent commander
 	public void next() {
 		this.debutEtape = false;
 		vendeur.next();
