@@ -34,7 +34,6 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 	
 	public eq2Vendeur() {
 		super();
-		//pour l'instant tous les prix sont initialises a 0
 		this.prixTF = new Variable("prixTF",this,1900);
 		this.prixTT = new Variable("prixTT",this,2500);
 		this.prixTTE = new Variable("prixTTE",this,2800);
