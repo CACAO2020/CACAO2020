@@ -13,28 +13,45 @@ import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
-public class AbsDistributeurChocolat {
-	
-	protected Integer cryptogramme;
+public class AbsVendeur {
 
+	// Référence à l'acteur principal
 	protected Distributeur2 ac;
-	
-	protected Journal journalCatalogue;
+
+	// Journal principal
 	protected Journal journal;
 	
-	protected Map<ChocolatDeMarque, Variable> quantitesACommanderContratCadre;
+	// Journal du catalogue
+	protected Journal journalCatalogue;
+	
+	// Enregistre les quantités de chaque chocolat de marque à commander
+	protected Map<ChocolatDeMarque, Variable> quantitesACommander;
+	
+	// Enregistre les quantités de chaque chocolat de marque mis en vente
 	protected Map<ChocolatDeMarque, Variable> quantitesEnVente;
+	
+	// Enregistre les prix de vente de chaque chocolat de marque
 	protected Map<ChocolatDeMarque, Variable> prixChoco;
-	protected Map<Chocolat, Variable> totalChocoVendu;
+	
+	// Enregistre les quantités de chaque type de chocolat vendues
 	protected Map<Chocolat, Variable> chocoVendu;
-	protected Map<Chocolat, Variable> quantitesACommanderBourse;
+	
+	// Prix par défaut à appliquer à chaque type de chocolat
 	protected Map<Chocolat, Double> prixParDefaut;
 	
+	// Quantité par défaut à vendre pour chaque chocolat de marque
+	protected double quantiteAVendreParDefaut;
+	
+	// Enregistre les quantités de chaque type de chocolat vendues à l'étape courante
+	protected Map<Chocolat, Double> ventesEtapeActuelle;
+	
+	// Liste des chocolats de marque proposés au vendeur
 	protected List<ChocolatDeMarque> produitsCatalogue;
+	
+	// Liste des chocolats de marque pour lesquels on souhaite réaliser une campagne de publicité
 	protected List<ChocolatDeMarque> publicites;
 	
-	protected boolean debutEtape = true;
-	
+	// Couleurs d'arrière-plan pour les messages des journaux
 	public Color titleColor = Color.BLACK;
 	public Color metaColor = Color.CYAN;
 	public Color alertColor = Color.RED;
@@ -42,29 +59,29 @@ public class AbsDistributeurChocolat {
 	public Color positiveColor = Color.GREEN;
 	public Color descriptionColor = Color.YELLOW;
 	
-	public AbsDistributeurChocolat(Distributeur2 ac) {	
+	public AbsVendeur(Distributeur2 ac) {	
 		this.ac = ac;
+		quantiteAVendreParDefaut = 100.;
 		produitsCatalogue = new ArrayList<ChocolatDeMarque>();
 		publicites = new ArrayList<ChocolatDeMarque>();
 		quantitesEnVente = new HashMap<ChocolatDeMarque, Variable>();
 		prixChoco = new HashMap<ChocolatDeMarque, Variable>();
-		quantitesACommanderBourse = new HashMap<Chocolat, Variable>();
-		quantitesACommanderContratCadre = new HashMap<ChocolatDeMarque, Variable>();
+		quantitesACommander = new HashMap<ChocolatDeMarque, Variable>();
+		ventesEtapeActuelle = new HashMap<Chocolat, Double>();
 		prixParDefaut = new HashMap<Chocolat, Double>();
 		prixParDefaut.put(Chocolat.CHOCOLAT_MOYENNE, 10000.);
 		prixParDefaut.put(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE, 14000.);
 		prixParDefaut.put(Chocolat.CHOCOLAT_HAUTE, 15000.);
 		prixParDefaut.put(Chocolat.CHOCOLAT_HAUTE_EQUITABLE, 20000.);
-		totalChocoVendu = new HashMap<Chocolat, Variable>();
 		chocoVendu = new HashMap<Chocolat, Variable>();
 		for (Chocolat choco : ac.nosChoco) {
-			totalChocoVendu.put(choco, new Variable(getNom() + " : " + choco.name() + " [Total Ventes]", ac, 0.));
-			chocoVendu.put(choco, new Variable(getNom() + " : " + choco.name() + " [Ventes i-1]", ac, 0.));
-			quantitesACommanderBourse.put(choco, new Variable(getNom() + " : " + choco.name() + " [Commande Bourse i-1]", ac, 0.));		
+			ventesEtapeActuelle.put(choco, 0.);
+			chocoVendu.put(choco, new Variable(getNom() + " : " + choco.name() + " [Ventes i-1]", ac, 0.));	
 		}
 		initJournaux();
 	}
 	
+	// Initialise les journaux
 	public void initJournaux() {
 		journal = new Journal(this.getNom() + " : Distributeur Chocolat", ac);
 		journal.ajouter(Journal.texteColore(titleColor, Color.WHITE, this.getNom() + " : Distributeur Chocolat"));
@@ -80,6 +97,30 @@ public class AbsDistributeurChocolat {
 		journalCatalogue.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "L'état du catalogue à une étape correspond à celui proposé au client lors de cette étape."));
 	}
 	
+	// Renvoie les indicateurs
+	public List<Variable> getIndicateurs() {
+		List<Variable> res = new ArrayList<Variable>();
+		for (Chocolat choco : ac.nosChoco) {
+			res.add(chocoVendu.get(choco));
+		}	
+		return res;
+	}
+
+	// Renvoie les paramètres
+	public List<Variable> getParametres() {
+		List<Variable> res=new ArrayList<Variable>();
+		return res;
+	}
+
+	// Renvoie les journaux
+	public List<Journal> getJournaux() {
+		List<Journal> res = new ArrayList<Journal>();
+		res.add(journal);
+		res.add(journalCatalogue);
+		return res;
+	}
+	
+	// Méthodes renvoyant aux méthodes de l'acteur principal
 	public String getNom() {
 		return ac.getNom();
 	}
@@ -112,28 +153,4 @@ public class AbsDistributeurChocolat {
 		ac.notificationOperationBancaire(montant);
 	}
 
-	public List<Variable> getIndicateurs() {
-		List<Variable> res = new ArrayList<Variable>();
-		for (Chocolat choco : ac.nosChoco) {
-			res.add(chocoVendu.get(choco));
-		}
-		
-		for (Chocolat choco : ac.nosChoco) {
-			res.add(quantitesACommanderBourse.get(choco));
-		}
-		
-		return res;
-	}
-
-	public List<Variable> getParametres() {
-		List<Variable> res=new ArrayList<Variable>();
-		return res;
-	}
-
-	public List<Journal> getJournaux() {
-		List<Journal> res = new ArrayList<Journal>();
-		res.add(journal);
-		res.add(journalCatalogue);
-		return res;
-	}
 }

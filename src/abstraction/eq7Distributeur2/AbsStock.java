@@ -16,13 +16,22 @@ import abstraction.fourni.Variable;
 
 public class AbsStock {
 
+	// Enregistre les stocks de chaque chocolat de marque
 	protected Map<ChocolatDeMarque, Variable> stocksChocolatDeMarque;
+	
+	// Enregistre les stocks de chaque type de chocolat
 	protected Map<Chocolat, Variable> stocksChocolat;
 	
+	// Enregistre les quantités de chocolat réceptionnés à chaque étape
+	protected Map<Chocolat, Variable> chocoReceptionne;
+	
+	// Journal principal
 	protected Journal journal;
 	
+	// Référence à l'acteur principal
 	protected Distributeur2 ac;
 	
+	// Couleurs d'arrière-plan pour les messages des journaux
 	public Color titleColor = Color.BLACK;
 	public Color metaColor = Color.CYAN;
 	public Color alertColor = Color.RED;
@@ -31,19 +40,19 @@ public class AbsStock {
 	public Color descriptionColor = Color.YELLOW;
 	
 	public AbsStock(Distributeur2 ac) {
-
 		this.ac = ac;
 		stocksChocolatDeMarque=new HashMap<ChocolatDeMarque, Variable>();
 		stocksChocolat=new HashMap<Chocolat, Variable>();
-		
+		chocoReceptionne = new HashMap<Chocolat, Variable>();
 		initJournaux();
-
 		for (Chocolat choco : ac.nosChoco) {
 			stocksChocolat.put(choco, new Variable(getNom() + " : " + choco.name() + " [Stock i]", ac, 0));
 			journal.ajouter(Journal.texteColore(metaColor, Color.BLACK,"[CRÉATION] Création d'un stock pour le " + choco + "."));
+			chocoReceptionne.put(choco, new Variable(getNom() + " : " + choco.name() + " [Réception i-1]", ac, 0));
 		}
 	}
-		
+	
+	// Initialise les journaux
 	public void initJournaux() {
 		this.journal = new Journal(getNom() + " : Stocks", ac);
 		this.journal.ajouter(Journal.texteColore(titleColor, Color.WHITE, this.getNom() + " : Suivi des stocks de chocolat"));
@@ -52,25 +61,32 @@ public class AbsStock {
 		journal.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "entrée d'un type de chocolat), les entrées et les sorties de stock."));
 	}
 	
+	// Renvoie les indicateurs
 	public List<Variable> getIndicateurs() {
 		List<Variable> res=new ArrayList<Variable>();
 		for (Chocolat choco : ac.nosChoco) {
 			res.add(stocksChocolat.get(choco));
 		}
+		for (Chocolat choco : ac.nosChoco) {
+			res.add(chocoReceptionne.get(choco));
+		}
 		return res;
 	}
 
+	// Renvoie les paramètres
 	public List<Variable> getParametres() {
 		List<Variable> res=new ArrayList<Variable>();
 		return res;
 	}
 
-	public List<Journal> getJournaux() {
+	// Renvoie les journaux
+	public List<Journal> getJournaux() { 
 		List<Journal> res = new ArrayList<Journal>();
 		res.add(journal);
 		return res;
 	}
-
+	
+	// Méthodes renvoyant aux méthodes de l'acteur principal
 	public String getNom() {
 		return ac.getNom();
 	}
