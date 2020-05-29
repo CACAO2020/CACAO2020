@@ -89,7 +89,7 @@ public class eq2Acteur implements IActeur {
 	public void initialiser() {
 		// Au début de la partie, on va commencer avec quelques arbres déjà plantés
 		this.getPaquetsArbres().add(new PaquetArbres(1000, Feve.FEVE_BASSE, 240));
-		this.getPaquetsArbres().add(new PaquetArbres(1000, Feve.FEVE_MOYENNE, 289));
+		this.getPaquetsArbres().add(new PaquetArbres(1000, Feve.FEVE_MOYENNE, 288));
 		this.getPaquetsArbres().add(new PaquetArbres(1000, Feve.FEVE_HAUTE, 48));
 
 	}
