@@ -16,8 +16,10 @@ import abstraction.fourni.Filiere;
 
 public class Transformateur2 implements IActeur {
 	
-	private static final double NOMBRE_DE_TOUR_DAUTO_MAX = 10;
-	private static final double NOMBRE_DE_TOUR_DAUTO_MIN = 2;
+	private static final int NOMBRE_DE_TOUR_DAUTO_MAX = 10;
+	private static final int NOMBRE_DE_TOUR_DAUTO_MIN = 2;
+	protected double INVESTI_MOYPROD = 0.01;
+	protected final double PRIX_MOYEN_SUPPOSE_PATE = 1000;
 
 	
 	
@@ -165,6 +167,8 @@ public class Transformateur2 implements IActeur {
 	public void setCryptogramme(Integer crypto) {
 		this.cryptogramme = crypto;
 	}
+	
+	//REDEF NEXT
 	public void next() {
 	}
 	
@@ -286,11 +290,11 @@ public class Transformateur2 implements IActeur {
 		}
 	}
 
-	public static double getNombreDeTourDautoMax() {
+	public static int getNombreDeTourDautoMax() {
 		return NOMBRE_DE_TOUR_DAUTO_MAX;
 	}
 
-	public static double getNombreDeTourDautoMin() {
+	public static int getNombreDeTourDautoMin() {
 		return NOMBRE_DE_TOUR_DAUTO_MIN;
 	}
 }

@@ -63,15 +63,6 @@ public class Transformateur2_negoce extends Transformateur2_gestion_stocks imple
 
 	//pour l'instant il essaie d'acheter tout ce qui passe mais à l'avenir on aura un if lot.quantiteentonne <= quantité_dont_on_a_besoin  
 	public double proposerAchat(LotCacaoCriee lot) {
-		Class classeAppelante = null;
-        try { 
-            Exception e = new Exception();
-            String name = ((e.getStackTrace())[1]).getClassName();
-            classeAppelante = Class.forName( name );
-        } catch(Exception e2) {
-            classeAppelante = null; 
-        }
-if (!classeAppelante.equals(SuperviseurCacaoCriee.class)) { throw new Error("la concurrence tente de nous arnaquer"); }
 		double prix = this.prixRentableAchatFeve(lot.getFeve());
 		if (super.getSolde()*0.5>lot.getQuantiteEnTonnes()*prix) { // ON ACHETE QUE SI LE VALEUR DU LOT EST < 50% DE NOTRE SOLDE (PEUT ETRE MODIFIE
 			return prix;
@@ -101,6 +92,7 @@ if (!classeAppelante.equals(SuperviseurCacaoCriee.class)) { throw new Error("la 
 		this.setMargeVisee(super.creerPateAPartirDeFeve(proposition.getFeve()));
 		this.journalEq4.ajouter("Apprend que sa proposition de "+Journal.doubleSur(proposition.getPrixPourUneTonne(), 4)+" pour "+Journal.texteColore(proposition.getVendeur(), Journal.doubleSur(proposition.getQuantiteEnTonnes(), 2)+" tonnes de "+proposition.getFeve().name())+Journal.texteColore(Color.green, Color.black," a ete acceptee"));
 		this.journalEq4.ajouter("--> le stock de feve passe a "+Journal.doubleSur(this.stockFeves.get(proposition.getFeve()).getValeur(), 4));
+		//System.out.println("ACHETE A : " + proposition.getPrixPourUneTonne());
 		//FAIRE AUGMENTER LA MARGE VISEE
 	}
 
@@ -126,22 +118,20 @@ if (!classeAppelante.equals(SuperviseurCacaoCriee.class)) { throw new Error("la 
 		if (Filiere.LA_FILIERE.getEtape()>1) {
 		double cout_process_product = this.getCoutProdChocolat(super.creerChocolat(super.creerPateAPartirDeFeve(feve)), 1) - this.getCoutMoyenFeveValeur(feve)*super.getCoeffTFEP()*super.getCoeffTPEC();
 		String indicateur = "BourseChoco cours ";
-		switch (feve.getGamme()) {
-		case BASSE : indicateur += "CHOCOLAT_BASSE" ; 
-		case MOYENNE :
-			if (feve.isEquitable()) {
-				indicateur += "CHOCOLAT_MOYENNE_EQUITABLE" ;
-			} else {
-				indicateur += "CHOCOLAT_MOYENNE" ;
-			}
-		case HAUTE : 
-			if (feve.isEquitable()) {
-				indicateur += "CHOCOLAT_HAUTE_EQUITABLE" ;
-			} else {
-				indicateur += "CHOCOLAT_HAUTE" ;
-			}
+		if (feve == Feve.FEVE_MOYENNE_EQUITABLE) {
+			indicateur += "CHOCOLAT_MOYENNE_EQUITABLE" ;
+		}
+		else if (feve == Feve.FEVE_HAUTE) {
+			indicateur += "CHOCOLAT_HAUTE" ;
+		}
+		else if (feve == Feve.FEVE_HAUTE_EQUITABLE) {
+			indicateur += "CHOCOLAT_HAUTE_EQUITABLE" ;
+		}
+		else {
+			return 0;
 		}
 		double prix_bourse_choco = Filiere.LA_FILIERE.getIndicateur(indicateur).getHistorique().get(Filiere.LA_FILIERE.getEtape()-1).getValeur();
+		//System.out.println(indicateur + " = " + prix_bourse_choco);
 		return prix_bourse_choco/(1+MARGE_VISEE_CHOCOLAT.get(super.creerChocolat(super.creerPateAPartirDeFeve(feve))).getValeur()) - cout_process_product;
 	}
 		else {
@@ -149,6 +139,8 @@ if (!classeAppelante.equals(SuperviseurCacaoCriee.class)) { throw new Error("la 
 		}
 	}
 	
+	
+	//AU DEBUT DE LA SIMUL CEST NEGATIF ->> A EVITER
 	public double prixRentablePourReventePate(Feve feve) {
 		double cout_process_product = this.getCoutProdPate(super.creerPateAPartirDeFeve(feve), 1) - this.getCoutMoyenFeveValeur(feve)*super.getCoeffTFEP();
 		double prix_moy_revente_pate = super.getPrixMoyReventePate(super.creerPateAPartirDeFeve(feve));
@@ -156,7 +148,8 @@ if (!classeAppelante.equals(SuperviseurCacaoCriee.class)) { throw new Error("la 
 	}
 	
 	public double prixRentableAchatFeve(Feve feve ) {
-		return Math.max(this.prixRentablePourReventeChocolat(feve), this.prixRentablePourReventePate(feve));
+		double prix = ((feve == Feve.FEVE_BASSE||feve == Feve.FEVE_MOYENNE) ? this.prixRentablePourReventePate(feve) : this.prixRentablePourReventeChocolat(feve));
+		return prix;
 	}
 	
 	
@@ -165,11 +158,14 @@ if (!classeAppelante.equals(SuperviseurCacaoCriee.class)) { throw new Error("la 
 		public double getOffre(Chocolat chocolat, double cours) {
 			double marge = this.margeChoc();
 			double quantite = this.getStockChocolatValeur(chocolat) ;
-			if ((cours >= this.getCoutProdChocolat(chocolat, 1)*(1+marge*0.5)) &&
-					(cours < this.getCoutProdChocolat(chocolat, 1)*(1+marge))) {
+			double cout_prod = this.getCoutProdChocolat(chocolat, 1);
+			double prix_semi_ideal = cout_prod*(1+marge*0.5);
+			double prix_ideal = this.getCoutProdChocolat(chocolat, 1)*(1+marge);
+			if ((cours >= prix_semi_ideal) &&
+					(cours < prix_ideal)) {
 				return quantite/2 ;
 			}
-			else if (cours >= this.getCoutProdChocolat(chocolat, 1)*(1+marge)) {
+			else if (cours >= prix_ideal) {
 				return quantite;
 			}
 			else {
@@ -191,7 +187,7 @@ if (!classeAppelante.equals(SuperviseurCacaoCriee.class)) { throw new Error("la 
 		
 		/* ADAPTATION DE LA MARGE */
 		public void setMargeVisee(PateInterne pate) {
-			int nbTourAuto = super.nbTourAutonomiePateEtFeves(pate);
+			int nbTourAuto = super.nbToursAutonomiePateEtFeves(pate);
 			if (nbTourAuto != 1000) {
 				double marge = Math.max(Math.min(nbTourAuto-1-super.getNombreDeTourDautoMin()/super.getNombreDeTourDautoMax(), 2), -0.1);
 				MARGE_VISEE_PATE.get(pate).setValeur(this, marge);

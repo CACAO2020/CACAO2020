@@ -15,9 +15,6 @@ public class Transformateur2_gestion_stocks extends Transformateur2_contratCadre
 	// donne la valeur totale des stocks
 	private Variable valeurDesStocks ;
 	
-	//Coût augmentation de la capacité max
-	private Variable coutAgrandirCapacite ; 
-	
 	// coût d'entretien des stocks par unité (tonne), ne dépend que du type de denrée
 	
 	private Variable coutUnitaireStockFeves ; 
@@ -36,9 +33,6 @@ public class Transformateur2_gestion_stocks extends Transformateur2_contratCadre
 		
 		//utilise la fonction juste en dessous pour l'initialisation
 		this.valeurDesStocks = new Variable(getNom()+" valeur totale des stocks", this, this.calculeValeurDesStocks()) ;
-	
-		this.coutAgrandirCapacite = new Variable (getNom()+" cout unitaire pour augmenter la capacité max", this, 200);
-		
 		this.seuilInfTFEP=new Variable (getNom()+" seuil pour diminuer capacité MAX Feve -> Pate", this, 0);
 		this.seuilSupTFEP=new Variable (getNom()+" seuil pour augmenter capacité MAX Feve -> Pate", this, 1);
 		this.seuilInfTPEC=new Variable (getNom()+" seuil pour diminuer capacité MAX Pate -> Choco", this, 0);
@@ -76,7 +70,6 @@ public class Transformateur2_gestion_stocks extends Transformateur2_contratCadre
 	
 	public List<Variable> getParametres() { //idem
 		List<Variable> res=super.getParametres();
-		res.add(this.coutAgrandirCapacite) ;
 		res.add(this.seuilSupTFEP) ;
 		res.add(this.seuilInfTFEP) ;
 		res.add(this.seuilSupTPEC) ;
@@ -122,10 +115,11 @@ public class Transformateur2_gestion_stocks extends Transformateur2_contratCadre
 			return resu;
 		}
 		
-		public int nbTourAutonomiePateEtFeves(PateInterne pate) {
+		public int nbToursAutonomiePateEtFeves(PateInterne pate) {
 			int resu = -1;
 			double pate_echeancier = 0;
-			int step = Filiere.LA_FILIERE.getEtape();
+			int step = Filiere.LA_FILIERE.getEtape(); //RETIRE POUR TEST
+			//int step = 1; //pour test
 			List<ExemplaireContratCadre> contratsDeCeType = super.getContratDeCeType(pate);
 			while (pate_echeancier < super.getStockPateValeur(pate)) {
 				resu++;
