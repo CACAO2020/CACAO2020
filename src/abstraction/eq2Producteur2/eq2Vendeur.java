@@ -25,11 +25,11 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 	private double prixvente;
 	private Variable propalsnonvendues;
 	private Journal journal_des_ventes;
-	private int compteurfora;        //comptent le nombre de fois qu'on a vendu tel type de fève
-	private int compteurtrini;
-	private int compteurtrinie;
-	private int compteurcrio;
-	private int compteurcrioe;
+	private double compteurfora;        //comptent le nombre de fois qu'on a vendu tel type de fève
+	private double compteurtrini;
+	private double compteurtrinie;
+	private double compteurcrio;
+	private double compteurcrioe;
 
 	
 	public eq2Vendeur() {
@@ -42,11 +42,11 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 		this.prixvente = 0;
 		this.propalsnonvendues = new Variable("propalsnonvendues",this,999999999);//première valeur super haute pour permettre ventes
 		this.journal_des_ventes = new Journal("Journal des ventes", this);
-		this.compteurfora = 100;
-		this.compteurtrini = 100;
-		this.compteurtrinie = 100;
-		this.compteurcrio = 100;
-		this.compteurcrioe = 100;
+		this.compteurfora = 100.00;
+		this.compteurtrini = 100.00;
+		this.compteurtrinie = 100.00;
+		this.compteurcrio = 100.00;
+		this.compteurcrioe = 100.00;
 	}
 	/*faudrait rajouter un truc qui set les prix en fonction de ce qu'il s'est passé au cycle d'avant et de notre rentabilité
 	 * 
@@ -332,19 +332,19 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 		return res;
 	}
 	
-	public int getcompteurfora() {
+	public double getcompteurfora() {
 		return this.compteurfora;
 	}
-	public int getcompteurtrini() {
+	public double getcompteurtrini() {
 		return this.compteurtrini;
 	}
-	public int getcompteurtrinie() {
+	public double getcompteurtrinie() {
 		return this.compteurtrinie;
 	}
-	public int getcompteurcrio() {
+	public double getcompteurcrio() {
 		return this.compteurcrio;
 	}
-	public int getcompteurcrioe() {
+	public double getcompteurcrioe() {
 		return this.compteurcrioe;
 	}
 
