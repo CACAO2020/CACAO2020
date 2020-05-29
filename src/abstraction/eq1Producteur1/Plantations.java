@@ -181,8 +181,8 @@ public class Plantations {
 		}
 		boolean bool = true;
 		while (bool) {
-			int i = l1.size()-1;
 			if (l1!= new ArrayList<Double>()) {
+			int i = l1.size()-1;
 				double age = (double) l1.get(i);
 				if (age>45) {
 					l1.remove(i);
@@ -200,8 +200,8 @@ public class Plantations {
 		}
 		bool = true;
 		while (bool) {
-			int i = l2.size()-1;
 			if (l2 != new ArrayList<Double>()) {
+			int i = l2.size()-1;
 				double age = (double) l2.get(i);
 				if (age>45) {
 					l2.remove(i);
