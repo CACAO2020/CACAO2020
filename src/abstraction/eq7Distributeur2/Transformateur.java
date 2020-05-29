@@ -137,7 +137,6 @@ public class Transformateur implements IAcheteurCacaoCriee, IVendeurChocolatBour
 		
 	}
 
-
 	public Integer getCryptogramme(SuperviseurCacaoCriee superviseur) {
 		return this.cryptogramme;
 	}
