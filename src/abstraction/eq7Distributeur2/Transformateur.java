@@ -139,7 +139,7 @@ public class Transformateur implements IAcheteurCacaoCriee, IVendeurChocolatBour
 			return 0;
 		}
 	}
-
+ 
 	public void notifierPropositionRefusee(PropositionCriee proposition) {
 		
 	}
