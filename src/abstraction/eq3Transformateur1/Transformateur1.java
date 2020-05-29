@@ -48,9 +48,8 @@ public class Transformateur1 extends VendeurChocolat {
 		}
 	}
 	public void next() {
+		System.out.println("test");
 		this.decisionTransformation();
-
-
 	}
 	
 	public List<Variable> getIndicateurs() {
