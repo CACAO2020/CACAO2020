@@ -100,7 +100,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 	}
 	
 	public void majPrixDeVente() {
-		//met à jour le prix de vente de chaque chocolat du catalogue selon la valeur du cours actuel
+		// met à jour le prix de vente de chaque chocolat du catalogue selon la valeur du cours actuel
 		// IA : prix vente = (1 + pourcentageMarge/100) * cours
 		double cours;
 		double pourcentageMarge;
