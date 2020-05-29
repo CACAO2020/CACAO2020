@@ -188,7 +188,8 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 	public void adapterQuantitesEnVente() {
 		//met à jour les quantité de chocolat de chaque marque en vente selon le stock qu'on en a
 		for (ChocolatDeMarque produit : produitsCatalogue) {
-			quantitesEnVente.get(produit).setValeur(ac, Double.min(quantitesEnVente.get(produit).getValeur(), ac.getStock().getStockChocolatDeMarque(produit)));
+			double stockLimite = 10.;
+			quantitesEnVente.get(produit).setValeur(ac, Double.min(quantitesEnVente.get(produit).getValeur(), ac.getStock().getStockChocolatDeMarque(produit)-stockLimite));
 		}
 	}
 

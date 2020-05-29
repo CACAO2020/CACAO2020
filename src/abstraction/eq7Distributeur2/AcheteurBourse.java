@@ -19,7 +19,6 @@ import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 
 public class AcheteurBourse extends AbsAcheteurBourse implements IAcheteurChocolatBourse, IActeur {
-	//Raphaël Caby
 	
 	public void next() {
 		// L'acheteur à la bourse détermine quelle quantité de chaque type de chocolat commander
@@ -32,11 +31,13 @@ public class AcheteurBourse extends AbsAcheteurBourse implements IAcheteurChocol
 	
 	public void initialiser() {
 	}
-	// Création d'une table des demandes (du vendeur) qui tiendra à jour quelle est la demande pour chaque GAMME de chocolat (Moyenne gamme Equitable par exemple)
+	
+	// Création d'une table des demandes (du vendeur) qui tiendra à jour quelle est la demande pour chaque type de chocolat
 	public Map<Chocolat, Variable> getDemandes() {
 		return quantitesACommander;
 	}
-	// Renvoit la demande actuelle (du vendeur) pour le chocolat chocolat (là encore c'est une gamme!) 
+	
+	// Renvoie la demande actuelle pour un type de chocolat donné
 	public double getDemande(Chocolat chocolat, double cours) {
 		return quantitesACommander.get(chocolat).getValeur();
 	}
@@ -44,7 +45,8 @@ public class AcheteurBourse extends AbsAcheteurBourse implements IAcheteurChocol
 	public Integer getCryptogramme(SuperviseurChocolatBourse superviseur) {
 		return ac.getCryptogramme(superviseur);
 	}
-	//Méthode qui notifie les commandes lorsqu'elles ont lieu : elle inscrit les commandes dans les journaux et met à jour la table des demandes du vendeur
+	
+	// Méthode qui notifie les commandes lorsqu'elles ont lieu : elle inscrit les commandes dans les journaux et met à jour la table des demandes du vendeur
 	public void notifierCommande(Chocolat chocolat, double quantiteObtenue, boolean payee) {
 		if (payee) {
 			journal.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[PAIEMENT] Confirmation d'une commande de " + Journal.doubleSur(quantiteObtenue,2) + " tonnes de " + chocolat.name() + "."));
@@ -54,7 +56,8 @@ public class AcheteurBourse extends AbsAcheteurBourse implements IAcheteurChocol
 		}
 		quantitesACommander.get(chocolat).setValeur(ac, quantitesACommander.get(chocolat).getValeur()-quantiteObtenue);
 	}
-	//Méthode qui, une fois un achat validé, met à jour les stocks, paye la commande si besoin et inscrit le tout dans le journal correspondant
+	
+	// Méthode qui, une fois un achat validé, met à jour les stocks, paye la commande si besoin et inscrit le tout dans le journal correspondant
 	public void receptionner(ChocolatDeMarque chocolat, double quantite) {
 		ac.getStock().ajouterStockChocolat(chocolat, quantite);
 		if (commandeImpayee != null) {
@@ -66,7 +69,7 @@ public class AcheteurBourse extends AbsAcheteurBourse implements IAcheteurChocol
 		ac.getStock().chocoReceptionne.get(chocolat.getChocolat()).setValeur(ac, ac.getStock().chocoReceptionne.get(chocolat.getChocolat()).getValeur() + quantite);
 	}
 	
-	//Méthode qui calcule la quantité qui doit être achetée en bourse, en tenant compte des contrats, pour chaque gamme de chocolat. La table des demandes est tenue à jour.
+	// Méthode qui calcule la quantité qui doit être achetée en bourse, en tenant compte des contrats, pour chaque gamme de chocolat. La table des demandes est tenue à jour.
 	public void majAchatsBourse() {
 		// IA : quantité à commander = quantité demandée par le vendeur MOINS les quantités reçues à l'étape suivante grâce aux contrats actuels
 		double quantiteTotaleACommander;
