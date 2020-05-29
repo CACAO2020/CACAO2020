@@ -19,15 +19,15 @@ import abstraction.fourni.Variable;
 public class Producteur implements IActeur, IVendeurCacaoCriee {
 	
 	private Variable stockFeves;
-	private Variable productionMax;
+	private Variable production;
 	private Integer cryptogramme;
 	private Journal journalPVA1;
 	private Feve feve;
 
 	public Producteur(Feve feve) {
 		this.feve = feve;
-		this.stockFeves=new Variable(getNom()+" stock fèves", this, 0, 10000, 1000);
-		this.productionMax=new Variable(getNom()+" production max par step", this, 0, 1000, 200);
+		this.stockFeves=new Variable(getNom()+" stock fèves", this, 1000);
+		this.production=new Variable(getNom()+" production par step", this, 4000, 10000, 0);
 		this.journalPVA1 = new Journal(this.getNom()+" activites", this);
 	}
 	
@@ -52,7 +52,8 @@ public class Producteur implements IActeur, IVendeurCacaoCriee {
 
 	public void next() {
 		// production
-		double production =  Math.random()*this.productionMax.getValeur();
+		double production =  Math.random()*(this.production.getMax()-this.production.getMin())+this.production.getMin();
+		this.production.setValeur(this, production);
 		this.stockFeves.ajouter(this, production);
 		this.journalPVA1.ajouter("Production de "+production);
 
@@ -79,7 +80,7 @@ public class Producteur implements IActeur, IVendeurCacaoCriee {
 
 	public List<Variable> getParametres() {
 		List<Variable> res=new ArrayList<Variable>();
-		res.add(this.productionMax);
+		res.add(this.production);
 		return res;
 	}
 
@@ -113,7 +114,7 @@ public class Producteur implements IActeur, IVendeurCacaoCriee {
 		if (this.stockFeves.getValeur()/2 <= LotCacaoCriee.QUANTITE_MIN) {
 			return null;
 		} else {
-			LotCacaoCriee lot = new LotCacaoCriee(this, this.feve, this.stockFeves.getValeur()/2, 1.);
+			LotCacaoCriee lot = new LotCacaoCriee(this, this.feve, 0.8*this.stockFeves.getValeur(), 100);
 			return lot;
 		}
 	}
