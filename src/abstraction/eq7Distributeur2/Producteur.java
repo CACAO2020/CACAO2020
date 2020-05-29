@@ -26,8 +26,8 @@ public class Producteur implements IActeur, IVendeurCacaoCriee {
 
 	public Producteur(Feve feve) {
 		this.feve = feve;
-		this.stockFeves=new Variable(getNom()+" stock fèves", this, 1000);
-		this.production=new Variable(getNom()+" production par step", this, 4000, 10000, 0);
+		this.stockFeves=new Variable(getNom()+" stock fèves", this, 0);
+		this.production=new Variable(getNom()+" production par step", this, 100, 500, 0);
 		this.journalPVA1 = new Journal(this.getNom()+" activites", this);
 	}
 	
@@ -114,7 +114,7 @@ public class Producteur implements IActeur, IVendeurCacaoCriee {
 		if (this.stockFeves.getValeur()/2 <= LotCacaoCriee.QUANTITE_MIN) {
 			return null;
 		} else {
-			LotCacaoCriee lot = new LotCacaoCriee(this, this.feve, 0.8*this.stockFeves.getValeur(), 100);
+			LotCacaoCriee lot = new LotCacaoCriee(this, this.feve, 0.8*this.stockFeves.getValeur(), 1);
 			return lot;
 		}
 	}
