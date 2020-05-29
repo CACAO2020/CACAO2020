@@ -9,12 +9,16 @@ import abstraction.eq8Romu.contratsCadres.Echeancier;
 import abstraction.eq8Romu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eq8Romu.contratsCadres.IVendeurContratCadre;
 import abstraction.eq8Romu.produits.Pate;
+import abstraction.fourni.Filiere;
 import abstraction.fourni.Variable;
 
 public class Transformateur2_contratCadre extends Transformateur2_stocks_et_transfos implements IVendeurContratCadre {
+
 	
-	// NOTES : ne marche que si on a qu'un seul contrat à la fois, sinon les quantités max vont être largement
-	// dépassées
+	/* ***!*** IL PEUT ETRE INTERESSANT LORS DE L'INIT DE NOTRE ACTEUR DE METTRE DES FAUX CONTRATS CADRES
+	 *  POUR QU'ON PUISSANCE LANCER NOS FONCTIONS POUR POUVOIR PROPOSER DES PRIX D'ACHAT
+	 *  PARCE QUE SINON CA VA BUGUER POUR L'ESTIMATION
+	 */
 	
 	//Variables
 	protected List<ExemplaireContratCadre> mesContratEnTantQueVendeur; //ne peut pas être ajouté dans les fonctions d'affichage
@@ -79,6 +83,37 @@ public class Transformateur2_contratCadre extends Transformateur2_stocks_et_tran
 		return this.stockPateMin.getValeur();
 	}
 	
+	public List<ExemplaireContratCadre> getMesContratEnTantQueVendeur() {
+		return mesContratEnTantQueVendeur;
+	}
+
+	public List<ExemplaireContratCadre> getContratDeCeType(PateInterne pateI) {
+		Pate pate = pateI.conversionPateInterne();
+		List<ExemplaireContratCadre> resu = new LinkedList<ExemplaireContratCadre>();
+		for (ExemplaireContratCadre ex : mesContratEnTantQueVendeur) {
+			if (ex.getProduit() == pate) {
+				resu.add(ex);
+			}
+		}
+		return resu;
+	}
+	
+	public double getQuantiteALivrerAuStep(ExemplaireContratCadre e, int i) {
+		return e.getEcheancier().getQuantite(i);
+	}
+	
+	public double getQuantiteALivrerPourITour(PateInterne pate, int i) {
+		List<ExemplaireContratCadre> li = this.getContratDeCeType(pate);
+		double resu = 0;
+		int step = Filiere.LA_FILIERE.getEtape();
+		for (ExemplaireContratCadre ex : li) {
+			for (int k = 0; k < i; k++) {
+				resu += this.getQuantiteALivrerAuStep(ex, step + k);
+			}
+		}
+		return resu;
+	}
+	
 	// renvoie la valeur de la quantite totale de pate à fournir
 	public double getQuantitePateCCTotaleValeur() {
 		double valeur = 0 ;
@@ -88,6 +123,28 @@ public class Transformateur2_contratCadre extends Transformateur2_stocks_et_tran
 		return valeur ;
 	}
 	
+	//Renvoie la moyenne pondérée des prix de revente de notre pate pondérée par la qte a vendre
+	public double getPrixMoyReventePate(PateInterne pate) {
+		if (this.getQuantitePateCCValeur(pate) == 0) {
+			return PRIX_MOYEN_SUPPOSE_PATE;
+		}
+		else {
+		double resu = 0;
+		for (ExemplaireContratCadre exemplaireContratCadre : mesContratEnTantQueVendeur) {
+			if ((Pate)exemplaireContratCadre.getProduit() == pate.conversionPateInterne()) {
+				System.out.println("montant restant a regler : " + exemplaireContratCadre.getMontantRestantARegler());
+			resu += exemplaireContratCadre.getMontantRestantARegler();
+			}
+		}
+		if (resu == 0) {
+			return PRIX_MOYEN_SUPPOSE_PATE;									//UNE CONSTANTE IMPORTANTE -> AU DEBUT DE LA SIMUL ON SUPPORT LE PRIX DE REVENTE DE LA PATE DE 1000
+																					//CA PERMET DE LANCER LES NEGO
+		}
+		else {
+			return resu/this.getQuantitePateCCValeur(pate);
+		}
+		}
+	}
 	// permet de mettre à jour quantitePateCC grâce à la liste des contrats actuels
 	// il faut mettre à jour à chaque début de tour, le contrats ayant été négociés à la fin du tour précédent
 	
@@ -96,7 +153,7 @@ public class Transformateur2_contratCadre extends Transformateur2_stocks_et_tran
 		for (PateInterne pate : PateInterne.values()) {
 			double valeur = 0 ;
 			for (ExemplaireContratCadre contrat : this.mesContratEnTantQueVendeur) {
-				if (contrat.getProduit() == pate) {
+				if (contrat.getProduit() == pate.conversionPateInterne()) {
 				valeur += contrat.getQuantiteALivrerAuStep() ; }
 			}
 			Variable nouvelleQuantite = this.quantitePateCC.get(pate) ;
@@ -272,15 +329,6 @@ public class Transformateur2_contratCadre extends Transformateur2_stocks_et_tran
 		this.majQuantitePateCC(); 
 	}
 	
-	public void next() {
-		List<ExemplaireContratCadre> contratsObsoletes=new LinkedList<ExemplaireContratCadre>();
-		for (ExemplaireContratCadre contrat : this.mesContratEnTantQueVendeur) {
-			if (contrat.getQuantiteRestantALivrer()==0.0 && contrat.getMontantRestantARegler()==0.0) {
-				contratsObsoletes.add(contrat);
-			}
-		}
-		this.mesContratEnTantQueVendeur.removeAll(contratsObsoletes);
-	}
 	
 	// renvoie true si on vend le produit : si on a pas un stock minimal, on ne vend pas (ou alors on permet
 	// d'avoir un contrat avec une première année à vide si on arrive à le négocier ?)

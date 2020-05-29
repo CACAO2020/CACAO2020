@@ -15,12 +15,16 @@ public abstract class ActeurEQ3 implements IActeur{
 	protected Variable stockFeves;
 	protected Variable stockChocolat;
 	protected Integer cryptogramme;
-	protected Journal journalEq3;
+	protected Journal journalAchat;
+	protected Journal journalVente;
+	protected Journal journalTransformation;
 
 	public ActeurEQ3() {
 		this.stockFeves=new Variable(getNom()+" stock feves", this, 50);
 		this.stockChocolat=new Variable(getNom()+" stock chocolat", this, 100);
-		this.journalEq3 = new Journal("Eq3 activites", this);
+		this.journalAchat = new Journal("Eq3 achat", this);
+		this.journalVente =new Journal("Eq3 ventes", this);
+		this.journalTransformation =new Journal("Eq3 transformations", this);
 	}
 	
 	public String getNom() {
@@ -68,7 +72,9 @@ public abstract class ActeurEQ3 implements IActeur{
 
 	public List<Journal> getJournaux() {
 		List<Journal> res=new ArrayList<Journal>();
-		res.add(this.journalEq3);
+		res.add(this.journalAchat);
+		res.add(this.journalVente);
+		res.add(this.journalTransformation);
 		return res;
 	}
 

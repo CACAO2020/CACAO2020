@@ -2,18 +2,18 @@ package abstraction.eq4Transformateur2;
 
 import java.util.List;
 
+import abstraction.eq8Romu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.Feve;
 import abstraction.eq8Romu.produits.Gamme;
+import abstraction.eq8Romu.produits.Pate;
+import abstraction.fourni.Filiere;
 import abstraction.fourni.Variable;
 
-public class Transformateur2_gestion_stocks extends Transformateur2_negoce {
+public class Transformateur2_gestion_stocks extends Transformateur2_contratCadre {
 	
 	// donne la valeur totale des stocks
 	private Variable valeurDesStocks ;
-	
-	//Coût augmentation de la capacité max
-	private Variable coutAgrandirCapacite ; 
 	
 	// coût d'entretien des stocks par unité (tonne), ne dépend que du type de denrée
 	
@@ -33,9 +33,6 @@ public class Transformateur2_gestion_stocks extends Transformateur2_negoce {
 		
 		//utilise la fonction juste en dessous pour l'initialisation
 		this.valeurDesStocks = new Variable(getNom()+" valeur totale des stocks", this, this.calculeValeurDesStocks()) ;
-	
-		this.coutAgrandirCapacite = new Variable (getNom()+" cout unitaire pour augmenter la capacité max", this, 200);
-		
 		this.seuilInfTFEP=new Variable (getNom()+" seuil pour diminuer capacité MAX Feve -> Pate", this, 0);
 		this.seuilSupTFEP=new Variable (getNom()+" seuil pour augmenter capacité MAX Feve -> Pate", this, 1);
 		this.seuilInfTPEC=new Variable (getNom()+" seuil pour diminuer capacité MAX Pate -> Choco", this, 0);
@@ -73,7 +70,6 @@ public class Transformateur2_gestion_stocks extends Transformateur2_negoce {
 	
 	public List<Variable> getParametres() { //idem
 		List<Variable> res=super.getParametres();
-		res.add(this.coutAgrandirCapacite) ;
 		res.add(this.seuilSupTFEP) ;
 		res.add(this.seuilInfTFEP) ;
 		res.add(this.seuilSupTPEC) ;
@@ -84,11 +80,75 @@ public class Transformateur2_gestion_stocks extends Transformateur2_negoce {
 	// calcule l'ensemble des coûts dûs à l'entretien des stocks
 		// à exécuter à chaque fin de tour
 		
+	public double coutStocksChoc() {
+		return this.coutUnitaireStockChocolat.getValeur()*super.getStockTotalChocolat();
+	}
+	
+	
 		public double coutStocks () {  
 			double cout = 0 ;
 			cout += this.coutUnitaireStockFeves.getValeur()*super.getStockTotalFeves() ; 
 			cout += this.coutUnitaireStockPate.getValeur()*super.getStockTotalPate() ; 
 			cout += this.coutUnitaireStockChocolat.getValeur()*super.getStockTotalChocolat() ; 
 			return cout ;
+		}
+		
+	//  Nombre de tours d'autonmies restants pour couvrir les echeanciers de nos contrats cadres	
+		public int nbToursAutonomiePate(PateInterne pate) {
+			int resu = -1;
+			double pate_echeancier = 0;
+			int step = Filiere.LA_FILIERE.getEtape();
+			List<ExemplaireContratCadre> contratsDeCeType = super.getContratDeCeType(pate);
+			while (pate_echeancier < super.getStockPateValeur(pate)) {
+				resu++;
+				double qte_tour = 0;
+				for (ExemplaireContratCadre ex : contratsDeCeType) {
+					qte_tour += super.getQuantiteALivrerAuStep(ex, step + resu);
+				}
+				if (qte_tour == 0) {
+					return 1000;			// On a assez pour subvenir à toutes le echeances
+				}
+				else {
+					pate_echeancier += qte_tour;
+				}
+			}
+			return resu;
+		}
+		
+		public int nbToursAutonomiePateEtFeves(PateInterne pate) {
+			int resu = -1;
+			double pate_echeancier = 0;
+			int step = Filiere.LA_FILIERE.getEtape(); //RETIRE POUR TEST
+			//int step = 1; //pour test
+			List<ExemplaireContratCadre> contratsDeCeType = super.getContratDeCeType(pate);
+			while (pate_echeancier < super.getStockPateValeur(pate)) {
+				resu++;
+				double qte_tour = 0;
+				for (ExemplaireContratCadre ex : contratsDeCeType) {
+					qte_tour += super.getQuantiteALivrerAuStep(ex, step + resu);
+				}
+				if (qte_tour == 0) {
+					return 1000;			// On a assez pour subvenir à toutes le echeances
+				}
+				else {
+					pate_echeancier += qte_tour;
+				}
+			}
+			double equivalent_feves = (pate_echeancier - super.getStockPateValeur(pate))/super.getCoeffTFEP();
+			Feve feve = super.creerFeve(pate);
+			while (equivalent_feves < super.getStockFevesValeur(feve)) {
+				resu++;
+				double qte_tour = 0;
+				for (ExemplaireContratCadre ex : contratsDeCeType) {
+					qte_tour += super.getQuantiteALivrerAuStep(ex, step + resu);
+				}
+				if (qte_tour == 0) {
+					return 1000;			// On a assez pour subvenir à toutes le echeances
+				}
+				else {
+					equivalent_feves += qte_tour/super.getCoeffTFEP();
+				}
+			}
+			return resu;
 		}
 }

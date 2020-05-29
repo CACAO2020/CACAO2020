@@ -16,6 +16,12 @@ import abstraction.fourni.Filiere;
 
 public class Transformateur2 implements IActeur {
 	
+	private static final int NOMBRE_DE_TOUR_DAUTO_MAX = 10;
+	private static final int NOMBRE_DE_TOUR_DAUTO_MIN = 2;
+	protected double INVESTI_MOYPROD = 0.01;
+	protected final double PRIX_MOYEN_SUPPOSE_PATE = 1000;
+
+	
 	
 	//variables : ce sont les stocks, sous la forme de dictionnaires. A chaque type de denrée correspond
 	//une Variable, dont la valeur est un double. Cela nous donne les quantités de stocks pour chaque type
@@ -161,6 +167,8 @@ public class Transformateur2 implements IActeur {
 	public void setCryptogramme(Integer crypto) {
 		this.cryptogramme = crypto;
 	}
+	
+	//REDEF NEXT
 	public void next() {
 	}
 	
@@ -280,5 +288,13 @@ public class Transformateur2 implements IActeur {
 			return this.getStockChocolatValeur(Chocolat.CHOCOLAT_HAUTE) + this.getStockChocolatValeur(Chocolat.CHOCOLAT_HAUTE_EQUITABLE) ;
 		default : throw new IllegalArgumentException("pas de gamme trouvée") ;
 		}
+	}
+
+	public static int getNombreDeTourDautoMax() {
+		return NOMBRE_DE_TOUR_DAUTO_MAX;
+	}
+
+	public static int getNombreDeTourDautoMin() {
+		return NOMBRE_DE_TOUR_DAUTO_MIN;
 	}
 }
