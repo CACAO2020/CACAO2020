@@ -54,7 +54,7 @@ public class eq2Acteur implements IActeur {
 	
 	@Override
 	public String getNom() {
-		return "EQ2";
+		return "EQ2 (Moulacao)";
 	}
 
 	@Override
