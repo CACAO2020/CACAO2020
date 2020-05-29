@@ -42,7 +42,7 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 		this.cryptogramme = crypto;
 	}
 	
-	private Integer getCryptogramme()
+	public Integer getCryptogramme()
 	{
 		return this.cryptogramme;
 	}

@@ -225,11 +225,13 @@ public class Plantations {
 			lF.add((Double) age);
 		}
 		Collections.sort(lF);
+		this.setArbresF(lF);
 		for (int i=0; i<arbresT; i+= 1) {
 			double age = (double) rand.nextInt(45);
 			lT.add((Double) age);
 		}
 		Collections.sort(lT);
+		this.setArbresT(lT);
 	}
 	
 	
