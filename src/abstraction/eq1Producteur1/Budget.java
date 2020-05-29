@@ -169,8 +169,8 @@ public class Budget {
 		this.setNewStockF(stockF);
 		this.setNewStockT(stockT);
 		ArrayList<Integer> newPlants = new ArrayList<Integer>();
-		if (this.getFonds()>this.getEmployes()*25) {
-			newPlants = investissement((this.getFonds()-this.getEmployes()*25), (this.getNewStockF()-this.getOldStockF()), this.getNewStockT()-this.getOldStockT());
+		if (this.getFonds()>this.getEmployes()*50) {
+			newPlants = investissement((this.getFonds()-this.getEmployes()*50), (this.getNewStockF()-this.getOldStockF()), this.getNewStockT()-this.getOldStockT());
 		} else {
 			newPlants.add((Integer) 0);
 			newPlants.add((Integer) 0);
