@@ -29,7 +29,9 @@ public abstract class AcheteurCacao extends Transformation implements abstractio
 			if(lot.getPrixMinPourUneTonne()*lot.getQuantiteEnTonnes()<this.getMontantCompte()&&
 					(lot.getPrixMinPourUneTonne()<=(Filiere.LA_FILIERE.getIndicateur("BourseChoco cours "+equivalentChocoFeve(lot.getFeve())).getValeur()-10000)*0.9)) {
 				if(((lot.getPrixMinPourUneTonne()+(Filiere.LA_FILIERE.getIndicateur("BourseChoco cours "+equivalentChocoFeve(lot.getFeve())).getValeur()-10000)*0.9))/2<this.getMontantCompte()) {
+					this.journalAchat.ajouter("Proposition d'achat du lot" + lot.toString());
 					return ((lot.getPrixMinPourUneTonne()+(Filiere.LA_FILIERE.getIndicateur("BourseChoco cours "+equivalentChocoFeve(lot.getFeve())).getValeur()-10000)*0.9))/2;
+					
 				}
 				else {
 					this.journalAchat.ajouter("Proposition d'achat du lot" + lot.toString());
