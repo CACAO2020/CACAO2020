@@ -58,7 +58,7 @@ public class Producteur implements IActeur, IVendeurCacaoCriee {
 		this.journalPVA1.ajouter("Production de "+production);
 
 	}
-
+	// Méthode qui tient à jour les stocks et les journaux quand une commande a été passée.
 	public void notificationVente(double quantite, double prix) {
 		this.stockFeves.retirer(this, quantite);// Le superviseur nous informe de la quantite qu'on vient de vendre --> on la retire du stock
         this.journalPVA1.ajouter("vente de "+quantite+" au prix de "+prix+" le stock devient "+this.stockFeves.getValeur());
@@ -100,16 +100,16 @@ public class Producteur implements IActeur, IVendeurCacaoCriee {
 
 	public void notificationOperationBancaire(double montant) {
 	}
-
+	//Retourne le stock de la gamme chocolat
 	public double getOffre(Chocolat chocolat, double cours) {
 		return this.stockFeves.getValeur();
 	}
-
+	//Tient à jour le stock après une vente
 	public void livrer(Chocolat chocolat, double quantite) {
 		stockFeves.retirer(this, quantite);
 	}
 
-
+	// Méthode simulant un achat à la criée
 	public LotCacaoCriee getLotEnVente() {
 		if (this.stockFeves.getValeur()/2 <= LotCacaoCriee.QUANTITE_MIN) {
 			return null;
@@ -130,7 +130,8 @@ public class Producteur implements IActeur, IVendeurCacaoCriee {
 			return propositions.get(0);
 		}
 	}
-
+	
+	//Mise à jour des sctocks après vente à la criée
 	public void notifierVente(PropositionCriee proposition) {
 		this.stockFeves.retirer(proposition.getAcheteur(), proposition.getQuantiteEnTonnes());
 	}
