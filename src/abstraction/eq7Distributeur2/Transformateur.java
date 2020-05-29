@@ -146,7 +146,7 @@ public class Transformateur implements IAcheteurCacaoCriee, IVendeurChocolatBour
 		return this.cryptogramme;
 	}
 
-	// envoie une notification de l'achat effectué
+	// envoie une notification de l'achat effectué 
 	public void notifierVente(PropositionCriee proposition) {
 		System.out.println("+ " + proposition.getQuantiteEnTonnes() +" pour " + proposition.getVendeur());
 		this.stockFeves.ajouter(proposition.getVendeur(), proposition.getQuantiteEnTonnes());
