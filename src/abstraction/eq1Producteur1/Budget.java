@@ -177,6 +177,7 @@ public class Budget {
 			newPlants.add((Integer) 0);
 		}
 		this.setEmployes(this.getEmployes()+newPlants.get(2));
+		this.removeFonds(202.18*newPlants.get(2));;
 		return newPlants;
 	}
 
