@@ -162,10 +162,10 @@ public class Plantations {
 		int F = this.getNouveauxF();
 		int T = this.getNouveauxT();
 		for (int i=0; i<F; i+=1) {
-			this.arbresF.add((Double) 0.0);
+			this.arbresF.add(0, (Double) 0.0);;
 		}
 		for (int i=0; i<T; i+=1) {
-			this.arbresT.add((Double) 0.0);
+			this.arbresT.add(0, (Double) 0.0);
 		}
 		
 	}
