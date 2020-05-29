@@ -38,5 +38,10 @@ public class Usine {
 		}
 		else return 0.0;
 	}
-	public double 
+	public double Amortissement() {
+		if (this.getAge()<=15) {
+			return 100; //a remplacer par un pourcentage du cout d'achat
+		}
+		else {return 0;}
+	}
 }
