@@ -15,10 +15,12 @@ import abstraction.eq8Romu.produits.Feve;
 public class eq2Investisseur extends eq2Vendeur {
 
 	private double prixArbre;
+	private double prixUsine;
 	private Journal journal_achats;
 
 	public eq2Investisseur() {
 		super();
+		this.prixUsine=100;
 		this.prixArbre = 3;
 		this.journal_achats = new Journal("Investissements",this);
 	}
