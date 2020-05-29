@@ -197,7 +197,7 @@ public class Plantations {
 		bool = true;
 		while (bool) {
 			int i = l2.size()-1;
-			double age = (double) l1.get(i);
+			double age = (double) l2.get(i);
 			if (age>45) {
 				l2.remove(i);
 			} else {
