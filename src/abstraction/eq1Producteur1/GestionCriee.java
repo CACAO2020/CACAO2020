@@ -16,7 +16,14 @@ import abstraction.fourni.Filiere;
 
 
 
-/** @author Clément */
+/** @author Clément 
+ * Implémente les fonctions nécessaire pour la vente a la criée
+ * ainsi que les fonctions telles que la mise a jour du prix minimum de vente.
+ * 
+ * Dans une v1, nous avons testé plusiseurs méthode pour définire le prix minimum de vente d'un lot
+ * cependant, pour nous alligner avec ce qui a été fait dans l'équipe 2, nous fixerons les prix a la tonne
+ * dans le constructeur.
+*/
 class GestionCriee //implements IVendeurCacaoCriee 
 {
 	
@@ -31,6 +38,8 @@ class GestionCriee //implements IVendeurCacaoCriee
 	private Producteur1 producteur1;
 	private List<LotCacaoCriee> miseEnVenteLog;
 	private List<PropositionCriee> venduLog;
+	private double v1PrixBasse;
+	private double v1PrixMoyenne;
 	
 	public GestionCriee(Producteur1 sup) //Clément
 	{
@@ -41,6 +50,8 @@ class GestionCriee //implements IVendeurCacaoCriee
 		this.venduLog = new ArrayList<PropositionCriee>();
 		this.miseEnVenteLog = new ArrayList<LotCacaoCriee>();
 		this.venteBasseSurCeTour = false;
+		v1PrixBasse = 2500;
+		v1PrixMoyenne = 1900;
 	}
 	
 	public GestionCriee(double lastPrixMinInit, double lastPrixVenteInit, IActeur sup) //Clément
@@ -52,12 +63,21 @@ class GestionCriee //implements IVendeurCacaoCriee
 	private LotCacaoCriee makeLot(Feve typeFeve, double quantiteAVendre)
 	{
 		double PrixMoy = this.prixMoyenDernierreVentes(typeFeve);
-		this.producteur1.ajouterJournaux("[GestionCriee] - Mise en vente de : " + quantiteAVendre + " au prix de " + (PrixMoy+0.004)*quantiteAVendre);
+		double prixVente = 0; //quantiteAVendre * (PrixMoy+0.004);
+		if(typeFeve == Feve.FEVE_BASSE)
+		{
+			prixVente = this.v1PrixBasse;
+		}
+		else
+		{
+			prixVente = this.v1PrixMoyenne;
+		}
+		this.producteur1.ajouterJournaux("[GestionCriee] - Mise en vente de : " + typeFeve + " en quantité "+ quantiteAVendre + " au prix minimum de" + prixVente);
 		if(quantiteAVendre == 0)
 		{
 			return null;
 		}
-		LotCacaoCriee lot = new LotCacaoCriee(this.producteur1, typeFeve, quantiteAVendre, quantiteAVendre * (PrixMoy+0.004));
+		LotCacaoCriee lot = new LotCacaoCriee(this.producteur1, typeFeve, quantiteAVendre, prixVente);
 		this.miseEnVenteLog.add(lot);
 		return lot;
 	}
