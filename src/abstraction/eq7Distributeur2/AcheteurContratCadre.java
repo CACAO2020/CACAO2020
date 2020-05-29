@@ -80,7 +80,7 @@ public class AcheteurContratCadre extends AbsAcheteurContratCadre implements IAc
 				contrat = superviseur.demande(ac, vendeur, choco, new Echeancier(etape+1, 10, 1.0), ac.cryptogramme);
 				if (contrat != null) {
 					nosContrats.add(contrat);
-					notifierNouveauContrat(contrat); 
+					notifierNouveauContrat(contrat);  
 				}
 			}
 		}	
