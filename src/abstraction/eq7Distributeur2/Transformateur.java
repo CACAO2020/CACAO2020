@@ -142,7 +142,6 @@ public class Transformateur implements IAcheteurCacaoCriee, IVendeurChocolatBour
 	}
 
 	public void notifierVente(PropositionCriee proposition) {
-		System.out.println("+ " + proposition.getQuantiteEnTonnes() +" pour " + proposition.getVendeur());
 		this.stockFeves.ajouter(proposition.getVendeur(), proposition.getQuantiteEnTonnes());
 	}
 
