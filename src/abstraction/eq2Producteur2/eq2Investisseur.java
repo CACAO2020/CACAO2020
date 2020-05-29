@@ -57,7 +57,7 @@ public class eq2Investisseur extends eq2Vendeur {
 			this.AchatArbres((int)Math.floor(ecart*proportioncrioe), Feve.FEVE_HAUTE_EQUITABLE);
 			this.journal_achats.ajouter("on a acheté des arbres car trop peu d'arbres");
 		}
-		else if ((Filiere.LA_FILIERE.getBanque().getSolde(this,this.getCrypto())) > 1000) { //on investit pas si on a moins de 1000$
+		else if ((Filiere.LA_FILIERE.getBanque().getSolde(this,this.getCrypto())) > 50000) { //on investit pas si on a moins de 1000$
 			double investissement_max = Filiere.LA_FILIERE.getBanque().getSolde(this,this.getCrypto())*0.2;
 			double nbre_arbresmax = Math.floor(investissement_max/this.getprixArbre());
 			this.AchatArbres((int)Math.floor(nbre_arbresmax*proportionfora), Feve.FEVE_BASSE);
