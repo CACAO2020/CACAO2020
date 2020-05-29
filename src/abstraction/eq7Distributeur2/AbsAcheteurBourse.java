@@ -76,7 +76,7 @@ public class AbsAcheteurBourse {
 	public String getNom() {
 		return ac.getNom();
 	}
-
+	
 	public String getDescription() {
 		return ac.getDescription();
 	}

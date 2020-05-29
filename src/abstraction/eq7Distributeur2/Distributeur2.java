@@ -35,6 +35,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	
 	protected double soldeCritique;
 	
+	//Les sous-acteurs
 	private AcheteurBourse acheteurBourse;
 	private AcheteurContratCadre acheteurContratCadre;
 	private Vendeur vendeur;
@@ -72,7 +73,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	public int getNumero() {
 		return this.numero; 
 	}
-
+	// Lance les procédures d'initialisation des acteurs
 	public void initialiser() {
 		vendeur.initialiser();
 		acheteurBourse.initialiser();
@@ -82,7 +83,8 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 			stock.ajouterStockChocolat(choco, vendeur.quantiteAVendreParDefaut);
 		}
 	}
-	
+	//La méthode next, qui lance les appels des fonctions next de chaque sous-acteur. Le vendeur en premier pour évaluer la quantité de chocolat
+	// que les acheteurs doivent obtenir
 	public void next() {
 		this.debutEtape = false;
 		vendeur.next();
