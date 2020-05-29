@@ -10,6 +10,10 @@ import abstraction.eq8Romu.chocolatBourse.IVendeurChocolatBourse;
 import abstraction.eq8Romu.chocolatBourse.SuperviseurChocolatBourse;
 import abstraction.eq8Romu.clients.ClientFinal;
 import abstraction.eq8Romu.clients.IDistributeurChocolatDeMarque;
+import abstraction.eq8Romu.contratsCadres.Echeancier;
+import abstraction.eq8Romu.contratsCadres.ExemplaireContratCadre;
+import abstraction.eq8Romu.contratsCadres.IAcheteurContratCadre;
+import abstraction.eq8Romu.contratsCadres.SuperviseurVentesContratCadre;
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.ChocolatDeMarque;
 import abstraction.eq8Romu.produits.Feve;
@@ -18,35 +22,43 @@ import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
+import abstraction.eq1Producteur1.FiliereTestCrieeProd1;
 import abstraction.eq7Distributeur2.*;
 
 
-public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteurChocolatBourse, IDistributeurChocolatDeMarque {
+public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteurChocolatBourse, IAcheteurContratCadre, IDistributeurChocolatDeMarque {
 	
 	private static int NB_INSTANCES = 0;
 	public int numero;
-	private int cryptogramme;
+	
+	protected int cryptogramme;
 	
 	protected double soldeCritique;
 	
-	private AcheteurChocolat acheteurChocolat;
-	private DistributeurChocolat distributeurChocolat;
+	//Les sous-acteurs
+	private AcheteurBourse acheteurBourse;
+	private AcheteurContratCadre acheteurContratCadre;
+	private Vendeur vendeur;
 	private Stock stock;
 	
 	private Journal journal;
 	private Journal journalTransactions;
+	
+	protected boolean debutEtape = true;
 	
 	public Distributeur2() {
 		super();
 		NB_INSTANCES++;
 		numero = NB_INSTANCES;
 		soldeCritique = 2.;
-		acheteurChocolat = new AcheteurChocolat(this);
-		distributeurChocolat = new DistributeurChocolat(this);
+		acheteurBourse = new AcheteurBourse(this);
+		acheteurContratCadre = new AcheteurContratCadre(this);
+		vendeur = new Vendeur(this);
 		stock = new Stock(this);
 		initJournaux();
 	}
 	
+	// Initialise les journaux
 	public void initJournaux() {
 		journal = new Journal(getNom() + " : Informations générales", this);
 		journal.ajouter(Journal.texteColore(titleColor, Color.WHITE, "EQ7 : Journal d'activités"));
@@ -55,25 +67,31 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		journalTransactions = new Journal(getNom() + " : Transactions bancaires", this);
 		journalTransactions.ajouter(Journal.texteColore(titleColor, Color.WHITE, "EQ7 : Transactions bancaires"));
 		journalTransactions.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "Ce journal regroupe toutes les opérations bancaires effectuées"));
-		journalTransactions.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "par l'acteur (débits et crédits)."));
+		journalTransactions.ajouter(Journal.texteColore(descriptionColor, Color.BLACK, "par l'acteur (débits et crédits) ainsi que les alertes de solde."));
 	}
-	 
+	
 	public int getNumero() {
 		return this.numero; 
 	}
-	
-	public AcheteurChocolat getAcheteurChocolat() {
-		return this.acheteurChocolat;
+	// Lance les procédures d'initialisation des acteurs
+	public void initialiser() {
+		vendeur.initialiser();
+		acheteurBourse.initialiser();
+		stock.initialiser();
+		// AJOUT D'UN STOCK INITIAL POUR OBSERVER LES VENTES
+		for (ChocolatDeMarque choco : vendeur.getCatalogue()) {
+			stock.ajouterStockChocolat(choco, vendeur.quantiteAVendreParDefaut);
+		}
+	}
+	// La méthode next, qui lance les appels des fonctions next de chaque sous-acteur
+	// Le vendeur est appelé en premier pour évaluer la quantité de chocolat que les acheteurs doivent commander
+	public void next() {
+		this.debutEtape = false; 
+		vendeur.next();
+		acheteurContratCadre.next();
+		acheteurBourse.next();
 	}
 	
-	public DistributeurChocolat getDistributeurChocolat() {
-		return this.distributeurChocolat;
-	}
-	
-	public Stock getStock() {
-		return this.stock;
-	}
-		
 	public String getNom() {
 		return "EQ7";
 	}
@@ -85,57 +103,13 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	public Color getColor() {
 		return new Color(240, 195, 15); 
 	}
-
-	public void initialiser() {
-		distributeurChocolat.initialiser();
-		acheteurChocolat.initialiser();
-		stock.initialiser();
-	}
 	
-	public void next() {
-		distributeurChocolat.next();
-		acheteurChocolat.next();
-		stock.next();
-	}
-	
+	// Renvoie le solde actuel de l'acteur
 	public double getSolde() {
 		return Filiere.LA_FILIERE.getBanque().getSolde(Filiere.LA_FILIERE.getActeur(getNom()), this.cryptogramme);
 	}
-
-	public List<String> getNomsFilieresProposees() {
-		return new ArrayList<String>();
-	}
-
-	public Filiere getFiliere(String nom) {
-		return Filiere.LA_FILIERE;
-	}
-
-	public List<Variable> getIndicateurs() {
-		List<Variable> res = new ArrayList<Variable>();
-		res.addAll(stock.getIndicateurs());
-		res.addAll(acheteurChocolat.getIndicateurs());
-		res.addAll(distributeurChocolat.getIndicateurs());
-		return res;
-	}
-
-	public List<Variable> getParametres() {
-		List<Variable> res=new ArrayList<Variable>();
-		res.addAll(stock.getParametres());
-		res.addAll(acheteurChocolat.getParametres());
-		res.addAll(distributeurChocolat.getParametres());
-		return res;
-	}
-
-	public List<Journal> getJournaux() {
-		List<Journal> res=new ArrayList<Journal>();
-		res.add(journal);
-		res.add(journalTransactions);
-		res.addAll(stock.getJournaux());
-		res.addAll(acheteurChocolat.getJournaux());
-		res.addAll(distributeurChocolat.getJournaux());
-		return res;
-	}
-
+	
+	// Informe de la faillite d'un acteur dans le journal principal
 	public void notificationFaillite(IActeur acteur) {
 		if (this==acteur) {
 			System.out.println("I'll be back... or not... "+this.getNom());
@@ -146,6 +120,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		}
 	}	
 
+	// Affiche les détails d'une opération bancaire dans le journal des transactions
 	public void notificationOperationBancaire(double montant) {
 		if (montant > 0) {
 			journalTransactions.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[CRÉDIT] Crédit d'une valeur de : " + Journal.doubleSur(montant,2) + "."));
@@ -154,6 +129,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		}
 	}
 	
+	// Affiche le solde dans le journal principal
 	public void notificationSolde() {
 		double solde = getSolde();
 		if (solde > soldeCritique) {
@@ -167,14 +143,79 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		}
 	}
 
-	// Méthodes de l'acheteur de chocolat à la bourse
+	// Renvoie la liste des filières proposées par l'acteur
+	public List<String> getNomsFilieresProposees() {
+		ArrayList<String> filieres = new ArrayList<String>();
+		filieres.add("TESTEQ7");
+		return(filieres);
+	}
+
+	// Renvoie une instance d'une filière d'après son nom
+	public Filiere getFiliere(String nom) {
+		if (nom.equals("TESTEQ7")) {
+			return new FiliereTest();
+		}
+		else {
+			return Filiere.LA_FILIERE;
+		}
+	}
+
+	// Renvoie les indicateurs
+	public List<Variable> getIndicateurs() {
+		List<Variable> res = new ArrayList<Variable>();
+		res.addAll(stock.getIndicateurs());
+		res.addAll(acheteurBourse.getIndicateurs());
+		res.addAll(acheteurContratCadre.getIndicateurs());
+		res.addAll(vendeur.getIndicateurs());
+		return res;
+	}
+
+	// Renvoie les paramètres
+	public List<Variable> getParametres() {
+		List<Variable> res=new ArrayList<Variable>();
+		res.addAll(stock.getParametres());
+		res.addAll(acheteurBourse.getParametres());
+		res.addAll(acheteurContratCadre.getParametres());
+		res.addAll(vendeur.getParametres());
+		return res;
+	}
+
+	// Renvoie les journaux
+	public List<Journal> getJournaux() {
+		List<Journal> res=new ArrayList<Journal>();
+		res.add(journal);
+		res.add(journalTransactions);
+		res.addAll(stock.getJournaux());
+		res.addAll(acheteurBourse.getJournaux());
+		res.addAll(acheteurContratCadre.getJournaux());
+		res.addAll(vendeur.getJournaux());
+		return res;
+	}
+
+	// Renvoie les instances des acteurs associés à ce distributeur
+	public AcheteurBourse getAcheteurBourse() {
+		return this.acheteurBourse;
+	}
 	
+	public AcheteurContratCadre getAcheteurContratCadre() {
+		return this.acheteurContratCadre;
+	}
+	
+	public Vendeur getVendeur() {
+		return this.vendeur;
+	}
+	
+	public Stock getStock() {
+		return this.stock;
+	}
+
+	// Méthodes renvoyant aux méthodes de l'acheteur à la bourse
 	public void setCryptogramme(Integer crypto) {
 		this.cryptogramme = crypto;
 	}
 
 	public double getDemande(Chocolat chocolat, double cours) {
-		return acheteurChocolat.getDemande(chocolat, cours);
+		return acheteurBourse.getDemande(chocolat, cours);
 	}
 
 	public Integer getCryptogramme(SuperviseurChocolatBourse superviseur) {
@@ -182,37 +223,49 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	}
 
 	public void notifierCommande(Chocolat chocolat, double quantiteObtenue, boolean payee) {
-		acheteurChocolat.notifierCommande(chocolat, quantiteObtenue, payee);
+		acheteurBourse.notifierCommande(chocolat, quantiteObtenue, payee);
 	}
 
 	public void receptionner(ChocolatDeMarque chocolat, double quantite) {
-		acheteurChocolat.receptionner(chocolat, quantite);
+		acheteurBourse.receptionner(chocolat, quantite);
 	}
 
-	// Méthodes du distributeur de chocolat de marque
-	
+	// Méthodes renvoyant aux méthodes du vendeur
 	public List<ChocolatDeMarque> getCatalogue() {
-		return distributeurChocolat.getCatalogue();
+		return vendeur.getCatalogue();
 	}
 
 	public double prix(ChocolatDeMarque choco) {
-		return distributeurChocolat.prix(choco);
+		return vendeur.prix(choco);
 	}
 
 	public double quantiteEnVente(ChocolatDeMarque choco) {
-		return distributeurChocolat.quantiteEnVente(choco);
+		return vendeur.quantiteEnVente(choco);
 	}
 
 	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant) {
-		distributeurChocolat.vendre(client, choco, quantite, montant);
+		vendeur.vendre(client, choco, quantite, montant);
 	}
 
 	public void notificationRayonVide(ChocolatDeMarque choco) {
-		distributeurChocolat.notificationRayonVide(choco);
+		vendeur.notificationRayonVide(choco);
 	}
 
 	public List<ChocolatDeMarque> pubSouhaitee() {
-		return distributeurChocolat.pubSouhaitee();
+		return vendeur.pubSouhaitee();
+	}
+
+	// Méthodes renvoyant aux méthodes de l'acheteur contrat cadre
+	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
+		return acheteurContratCadre.contrePropositionDeLAcheteur(contrat);
+	}
+
+	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
+		return acheteurContratCadre.contrePropositionPrixAcheteur(contrat);
+	}
+
+	public void receptionner(Object produit, double quantite, ExemplaireContratCadre contrat) {
+		acheteurContratCadre.receptionner(produit, quantite, contrat);
 	}
 
 }

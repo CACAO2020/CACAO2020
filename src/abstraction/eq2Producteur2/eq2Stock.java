@@ -69,6 +69,7 @@ public void setQtFeve(Feve feve, double quantite) {
 
 }
 public void addQtPate(Pate pate, double quantite) {
+<<<<<<< HEAD
 	this.getStockPate().get(pate).ajouter(this, quantite);
 
 }
@@ -83,6 +84,27 @@ public void setQtPate(Pate pate, double quantite) {
 public void addQtFeve(Feve feve, double quantite) {
 	this.getStockFeve().get(feve).ajouter(this, quantite);
 
+=======
+	if(this.getStockPate().containsKey(pate))
+	{this.getStockPate().get(pate).ajouter(this, quantite);}
+	else {this.addStockPate(pate, quantite);}
+
+}
+public void removeQtPate(Pate pate, double quantite) {
+	this.getStockPate().get(pate).retirer(this, quantite);
+
+}
+public void setQtPate(Pate pate, double quantite) {
+	this.getStockPate().get(pate).setValeur(this, quantite);
+
+}
+public void addQtFeve(Feve feve, double quantite) {
+	if (this.getStockFeve().containsKey(feve)) {
+		this.getStockFeve().get(feve).ajouter(this, quantite);}
+	else {
+		this.addStockFeve(feve, quantite);
+	}	
+>>>>>>> branch 'master' of https://github.com/CACAO2020/CACAO2020
 }
 public void removeQtFeve(Feve feve, double quantite) {
 	this.getStockFeve().get(feve).retirer(this, quantite);
