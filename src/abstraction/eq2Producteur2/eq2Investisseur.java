@@ -24,46 +24,6 @@ public class eq2Investisseur extends eq2Vendeur {
 	}
 
 	public void AchatArbres(int nbrArbres, Feve feve){
-<<<<<<< HEAD
-		if (Filiere.LA_FILIERE.getBanque().getSolde(this,this.getCrypto())> nbrArbres*this.prixArbre) {
-			this.ajoutPaquetArbres(new PaquetArbres(nbrArbres, feve));
-			Filiere.LA_FILIERE.getBanque().virer(this,this.getCrypto(),Filiere.LA_FILIERE.getBanque(),nbrArbres*this.prixArbre);
-			
-			this.journal_achats.ajouter("Achat de " + nbrArbres + " arbres de type: " + feve.getGamme());
-		}
-	}
-	/** décide si on achète des arbres à ce tour ou non, à appeler à chaque next**/
-	public void decideAchatArbres() { //si nbre d'arbres arrive en-dessous d'un minimum et qu'on peut en acheter : on rachète ce type d'arbre, ou bien qu'on a assez d'argent, on achète ce qui s'est le mieux vendu sur toutes les ventes depuis x temps.
-		                              //mettons qu'on commence avec 10 hectares (propriété de taille très raisonnable) --> 11 110 arbres, entre 5 et 6 employés
-		                              //on détermine les proportions de fèves qui se sont le mieux vendues les tours précédents pour savoir quoi planter
-		int nbrearbres = 0;
-		List<PaquetArbres> arbres = this.getPaquetsArbres();
-		for (int i = 0; i < arbres.size(); i++) {
-			nbrearbres = nbrearbres + arbres.get(i).getNbreArbres();
-		}
-		int totalventesréalisées = this.getcompteurcrio()+this.getcompteurcrioe()+this.getcompteurfora()+this.getcompteurtrini()+this.getcompteurtrinie();
-		if(totalventesréalisées !=0) {
-		double proportionfora = this.getcompteurfora()/totalventesréalisées;
-		double proportiontrini = this.getcompteurtrini()/totalventesréalisées;
-		double proportioncrio = this.getcompteurcrio()/totalventesréalisées;
-		double proportiontrinie = this.getcompteurtrinie()/totalventesréalisées;
-		double proportioncrioe = this.getcompteurcrioe()/totalventesréalisées;
-		
-		if (nbrearbres < 11100 && Filiere.LA_FILIERE.getBanque().getSolde(this,this.getCrypto()) > 0) {
-			int ecart = 11100 - nbrearbres;
-			this.journal_achats.ajouter("boucle 1 déconne");
-			this.AchatArbres((int)Math.floor(ecart*proportionfora), Feve.FEVE_BASSE);
-			this.AchatArbres((int)Math.floor(ecart*proportiontrini), Feve.FEVE_MOYENNE);
-			this.AchatArbres((int)Math.floor(ecart*proportiontrinie), Feve.FEVE_MOYENNE_EQUITABLE);
-			this.AchatArbres((int)Math.floor(ecart*proportioncrio), Feve.FEVE_HAUTE);
-			this.AchatArbres((int)Math.floor(ecart*proportioncrioe), Feve.FEVE_HAUTE_EQUITABLE);
-			this.journal_achats.ajouter("on a acheté des arbres car trop peu d'arbres");
-		}
-		else if ((Filiere.LA_FILIERE.getBanque().getSolde(this,this.getCrypto())) > 1000) { //on investit pas si on a moins de 1000$
-			double investissement_max = Filiere.LA_FILIERE.getBanque().getSolde(this,this.getCrypto())*0.2;
-			this.journal_achats.ajouter("boucle 2 déconne");
-			int nbre_arbresmax = (int)Math.floor(investissement_max/this.getprixArbre());
-=======
 		if (Filiere.LA_FILIERE.getBanque().getSolde(this,this.getCrypto())> nbrArbres*this.prixArbre && nbrArbres > 0) {
 			this.ajoutPaquetArbres(new PaquetArbres(nbrArbres, feve));
 			Filiere.LA_FILIERE.getBanque().virer(this,this.getCrypto(),Filiere.LA_FILIERE.getBanque(),nbrArbres*this.prixArbre);
@@ -100,7 +60,6 @@ public class eq2Investisseur extends eq2Vendeur {
 		else if ((Filiere.LA_FILIERE.getBanque().getSolde(this,this.getCrypto())) > (this.NbTotalArbres()*0.05)*500) { //pb : achète trop d'arbres qui produisent pas avant 6 ans, faillite
 			double investissement_max = Filiere.LA_FILIERE.getBanque().getSolde(this,this.getCrypto())*0.005;
 			double nbre_arbresmax = Math.floor(investissement_max/this.getprixArbre());
->>>>>>> branch 'master' of https://github.com/CACAO2020/CACAO2020
 			this.AchatArbres((int)Math.floor(nbre_arbresmax*proportionfora), Feve.FEVE_BASSE);
 			this.AchatArbres((int)Math.floor(nbre_arbresmax*proportiontrini), Feve.FEVE_MOYENNE);
 			this.AchatArbres((int)Math.floor(nbre_arbresmax*proportiontrinie), Feve.FEVE_MOYENNE_EQUITABLE);
