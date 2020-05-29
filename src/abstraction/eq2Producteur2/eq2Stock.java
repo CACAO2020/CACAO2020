@@ -69,7 +69,9 @@ public void setQtFeve(Feve feve, double quantite) {
 
 }
 public void addQtPate(Pate pate, double quantite) {
-	this.getStockPate().get(pate).ajouter(this, quantite);
+	if(this.getStockPate().containsKey(pate))
+	{this.getStockPate().get(pate).ajouter(this, quantite);}
+	else {this.addStockPate(pate, quantite);}
 
 }
 public void removeQtPate(Pate pate, double quantite) {
@@ -81,8 +83,11 @@ public void setQtPate(Pate pate, double quantite) {
 
 }
 public void addQtFeve(Feve feve, double quantite) {
-	this.getStockFeve().get(feve).ajouter(this, quantite);
-
+	if (this.getStockFeve().containsKey(feve)) {
+		this.getStockFeve().get(feve).ajouter(this, quantite);}
+	else {
+		this.addStockFeve(feve, quantite);
+	}	
 }
 public void removeQtFeve(Feve feve, double quantite) {
 	this.getStockFeve().get(feve).retirer(this, quantite);
