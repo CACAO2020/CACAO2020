@@ -25,6 +25,7 @@ public class AbsDistributeur2 {
 	public Color positiveColor = Color.GREEN;
 	public Color warningColor = Color.ORANGE;
 	
+	//Les chocos que nous vendons
 	public AbsDistributeur2() {
 		nosChoco = new ArrayList<Chocolat>();
 		nosChoco.add(Chocolat.CHOCOLAT_MOYENNE);
