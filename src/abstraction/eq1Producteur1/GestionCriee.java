@@ -16,7 +16,14 @@ import abstraction.fourni.Filiere;
 
 
 
-/** @author Clément */
+/** @author Clément 
+ * Implémente les fonctions nécessaire pour la vente a la criée
+ * ainsi que les fonctions telles que la mise a jour du prix minimum de vente.
+ * 
+ * Dans une v1, nous avons testé plusiseurs méthode pour définire le prix minimum de vente d'un lot
+ * cependant, pour nous alligner avec ce qui a été fait dans l'équipe 2, nous fixerons les prix a la tonne
+ * dans le constructeur.
+*/
 class GestionCriee //implements IVendeurCacaoCriee 
 {
 	
