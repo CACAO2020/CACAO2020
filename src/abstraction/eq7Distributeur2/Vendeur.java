@@ -27,6 +27,8 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 	}
 	
 	public boolean commercialise(Chocolat choco) {
+		//cette fonction indique si ce chocolat (selon sa gamme) est commercialisé ou pas par notre distributeur
+		//(retourne faux s'il ne l'est pas, vrai sinon)
 		return !choco.getGamme().equals(Gamme.BASSE);
 	}
 	
@@ -53,6 +55,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 	}
 	
 	public void majIndicateursDeVente() {
+		//cette fonction met à jour les données de vente de la step actuelle
 		for (Chocolat choco : ac.nosChoco) {
 			chocoVendu.get(choco).setValeur(ac, ventesEtapeActuelle.get(choco));
 			ventesEtapeActuelle.put(choco,0.);
@@ -60,6 +63,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 	}
 	
 	public void majPublicites() {
+		//cette fonction actualise la liste des chocolats (selon gamme) dont le distributeur fait la publicité
 		// IA : publicités sur les chocolats équitables uniquement
 		for (ChocolatDeMarque choco : produitsCatalogue) {
 			if (choco.getChocolat() == Chocolat.CHOCOLAT_MOYENNE_EQUITABLE ||choco.getChocolat() == Chocolat.CHOCOLAT_HAUTE_EQUITABLE) {
@@ -69,6 +73,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 	}
 	
 	public void majQuantitesEnVente() {
+		//cette fonction met à jour la quantité de chocolat en vente pour chaque chocolat du catalogue
 		// IA : quantité en vente = alpha * stockActuel + beta
 		double quantiteEnVente;
 		double stockActuel;
@@ -82,6 +87,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 	}
 	
 	public void majQuantitesACommander() {
+		//cette fonction met à jour la quantité de chocolat à commander pour chaque chocolat du catalogue
 		// IA : quantité à commander = max(0, quantité en vente - (stockActuel - stockLimite))
 		double quantiteACommander;
 		double stockActuel;
@@ -94,6 +100,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 	}
 	
 	public void majPrixDeVente() {
+		//met à jour le prix de vente de chaque chocolat du catalogue selon la valeur du cours actuel
 		// IA : prix vente = (1 + pourcentageMarge/100) * cours
 		double cours;
 		double pourcentageMarge;
@@ -110,10 +117,12 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 	}
 	
 	public double getQuantiteACommander(ChocolatDeMarque choco) {
+		//donne la valeur des quantités à commander pour tel chocolat de marque
 		return quantitesACommander.get(choco).getValeur();
 	}
 	
 	public double getQuantiteACommander(Chocolat choco) {
+		//donne la quantité à commander de chocolat d'une gamme
 		double res = 0.;
 		for (ChocolatDeMarque produit : produitsCatalogue) {
 			if (produit.getChocolat() == choco) {
@@ -124,6 +133,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 	}
 	
 	public double quantiteEnVente(Chocolat choco) {
+		//donne quantité en vente de chocolat selon une gamme
 		double res = 0.;
 		for (ChocolatDeMarque produit : produitsCatalogue) {
 			if (produit.getChocolat() == choco) {
@@ -134,6 +144,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 	}
 	
 	public double quantiteEnVente(ChocolatDeMarque choco) {
+		//donne quantité en vente de chocolat selon la marque
 		if (!ac.debutEtape) {
 			ac.debutEtape = true;
 			adapterQuantitesEnVente();
@@ -147,6 +158,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 	}
 
 	public void ajouterProduitAuCatalogue(ChocolatDeMarque choco) {
+		//ajoute au catalogue un chocolat (selon sa marque) en indiquant son prix et sa quantité en vente
 		if (!produitsCatalogue.contains(choco)) {
 			produitsCatalogue.add(choco);
 			prixChoco.put(choco, new Variable("Prix du " + choco.name(), ac, prixParDefaut.get(choco.getChocolat())));
@@ -164,20 +176,24 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 	}
 	
 	public List<ChocolatDeMarque> getCatalogue() {
+		//renvoie la liste des chocolats de marque de notre catalogue
 		return produitsCatalogue;
 	}
 
 	public double prix(ChocolatDeMarque choco) {
+		//renvoie le prix d'un chocolat (selon sa marque)
 		return prixChoco.get(choco).getValeur();
 	}
 
 	public void adapterQuantitesEnVente() {
+		//met à jour les quantité de chocolat de chaque marque en vente selon le stock qu'on en a
 		for (ChocolatDeMarque produit : produitsCatalogue) {
 			quantitesEnVente.get(produit).setValeur(ac, Double.min(quantitesEnVente.get(produit).getValeur(), ac.getStock().getStockChocolatDeMarque(produit)));
 		}
 	}
 
 	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant) {
+		//vend le chocolat de tel marque à tel rpix et tel quantité au client final
 		if (client!=null) { 
 			ac.getStock().retirerStockChocolat(choco, quantite);
 			journal.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[VENTE] Vente de " + Journal.doubleSur(quantite,2) + " tonnes de " + choco.name() + " à " + client.getNom() + " pour " + Journal.doubleSur(montant,2) + " (" + Journal.doubleSur(montant/quantite,2) + "/tonne)."));
@@ -186,6 +202,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 	}
 
 	public void notificationRayonVide(ChocolatDeMarque choco) {
+		//notifie quand le rayon est vide
 		journal.ajouter(Journal.texteColore(warningColor, Color.BLACK, "[RAYON] Le rayon de " + choco.name() + " est vide."));
 	}
 
