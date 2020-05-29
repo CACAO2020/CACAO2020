@@ -58,6 +58,7 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 	}
 
 	public void initialiser() {
+		this.plantation.initialiserArbres(10000, 2000);
 	}
 	
 	// Modifiee par Melanie pour l'ajout des differents stocks de feves

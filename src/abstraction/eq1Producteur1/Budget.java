@@ -2,6 +2,8 @@ package abstraction.eq1Producteur1;
 
 import java.util.ArrayList;
 
+import abstraction.fourni.Variable;
+
 /*
  * Cree par Thalie
  */
@@ -10,8 +12,8 @@ import java.util.ArrayList;
  * Donnees :
  * On paie un employe (recolteur, pas de diversification des employes pour l'instant)
  * 65 000 francs CFA par mois, ce qui correspond a 100 euros.
- * Un nouveau plant coute 200 francs CFA (0.3), on compte 1 111 plants par hectares
- * et chaque recolteur s'occupe de 2 hectares.
+ * Un nouveau plant coute 200 francs CFA (0.3), on compte 500 plants par récolteur.
+ * On ne prend pas en compte le terrain lors de la plantation de nouveaux arbres.
  */
 
 
@@ -28,7 +30,7 @@ import java.util.ArrayList;
  * int removeEmployes(int)
  * 
  * ArrayList<Integer> investissement(double, int, double, double)
- * ArrayList<Integer> cyclique(int, double, double)
+ * ArrayList<Integer> budget_cyclique(int, double, double)
  */
 
 
@@ -36,6 +38,11 @@ import java.util.ArrayList;
 public class Budget {
 	private double fonds;
 	private int employes;
+	private Variable oldstockF;
+	private Variable newstockF;
+	private Variable oldstockT;
+	private Variable newstockT;
+	
 	
 	public double getFonds() {
 		return this.fonds;
@@ -43,6 +50,38 @@ public class Budget {
 	
 	public int getEmployes() {
 		return this.employes;
+	}
+	
+	public Variable getOldStockF() {
+		return this.oldstockF;
+	}
+
+	public Variable getOldStockT() {
+		return this.oldstockT;
+	}
+	
+	public Variable getNewStockF() {
+		return this.oldstockF;
+	}
+
+	public Variable getNewStockT() {
+		return this.oldstockT;
+	}
+	
+	public void setOldStockF(Variable s) {
+		this.oldstockF=s;
+	}
+	
+	public void setOldStockT(Variable s) {
+		this.oldstockF=s;
+	}
+	
+	public void setNewStockF(Variable s) {
+		this.oldstockF=s;
+	}
+	
+	public void setNewStockT(Variable s) {
+		this.oldstockF=s;
 	}
 	
 	public void setFonds(double n_fonds) {
@@ -71,20 +110,12 @@ public class Budget {
 
 
 	public ArrayList<Integer> investissement(double somme, int nb_arbres, double quantiteVendueF, double quantiteVendueT) {
-		int nb_hectares = (int) nb_arbres/1111;
-		int parite = nb_hectares - ((int) nb_hectares/2);
-		double coutArbresHectare = 333.33;
+		double coutArbresEmploye = 152.18;
 		int newHectares = 0;
-		while (somme>(coutArbresHectare + (1-parite)*50)) {
+		while (somme>(coutArbresEmploye + 50)) {
 			newHectares += 1;
-			if (parite==0) {
-				somme = somme - coutArbresHectare - 50;
-				parite = 1;
-			} else {
-				somme = somme - coutArbresHectare;
-				parite = 0;
+			somme = somme - coutArbresEmploye - 50;
 			}
-		}
 		double quantiteVendue = quantiteVendueF + quantiteVendueT;
 		double proportionT = quantiteVendueT/quantiteVendue;
 		int newHectaresT = (int) proportionT*newHectares;
@@ -98,7 +129,7 @@ public class Budget {
 	
 	
 
-	public ArrayList<Integer> cyclique(int nb_arbres, double quantiteVendueF, double quantiteVendueT) {
+	public ArrayList<Integer> budget_cyclique(int nb_arbres, Variable stockF, Variable stockT) {
 		if (this.getFonds()>this.getEmployes()*50) {
 			this.removeFonds(this.getEmployes()*50);
 		} else {
@@ -106,6 +137,12 @@ public class Budget {
 			this.setEmployes(max_employes);
 			this.removeFonds(this.getEmployes()*50);
 		}
+		this.setOldStockF(this.getNewStockF());
+		this.setOldStockT(this.getNewStockT());
+		this.setNewStockF(stockF);
+		this.setNewStockT(stockT);
+		double quantiteVendueF = this.getNewStockF().getValeur() - this.getOldStockF().getValeur();
+		double quantiteVendueT = this.getNewStockT().getValeur() - this.getOldStockT().getValeur();
 		ArrayList<Integer> newPlants = new ArrayList<Integer>();
 		if (this.getFonds()>this.getEmployes()*25) {
 			newPlants = investissement((this.getFonds()-this.getEmployes()*25), nb_arbres, quantiteVendueF, quantiteVendueT);
