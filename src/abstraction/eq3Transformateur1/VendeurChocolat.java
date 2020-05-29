@@ -13,30 +13,31 @@ import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;;
 public abstract class VendeurChocolat extends AcheteurCacao implements IVendeurChocolatBourse {
 
-	/** @author K. GUTIERREZ  */
+	/** @author K. GUTIERREZ/Theophile  */
 	public double getOffre(Chocolat chocolat, double cours) {
         if(this.getStockChocolat().containsKey(chocolat)) {
             
             if(cours<this.getCoutChocolat(chocolat)) {
-
+            	this.journalVente.ajouter("On ne vend pas ");
                 return 0.0;
             }
             if(cours<1.02*this.getCoutChocolat(chocolat)) {
-
+            	this.journalVente.ajouter("On essaye de vendre 20% de chocolat"+chocolat);
                 return 0.2*this.getStockChocolat(chocolat);
             }
             if(cours<1.04*this.getCoutChocolat(chocolat)) {
-
+            	this.journalVente.ajouter("On essaye de vendre 40% de chocolat"+chocolat);
                 return 0.4*this.getStockChocolat(chocolat);
             }
             if(cours<1.06*this.getCoutChocolat(chocolat)) {
-
+            	this.journalVente.ajouter("On essaye de vendre 60% de chocolat"+chocolat);
                 return 0.06*this.getStockChocolat(chocolat);
             }
             if(cours<1.08*this.getCoutChocolat(chocolat)) {
-
+            	this.journalVente.ajouter("On essaye de vendre 80% de chocolat"+chocolat);
                 return 0.8*this.getStockChocolat(chocolat);
             }
+        	this.journalVente.ajouter("On essaye de vendre 100% de chocolat"+chocolat);
             return this.getStockChocolat(chocolat);
         }
         return 0.0;
@@ -44,6 +45,7 @@ public abstract class VendeurChocolat extends AcheteurCacao implements IVendeurC
 	
 	/** @author K. GUTIERREZ  */
 	public void livrer(Chocolat chocolat, double quantite) {
+    	this.journalVente.ajouter("On a vendu "+quantite+"T de chocolat"+chocolat);
 		this.setStockChocolat(chocolat,-quantite);
 	}
 

@@ -15,13 +15,13 @@ import abstraction.fourni.Filiere;
 /** @author AMAURY COUDRAY*/
 public class Transformateur1 extends VendeurChocolat {
 	public Transformateur1() {
-		this.stockChocolat.put(Chocolat.CHOCOLAT_BASSE,50.0);
+		this.stockChocolat.put(Chocolat.CHOCOLAT_BASSE,500.0);
 		this.stockFeves.put(Feve.FEVE_HAUTE,10.0);
 		this.coutChocolat.put(Chocolat.CHOCOLAT_BASSE,10.0);
-		this.coutFeves.put(Feve.FEVE_HAUTE, 1.0);
+		this.coutFeves.put(Feve.FEVE_HAUTE, 10000.0);
 		this.MontantCompte=500000.0;
 		this.stockTotalFeves=new Variable("stock total de feves de "+getNom(),this,10.0);
-		this.stockTotalChocolat=new Variable("stock total de chocolat de "+getNom(),this,50.0);
+		this.stockTotalChocolat=new Variable("stock total de chocolat de "+getNom(),this,500.0);
 		this.stockTotalPateInterne=new Variable("stock total de pate interne de "+getNom(),this,0.0);
 
 	}
@@ -48,7 +48,7 @@ public class Transformateur1 extends VendeurChocolat {
 		}
 	}
 	public void next() {
-		System.out.println("test");
+
 		this.decisionTransformation();
 	}
 	
