@@ -168,7 +168,7 @@ public class ContratCadre {
 		}
 		int step = Filiere.LA_FILIERE.getEtape();
 		if (step<=this.getEcheancier().getStepFin()) {
-			return this.getEcheancier().getQuantiteJusquA(step)- (this.quantitesLivrees ==null ? 0.0 : this.getQuantiteLivree().getQuantiteJusquA(step));
+			return this.getEcheancier().getQuantiteJusquA(step)- (this.getQuantiteLivree()==null ? 0.0 : this.getQuantiteLivree().getQuantiteJusquA(step));
 		} else {
 			return this.quantiteRestantALivrer;
 		}
