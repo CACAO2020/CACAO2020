@@ -20,6 +20,7 @@ public class eq2Acteur implements IActeur {
 	 * 
 	 */
 	private List<PaquetArbres> PaquetsArbres;
+	private List<Usine>Usines;
 	private Journal journalEq2;
 	private Integer cryptogramme;
 	private List<Variable> parametres;
@@ -29,6 +30,7 @@ public class eq2Acteur implements IActeur {
 		this.PaquetsArbres = new ArrayList<PaquetArbres>();
 		this.parametres = new ArrayList<Variable>();
 		this.PaquetsArbres = new ArrayList<PaquetArbres>();
+		this.Usines = new ArrayList<Usine>();
 	}
 
 	
@@ -40,8 +42,16 @@ public class eq2Acteur implements IActeur {
 		return this.PaquetsArbres;
 	}
 
+	public List<Usine> getUsines(){
+		return this.Usines;
+	}
+	
 	public void ajoutPaquetArbres(PaquetArbres paquetArbres){
 		this.PaquetsArbres.add(paquetArbres);
+	}
+	
+	public void ajoutUsine(Usine usine){
+		this.Usines.add(usine);
 	}
 	
 	public double NbTotalArbres() {
@@ -50,6 +60,14 @@ public class eq2Acteur implements IActeur {
 			TotalArbre += this.getPaquetsArbres().get(i).getNbreArbres();
 		}
 		return TotalArbre;
+	}
+	
+	public double NbTotalMachines() {
+		double TotalMachine =0; 
+		for (int i=0; i<this.getUsines().size(); i++) {
+			TotalMachine += this.getUsines().get(i).getNbMachine();
+		}
+		return TotalMachine;
 	}
 	
 	@Override
