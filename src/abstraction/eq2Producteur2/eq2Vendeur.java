@@ -34,7 +34,6 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 	
 	public eq2Vendeur() {
 		super();
-		//pour l'instant tous les prix sont initialises a 0
 		this.prixTF = new Variable("prixTF",this,1900);
 		this.prixTT = new Variable("prixTT",this,2500);
 		this.prixTTE = new Variable("prixTTE",this,2800);
@@ -43,11 +42,11 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 		this.prixvente = 0;
 		this.propalsnonvendues = new Variable("propalsnonvendues",this,999999999);//première valeur super haute pour permettre ventes
 		this.journal_des_ventes = new Journal("Journal des ventes", this);
-		this.compteurfora = 0;
-		this.compteurtrini = 0;
-		this.compteurtrinie = 0;
-		this.compteurcrio = 0;
-		this.compteurcrioe = 0;
+		this.compteurfora = 100;
+		this.compteurtrini = 100;
+		this.compteurtrinie = 100;
+		this.compteurcrio = 100;
+		this.compteurcrioe = 100;
 	}
 	/*faudrait rajouter un truc qui set les prix en fonction de ce qu'il s'est passé au cycle d'avant et de notre rentabilité
 	 * 
