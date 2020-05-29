@@ -252,42 +252,45 @@ public class Plantations {
 		double rendement = 0.0003125;
 		ArrayList<Double> lF = this.getArbresF();
 		ArrayList<Double> lT = this.getArbresT();
-		
-		for (int i=0; i<lF.size(); i+=1) {
-			double age = (double) lF.get(i);
-			if (age==3) {
-				totalF += rendement/4;
-			} else if (age==4) {
-				totalF += rendement/2;
-			} else if (age==5) {
-				totalF += 3*rendement/4;
-			}else if (age<36) {
-				totalF += rendement;
-			} else if (age<39) {
-				totalF += 3*rendement/4;
-			} else if (age<42) {
-				totalF += rendement/2;
-			} else {
-				totalF += rendement/4;
+		if (lF != new ArrayList<Double>()) {
+			for (int i=0; i<lF.size(); i+=1) {
+				double age = (double) lF.get(i);
+				if (age==3) {
+					totalF += rendement/4;
+				} else if (age==4) {
+					totalF += rendement/2;
+				} else if (age==5) {
+					totalF += 3*rendement/4;
+				}else if (age<36) {
+					totalF += rendement;
+				} else if (age<39) {
+					totalF += 3*rendement/4;
+				} else if (age<42) {
+					totalF += rendement/2;
+				} else {
+					totalF += rendement/4;
+				}
 			}
 		}
 		
-		for (int i=0; i<lT.size(); i+=1) {
-			double age = (double) lT.get(i);
-			if (age==3) {
-				totalT += rendement/4;
-			} else if (age==4) {
-				totalT += rendement/2;
-			} else if (age==5) {
-				totalT += 3*rendement/4;
-			}else if (age<36) {
-				totalT += rendement;
-			} else if (age<39) {
-				totalT += 3*rendement/4;
-			} else if (age<42) {
-				totalT += rendement/2;
-			} else {
-				totalT += rendement/4;
+		if (lT != new ArrayList<Double>()) {
+			for (int i=0; i<lT.size(); i+=1) {
+				double age = (double) lT.get(i);
+				if (age==3) {
+					totalT += rendement/4;
+				} else if (age==4) {
+					totalT += rendement/2;
+				} else if (age==5) {
+					totalT += 3*rendement/4;
+				}else if (age<36) {
+					totalT += rendement;
+				} else if (age<39) {
+					totalT += 3*rendement/4;
+				} else if (age<42) {
+					totalT += rendement/2;
+				} else {
+					totalT += rendement/4;
+				}
 			}
 		}
 		

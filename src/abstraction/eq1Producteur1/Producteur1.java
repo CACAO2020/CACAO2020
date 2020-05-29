@@ -35,7 +35,7 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 		this.journalEq1 = new Journal("Eq1 activites", this);
 		this.venteCriee = new GestionCriee(this);
 		this.plantation = new Plantations();
-		this.budget = new Budget(1000, 24, 0.0, 0.0, 0.0, 0.0);
+		this.budget = new Budget(1000, 24, 0.0, 0.0, 0, 0);
 	}
 
 	public void setCryptogramme(Integer crypto) {

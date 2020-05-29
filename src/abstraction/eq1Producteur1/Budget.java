@@ -134,11 +134,21 @@ public class Budget {
 			}
 		double quantiteVendue = quantiteVendueF + quantiteVendueT;
 		double proportionT = quantiteVendueT/quantiteVendue;
-		int newHectaresT = (int) proportionT*newEmployes;
-		int newHectaresF = newEmployes- newHectaresT;
+		double proportionF = quantiteVendueF/quantiteVendue;
+		if (proportionF<0) {
+			proportionF = 0;
+		}
+		if (proportionT<0) {
+			proportionT = 0;
+		}
+		int newArbresT = (int) proportionT*newEmployes;
+		int newArbresF = (int) proportionF*newEmployes;
+		if (newArbresT+newArbresF == 0) {
+			newEmployes = 0;
+		}
 		ArrayList<Integer> newPlants = new ArrayList<Integer>();
-		newPlants.add(newHectaresF);
-		newPlants.add(newHectaresT);
+		newPlants.add(newArbresF*500);
+		newPlants.add(newArbresT*500);
 		newPlants.add(newEmployes);
 		return newPlants;
 	}
