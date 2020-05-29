@@ -127,7 +127,9 @@ public class Transformateur implements IAcheteurCacaoCriee, IVendeurChocolatBour
 		stockChocolat.retirer(this, quantite);
 	}
 
+
 // propose les achats de feves pour la criée en fonction du prix minimal
+
 	public double proposerAchat(LotCacaoCriee lot) {
 		if (lot.getFeve().getGamme() == this.choco.getGamme()) {
 			return lot.getPrixMinPourUneTonne()*lot.getQuantiteEnTonnes();
@@ -135,7 +137,6 @@ public class Transformateur implements IAcheteurCacaoCriee, IVendeurChocolatBour
 			return 0;
 		}
 	}
-
 
 	public void notifierPropositionRefusee(PropositionCriee proposition) {
 		
