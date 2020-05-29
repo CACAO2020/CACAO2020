@@ -81,14 +81,14 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 
 
         if (choco.getChocolat()==Chocolat.CHOCOLAT_HAUTE_EQUITABLE) {
-            return this.MapStock.keySet().contains(choco) ? Math.min(capaciteHGE/nbmarques, this.MapStock.get(choco)) : capaciteHGE/nbmarques;
+            return this.MapStock.keySet().contains(choco) ? Math.min(capaciteHGE/nbmarques, this.MapStock.get(choco)) : 0;
         }
         else if (choco.getChocolat()==Chocolat.CHOCOLAT_MOYENNE) {
-            return this.MapStock.keySet().contains(choco) ? Math.min(capaciteMG/nbmarques, this.MapStock.get(choco)):capaciteMG/nbmarques;
+            return this.MapStock.keySet().contains(choco) ? Math.min(capaciteMG/nbmarques, this.MapStock.get(choco)):0;
         }
         else if (choco.getChocolat()==Chocolat.CHOCOLAT_BASSE) {
         	System.out.print("Map ="+this.MapStock);
-            return this.MapStock.keySet().contains(choco) ? Math.min(capaciteBG/nbmarques, this.MapStock.get(choco)) : capaciteBG/nbmarques;
+            return this.MapStock.keySet().contains(choco) ? Math.min(capaciteBG/nbmarques, this.MapStock.get(choco)) : 0;
         }
         else {
             return 0;

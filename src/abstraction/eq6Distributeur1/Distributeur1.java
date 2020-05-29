@@ -13,7 +13,7 @@ public class Distributeur1 extends DistributeurClientFinal {
 	}
 	
 	public Distributeur1() {
-		super(100000, 0.5, 0.4, 0.2, 10000000, 15, 35, 50);
+		super(100000, 0.5, 0.4, 0.2, 10000000, 0.15, 0.35, 0.50);
 	}
 
 }
