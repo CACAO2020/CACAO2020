@@ -192,7 +192,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 			quantitesEnVente.get(produit).setValeur(ac, Double.min(quantitesEnVente.get(produit).getValeur(), ac.getStock().getStockChocolatDeMarque(produit)-stockLimite));
 		}
 	}
-
+ 
 	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant) {
 		//vend le chocolat de tel marque à tel rpix et tel quantité au client final
 		if (client!=null) { 
