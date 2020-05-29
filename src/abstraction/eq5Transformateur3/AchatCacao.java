@@ -43,8 +43,8 @@ public class AchatCacao {
 			tentativeDachat.get(lot.getFeve()).clear();
 		}
 		
-		if (lot.getFeve().isEquitable() && lot.getFeve().getGamme()== Gamme.HAUTE ) {
-			if(lot.getQuantiteEnTonnes() + this.acteur.getStock().getQuantiteFeves(lot.getFeve()) <= 1000) {
+		if (lot.getFeve().isEquitable() && lot.getFeve().getGamme()== Gamme.HAUTE && 
+				lot.getQuantiteEnTonnes() + this.acteur.getStock().getQuantiteFeves(lot.getFeve()) <= 1000) {
 				
 				prix = lot.getPrixMinPourUneTonne();
 				if (NB_propositions_refusees == NB_precedent
@@ -79,8 +79,6 @@ public class AchatCacao {
 					}
 				}	
 			}
-		}
-			
 		else {
 			return 0.0;
 		}
