@@ -83,8 +83,6 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 		// Ecriture de l'état dans les logs.
 		this.journalEq1.ajouter("Quantité de stock de Trinitario : " + this.getStock(Feve.FEVE_MOYENNE));
 		this.journalEq1.ajouter("Quantité de stock de Forastero : " + this.getStock(Feve.FEVE_BASSE));
-		double budget1 = this.stockFevesForastero.getValeur();
-		double budget2 = this.stockFevesTrinitario.getValeur();
 		ArrayList<Double> recolte = new ArrayList<Double>();
 		ArrayList<Integer> nouveautes = new ArrayList<Integer>();
 		nouveautes.add((Integer) 0);
@@ -93,6 +91,8 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 		int newArbresTrinitario = nouveautes.get(1);
 		recolte = this.plantation.plantation_cyclique(newArbresForastero, newArbresTrinitario, this.budget.getEmployes());
 		nouveautes = this.budget.budget_cyclique(this.stockFevesForastero.getValeur(), this.stockFevesTrinitario.getValeur());
+		this.addStock(recolte.get(0), Feve.FEVE_BASSE);
+		this.addStock(recolte.get(1), Feve.FEVE_MOYENNE);
 	}
 
 	// Modification pour ajout de la filiere TestCrieeProd1
