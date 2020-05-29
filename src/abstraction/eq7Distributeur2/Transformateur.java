@@ -18,7 +18,7 @@ import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
-
+// cette classe a ete créee pour simuler un transformateur dans la filiere test
 public class Transformateur implements IAcheteurCacaoCriee, IVendeurChocolatBourse {
 
 	private Variable stockFeves;
@@ -49,7 +49,9 @@ public class Transformateur implements IAcheteurCacaoCriee, IVendeurChocolatBour
 		this.laBanque = Filiere.LA_FILIERE.getBanque();
 		
 	}
-
+// on effectue ici la transformation du cacao (et du sucre) en chocolat. On retire donc une certaine quantité de cacao du stock pour ajouter 
+// du chocolat de la qualité correspondante au stock concerné de chocolat
+// On ajoute aux couts la main d'oeuvre et les frais en sucre, entretient de machines,...
 	public void next() {
 		double quantiteTransformee = Math.random()*Math.min(100, this.stockFeves.getValeur()); // on suppose qu'on a un stock infini de sucre
 		this.stockFeves.retirer(this, quantiteTransformee);
@@ -125,7 +127,7 @@ public class Transformateur implements IAcheteurCacaoCriee, IVendeurChocolatBour
 		stockChocolat.retirer(this, quantite);
 	}
 
-
+// propose les achats de feves pour la criée en fonction du prix minimal
 	public double proposerAchat(LotCacaoCriee lot) {
 		if (lot.getFeve().getGamme() == this.choco.getGamme()) {
 			return lot.getPrixMinPourUneTonne()*lot.getQuantiteEnTonnes();
@@ -144,6 +146,7 @@ public class Transformateur implements IAcheteurCacaoCriee, IVendeurChocolatBour
 		return this.cryptogramme;
 	}
 
+	// envoie une notification de l'achat effectué
 	public void notifierVente(PropositionCriee proposition) {
 		System.out.println("+ " + proposition.getQuantiteEnTonnes() +" pour " + proposition.getVendeur());
 		this.stockFeves.ajouter(proposition.getVendeur(), proposition.getQuantiteEnTonnes());
