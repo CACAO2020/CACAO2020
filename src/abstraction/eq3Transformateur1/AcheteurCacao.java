@@ -18,10 +18,7 @@ import abstraction.fourni.Variable;
 
 public abstract class AcheteurCacao extends Transformation implements abstraction.eq8Romu.cacaoCriee.IAcheteurCacaoCriee{
 	private HashMap<String,Double> nb_proposition;
-
-
-
-
+	
 	/** @author amaury */
 	public double proposerAchat(LotCacaoCriee lot) {
 
@@ -35,12 +32,14 @@ public abstract class AcheteurCacao extends Transformation implements abstractio
 					return ((lot.getPrixMinPourUneTonne()+(Filiere.LA_FILIERE.getIndicateur("BourseChoco cours "+equivalentChocoFeve(lot.getFeve())).getValeur()-10000)*0.9))/2;
 				}
 				else {
+					this.journalEq3.ajouter("Proposition d'achat du lot" + lot.toString());
 					return lot.getPrixMinPourUneTonne();	
 				}
 				
 			}
 
 		}
+		this.journalEq3.ajouter("Pas de proposition d'achat pour le lot" + lot.toString());
 		return 0.0;
 
 	}
@@ -48,20 +47,19 @@ public abstract class AcheteurCacao extends Transformation implements abstractio
 	 * On fait un simple print de la notification de vente ou de refus de vente, on pourra ajouter cette notification au journal quand l'attribut journal sera mis en protected et qu'on y aura accès dans cette classe
 	 */
 	public void notifierPropositionRefusee(PropositionCriee proposition) {
-		System.out.println("La proposition " + proposition.getLot().toString() + ", de " + proposition.getVendeur().toString() + ", au prix" + proposition.getPrixPourLeLot()
+		this.journalEq3.ajouter("La proposition " + proposition.getLot().toString() + ", de " + proposition.getVendeur().toString() + ", au prix" + proposition.getPrixPourLeLot()
 		+ "a été refusée");
 	}
 
 	public void notifierVente(PropositionCriee proposition) {
 		this.setCoutFeves(proposition.getLot().getFeve(), this.calculCoutFeve(proposition.getLot().getFeve(), proposition.getQuantiteEnTonnes(), proposition.getPrixPourUneTonne()));
 		this.setStockFeves(proposition.getLot().getFeve(), proposition.getQuantiteEnTonnes());
-		System.out.println("Lot " + proposition.getLot().toString() + ", de " + proposition.getVendeur().toString() + ", au prix" + proposition.getPrixPourLeLot() + " a été effectué");
+		this.journalEq3.ajouter("Lot " + proposition.getLot().toString() + ", de " + proposition.getVendeur().toString() + ", au prix" + proposition.getPrixPourLeLot() + " a été effectué");
 
 	}
 
 	/** @author Nathan Olborski
-	 * Simple getter, on voit ici l'intérêt d'avoir nos variables en protected 
-	 */
+	 * Simple getter	*/
 	public Integer getCryptogramme(SuperviseurCacaoCriee superviseur) {
 		if (superviseur != null) {
 			return this.cryptogramme;}
