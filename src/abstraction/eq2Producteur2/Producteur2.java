@@ -56,7 +56,7 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 	public void RefreshStocks() {
 		for (int i = 0; i < this.getPaquetsArbres().size(); i++) {
 			this.addQtFeve(this.getPaquetsArbres().get(i).getType(),this.getPaquetsArbres().get(i).production());
-			this.journal_de_production.ajouter("Production de " + this.getPaquetsArbres().get(i).production() + " fèves de type: " + this.getPaquetsArbres().get(i).getType() );
+			this.journal_de_production.ajouter("Production de " + this.getPaquetsArbres().get(i).production() + "tonnes de fèves de type: " + this.getPaquetsArbres().get(i).getType() );
 		}
 	}
 	//cette fonction va essayer de calculer la valeur de notre stock a partir des prix de la criée precedente (pour le moment), il pourra etre amelioré.(lucas p)

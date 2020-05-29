@@ -38,4 +38,5 @@ public class Usine {
 		}
 		else return 0.0;
 	}
+	public double 
 }
