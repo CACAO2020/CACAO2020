@@ -202,7 +202,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 	}
 
 	public void notificationRayonVide(ChocolatDeMarque choco) {
-		//notifie quand le rayon est vide
+		
 		journal.ajouter(Journal.texteColore(warningColor, Color.BLACK, "[RAYON] Le rayon de " + choco.name() + " est vide."));
 	}
 
