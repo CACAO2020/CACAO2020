@@ -16,7 +16,7 @@ public class Pair<T1,T2> {
 	{
 	  this.p1 = a;
 	  this.p2 = b;
-	}
+	} 
 	
 	public T1 getFirstValue() {
 		return this.p1;
@@ -26,4 +26,4 @@ public class Pair<T1,T2> {
 		return this.p2;
 	}
 	  
-}
+} 
