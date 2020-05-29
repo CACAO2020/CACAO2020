@@ -1,8 +1,64 @@
 package abstraction.eq1Producteur1;
 
+import java.util.ArrayList;
+
+
+/*
+ * Cree par Thalie
+ */
+
+/*
+ * Donnees :
+ * On paie un employe (recolteur, pas de diversification des employes pour l'instant)
+ * 65 000 francs CFA par mois, ce qui correspond a 100 euros.
+ * Un nouveau plant coute 200 francs CFA (0.3), on compte 500 plants par récolteur.
+ * On ne prend pas en compte le terrain lors de la plantation de nouveaux arbres.
+ */
+
+
+/*
+ * Programmes disponibles :
+ * double getFonds()
+ * int getEmployes()
+ * double getOldStockF()
+ * double getOldSTockT()
+ * double getNewStockF()
+ * double getNewStockT()
+ * 
+ * void setFonds(double)
+ * void setEmployes(int)
+ * void setOldStockF(double)
+ * void setOldStockT(double)
+ * void setNewStockF(double)
+ * void setNewStockT(double)
+ * 
+ * double addFonds(double)
+ * double removeFonds(double)
+ * int addEmployes(int)
+ * int removeEmployes(int)
+ * 
+ * ArrayList<Integer> investissement(double, double, double)
+ * ArrayList<Integer> budget_cyclique(double, double)
+ */
+
+
+
 public class Budget {
 	private double fonds;
 	private int employes;
+	private double oldstockF;
+	private double newstockF;
+	private double oldstockT;
+	private double newstockT;
+	
+	public Budget(double f, int e, double osf, double ost, double nsf, double nst) {
+		this.fonds = f;
+		this.employes = e;
+		this.oldstockF = osf;
+		this.oldstockT = ost;
+		this.newstockF = nsf;
+		this.newstockT = nst;
+	}
 	
 	public double getFonds() {
 		return this.fonds;
@@ -10,6 +66,38 @@ public class Budget {
 	
 	public int getEmployes() {
 		return this.employes;
+	}
+	
+	public double getOldStockF() {
+		return this.oldstockF;
+	}
+
+	public double getOldStockT() {
+		return this.oldstockT;
+	}
+	
+	public double getNewStockF() {
+		return this.oldstockF;
+	}
+
+	public double getNewStockT() {
+		return this.oldstockT;
+	}
+	
+	public void setOldStockF(double s) {
+		this.oldstockF=s;
+	}
+	
+	public void setOldStockT(double s) {
+		this.oldstockF=s;
+	}
+	
+	public void setNewStockF(double s) {
+		this.oldstockF=s;
+	}
+	
+	public void setNewStockT(double s) {
+		this.oldstockF=s;
 	}
 	
 	public void setFonds(double n_fonds) {
@@ -35,14 +123,40 @@ public class Budget {
 	public void removeEmployes(int retrait) {
 		this.setEmployes(this.getEmployes() - retrait);
 	}
+
+
+	public ArrayList<Integer> investissement(double somme, double quantiteVendueF, double quantiteVendueT) {
+		double coutArbresEmploye = 152.18;
+		int newEmployes = 0;
+		while (somme>(coutArbresEmploye + 50)) {
+			newEmployes += 1;
+			somme = somme - coutArbresEmploye - 50;
+			}
+		double quantiteVendue = quantiteVendueF + quantiteVendueT;
+		double proportionT = quantiteVendueT/quantiteVendue;
+		double proportionF = quantiteVendueF/quantiteVendue;
+		if (proportionF<0) {
+			proportionF = 0;
+		}
+		if (proportionT<0) {
+			proportionT = 0;
+		}
+		int newArbresT = (int) proportionT*newEmployes;
+		int newArbresF = (int) proportionF*newEmployes;
+		if (newArbresT+newArbresF == 0) {
+			newEmployes = 0;
+		}
+		ArrayList<Integer> newPlants = new ArrayList<Integer>();
+		newPlants.add(newArbresF*500);
+		newPlants.add(newArbresT*500);
+		newPlants.add(newEmployes);
+		return newPlants;
+	}
+		
 	
 	
-/*
- * Fonction à faire tourner à chaque cycle dans le programme principal.
- * Paie moyenne des employés (récolteurs, voir après si on diversifie les employés) :
- *  65 000 francs CFA/mois, ce qui fait environ 100 euros par mois
- */
-	public void cyclique() {
+
+	public ArrayList<Integer> budget_cyclique(double stockF, double stockT) {
 		if (this.getFonds()>this.getEmployes()*50) {
 			this.removeFonds(this.getEmployes()*50);
 		} else {
@@ -50,6 +164,20 @@ public class Budget {
 			this.setEmployes(max_employes);
 			this.removeFonds(this.getEmployes()*50);
 		}
+		this.setOldStockF(this.getNewStockF());
+		this.setOldStockT(this.getNewStockT());
+		this.setNewStockF(stockF);
+		this.setNewStockT(stockT);
+		ArrayList<Integer> newPlants = new ArrayList<Integer>();
+		if (this.getFonds()>this.getEmployes()*25) {
+			newPlants = investissement((this.getFonds()-this.getEmployes()*25), (this.getNewStockF()-this.getOldStockF()), this.getNewStockT()-this.getOldStockT());
+		} else {
+			newPlants.add((Integer) 0);
+			newPlants.add((Integer) 0);
+			newPlants.add((Integer) 0);
+		}
+		this.setEmployes(this.getEmployes()+newPlants.get(2));
+		return newPlants;
 	}
 
 }
