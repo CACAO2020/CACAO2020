@@ -42,11 +42,11 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 		this.prixvente = 0;
 		this.propalsnonvendues = new Variable("propalsnonvendues",this,999999999);//première valeur super haute pour permettre ventes
 		this.journal_des_ventes = new Journal("Journal des ventes", this);
-		this.compteurfora = 1;
-		this.compteurtrini = 1;
-		this.compteurtrinie = 1;
-		this.compteurcrio = 1;
-		this.compteurcrioe = 1;
+		this.compteurfora = 100;
+		this.compteurtrini = 100;
+		this.compteurtrinie = 100;
+		this.compteurcrio = 100;
+		this.compteurcrioe = 100;
 	}
 	/*faudrait rajouter un truc qui set les prix en fonction de ce qu'il s'est passé au cycle d'avant et de notre rentabilité
 	 * 
