@@ -86,7 +86,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	// La méthode next, qui lance les appels des fonctions next de chaque sous-acteur
 	// Le vendeur est appelé en premier pour évaluer la quantité de chocolat que les acheteurs doivent commander
 	public void next() {
-		this.debutEtape = false;
+		this.debutEtape = false; 
 		vendeur.next();
 		acheteurContratCadre.next();
 		acheteurBourse.next();
