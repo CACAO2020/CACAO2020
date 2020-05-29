@@ -153,7 +153,7 @@ class GestionCriee //implements IVendeurCacaoCriee
 		int i = 0;
 		int j = 0;
 		double moyenne = 0;
-		while(i <= n && i <= 10)
+		while(i < n && i < 10)
 		{
 			if(this.venduLog.get(n-i-1).getFeve() == typeFeve)
 			{
