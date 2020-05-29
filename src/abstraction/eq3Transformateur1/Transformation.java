@@ -3,6 +3,7 @@ package abstraction.eq3Transformateur1;
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.Feve;
 import abstraction.eq8Romu.produits.Gamme;
+import abstraction.fourni.Journal;
 
 /** @author AMAURY COUDRAY*/
 public abstract class Transformation extends Stock {
@@ -34,6 +35,7 @@ public abstract class Transformation extends Stock {
 			this.setCoutPateInterne(this.equivalentChocoFeve(feve),this.calculCoutPateInterne(this.equivalentChocoFeve(feve), quantite, quantite*(6000+this.getCoutFeves(feve))));
 			this.setStockFeves(feve, -quantite);
 			this.setStockPateInterne(this.equivalentChocoFeve(feve), quantite);
+
 
 		}
 	}
