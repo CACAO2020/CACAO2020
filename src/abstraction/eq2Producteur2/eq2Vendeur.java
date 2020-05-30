@@ -30,6 +30,7 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 	private double compteurtrinie;
 	private double compteurcrio;
 	private double compteurcrioe;
+	private double prixmaxlot;
 
 	
 	public eq2Vendeur() {
@@ -47,6 +48,7 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 		this.compteurtrinie = 1.00;
 		this.compteurcrio = 1.00;
 		this.compteurcrioe = 1.00;
+		this.prixmaxlot = 100000;
 	}
 	/*faudrait rajouter un truc qui set les prix en fonction de ce qu'il s'est passé au cycle d'avant et de notre rentabilité
 	 * 
@@ -96,9 +98,11 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 
 	    if (prixfora > prixtrini && prixfora > prixcrio && masseFora > 0.5 && prixfora > prixtrinie && prixfora > prixcrioe) {
 	    	if (this.getPropal()>prixfora) {
-	    		this.setPrixVente(prixfora);
-	    		this.journal_des_ventes.ajouter("EQ2 : Proposition de vente d'un lot de forastero de " + masseFora + "tonnes, pour "+this.getPrixVente()+"$");
-	    		return new LotCacaoCriee(this, Feve.FEVE_BASSE, masseFora, this.getPrixTF().getValeur());
+	    		if (prixfora > this.getprixmaxlot()) {
+	    			this.setPrixVente(this.getprixmaxlot());
+	    			this.journal_des_ventes.ajouter("EQ2 : Proposition de vente d'un lot de forastero de " + this.getprixmaxlot()/this.getPrixTF().getValeur() + "tonnes, pour "+this.getPrixVente()+"$");
+	    			return new LotCacaoCriee(this, Feve.FEVE_BASSE, this.getprixmaxlot()/this.getPrixTF().getValeur(), this.getPrixTF().getValeur());
+	    		}
 	    	}
 	    	else if ((this.getPropal())/this.getPrixTF().getValeur()>0.5){
 	    		this.setPrixVente(this.getPropal());
@@ -109,9 +113,11 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 	    }
 	    else if (prixtrini > prixfora && prixtrini > prixcrio && masseTrini > 0.5 && prixtrini > prixtrinie && prixtrini > prixcrioe) {
 	    	if (this.getPropal()>prixtrini) {
-	    		this.setPrixVente(prixtrini);
-	    		this.journal_des_ventes.ajouter("EQ2 : Proposition de vente d'un lot de trinitario de " + masseTrini + "tonnes, pour "+this.getPrixVente()+"$");
-	    		return new LotCacaoCriee(this, Feve.FEVE_MOYENNE, masseTrini, this.getPrixTT().getValeur());
+	    		if (prixtrini > this.getprixmaxlot()) {
+	    			this.setPrixVente(this.getprixmaxlot());
+	    			this.journal_des_ventes.ajouter("EQ2 : Proposition de vente d'un lot de trinitario de " + this.getprixmaxlot()/this.getPrixTT().getValeur() + "tonnes, pour "+this.getPrixVente()+"$");
+	    			return new LotCacaoCriee(this, Feve.FEVE_MOYENNE, this.getprixmaxlot()/this.getPrixTT().getValeur(), this.getPrixTT().getValeur());
+	    		}
 	    	}
 	    	else if ((this.getPropal())/this.getPrixTT().getValeur()>0.5){
 	    		this.setPrixVente(this.getPropal());
@@ -122,9 +128,11 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 	    }
 	    else if (prixtrinie > prixfora && prixtrinie > prixcrio && masseTriniE > 0.5 && prixtrinie > prixtrini && prixtrinie > prixcrioe) {
 	    	if (this.getPropal()>prixtrinie) {
-	    		this.setPrixVente(prixtrinie);
-	    		this.journal_des_ventes.ajouter("EQ2 : Proposition de vente d'un lot de trinitario de équitable " + masseTriniE + "tonnes, pour "+this.getPrixVente()+"$");
-	    		return new LotCacaoCriee(this, Feve.FEVE_MOYENNE_EQUITABLE, masseTriniE, this.getPrixTTE().getValeur());
+	    		if (prixtrinie > this.getprixmaxlot()) {
+	    			this.setPrixVente(this.getprixmaxlot());
+	    			this.journal_des_ventes.ajouter("EQ2 : Proposition de vente d'un lot de trinitario de équitable " + this.getprixmaxlot()/this.getPrixTTE().getValeur() + "tonnes, pour "+this.getPrixVente()+"$");
+	    			return new LotCacaoCriee(this, Feve.FEVE_MOYENNE_EQUITABLE, this.getprixmaxlot()/this.getPrixTTE().getValeur(), this.getPrixTTE().getValeur());
+	    		}
 	    	}
 	    	else if ((this.getPropal())/this.getPrixTTE().getValeur()>0.5){
 	    		this.setPrixVente(this.getPropal());
@@ -135,9 +143,11 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 	    }
 	    else if (prixcrio > prixtrini && prixfora < prixcrio && masseCrio > 0.5 && prixcrio > prixtrinie && prixcrio > prixcrioe) {
 	    	if (this.getPropal()>prixcrio) {
-	    		this.setPrixVente(prixcrio);
-	    		this.journal_des_ventes.ajouter("EQ2 : Proposition de vente d'un lot de criollo de " + masseCrio + "tonnes, pour "+this.getPrixVente()+"$");
-	    		return new LotCacaoCriee(this, Feve.FEVE_HAUTE, masseCrio, this.getPrixTC().getValeur());
+	    		if (prixcrio > this.getprixmaxlot()) {
+	    			this.setPrixVente(this.getprixmaxlot());
+	    			this.journal_des_ventes.ajouter("EQ2 : Proposition de vente d'un lot de criollo de " + this.getprixmaxlot()/this.getPrixTC().getValeur() + "tonnes, pour "+this.getPrixVente()+"$");
+	    			return new LotCacaoCriee(this, Feve.FEVE_HAUTE, this.getprixmaxlot()/this.getPrixTC().getValeur(), this.getPrixTC().getValeur());
+	    		}
 	    	}
 	    	else if((this.getPropal())/this.getPrixTC().getValeur()>0.5){
 	    		this.setPrixVente(this.getPropal());
@@ -148,9 +158,11 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 	    }
 	    else if (prixcrioe > prixtrini && prixfora < prixcrioe && masseCrioE > 0.5 && prixcrioe > prixtrinie && prixcrioe > prixcrio) {
 	    	if (this.getPropal()>prixcrioe) {
-	    		this.setPrixVente(prixcrioe);
-	    		this.journal_des_ventes.ajouter("EQ2 : Proposition de vente d'un lot de criollo équitable de " + masseCrioE + "tonnes, pour "+this.getPrixVente()+"$");
-	    		return new LotCacaoCriee(this, Feve.FEVE_HAUTE_EQUITABLE, masseCrioE, this.getPrixTCE().getValeur());
+	    		if (prixcrioe > this.getprixmaxlot()) {
+	    			this.setPrixVente(this.getprixmaxlot());
+	    			this.journal_des_ventes.ajouter("EQ2 : Proposition de vente d'un lot de criollo équitable de " + this.getprixmaxlot()/this.getPrixTCE().getValeur() + "tonnes, pour "+this.getPrixVente()+"$");
+	    			return new LotCacaoCriee(this, Feve.FEVE_HAUTE_EQUITABLE, this.getprixmaxlot()/this.getPrixTCE().getValeur(), this.getPrixTCE().getValeur());
+	    		}
 	    	}
 	    	else if((this.getPropal())/this.getPrixTCE().getValeur()>0.5){
 	    		this.setPrixVente(this.getPropal());
@@ -169,7 +181,7 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 
 	@Override
 	public void notifierAucuneProposition(LotCacaoCriee lot) { //10000 arbitraire
-		this.setPropal(this.getPrixVente()*0.90);
+		this.setPropal(this.getPrixVente()*0.95);
 		this.journal_des_ventes.ajouter("EQ2 : Aucune proposition de lot n'a abouti à une vente");
 		
 	}
@@ -347,7 +359,9 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 	public double getcompteurcrioe() {
 		return this.compteurcrioe;
 	}
-
+	public double getprixmaxlot() {
+		return this.prixmaxlot;
+	}
 }
 	
 
