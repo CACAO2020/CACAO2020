@@ -31,6 +31,7 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 	private double compteurcrio;
 	private double compteurcrioe;
 	private double prixmaxlot;
+	private int compteurinvendus;
 
 	
 	public eq2Vendeur() {
@@ -49,6 +50,7 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 		this.compteurcrio = 1.00;
 		this.compteurcrioe = 1.00;
 		this.prixmaxlot = 100000;
+		this.compteurinvendus = 0;
 	}
 	/*faudrait rajouter un truc qui set les prix en fonction de ce qu'il s'est passé au cycle d'avant et de notre rentabilité
 	 * 
@@ -173,6 +175,7 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 	    }
 	    
 	    this.journal_des_ventes.ajouter("Aucun lot n'a été proposé à la vente");
+	    this.setcompteurinvendus(this.getcompteurinvendus()+10);
 	    return null;
 	    
 		
@@ -180,9 +183,11 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 	
 
 	@Override
-	public void notifierAucuneProposition(LotCacaoCriee lot) { //10000 arbitraire
+	public void notifierAucuneProposition(LotCacaoCriee lot) { 
 		this.setPropal(this.getPrixVente()*0.95);
 		this.journal_des_ventes.ajouter("EQ2 : Aucune proposition de lot n'a abouti à une vente");
+		this.setcompteurinvendus(this.getcompteurinvendus()+1);
+		this.journal_des_ventes.ajouter("compteur des invendus = "+this.getcompteurinvendus());
 		
 	}
 
@@ -233,6 +238,8 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 	public void notifierVente(PropositionCriee proposition) { //enlève fèves vendues de notre stock
 		removeQtFeve(proposition.getLot().getFeve(), proposition.getLot().getQuantiteEnTonnes());
 		this.journal_des_ventes.ajouter("EQ2 : La vente a aboutit, le stock a été actualisé STONKS");
+		this.setcompteurinvendus(0);
+		this.journal_des_ventes.ajouter("le compteur des invendus vaut" + this.getcompteurinvendus());
 		Feve feve = proposition.getFeve();
 		if (feve==Feve.FEVE_BASSE) {
 			compteurfora ++;
@@ -361,6 +368,12 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 	}
 	public double getprixmaxlot() {
 		return this.prixmaxlot;
+	}
+	public void setcompteurinvendus(int i) {
+		this.compteurinvendus = i;
+	}
+	public int getcompteurinvendus() {
+		return this.compteurinvendus;
 	}
 }
 	
