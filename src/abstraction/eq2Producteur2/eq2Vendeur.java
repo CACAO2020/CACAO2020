@@ -241,20 +241,36 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee {
 		this.setcompteurinvendus(0);
 		this.journal_des_ventes.ajouter("le compteur des invendus vaut" + this.getcompteurinvendus());
 		Feve feve = proposition.getFeve();
+		double prixtonne = proposition.getPrixPourUneTonne();
 		if (feve==Feve.FEVE_BASSE) {
 			compteurfora ++;
+			/*if (prixtonne > this.getPrixTF().getValeur()) {
+				this.prixTF.setValeur(this, this.getPrixTF().getValeur() + 0.7*(prixtonne - this.getPrixTF().getValeur()));
+			}*/
 		}
 		else if (feve==Feve.FEVE_MOYENNE) {
 			compteurtrini ++;
+			/*if (prixtonne > this.getPrixTT().getValeur()) {
+				this.prixTT.setValeur(this, this.getPrixTT().getValeur() + 0.7*(prixtonne - this.getPrixTT().getValeur()));
+			}*/
 		}
 		else if (feve==Feve.FEVE_MOYENNE_EQUITABLE) {
 			compteurtrinie ++;
+			/*if (prixtonne > this.getPrixTTE().getValeur()) {
+				this.prixTTE.setValeur(this, this.getPrixTTE().getValeur() + 0.7*(prixtonne - this.getPrixTTE().getValeur()));
+			}*/
 		}
 		else if (feve==Feve.FEVE_HAUTE) {
 			compteurcrio ++;
+			/*if (prixtonne > this.getPrixTC().getValeur()) {
+				this.prixTC.setValeur(this, this.getPrixTC().getValeur() + 0.7*(prixtonne - this.getPrixTC().getValeur()));
+			}*/
 		}
 		else if (feve==Feve.FEVE_HAUTE_EQUITABLE) {
 			compteurcrioe ++;
+			/*if (prixtonne > this.getPrixTCE().getValeur()) {
+				this.prixTCE.setValeur(this, this.getPrixTCE().getValeur() + 0.7*(prixtonne - this.getPrixTCE().getValeur()));
+			}*/
 		}
 	}
 	
