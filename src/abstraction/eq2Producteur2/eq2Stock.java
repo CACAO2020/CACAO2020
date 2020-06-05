@@ -10,6 +10,8 @@ import abstraction.eq8Romu.produits.Feve;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
@@ -21,23 +23,26 @@ public class eq2Stock extends eq2Acteur{
  * cette classe gère les StockFeves de fèves et de pâte, les masses sont exprimées en tonnes
  */
 	
-	private Variable coutStockFeve;
+	private Variable coutStock;
 	private HashMap<Feve,Variable> StockFeve;
 	private HashMap<Pate,Variable> StockPate;
 	private double nbemployees;
-	
+	private Variable cout_total_Stock;
 	
 	/**
 	 * @author lucas p
 	 * 	 */
 	public eq2Stock() {
 		super();
-		this.coutStockFeve = new Variable ("cout",this,100);
+		this.coutStock = new Variable ("cout",this,1);
 		this.StockFeve = new HashMap<Feve,Variable>();
 		this.StockPate = new HashMap<Pate,Variable>();
+		this.cout_total_Stock= new Variable("cout_total_stock",this,0);
 		this.StockFeve.put(Feve.FEVE_BASSE, new Variable("EQ2Feve.FEVE_BASSE",this, 10.0));
 		this.StockFeve.put(Feve.FEVE_MOYENNE, new Variable("EQ2Feve.FEVE_MOYENNE",this, 75.0));
 		this.StockFeve.put(Feve.FEVE_HAUTE, new Variable("EQ2Feve.FEVE_HAUTE",this, 30.0));
+		this.StockFeve.put(Feve.FEVE_MOYENNE_EQUITABLE, new Variable("EQ2Feve.FEVE_MOYENNE_EQUITABLE",this, 20.0));
+		this.StockFeve.put(Feve.FEVE_HAUTE_EQUITABLE, new Variable("EQ2Feve.FEVE_HAUTE_EQUITABLE",this, 25.0));
 	}
 	
 public void addStockFeve(Feve feve, double quantité) {
@@ -57,12 +62,17 @@ public void addStockPate(Pate pate, double quantité) {
 	 return this.StockPate;
 	 
  }
-
-public void setCoutStockFeve(double cout) {
-	this.coutStockFeve.setValeur(this, cout);
+ public Variable getCoutTotalStock() {
+	 return this.cout_total_Stock;
+ }
+public void setCoutTotalStock(double new_cout) {
+	this.cout_total_Stock.setValeur(this,new_cout);
 }
-public Variable getCoutStockFeve() {
-	return this.coutStockFeve;
+public void setCoutStockFeve(double cout) {
+	this.coutStock.setValeur(this, cout);
+}
+public Variable getCoutStock() {
+	return this.coutStock;
 }
 public void setQtFeve(Feve feve, double quantite) {
 	this.getStockFeve().get(feve).setValeur(this, quantite);
@@ -113,7 +123,17 @@ public double getQuantiteFeve(Feve feve) {
 public double getQuantitePate(Pate pate) {
 	return this.getStockPate().get(pate).getValeur();
 }
-
+public void Maintenance() {
+	double stock_total = 0;
+	for (Feve feve :this.getStockFeve().keySet()) {
+		stock_total+=this.getStockFeve().get(feve).getValeur();
+	}
+	for(Pate pate :this.getStockPate().keySet()) {
+		stock_total+=this.getStockPate().get(pate).getValeur();
+	}
+	this.setCoutTotalStock(stock_total*this.getCoutStock().getValeur()) ;
+	Filiere.LA_FILIERE.getBanque().virer(this,this.getCrypto(),Filiere.LA_FILIERE.getBanque(),this.getCoutTotalStock().getValeur());
+}
 
 
 }
