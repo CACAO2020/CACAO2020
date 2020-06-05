@@ -3,6 +3,7 @@ package abstraction.eq2Producteur2;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
@@ -67,13 +68,23 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 	 * cette fonction calcule la production d'un cycle et la rajoute au stock
 	 */
 	public void RefreshStocks() {
+		
+		float facteur_maladies;
+		if(this.apparitionMaladies()) {
+			facteur_maladies = this.graviteMaladies();
+			this.journal_de_production.ajouter("Une maladie a frappé nos plantations ! Notre production est affectée avec un facteur de "+ facteur_maladies);
+		}
+		else {
+			facteur_maladies = 1;
+		}
+		
 		for (int i = 0; i < this.getPaquetsArbres().size(); i++) {
-			this.addQtFeve(this.getPaquetsArbres().get(i).getType(),this.getPaquetsArbres().get(i).production());
-			this.journal_de_production.ajouter("Production de " + this.getPaquetsArbres().get(i).production() + "tonnes de fèves de type: " + this.getPaquetsArbres().get(i).getType() );
+			this.addQtFeve(this.getPaquetsArbres().get(i).getType(),this.getPaquetsArbres().get(i).production()*facteur_maladies);
+			this.journal_de_production.ajouter("Production de " + this.getPaquetsArbres().get(i).production()*facteur_maladies + "tonnes de fèves de type: " + this.getPaquetsArbres().get(i).getType() );
 		}
 		for (int i = 0; i < this.getUsines().size(); i++) {
-			this.addQtPate(this.getUsines().get(i).getPate(),this.getUsines().get(i).Production());
-			this.journal_de_production.ajouter("Production de " + this.getUsines().get(i).Production() + "tonnes de pates de type: " + this.getUsines().get(i).getPate() );
+			this.addQtPate(this.getUsines().get(i).getPate(),this.getUsines().get(i).Production()*facteur_maladies);
+			this.journal_de_production.ajouter("Production de " + this.getUsines().get(i).Production()*facteur_maladies + "tonnes de pates de type: " + this.getUsines().get(i).getPate() );
 		}
 	}
 	//cette fonction va essayer de calculer la valeur de notre stock a partir des prix de la criée precedente (pour le moment), il pourra etre amelioré.(lucas p)
@@ -106,7 +117,30 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 		return res;
 	}
 	
+	/*
+	 *  Cette méthode détermine si une maladie est apparue ou non
+	 *  Nous avons une chance sur 20 actuellement d'avoir une maladie à un tour
+	 */
+	public boolean apparitionMaladies() {
+		Random rand = new Random();
+		int experience = rand.nextInt(20);
+		if(experience == 0) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 	
+	/*
+	 * Cette méthode calcule la gravité de la maladie si une maladie est apparue
+	 * Pour l'instant le facteur d'atténuation varie entre 0.9 et 0.3
+	 */
+	public float graviteMaladies() {
+		Random rand2 = new Random();
+		int experience2 = rand2.nextInt(6);
+		return (9 - experience2)/(float) 10;
+	}
 
 
 }
