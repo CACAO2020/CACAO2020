@@ -93,6 +93,9 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 		nouveautes = this.budget.budget_cyclique(this.stockFevesForastero.getValeur(), this.stockFevesTrinitario.getValeur());
 		this.addStock(recolte.get(0), Feve.FEVE_BASSE);
 		this.addStock(recolte.get(1), Feve.FEVE_MOYENNE);
+
+		//next de la classe venteCriee
+		this.venteCriee.next();
 	}
 
 	// Modification pour ajout de la filiere TestCrieeProd1
