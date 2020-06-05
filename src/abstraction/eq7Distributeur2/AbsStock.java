@@ -9,6 +9,7 @@ import java.util.Map;
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.ChocolatDeMarque;
 import abstraction.eq8Romu.produits.Feve;
+import abstraction.eq8Romu.contratsCadres.Echeancier;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
@@ -18,6 +19,9 @@ public class AbsStock {
 
 	// Enregistre les stocks de chaque chocolat de marque
 	protected Map<ChocolatDeMarque, Variable> stocksChocolatDeMarque;
+	
+	// Une table pour tenir compte des échéances (NE PAS TOUCHER, TRAVAIL EN COURS)
+	protected Map<ChocolatDeMarque, Echeancier> datesLimites;
 	
 	// Enregistre les stocks de chaque type de chocolat
 	protected Map<Chocolat, Variable> stocksChocolat;
@@ -42,6 +46,7 @@ public class AbsStock {
 	public AbsStock(Distributeur2 ac) {
 		this.ac = ac;
 		stocksChocolatDeMarque=new HashMap<ChocolatDeMarque, Variable>();
+		datesLimites=new HashMap<ChocolatDeMarque, Echeancier>();
 		stocksChocolat=new HashMap<Chocolat, Variable>();
 		chocoReceptionne = new HashMap<Chocolat, Variable>();
 		initJournaux();

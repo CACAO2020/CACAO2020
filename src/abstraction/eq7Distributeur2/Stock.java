@@ -8,6 +8,7 @@ import java.util.Map;
 
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.ChocolatDeMarque;
+import abstraction.eq8Romu.contratsCadres.Echeancier;
 import abstraction.eq8Romu.produits.Feve;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
@@ -15,9 +16,12 @@ import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 //cette classe permet de gerer les mouvement de stock
 public class Stock extends AbsStock implements IStock {
+	private int datePeremption;
 	
 	public Stock(Distributeur2 ac) {
 			super(ac);
+			this.datePeremption = 12; //Donc une date de péremption de 6 mois car 12 steps
+			
 	}
 	
 	public double getStockChocolat(Chocolat choco) {
@@ -45,8 +49,19 @@ public class Stock extends AbsStock implements IStock {
 		stocksChocolat.get(chocoDeMarque.getChocolat()).setValeur(ac, stocksChocolat.get(chocoDeMarque.getChocolat()).getValeur() + quantite);
 		journal.ajouter(Journal.texteColore(addStockColor, Color.BLACK, "[STOCK +] " + Journal.doubleSur(quantite,2) + " tonnes de " + chocoDeMarque.name() + " ont été ajoutées au stock (nouveau stock : " + Journal.doubleSur(stocksChocolatDeMarque.get(chocoDeMarque).getValeur(),2) + " tonnes)."));
 		
+		int etape = Filiere.LA_FILIERE.getEtape()+this.datePeremption;
+		
+		if (datesLimites.containsKey(chocoDeMarque)) {
+			datesLimites.get(chocoDeMarque).set(etape, quantite);
+		} else {
+			List<Double> quantites;
+			quantites = new ArrayList<Double>();
+			quantites.add(quantite);
+			datesLimites.put(chocoDeMarque, new Echeancier(etape, quantites));
+		}
+		
 	}
-//retire les quantités necessaires de chocolat des stocks correspondant (avec la prise en compte des potentiels echecs de mouvements)
+	//retire les quantités necessaires de chocolat des stocks correspondant (avec la prise en compte des potentiels echecs de mouvements)
 	public void retirerStockChocolat(ChocolatDeMarque chocoDeMarque, double quantite) {
 		if (!stocksChocolatDeMarque.containsKey(chocoDeMarque)) {
 		}
@@ -60,7 +75,7 @@ public class Stock extends AbsStock implements IStock {
 				journal.ajouter(Journal.texteColore(alertColor, Color.BLACK,"[ÉCHEC STOCK -] Tentative de retirer " + Journal.doubleSur(quantite,2) + " tonnes de " + chocoDeMarque.name() + " rejetée (stock actuel : " + Journal.doubleSur(stocksChocolatDeMarque.get(chocoDeMarque).getValeur(),2) + " tonnes)."));
 		}
 	}
-	//ajoute une valeur a un stock en cas d'achat fructueux auprès d'un transformateur
+
 	public void initialiser() {		
 		for (ChocolatDeMarque choco : ac.tousLesChocolatsDeMarquePossibles()) {
 			stocksChocolatDeMarque.put(choco, new Variable(ac.getNom() + " : STOCK " + choco.name(), ac, 0.));
