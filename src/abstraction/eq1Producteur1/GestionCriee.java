@@ -16,29 +16,32 @@ import abstraction.fourni.Filiere;
 
 
 
-/** @author Clément */
+/** @author Clément 
+ * Implémentation des méthodes spécifique a l'interface IVendeurCacaoCriee
+ * avec écriture automatique dans les logs pour garder trace des mise en vente
+ * et des achats.
+ * 
+ * Pour le moment le prix minimal accepté lors de la vente est défini à l'aide du dernier prix de vente.
+*/
 class GestionCriee //implements IVendeurCacaoCriee 
 {
 	
-	private double lastPrixMin;
 	private double lastPrixVente;
 	private Producteur1 producteur1;
 	private List<LotCacaoCriee> miseEnVenteLog;
 	private List<PropositionCriee> venduLog;
 	
-	public GestionCriee(final Producteur1 sup) //Clément
+	public GestionCriee(Producteur1 sup) //Clément
 	{
 		//Prix par unité
-		this.lastPrixMin = 0;
 		this.lastPrixVente = 0;
 		this.producteur1 = sup;
 		this.venduLog = new ArrayList<PropositionCriee>();
 		this.miseEnVenteLog = new ArrayList<LotCacaoCriee>();
 	}
 	
-	public GestionCriee(final double lastPrixMinInit, final double lastPrixVenteInit, final IActeur sup) //Clément
+	public GestionCriee(double lastPrixVenteInit, IActeur sup) //Clément
 	{
-		this.lastPrixMin = lastPrixMinInit;
 		this.lastPrixVente = lastPrixVenteInit;
 	}
 
