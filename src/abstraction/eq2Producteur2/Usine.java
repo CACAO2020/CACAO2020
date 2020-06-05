@@ -20,6 +20,9 @@ public class Usine {
 	public int getAge() {
 		return this.Age;
 	}
+	public void setAge( int newAge) {
+		this.Age= newAge;
+	}
 	public int getNbMachine() {
 		return this.NbMachine;
 	}

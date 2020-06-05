@@ -30,6 +30,7 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 		this.PayerEmployes();
 		this.setPropal(99999999);
 		this.decideAchatArbres();
+		this.Maintenance();
 	}
 	/**
 	 * Cette méthode avance l'age de chaque paquet d'arbre de 1 et enleve les arbres qui ont atteint les 45 ans
@@ -46,6 +47,18 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 		for (int i = 0; i < deathlist.size(); i++) {
 			this.getPaquetsArbres().remove(this.getPaquetsArbres().get(i));
 		}
+		List<Integer> terminator = new ArrayList<Integer>();
+		
+		for (int i = 0; i < this.getUsines().size(); i++) {
+			this.getUsines().get(i).setAge(this.getUsines().get(i).getAge() + 1);
+			if (this.getPaquetsArbres().get(i).getAge() >= 50*24) {
+				terminator.add(i);
+			}
+		}
+		for (int i = 0; i < terminator.size(); i++) {
+			this.getUsines().remove(this.getUsines().get(i));
+		}
+		
 	}
 	
 	/**
@@ -57,6 +70,10 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 		for (int i = 0; i < this.getPaquetsArbres().size(); i++) {
 			this.addQtFeve(this.getPaquetsArbres().get(i).getType(),this.getPaquetsArbres().get(i).production());
 			this.journal_de_production.ajouter("Production de " + this.getPaquetsArbres().get(i).production() + "tonnes de fèves de type: " + this.getPaquetsArbres().get(i).getType() );
+		}
+		for (int i = 0; i < this.getUsines().size(); i++) {
+			this.addQtPate(this.getUsines().get(i).getPate(),this.getUsines().get(i).Production());
+			this.journal_de_production.ajouter("Production de " + this.getUsines().get(i).Production() + "tonnes de pates de type: " + this.getUsines().get(i).getPate() );
 		}
 	}
 	//cette fonction va essayer de calculer la valeur de notre stock a partir des prix de la criée precedente (pour le moment), il pourra etre amelioré.(lucas p)
@@ -71,13 +88,14 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 		for (Pate pate: this.getStockPate().keySet()) {
 			res.add(this.getStockPate().get(pate));
 		}
+		res.add(this.getCoutTotalStock());
 		return res;
 	}
 	
 	public List<Variable> getParametres() {
 		List<Variable> res=new ArrayList<Variable>();
 		res.add(new Variable("cout_arbre",this,this.getprixArbre()));
-		res.add(this.getCoutStockFeve());
+		res.add(this.getCoutStock());
 		return res;
 	}
 		
@@ -87,6 +105,7 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 		res.add(this.journal_de_production);
 		return res;
 	}
+	
 	
 
 
