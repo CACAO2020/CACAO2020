@@ -10,7 +10,7 @@ public abstract class Transformation extends Stock {
 
 	/* gestion TRANSFORMATION */
 
-	public Chocolat equivalentChocoFeve(Feve feve) {
+	public Chocolat equivalentChocoFeve(Feve feve) { 
 		if(feve.isEquitable()) {
 			if(feve.getGamme()==Gamme.HAUTE) {
 				return Chocolat.CHOCOLAT_HAUTE_EQUITABLE;

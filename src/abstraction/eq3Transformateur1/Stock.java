@@ -15,7 +15,7 @@ public abstract class Stock extends Tresorerie {
 
 	/* quantite de chaque type de FEVE/CHocolat/PATE */
 	protected Map<Feve,Double> stockFeves;
-	protected Map<Chocolat,Double> stockChocolat;
+	protected Map<Chocolat,Double> stockChocolat; 
 	protected Map<Chocolat,Double> stockPate;
 	/* cout pour chaque unité de chaque type de FEVE/CHocolat */
 	protected Map<Feve,Double> coutFeves;

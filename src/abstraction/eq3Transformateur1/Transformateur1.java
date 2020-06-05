@@ -15,7 +15,7 @@ import abstraction.fourni.Filiere;
 /** @author AMAURY COUDRAY / KARL GUTIERREZ*/
 public class Transformateur1 extends VendeurChocolat {
 	
-	public Transformateur1() {
+	public Transformateur1() { 
 		this.stockFeves.put(Feve.FEVE_BASSE,10.0);
 		this.stockFeves.put(Feve.FEVE_MOYENNE,10.0);
 		this.stockFeves.put(Feve.FEVE_MOYENNE_EQUITABLE,10.0);
