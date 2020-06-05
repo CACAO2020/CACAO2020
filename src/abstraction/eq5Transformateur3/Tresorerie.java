@@ -183,8 +183,17 @@ public class Tresorerie {
 	     */
 	public void updateFacteurPrioriteGamme () {
 		
-		if (this.calculRentabiliteBas()>this.calculRentabiliteSecondaire()) {
-			//if 
+		if (this.calculRentabiliteBas()>this.calculRentabiliteSecondaire()) { //si 1 filière est + rentable, on modifie le facteur
+			if (this.getFacteurPrioriteGamme()+0.05>=0.9) {}		//on ne dépasse pas un trop gros seuil de priorité pour garder un minimum de variété
+			else {
+				this.setFacteurPrioriteGamme(this.getFacteurPrioriteGamme()+0.05);
+			}
+		}
+		else {
+			if (this.getFacteurPrioriteGamme()-0.05<=0.1) {}	
+			else {
+				this.setFacteurPrioriteGamme(this.getFacteurPrioriteGamme()-0.05);
+			}
 		}
 	}
 	
@@ -200,9 +209,8 @@ public class Tresorerie {
 		/**
 		 * Met à jour toute la trésorerie
 		 */
-		//this.setFacteurPrioriteGamme(this.getFacteurPrioriteGamme());
 		this.updateFacteurPrioriteGamme();
-		this.setMontantCompteALaFinDuTour(0); 						//réinitialise la valeur temporaire
+		this.setMontantCompteALaFinDuTour(0); 						
 		this.setInvestissementBasACeTour(0);
 		this.setInvestissementSecondaireACeTour(0);
 		this.setVenteBasACeTour(0);
