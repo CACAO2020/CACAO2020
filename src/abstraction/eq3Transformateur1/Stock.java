@@ -10,7 +10,7 @@ import abstraction.eq8Romu.produits.Gamme;
 import abstraction.fourni.Variable;
 
 /** @author AMAURY COUDRAY / KARL GUTIERREZ*/
-public abstract class Stock extends Tresorerie {
+public abstract class Stock extends Tresorerie { 
 
 
 	/* quantite de chaque type de FEVE/CHocolat/PATE */
