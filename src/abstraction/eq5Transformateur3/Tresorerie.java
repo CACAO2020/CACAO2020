@@ -22,6 +22,8 @@ public class Tresorerie {
 	private double FacteurPrioriteGamme; // 100% haute gamme = 1, 100% bas de gamme = 0
 	private double investissementBasACeTour;
 	private double investissementSecondaireACeTour;
+	private double venteBasACeTour;
+	private double venteSecondaireACeTour;
 	
 	//private Variable decouvertsConsecutifsAvantFaillite; //parametres fixes à priori
 	//private Variable decouvertAutorise;
@@ -62,18 +64,23 @@ public class Tresorerie {
 				Filiere.LA_FILIERE.getBanque().getParametres().get(4));
 	}*/
 	
-	public Tresorerie(Transformateur3 acteur, double MontantCompteALaFinDuTour, double Facteur,double investissementBasACeTour,double investissementHautACeTour) {
+	public Tresorerie(Transformateur3 acteur, double MontantCompteALaFinDuTour, double Facteur,double investissementBasACeTour,double investissementSecondaireACeTour,
+			double venteBasACeTour,double venteSecondaireACeTour) {
 		this.acteur = acteur;
 		this.MontantCompteALaFinDuTour=MontantCompteALaFinDuTour;
 		this.FacteurPrioriteGamme=Facteur;
 		this.investissementBasACeTour=investissementBasACeTour;
 		this.investissementSecondaireACeTour=investissementSecondaireACeTour;
+		this.venteBasACeTour=venteBasACeTour;
+		this.venteSecondaireACeTour=venteSecondaireACeTour;
 	}
 
 	public Tresorerie(Transformateur3 acteur) {
 		this(acteur,
 				0,
 				0.8,
+				0,
+				0,
 				0,
 				0);
 	}
@@ -112,8 +119,24 @@ public class Tresorerie {
 	public void setInvestissementBasACeTour(double investissementBasACeTour) {
 		this.investissementBasACeTour = investissementBasACeTour;
 	}
+	
 
 
+	public double getVenteBasACeTour() {
+		return venteBasACeTour;
+	}
+
+	public void setVenteBasACeTour(double venteBasACeTour) {
+		this.venteBasACeTour = venteBasACeTour;
+	}
+
+	public double getVenteSecondaireACeTour() {
+		return venteSecondaireACeTour;
+	}
+
+	public void setVenteSecondaireACeTour(double venteSecondaireACeTour) {
+		this.venteSecondaireACeTour = venteSecondaireACeTour;
+	}
 
 	public double getInvestissementSecondaireACeTour() {
 		return investissementSecondaireACeTour;
@@ -166,11 +189,11 @@ public class Tresorerie {
 	}
 	
 	public double calculRentabiliteBas() {
-		return investissementBasACeTour;
+		return (this.getInvestissementBasACeTour())/(this.getVenteBasACeTour());
 	}
 	
 	public double calculRentabiliteSecondaire() {
-		return investissementSecondaireACeTour;
+		return (this.getInvestissementSecondaireACeTour())/(this.getVenteSecondaireACeTour());
 	}
 
 	public void next() {
@@ -182,13 +205,24 @@ public class Tresorerie {
 		this.setMontantCompteALaFinDuTour(0); 						//réinitialise la valeur temporaire
 		this.setInvestissementBasACeTour(0);
 		this.setInvestissementSecondaireACeTour(0);
+		this.setVenteBasACeTour(0);
+		this.setVenteSecondaireACeTour(0);
 	}
+	
 	public void jaiAchetePrincipale(double montant) {
 		this.setInvestissementBasACeTour(this.getInvestissementBasACeTour()+montant);
 	}
 	
 	public void jaiAcheteSecondaire(double montant) {
 		this.setInvestissementSecondaireACeTour(this.getInvestissementSecondaireACeTour()+montant);
+	}
+	
+	public void jaiVenduPrincipale(double montant) {
+		this.setVenteBasACeTour(this.getVenteBasACeTour()+montant);
+	}
+	
+	public void jaiVenduSecondaire(double montant) {
+		this.setVenteSecondaireACeTour(this.getVenteSecondaireACeTour()+montant);
 	}
 	
 	public double investissementMaxBasDeGamme() {
