@@ -49,7 +49,7 @@ public class TestStock extends Transformateur1{
 		System.out.println("TEST DE METHODE transformationFevePate");
 		System.out.println("");
 		System.out.println("Map Stock feves "+stock.getStockFeves());
-		System.out.println("Map Stock Pate interne "+stock.getStockPateInterne());
+		System.out.println("Map Stock Pate interne "+stock.getStockPate());
 		System.out.println("Map stock Chocolat "+stock.getStockChocolat());
 		System.out.println("");
 		stock.transformationFevePate(Feve.FEVE_BASSE,5.0);
@@ -57,7 +57,7 @@ public class TestStock extends Transformateur1{
 		stock.transformationFevePate(Feve.FEVE_BASSE,21.0);
 		stock.transformationFevePate(Feve.FEVE_HAUTE,2.0);
 		System.out.println("Map Stock feves "+stock.getStockFeves());
-		System.out.println("Map Stock Pate interne "+stock.getStockPateInterne());
+		System.out.println("Map Stock Pate interne "+stock.getStockPate());
 		System.out.println("Map stock Chocolat "+stock.getStockChocolat());
 		System.out.println("");
 		
@@ -67,7 +67,7 @@ public class TestStock extends Transformateur1{
 		stock.transformationPateChocolat(Chocolat.CHOCOLAT_MOYENNE, 20.0);
 		stock.transformationPateChocolat(Chocolat.CHOCOLAT_MOYENNE, -20.0);
 		System.out.println("Map Stock feves "+stock.getStockFeves());
-		System.out.println("Map Stock Pate interne "+stock.getStockPateInterne());
+		System.out.println("Map Stock Pate interne "+stock.getStockPate());
 		System.out.println("Map stock Chocolat "+stock.getStockChocolat());
 		System.out.println(" "+stock.getNom());
 		

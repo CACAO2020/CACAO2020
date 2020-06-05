@@ -32,20 +32,20 @@ public abstract class Transformation extends Stock {
 				(this.getStockFeves().containsKey(feve))&&
 				(this.getStockFeves(feve)>=quantite)&&
 				(this.depense(quantite*6000))) {
-			this.setCoutPateInterne(this.equivalentChocoFeve(feve),this.calculCoutPateInterne(this.equivalentChocoFeve(feve), quantite, quantite*(6000+this.getCoutFeves(feve))));
+			this.setCoutPate(this.equivalentChocoFeve(feve),this.calculCoutPate(this.equivalentChocoFeve(feve), quantite, quantite*(6000+this.getCoutFeves(feve))));
 			this.setStockFeves(feve, -quantite);
-			this.setStockPateInterne(this.equivalentChocoFeve(feve), quantite);
+			this.setStockPate(this.equivalentChocoFeve(feve), quantite);
 			this.journalTransformation.ajouter("transformation de "+quantite +"T de FEVES"+feve+" en pate");
 
 		}
 	}
 	public  void transformationPateChocolat(Chocolat chocolat, Double quantite) {
 		if((quantite>0)&&
-				(this.getStockPateInterne().containsKey(chocolat))&&
-				(this.getStockPateInterne(chocolat)>=quantite)&&
+				(this.getStockPate().containsKey(chocolat))&&
+				(this.getStockPate(chocolat)>=quantite)&&
 				(this.depense(quantite*4000))) {
-			this.setCoutChocolat(chocolat, this.calculCoutChocolat(chocolat, quantite, (4000+this.getCoutPateInterne(chocolat))*quantite));
-			this.setStockPateInterne(chocolat, -quantite);
+			this.setCoutChocolat(chocolat, this.calculCoutChocolat(chocolat, quantite, (4000+this.getCoutPate(chocolat))*quantite));
+			this.setStockPate(chocolat, -quantite);
 			this.setStockChocolat(chocolat,quantite);
 			this.journalTransformation.ajouter("transformation de "+quantite +"T de Pate"+chocolat+" en chocolat");
 		}
