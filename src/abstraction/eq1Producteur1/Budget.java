@@ -68,7 +68,7 @@ public class Budget {
 	}
 	
 	public double getFonds() {
-		return this.getFonds();
+		return this.fonds;
 	}
 	
 	public ArrayList<Integer> getEmployes() {
