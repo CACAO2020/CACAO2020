@@ -30,7 +30,15 @@ public class eq2Investisseur extends eq2Vendeur {
 			this.ajoutPaquetArbres(new PaquetArbres(nbrArbres, feve));
 			Filiere.LA_FILIERE.getBanque().virer(this,this.getCrypto(),Filiere.LA_FILIERE.getBanque(),nbrArbres*this.prixArbre);
 			
-			this.journal_achats.ajouter("Achat de " + nbrArbres + " arbres de type: " + feve.getGamme());
+			if(feve.isBio()) {
+				this.journal_achats.ajouter("Achat de " + nbrArbres + " arbres de type: " + feve.getGamme()+ " BIO");
+			}
+			else if(feve.isEquitable()) {
+				this.journal_achats.ajouter("Achat de " + nbrArbres + " arbres de type: " + feve.getGamme()+ " EQUITABLE");
+			}
+			else {
+				this.journal_achats.ajouter("Achat de " + nbrArbres + " arbres de type: " + feve.getGamme());
+			}
 		}
 	}
 	/** décide si on achète des arbres à ce tour ou non, à appeler à chaque next**/
