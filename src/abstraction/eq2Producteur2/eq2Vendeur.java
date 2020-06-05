@@ -215,9 +215,7 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 	    	}
 	    		
 	    }
-	    else if (this.getforavendu() == true && this.gettrinivendu() == true && this.gettrinievendu() == true && this.getcriovendu() == true && this.getcrioevendu() == true) {
-	    	this.resetbooleans();
-	    }
+	    
 	    
 	    this.journal_des_ventes.ajouter("Aucun lot n'a été proposé à la vente");
 	    this.setcompteurinvendus(this.getcompteurinvendus()+10);
@@ -232,7 +230,7 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 		this.setPropal(this.getPrixVente()*0.95);
 		this.journal_des_ventes.ajouter("EQ2 : Aucune proposition de lot n'a abouti à une vente");
 		this.setcompteurinvendus(this.getcompteurinvendus()+1);
-		this.journal_des_ventes.ajouter("compteur des invendus = "+this.getcompteurinvendus());
+		this.journal_des_ventes.ajouter("compteur des invendus = "+this.getcompteurinvendus());	
 		if (lot.getFeve() == Feve.FEVE_BASSE) {
 			this.foravendu = true;
 		}
@@ -248,6 +246,9 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 		else if (lot.getFeve() == Feve.FEVE_HAUTE_EQUITABLE) {
 			this.crioevendu = true;
 		}
+		if (this.getforavendu() == true && this.gettrinivendu() == true && this.gettrinievendu() == true && this.getcriovendu() == true && this.getcrioevendu() == true) {
+	    	this.resetbooleans();
+	    }
 	}
 
 	@Override
