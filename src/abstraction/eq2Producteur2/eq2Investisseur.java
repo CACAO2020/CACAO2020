@@ -17,9 +17,11 @@ public class eq2Investisseur extends eq2Vendeur {
 	private double prixArbre;
 	private double prixUsine;
 	private Journal journal_achats;
+	private double prime;
 
 	public eq2Investisseur() {
 		super();
+		this.prime = 0;
 		this.prixUsine=100;
 		this.prixArbre = 3;
 		this.journal_achats = new Journal("Investissements",this);
@@ -86,7 +88,7 @@ public class eq2Investisseur extends eq2Vendeur {
 	 */
 	public void PayerEmployes() {
 		if (this.NbTotalArbres() > 0) {
-			double payeEmployes = this.NbTotalArbres()*0.05;
+			double payeEmployes = this.NbTotalArbres()*0.05+this.getPrime();
 			Filiere.LA_FILIERE.getBanque().virer(this,this.getCrypto(),Filiere.LA_FILIERE.getBanque(),payeEmployes);
 		}
 	}
@@ -94,6 +96,12 @@ public class eq2Investisseur extends eq2Vendeur {
 		return this.prixArbre;
 	}
 	
+	public double getPrime() {
+		return this.prime;
+	}
+	public void setPrime(double new_prime) {
+		this.prime=new_prime;
+	}
 	public double getprixUsine() {
 		return this.prixUsine;
 	}
