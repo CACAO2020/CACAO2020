@@ -10,6 +10,8 @@ import abstraction.eq8Romu.produits.Feve;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
@@ -21,7 +23,7 @@ public class eq2Stock extends eq2Acteur{
  * cette classe gère les StockFeves de fèves et de pâte, les masses sont exprimées en tonnes
  */
 	
-	private Variable coutStockFeve;
+	private Variable coutStock;
 	private HashMap<Feve,Variable> StockFeve;
 	private HashMap<Pate,Variable> StockPate;
 	private double nbemployees;
@@ -32,7 +34,7 @@ public class eq2Stock extends eq2Acteur{
 	 * 	 */
 	public eq2Stock() {
 		super();
-		this.coutStockFeve = new Variable ("cout",this,100);
+		this.coutStock = new Variable ("cout",this,100);
 		this.StockFeve = new HashMap<Feve,Variable>();
 		this.StockPate = new HashMap<Pate,Variable>();
 		this.StockFeve.put(Feve.FEVE_BASSE, new Variable("EQ2Feve.FEVE_BASSE",this, 10.0));
@@ -61,10 +63,10 @@ public void addStockPate(Pate pate, double quantité) {
  }
 
 public void setCoutStockFeve(double cout) {
-	this.coutStockFeve.setValeur(this, cout);
+	this.coutStock.setValeur(this, cout);
 }
-public Variable getCoutStockFeve() {
-	return this.coutStockFeve;
+public Variable getCoutStock() {
+	return this.coutStock;
 }
 public void setQtFeve(Feve feve, double quantite) {
 	this.getStockFeve().get(feve).setValeur(this, quantite);
@@ -115,15 +117,16 @@ public double getQuantiteFeve(Feve feve) {
 public double getQuantitePate(Pate pate) {
 	return this.getStockPate().get(pate).getValeur();
 }
-public double Maintenance() {
-	double cout_total = 0;
+public void Maintenance() {
+	double stock_total = 0;
 	for (Feve feve :this.getStockFeve().keySet()) {
-		cout_total+=this.getStockFeve().get(feve).getValeur();
+		stock_total+=this.getStockFeve().get(feve).getValeur();
 	}
 	for(Pate pate :this.getStockPate().keySet()) {
-		cout_total+=this.getStockPate().get(pate).getValeur();
+		stock_total+=this.getStockPate().get(pate).getValeur();
 	}
-	return cout_total;
+	double cout_total =stock_total*this.getCoutStock().getValeur() ;
+	Filiere.LA_FILIERE.getBanque().virer(this,this.getCrypto(),Filiere.LA_FILIERE.getBanque(),cout_total);
 }
 
 
