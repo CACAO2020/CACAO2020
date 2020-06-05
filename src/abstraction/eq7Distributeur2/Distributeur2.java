@@ -91,6 +91,16 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		acheteurContratCadre.next();
 		acheteurBourse.next();
 	}
+	public double PrixStockageParNext() {
+		double prix1tonne = 720.0;
+		double prixStockage = 0.0;
+		double qtite = 0.0;
+		for (Chocolat choco : this.nosChoco) {
+			qtite += stock.getStockChocolat(choco);
+		}
+		prixStockage = qtite*prix1tonne;
+		return prixStockage;
+	}
 	
 	public String getNom() {
 		return "EQ7";
