@@ -85,6 +85,10 @@ public class eq2Investisseur extends eq2Vendeur {
 	public double getprixArbre() {
 		return this.prixArbre;
 	}
+	
+	public double getprixUsine() {
+		return this.prixUsine;
+	}
 	public List<Journal> getJournaux() {
 		List<Journal> res=new ArrayList<Journal>();
 		res.addAll(super.getJournaux());
