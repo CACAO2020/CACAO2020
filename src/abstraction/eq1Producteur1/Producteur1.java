@@ -94,11 +94,13 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 		nouveautes.add((Integer) 0);
 		int newArbresForastero = nouveautes.get(0);
 		int newArbresTrinitario = nouveautes.get(1);
-		recolte = this.plantation.plantation_cyclique(newArbresForastero, newArbresTrinitario, this.budget.getEmployes());
+		recolte = this.plantation.plantation_cyclique(newArbresForastero, newArbresTrinitario, this.budget.getEmployes().size());
 		nouveautes = this.budget.budget_cyclique(this.banque.getSolde(this, this.getCryptogramme()), this.stockFevesForastero.getValeur(), this.stockFevesTrinitario.getValeur());
 		this.addStock(recolte.get(0), Feve.FEVE_BASSE);
 		this.addStock(recolte.get(1), Feve.FEVE_MOYENNE);
-		this.banque.virer(this, this.getCryptogramme(), this.banque, nouveautes.get(3));
+		if (nouveautes.get(3)>0) {
+			this.banque.virer(this, this.getCryptogramme(), this.banque, nouveautes.get(3));
+		}
 		
 
 		//next de la classe venteCriee

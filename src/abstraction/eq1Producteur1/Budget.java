@@ -1,6 +1,8 @@
 package abstraction.eq1Producteur1;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
 
 import abstraction.fourni.Banque;
 import abstraction.fourni.Filiere;
@@ -14,22 +16,24 @@ import abstraction.fourni.Filiere;
  * Donnees :
  * On paie un employe (recolteur, pas de diversification des employes pour l'instant)
  * 65 000 francs CFA par mois, ce qui correspond a 100 euros.
+ * Chaque récolteur est embauché pour une durée de un an (24 cycles).
  * Un nouveau plant coute 200 francs CFA (0.3), on compte 500 plants par récolteur.
  * On ne prend pas en compte le terrain lors de la plantation de nouveaux arbres.
+ * Pour investir dans de nouvelles plantations, on s'assurera d'avoir suffisamment
+ * d'argent pour payer les récolteurs que l'on a déjà pendant un an (choix arbitraire).
  */
 
 
 /*
  * Programmes disponibles :
  * double getFonds()
- * int getEmployes()
+ * ArrayList<Integer> getEmployes()
  * double getOldStockF()
  * double getOldSTockT()
  * double getNewStockF()
  * double getNewStockT()
  * 
  * void setFonds(double)
- * void setEmployes(int)
  * void setOldStockF(double)
  * void setOldStockT(double)
  * void setNewStockF(double)
@@ -37,8 +41,8 @@ import abstraction.fourni.Filiere;
  * 
  * double addFonds(double)
  * double removeFonds(double)
- * int addEmployes(int)
- * int removeEmployes(int)
+ * void addEmployes(int)
+ * void actualiserEmployes()
  * 
  * ArrayList<Integer> investissement(double, double, double)
  * ArrayList<Integer> budget_cyclique(double, double)
@@ -48,7 +52,7 @@ import abstraction.fourni.Filiere;
 
 public class Budget {
 	private double fonds;
-	private int employes;
+	private ArrayList<Integer> employes;
 	private double oldstockF;
 	private double newstockF;
 	private double oldstockT;
@@ -56,7 +60,7 @@ public class Budget {
 	
 	public Budget(double f, int e, double osf, double ost, double nsf, double nst) {
 		this.fonds = f;
-		this.employes = e;
+		this.employes = initialiserEmployes(e);
 		this.oldstockF = osf;
 		this.oldstockT = ost;
 		this.newstockF = nsf;
@@ -67,7 +71,7 @@ public class Budget {
 		return this.getFonds();
 	}
 	
-	public int getEmployes() {
+	public ArrayList<Integer> getEmployes() {
 		return this.employes;
 	}
 	
@@ -107,9 +111,6 @@ public class Budget {
 		this.fonds = n_fonds;
 	}
 	
-	public void setEmployes(int n_employes) {
-		this.employes = n_employes;
-	}
 	
 	public void addFonds(double ajout) {
 		this.setFonds(this.getFonds() + ajout);
@@ -119,12 +120,36 @@ public class Budget {
 		this.setFonds(this.getFonds() - retrait);
 	}
 	
-	public void addEmployes(int ajout) {
-		this.setEmployes(this.getEmployes() + ajout);
+	public void setEmployes(ArrayList<Integer> l) {
+		this.employes = l;
 	}
 	
-	public void removeEmployes(int retrait) {
-		this.setEmployes(this.getEmployes() - retrait);
+	public void addEmployes(int i) {
+		for (int k=0; k<i; k++) {
+			this.employes.add((Integer) 0);
+		}
+	}
+	
+	public void actualiserEmployes() {
+		ArrayList<Integer> l = this.getEmployes();
+		for (int i=0; i<l.size(); i++) {
+			int employe = this.getEmployes().get(0) + 1;
+			if (employe==24) {
+				this.employes.remove(0);
+			}
+		}
+	}
+	
+	public ArrayList<Integer> initialiserEmployes(int i) {
+		Random rand = new Random();
+		ArrayList<Integer> l = new ArrayList<Integer>();
+		for (int k=0; k<i; k++) {
+			int cycle = (int) rand.nextInt(24);
+			l.add((Integer) cycle);
+		}
+		Collections.sort(l);
+		Collections.reverse(l);
+		return l;
 	}
 
 
@@ -161,27 +186,22 @@ public class Budget {
 
 	public ArrayList<Integer> budget_cyclique(double fonds, double stockF, double stockT) {
 		this.setFonds(fonds);
-		if (this.getFonds()>this.getEmployes()*50) {
-			this.removeFonds(this.getEmployes()*50);
-		} else {
-			int max_employes = (int) ((int) this.getFonds()/50);
-			this.setEmployes(max_employes);
-			this.removeFonds(this.getEmployes()*50);
-		}
+		this.removeFonds(this.getEmployes().size()*50);
+		this.actualiserEmployes();
+		
 		this.setOldStockF(this.getNewStockF());
 		this.setOldStockT(this.getNewStockT());
 		this.setNewStockF(stockF);
 		this.setNewStockT(stockT);
 		ArrayList<Integer> newPlants = new ArrayList<Integer>();
-		if (this.getFonds()>this.getEmployes()*50) {
-			newPlants = investissement((this.getFonds()-this.getEmployes()*50), (this.getNewStockF()-this.getOldStockF()), this.getNewStockT()-this.getOldStockT());
+		if (this.getFonds()>this.getEmployes().size()*50*24) {
+			newPlants = investissement((this.getFonds()-this.getEmployes().size()*50*24), (this.getNewStockF()-this.getOldStockF()), this.getNewStockT()-this.getOldStockT());
 		} else {
 			newPlants.add((Integer) 0);
 			newPlants.add((Integer) 0);
 			newPlants.add((Integer) 0);
 		}
-		this.setEmployes(this.getEmployes()+newPlants.get(2));
-		this.removeFonds(202.18*newPlants.get(2));;
+		this.addEmployes(newPlants.get(2));
 		newPlants.add((int) 202.18*newPlants.get(2));
 		return newPlants;
 	}
