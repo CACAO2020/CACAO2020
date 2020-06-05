@@ -108,9 +108,9 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 	    prixcrio = masseCrio*this.getPrixTC().getValeur();
 	    prixcrioe = masseCrioE*this.getPrixTCE().getValeur();
 	    //this.journal_des_ventes.ajouter("prixfora="+prixfora+"  prixTrini="+prixtrini+"  prixTriniE"+prixtrinie+"  prixCrio="+prixcrio+"  prixCrioE="+prixcrioe); //pour débugger
-
+	    //this.journal_des_ventes.ajouter(""+this.getforavendu() + this.gettrinivendu() + this.gettrinievendu() + this.getcriovendu() + this.getcrioevendu());
 	    //if (prixfora > prixtrini && prixfora > prixcrio && masseFora > 0.5 && prixfora > prixtrinie && prixfora > prixcrioe) {
-	    if (foravendu == false && masseFora > 0.5) {
+	    if ((this.getforavendu() == false) && masseFora > 0.5) {
 	    	if (this.getPropal()>prixfora) {
 	    		if (prixfora > this.getprixmaxlot()) {
 	    			this.setPrixVente(this.getprixmaxlot());
@@ -126,7 +126,7 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 	    		
 	    }
 	    //else if (prixtrini > prixfora && prixtrini > prixcrio && masseTrini > 0.5 && prixtrini > prixtrinie && prixtrini > prixcrioe) {
-	    else if (trinivendu==false && masseTrini >0.5) {
+	    else if (this.gettrinivendu()==false && masseTrini >0.5) {
 	    	if (this.getPropal()>prixtrini) {
 	    		if (prixtrini > this.getprixmaxlot()) {
 	    			this.setPrixVente(this.getprixmaxlot());
@@ -142,7 +142,7 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 	    		
 	    }
 	    //else if (prixtrinie > prixfora && prixtrinie > prixcrio && masseTriniE > 0.5 && prixtrinie > prixtrini && prixtrinie > prixcrioe) {
-	    else if (trinievendu == false && masseTriniE > 0.5) {
+	    else if (this.gettrinievendu() == false && masseTriniE > 0.5) {
 	    	if (this.getPropal()>prixtrinie) {
 	    		if (prixtrinie > this.getprixmaxlot()) {
 	    			this.setPrixVente(this.getprixmaxlot());
@@ -158,7 +158,7 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 	    		
 	    }
 	    //else if (prixcrio > prixtrini && prixfora < prixcrio && masseCrio > 0.5 && prixcrio > prixtrinie && prixcrio > prixcrioe) {
-	    else if (criovendu == false && masseCrio > 0.5) {
+	    else if (this.getcriovendu() == false && masseCrio > 0.5) {
 	    	if (this.getPropal()>prixcrio) {
 	    		if (prixcrio > this.getprixmaxlot()) {
 	    			this.setPrixVente(this.getprixmaxlot());
@@ -174,7 +174,7 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 	    		
 	    }
 	    //else if (prixcrioe > prixtrini && prixfora < prixcrioe && masseCrioE > 0.5 && prixcrioe > prixtrinie && prixcrioe > prixcrio) {
-	    else if (crioevendu == false && masseCrioE > 0.5) {
+	    else if (this.getcrioevendu() == false && masseCrioE > 0.5) {
 	    	if (this.getPropal()>prixcrioe) {
 	    		if (prixcrioe > this.getprixmaxlot()) {
 	    			this.setPrixVente(this.getprixmaxlot());
@@ -189,7 +189,7 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 	    	}
 	    		
 	    }
-	    else if (foravendu == true && trinivendu == true && trinievendu == true && criovendu == true && crioevendu == true) {
+	    else if (this.getforavendu() == true && this.gettrinivendu() == true && this.gettrinievendu() == true && this.getcriovendu() == true && this.getcrioevendu() == true) {
 	    	this.resetbooleans();
 	    }
 	    
@@ -432,7 +432,21 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 		this.criovendu = false;
 		this.crioevendu = false;
 	}	
-	
+	public boolean getforavendu() {
+		return this.foravendu;
+	}
+	public boolean gettrinivendu() {
+		return this.trinivendu;
+	}
+	public boolean gettrinievendu() {
+		return this.trinievendu;
+	}
+	public boolean getcriovendu() {
+		return this.criovendu;
+	}
+	public boolean getcrioevendu() {
+		return this.crioevendu;
+	}
 }
 
 
