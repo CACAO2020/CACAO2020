@@ -107,6 +107,12 @@ public class AchatCacao {
 				tentativeDachat.get(proposition.getFeve()).get(0).get1().getValeur(),
 				tentativeDachat.get(proposition.getFeve()).get(0).get2().getValeur());
 		//Tresorerie
+		//tentativeDachat.get(proposition.getPrixPourLeLot())
+		this.acteur.getTresorier().jaiAchetePrincipale( 
+				(tentativeDachat.get(proposition.getFeve()).get(0).get1().getValeur())*
+				(
+				tentativeDachat.get(proposition.getFeve()).get(0).get2().getValeur()));
+		// on achète que du haut de gamme en fèves
 	}
 	
 	

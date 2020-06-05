@@ -158,12 +158,27 @@ public class Tresorerie {
 	/**
 	     * Renvoie l'investissement maximum possible à faire sur la fillière principale (bas de gamme) par rapport à la filière secondaire
 	     */
+	public void updateFacteurPrioriteGamme () {
+		
+		if (this.calculRentabiliteBas()>this.calculRentabiliteSecondaire()) {
+			//if 
+		}
+	}
 	
+	public double calculRentabiliteBas() {
+		return investissementBasACeTour;
+	}
+	
+	public double calculRentabiliteSecondaire() {
+		return investissementSecondaireACeTour;
+	}
+
 	public void next() {
 		/**
 		 * Met à jour toute la trésorerie
 		 */
-		this.setFacteurPrioriteGamme(this.getFacteurPrioriteGamme()); //pour l'instant constant
+		//this.setFacteurPrioriteGamme(this.getFacteurPrioriteGamme());
+		this.updateFacteurPrioriteGamme();
 		this.setMontantCompteALaFinDuTour(0); 						//réinitialise la valeur temporaire
 		this.setInvestissementBasACeTour(0);
 		this.setInvestissementSecondaireACeTour(0);
