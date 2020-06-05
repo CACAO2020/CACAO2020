@@ -15,10 +15,12 @@ import abstraction.eq8Romu.produits.Feve;
 public class eq2Investisseur extends eq2Vendeur {
 
 	private double prixArbre;
+	private double prixUsine;
 	private Journal journal_achats;
 
 	public eq2Investisseur() {
 		super();
+		this.prixUsine=100;
 		this.prixArbre = 3;
 		this.journal_achats = new Journal("Investissements",this);
 	}
@@ -28,7 +30,15 @@ public class eq2Investisseur extends eq2Vendeur {
 			this.ajoutPaquetArbres(new PaquetArbres(nbrArbres, feve));
 			Filiere.LA_FILIERE.getBanque().virer(this,this.getCrypto(),Filiere.LA_FILIERE.getBanque(),nbrArbres*this.prixArbre);
 			
-			this.journal_achats.ajouter("Achat de " + nbrArbres + " arbres de type: " + feve.getGamme());
+			if(feve.isBio()) {
+				this.journal_achats.ajouter("Achat de " + nbrArbres + " arbres de type: " + feve.getGamme()+ " BIO");
+			}
+			else if(feve.isEquitable()) {
+				this.journal_achats.ajouter("Achat de " + nbrArbres + " arbres de type: " + feve.getGamme()+ " EQUITABLE");
+			}
+			else {
+				this.journal_achats.ajouter("Achat de " + nbrArbres + " arbres de type: " + feve.getGamme());
+			}
 		}
 	}
 	/** décide si on achète des arbres à ce tour ou non, à appeler à chaque next**/
@@ -57,15 +67,17 @@ public class eq2Investisseur extends eq2Vendeur {
 			this.AchatArbres((int)Math.floor(ecart*proportioncrioe), Feve.FEVE_HAUTE_EQUITABLE);
 			this.journal_achats.ajouter("on a acheté des arbres car trop peu d'arbres");
 		}
-		else if ((Filiere.LA_FILIERE.getBanque().getSolde(this,this.getCrypto())) > (this.NbTotalArbres()*0.05)*500) { //pb : achète trop d'arbres qui produisent pas avant 6 ans, faillite
-			double investissement_max = Filiere.LA_FILIERE.getBanque().getSolde(this,this.getCrypto())*0.005;
-			double nbre_arbresmax = Math.floor(investissement_max/this.getprixArbre());
-			this.AchatArbres((int)Math.floor(nbre_arbresmax*proportionfora), Feve.FEVE_BASSE);
-			this.AchatArbres((int)Math.floor(nbre_arbresmax*proportiontrini), Feve.FEVE_MOYENNE);
-			this.AchatArbres((int)Math.floor(nbre_arbresmax*proportiontrinie), Feve.FEVE_MOYENNE_EQUITABLE);
-			this.AchatArbres((int)Math.floor(nbre_arbresmax*proportioncrio), Feve.FEVE_HAUTE);
-			this.AchatArbres((int)Math.floor(nbre_arbresmax*proportioncrioe), Feve.FEVE_HAUTE_EQUITABLE);
-			this.journal_achats.ajouter("on a acheté des arbres parce qu'on a de la maille");
+		else if ((Filiere.LA_FILIERE.getBanque().getSolde(this,this.getCrypto())) > (this.NbTotalArbres()*0.05)*1080 + +this.getCoutTotalStock().getValeur()*300) {
+			if (this.getcompteurinvendus()<75) {
+				double investissement_max = Filiere.LA_FILIERE.getBanque().getSolde(this,this.getCrypto())*0.005;
+				double nbre_arbresmax = Math.floor(investissement_max/this.getprixArbre());
+				this.AchatArbres((int)Math.floor(nbre_arbresmax*proportionfora), Feve.FEVE_BASSE);
+				this.AchatArbres((int)Math.floor(nbre_arbresmax*proportiontrini), Feve.FEVE_MOYENNE);
+				this.AchatArbres((int)Math.floor(nbre_arbresmax*proportiontrinie), Feve.FEVE_MOYENNE_EQUITABLE);
+				this.AchatArbres((int)Math.floor(nbre_arbresmax*proportioncrio), Feve.FEVE_HAUTE);
+				this.AchatArbres((int)Math.floor(nbre_arbresmax*proportioncrioe), Feve.FEVE_HAUTE_EQUITABLE);
+				this.journal_achats.ajouter("on a acheté des arbres parce qu'on a de la maille");
+			}
 		}}
 		
 	}
@@ -80,6 +92,10 @@ public class eq2Investisseur extends eq2Vendeur {
 	}
 	public double getprixArbre() {
 		return this.prixArbre;
+	}
+	
+	public double getprixUsine() {
+		return this.prixUsine;
 	}
 	public List<Journal> getJournaux() {
 		List<Journal> res=new ArrayList<Journal>();

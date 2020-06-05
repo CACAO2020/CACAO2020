@@ -20,6 +20,7 @@ public class eq2Acteur implements IActeur {
 	 * 
 	 */
 	private List<PaquetArbres> PaquetsArbres;
+	private List<Usine>Usines;
 	private Journal journalEq2;
 	private Integer cryptogramme;
 	private List<Variable> parametres;
@@ -28,7 +29,7 @@ public class eq2Acteur implements IActeur {
 		this.journalEq2 = new Journal("Journal Principal Eq2", this);
 		this.PaquetsArbres = new ArrayList<PaquetArbres>();
 		this.parametres = new ArrayList<Variable>();
-		this.PaquetsArbres = new ArrayList<PaquetArbres>();
+		this.Usines = new ArrayList<Usine>();
 	}
 
 	
@@ -40,8 +41,16 @@ public class eq2Acteur implements IActeur {
 		return this.PaquetsArbres;
 	}
 
+	public List<Usine> getUsines(){
+		return this.Usines;
+	}
+	
 	public void ajoutPaquetArbres(PaquetArbres paquetArbres){
 		this.PaquetsArbres.add(paquetArbres);
+	}
+	
+	public void ajoutUsine(Usine usine){
+		this.Usines.add(usine);
 	}
 	
 	public double NbTotalArbres() {
@@ -50,6 +59,14 @@ public class eq2Acteur implements IActeur {
 			TotalArbre += this.getPaquetsArbres().get(i).getNbreArbres();
 		}
 		return TotalArbre;
+	}
+	
+	public double NbTotalMachines() {
+		double TotalMachine =0; 
+		for (int i=0; i<this.getUsines().size(); i++) {
+			TotalMachine += this.getUsines().get(i).getNbMachine();
+		}
+		return TotalMachine;
 	}
 	
 	@Override
@@ -70,9 +87,9 @@ public class eq2Acteur implements IActeur {
 	@Override
 	public void initialiser() {
 		// Au début de la partie, on va commencer avec quelques arbres déjà plantés
-		this.getPaquetsArbres().add(new PaquetArbres(100, Feve.FEVE_BASSE, 240));
-		this.getPaquetsArbres().add(new PaquetArbres(100, Feve.FEVE_MOYENNE, 288));
-		this.getPaquetsArbres().add(new PaquetArbres(100, Feve.FEVE_HAUTE, 48));
+		this.getPaquetsArbres().add(new PaquetArbres(1000, Feve.FEVE_BASSE, 240));
+		this.getPaquetsArbres().add(new PaquetArbres(1000, Feve.FEVE_MOYENNE, 289));
+		this.getPaquetsArbres().add(new PaquetArbres(1000, Feve.FEVE_HAUTE, 48));
 
 	}
 
