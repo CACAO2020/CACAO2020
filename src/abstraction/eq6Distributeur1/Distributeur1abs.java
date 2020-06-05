@@ -27,6 +27,7 @@ public class Distributeur1abs implements IActeur {
 	protected Variable stockBG;
 	protected Map<Integer,Map<Chocolat,Double>> evolutionCours;
 	protected Map<ChocolatDeMarque,Double> MapStock;
+	protected Map<Integer,Map<ChocolatDeMarque,Double>> evolutionVentes;
 
 	public Distributeur1abs() { 
 		this.stockHGE=new Variable(getNom()+" stock "+ Chocolat.CHOCOLAT_HAUTE_EQUITABLE.toString(), this, 0, 1000000000, 1000000);
@@ -36,6 +37,8 @@ public class Distributeur1abs implements IActeur {
 		this.journalEq6Stock=new Journal(this.getNom()+" stock", this);
 		evolutionCours = new HashMap<Integer,Map<Chocolat,Double>>();
 		this.MapStock = new HashMap<ChocolatDeMarque,Double>();
+		this.evolutionVentes = new HashMap<Integer, Map<ChocolatDeMarque,Double>>();
+		this.evolutionVentes.put(0,new HashMap<ChocolatDeMarque,Double>());
 	}
 
 	public String getNom() {
@@ -47,7 +50,7 @@ public class Distributeur1abs implements IActeur {
 	}
 
 	public Color getColor() {
-		return new Color(240, 195, 15);
+		return new Color(230, 126, 34);
 	}
 	
 	public void stocker(ChocolatDeMarque choco, double quantite) {
@@ -75,6 +78,7 @@ public class Distributeur1abs implements IActeur {
 	public void next() {
 		journalEq6.ajouter("Etape="+Filiere.LA_FILIERE.getEtape());
 		this.evolutionCours.put(Filiere.LA_FILIERE.getEtape(),new HashMap<Chocolat,Double>());
+		this.evolutionVentes.put(Filiere.LA_FILIERE.getEtape()+1,new HashMap<ChocolatDeMarque,Double>());
 		if (Filiere.LA_FILIERE.getEtape()>=1) {
 			for (ChocolatDeMarque chocos : this.MapStock.keySet()) {
 				journalEq6.ajouter("Le prix moyen du chocolat \""+chocos.name()+"\" a l'etape precedente etait de "+Filiere.LA_FILIERE.prixMoyenEtapePrecedente(chocos));
