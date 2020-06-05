@@ -66,13 +66,13 @@ class GestionCriee //implements IVendeurCacaoCriee
 		double prixVente = 0; //quantiteAVendre * (PrixMoy+0.004);
 		if(typeFeve == Feve.FEVE_BASSE)
 		{
-			prixVente = this.v1PrixBasse*quantiteAVendre;
+			prixVente = this.v1PrixBasse;
 		}
 		else
 		{
-			prixVente = this.v1PrixMoyenne*quantiteAVendre;
+			prixVente = this.v1PrixMoyenne;
 		}
-		this.producteur1.ajouterJournaux("[GestionCriee] - Mise en vente de : " + typeFeve + " en quantité "+ quantiteAVendre + " au prix minimum de" + prixVente);
+		this.producteur1.ajouterJournaux("[GestionCriee] - Mise en vente de : " + typeFeve + " en quantité "+ quantiteAVendre + " au prix minimum de " + prixVente);
 		if(quantiteAVendre == 0)
 		{
 			return null;
