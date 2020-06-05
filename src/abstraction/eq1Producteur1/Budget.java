@@ -2,6 +2,9 @@ package abstraction.eq1Producteur1;
 
 import java.util.ArrayList;
 
+import abstraction.fourni.Banque;
+import abstraction.fourni.Filiere;
+
 
 /*
  * Cree par Thalie
@@ -61,7 +64,7 @@ public class Budget {
 	}
 	
 	public double getFonds() {
-		return this.fonds;
+		return this.getFonds();
 	}
 	
 	public int getEmployes() {
@@ -156,7 +159,8 @@ public class Budget {
 	
 	
 
-	public ArrayList<Integer> budget_cyclique(double stockF, double stockT) {
+	public ArrayList<Integer> budget_cyclique(double fonds, double stockF, double stockT) {
+		this.setFonds(fonds);
 		if (this.getFonds()>this.getEmployes()*50) {
 			this.removeFonds(this.getEmployes()*50);
 		} else {
@@ -178,6 +182,7 @@ public class Budget {
 		}
 		this.setEmployes(this.getEmployes()+newPlants.get(2));
 		this.removeFonds(202.18*newPlants.get(2));;
+		newPlants.add((int) 202.18*newPlants.get(2));
 		return newPlants;
 	}
 

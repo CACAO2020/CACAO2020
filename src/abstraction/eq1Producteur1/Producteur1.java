@@ -11,6 +11,7 @@ import abstraction.eq8Romu.cacaoCriee.IVendeurCacaoCriee;
 import abstraction.eq8Romu.cacaoCriee.LotCacaoCriee;
 import abstraction.eq8Romu.cacaoCriee.PropositionCriee;
 import abstraction.eq8Romu.produits.Feve;
+import abstraction.fourni.Banque;
 import abstraction.fourni.Filiere;
 
 /*
@@ -28,6 +29,7 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 	private GestionCriee venteCriee;
 	private Plantations plantation;
 	private Budget budget;
+	private Banque banque;
 
 	public Producteur1() {
 		this.stockFevesForastero=new Variable(getNom()+" stock feves Forastero", this, 0, 10000, 1000);
@@ -36,6 +38,8 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 		this.venteCriee = new GestionCriee(this);
 		this.plantation = new Plantations();
 		this.budget = new Budget(500000, 24, 0.0, 0.0, 0, 0);
+		this.banque = new Banque();
+		this.banque.creerCompte(this);
 	}
 
 	public void setCryptogramme(Integer crypto) {
@@ -61,6 +65,7 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 
 	public void initialiser() {
 		this.plantation.initialiserArbres(10000, 2000);
+		this.banque.initialiser();
 	}
 	
 	// Modifiee par Melanie pour l'ajout des differents stocks de feves
@@ -90,9 +95,10 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 		int newArbresForastero = nouveautes.get(0);
 		int newArbresTrinitario = nouveautes.get(1);
 		recolte = this.plantation.plantation_cyclique(newArbresForastero, newArbresTrinitario, this.budget.getEmployes());
-		nouveautes = this.budget.budget_cyclique(this.stockFevesForastero.getValeur(), this.stockFevesTrinitario.getValeur());
+		nouveautes = this.budget.budget_cyclique(this.banque.getSolde(this, this.getCryptogramme()), this.stockFevesForastero.getValeur(), this.stockFevesTrinitario.getValeur());
 		this.addStock(recolte.get(0), Feve.FEVE_BASSE);
 		this.addStock(recolte.get(1), Feve.FEVE_MOYENNE);
+		this.banque.virer(this, this.getCryptogramme(), this.banque, nouveautes.get(3));
 	}
 
 	// Modification pour ajout de la filiere TestCrieeProd1
