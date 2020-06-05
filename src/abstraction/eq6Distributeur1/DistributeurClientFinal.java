@@ -59,28 +59,6 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 			return 0 ;}*/
 		return Filiere.LA_FILIERE.getIndicateur("BourseChoco cours "+choco.getChocolat().name()).getValeur() * 2;
 		}
-	
-	public void evolutionMarge(ChocolatDeMarque choco) {
-		double vente2 = Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-2, choco)>0 ? this.evolutionVentes.get(Filiere.LA_FILIERE.getEtape()-2).get(choco)/Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-2, choco):0;
-		double vente1 = Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-1, choco)>0 ? this.evolutionVentes.get(Filiere.LA_FILIERE.getEtape()-1).get(choco)/Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-1, choco):0;
-		if (vente1!=0 && vente2!=0) {
-			if (this.margeChocolat.containsKey(choco)) {
-				double newmarge = this.margeChocolat.get(choco)+((vente1-vente2)/vente2)*0.2;  // faudra faire des tests sur l'évolution des marges
-				if (newmarge<1.5 && newmarge>1.1){
-					this.margeChocolat.replace(choco, newmarge);
-				}
-				if (newmarge>1.5){
-					this.margeChocolat.replace(choco, 1.5);
-				}
-				if (newmarge<1.1) {
-					this.margeChocolat.replace(choco, 1.1);
-				}
-			}
-			else {
-				this.margeChocolat.put(choco, marge);
-			}
-		}
-	}
 		
 
 	/** @author Luca Pinguet & Mélissa Tamine */
@@ -137,6 +115,29 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 	public List<ChocolatDeMarque> pubSouhaitee() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	//Début V2
+	
+	public void evolutionMarge(ChocolatDeMarque choco) {
+		double vente2 = Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-2, choco)>0 ? this.evolutionVentes.get(Filiere.LA_FILIERE.getEtape()-2).get(choco)/Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-2, choco):0;
+		double vente1 = Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-1, choco)>0 ? this.evolutionVentes.get(Filiere.LA_FILIERE.getEtape()-1).get(choco)/Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-1, choco):0;
+		if (vente1!=0 && vente2!=0) {
+			if (this.margeChocolat.containsKey(choco)) {
+				double newmarge = this.margeChocolat.get(choco)+((vente1-vente2)/vente2)*0.2;  // faudra faire des tests sur l'évolution des marges
+				if (newmarge<1.5 && newmarge>1.1){
+					this.margeChocolat.replace(choco, newmarge);
+				}
+				if (newmarge>1.5){
+					this.margeChocolat.replace(choco, 1.5);
+				}
+				if (newmarge<1.1) {
+					this.margeChocolat.replace(choco, 1.1);
+				}
+			}
+			else {
+				this.margeChocolat.put(choco, marge);
+			}
+		}
 	}
 
 }
