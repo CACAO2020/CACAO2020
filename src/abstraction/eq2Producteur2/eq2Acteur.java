@@ -71,7 +71,7 @@ public class eq2Acteur implements IActeur {
 	
 	@Override
 	public String getNom() {
-		return "EQ2";
+		return "Return of the Stonks";
 	}
 
 	@Override
@@ -87,9 +87,11 @@ public class eq2Acteur implements IActeur {
 	@Override
 	public void initialiser() {
 		// Au début de la partie, on va commencer avec quelques arbres déjà plantés
-		this.getPaquetsArbres().add(new PaquetArbres(1000, Feve.FEVE_BASSE, 240));
-		this.getPaquetsArbres().add(new PaquetArbres(1000, Feve.FEVE_MOYENNE, 289));
+		this.getPaquetsArbres().add(new PaquetArbres(2500, Feve.FEVE_BASSE, 240));
+		this.getPaquetsArbres().add(new PaquetArbres(1500, Feve.FEVE_MOYENNE, 289));
 		this.getPaquetsArbres().add(new PaquetArbres(1000, Feve.FEVE_HAUTE, 48));
+		this.getPaquetsArbres().add(new PaquetArbres(500, Feve.FEVE_MOYENNE_EQUITABLE,70));
+		this.getPaquetsArbres().add(new PaquetArbres(500, Feve.FEVE_HAUTE_EQUITABLE,80));
 
 	}
 
