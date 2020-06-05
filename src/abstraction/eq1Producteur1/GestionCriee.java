@@ -40,7 +40,9 @@ class GestionCriee //implements IVendeurCacaoCriee
 	private List<PropositionCriee> venduLog;
 	private double v1PrixBasse;
 	private double v1PrixMoyenne;
-	
+	private int compteurNext;
+
+
 	public GestionCriee(Producteur1 sup) //Clément
 	{
 		//Prix par unité
@@ -59,6 +61,10 @@ class GestionCriee //implements IVendeurCacaoCriee
 		this.lastPrixVenteFeveBasse = lastPrixVenteInit;
 	}
 
+	public void next()
+	{
+		this.compteurNext = 0;
+	}
 
 	private LotCacaoCriee makeLot(Feve typeFeve, double quantiteAVendre)
 	{
@@ -77,7 +83,7 @@ class GestionCriee //implements IVendeurCacaoCriee
 		{
 			return null;
 		}
-		LotCacaoCriee lot = new LotCacaoCriee(this.producteur1, typeFeve, quantiteAVendre, prixVente);
+		LotCacaoCriee lot = new LotCacaoCriee(this.producteur1, typeFeve, quantiteAVendre/4, prixVente);
 		this.miseEnVenteLog.add(lot);
 		return lot;
 	}

@@ -99,6 +99,10 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 		this.addStock(recolte.get(0), Feve.FEVE_BASSE);
 		this.addStock(recolte.get(1), Feve.FEVE_MOYENNE);
 		this.banque.virer(this, this.getCryptogramme(), this.banque, nouveautes.get(3));
+		
+
+		//next de la classe venteCriee
+		this.venteCriee.next();
 	}
 
 	// Modification pour ajout de la filiere TestCrieeProd1
