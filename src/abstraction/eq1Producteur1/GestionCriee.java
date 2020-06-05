@@ -40,7 +40,8 @@ class GestionCriee //implements IVendeurCacaoCriee
 	private List<PropositionCriee> venduLog;
 	private double v1PrixBasse;
 	private double v1PrixMoyenne;
-	private int compteurNext;
+	private int compteurBas;
+	private int compteurMoyen;
 
 
 	public GestionCriee(Producteur1 sup) //Clément
@@ -63,7 +64,16 @@ class GestionCriee //implements IVendeurCacaoCriee
 
 	public void next()
 	{
-		this.compteurNext = 0;
+		this.compteurBas = 0;
+		this.compteurMoyen = 0;
+		if(this.producteur1.getStock(Feve.FEVE_BASSE) <= 0)
+		{
+			this.compteurBas = -1;
+		}
+		if(this.producteur1.getStock(Feve.FEVE_MOYENNE) <= 0)
+		{
+			this.compteurMoyen = -1;
+		}
 	}
 
 	private LotCacaoCriee makeLot(Feve typeFeve, double quantiteAVendre)
