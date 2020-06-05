@@ -115,7 +115,16 @@ public double getQuantiteFeve(Feve feve) {
 public double getQuantitePate(Pate pate) {
 	return this.getStockPate().get(pate).getValeur();
 }
-
+public double Maintenance() {
+	double cout_total = 0;
+	for (Feve feve :this.getStockFeve().keySet()) {
+		cout_total+=this.getStockFeve().get(feve).getValeur();
+	}
+	for(Pate pate :this.getStockPate().keySet()) {
+		cout_total+=this.getStockPate().get(pate).getValeur();
+	}
+	return cout_total;
+}
 
 
 }
