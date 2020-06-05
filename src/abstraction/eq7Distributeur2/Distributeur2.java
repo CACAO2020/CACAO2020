@@ -40,6 +40,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	private AcheteurContratCadre acheteurContratCadre;
 	private Vendeur vendeur;
 	private Stock stock;
+	private double masseSalariale1Next;
 	
 	private Journal journal;
 	private Journal journalTransactions;
@@ -56,6 +57,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		vendeur = new Vendeur(this);
 		stock = new Stock(this);
 		initJournaux();
+		masseSalariale1Next = 80000;
 	}
 	
 	// Initialise les journaux
@@ -90,6 +92,16 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		vendeur.next();
 		acheteurContratCadre.next();
 		acheteurBourse.next();
+	}
+	public double PrixStockageParNext() {
+		double prix1tonne = 720.0;
+		double prixStockage = 0.0;
+		double qtite = 0.0;
+		for (Chocolat choco : this.nosChoco) {
+			qtite += stock.getStockChocolat(choco);
+		}
+		prixStockage = qtite*prix1tonne;
+		return prixStockage;
 	}
 	
 	public String getNom() {
