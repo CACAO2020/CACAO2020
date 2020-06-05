@@ -88,14 +88,7 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 		for (Pate pate: this.getStockPate().keySet()) {
 			res.add(this.getStockPate().get(pate));
 		}
-		double stock_total = 0;
-		for (Feve feve :this.getStockFeve().keySet()) {
-			stock_total+=this.getStockFeve().get(feve).getValeur();
-		}
-		for(Pate pate :this.getStockPate().keySet()) {
-			stock_total+=this.getStockPate().get(pate).getValeur();
-		}
-		res.add(new Variable("cout_total_stock",this,stock_total*this.getCoutStock().getValeur()));
+		res.add(this.getCoutTotalStock());
 		return res;
 	}
 	

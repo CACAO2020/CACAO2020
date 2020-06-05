@@ -27,16 +27,17 @@ public class eq2Stock extends eq2Acteur{
 	private HashMap<Feve,Variable> StockFeve;
 	private HashMap<Pate,Variable> StockPate;
 	private double nbemployees;
-	
+	private Variable cout_total_Stock;
 	
 	/**
 	 * @author lucas p
 	 * 	 */
 	public eq2Stock() {
 		super();
-		this.coutStock = new Variable ("cout",this,0.1);
+		this.coutStock = new Variable ("cout",this,1);
 		this.StockFeve = new HashMap<Feve,Variable>();
 		this.StockPate = new HashMap<Pate,Variable>();
+		this.cout_total_Stock= new Variable("cout_total_stock",this,0);
 		this.StockFeve.put(Feve.FEVE_BASSE, new Variable("EQ2Feve.FEVE_BASSE",this, 10.0));
 		this.StockFeve.put(Feve.FEVE_MOYENNE, new Variable("EQ2Feve.FEVE_MOYENNE",this, 75.0));
 		this.StockFeve.put(Feve.FEVE_HAUTE, new Variable("EQ2Feve.FEVE_HAUTE",this, 30.0));
@@ -61,7 +62,12 @@ public void addStockPate(Pate pate, double quantité) {
 	 return this.StockPate;
 	 
  }
-
+ public Variable getCoutTotalStock() {
+	 return this.cout_total_Stock;
+ }
+public void setCoutTotalStock(double new_cout) {
+	this.cout_total_Stock.setValeur(this,new_cout);
+}
 public void setCoutStockFeve(double cout) {
 	this.coutStock.setValeur(this, cout);
 }
@@ -125,8 +131,8 @@ public void Maintenance() {
 	for(Pate pate :this.getStockPate().keySet()) {
 		stock_total+=this.getStockPate().get(pate).getValeur();
 	}
-	double cout_total =stock_total*this.getCoutStock().getValeur() ;
-	Filiere.LA_FILIERE.getBanque().virer(this,this.getCrypto(),Filiere.LA_FILIERE.getBanque(),cout_total);
+	this.setCoutTotalStock(stock_total*this.getCoutStock().getValeur()) ;
+	Filiere.LA_FILIERE.getBanque().virer(this,this.getCrypto(),Filiere.LA_FILIERE.getBanque(),this.getCoutTotalStock().getValeur());
 }
 
 
