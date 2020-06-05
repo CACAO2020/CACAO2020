@@ -20,7 +20,8 @@ public class Tresorerie {
 	private double MontantCompteALaFinDuTour;	//Montant théorique après les achats de quelqu'un
 	//private double Decouvert;
 	private double FacteurPrioriteGamme; // 100% haute gamme = 1, 100% bas de gamme = 0
-
+	private double investissementBasACeTour;
+	private double investissementSecondaireACeTour;
 	
 	//private Variable decouvertsConsecutifsAvantFaillite; //parametres fixes à priori
 	//private Variable decouvertAutorise;
@@ -61,16 +62,20 @@ public class Tresorerie {
 				Filiere.LA_FILIERE.getBanque().getParametres().get(4));
 	}*/
 	
-	public Tresorerie(Transformateur3 acteur, double MontantCompteALaFinDuTour, double Facteur) {
+	public Tresorerie(Transformateur3 acteur, double MontantCompteALaFinDuTour, double Facteur,double investissementBasACeTour,double investissementHautACeTour) {
 		this.acteur = acteur;
 		this.MontantCompteALaFinDuTour=MontantCompteALaFinDuTour;
 		this.FacteurPrioriteGamme=Facteur;
+		this.investissementBasACeTour=investissementBasACeTour;
+		this.investissementSecondaireACeTour=investissementSecondaireACeTour;
 	}
 
 	public Tresorerie(Transformateur3 acteur) {
 		this(acteur,
 				0,
-				0.8);
+				0.8,
+				0,
+				0);
 	}
 	
 	
@@ -79,16 +84,16 @@ public class Tresorerie {
 	}
 
 	public double getMontantCompte() {
+		//le découvert = montant compte si il est négatif
+		//V1 : le montant total est utilisé indifférement des filières
+		//V2 : on sépare les montants max accordés aux filières haute/basse avec le facteur de priorité
 		return Filiere.LA_FILIERE.getBanque().getSolde(this.acteur, this.acteur.getCryptogramme());
 	}
 	
 	public double getMontantCompteALaFinDuTour() {
 		return this.MontantCompteALaFinDuTour;
 	}
-	
-	public double getDecouvert() {
-		return 0; //jsp
-	}
+		
 	/**
 	     * Le facteur qui décrit la priorité que nous mettons sur le bas de gamme par rapport au haut de gamme (évolue au cours de la
 	     * simulation)
@@ -97,7 +102,27 @@ public class Tresorerie {
 		
 		return this.FacteurPrioriteGamme;
 	}
+	
+	
 		
+	public double getInvestissementBasACeTour() {
+		return investissementBasACeTour;
+	}
+
+	public void setInvestissementBasACeTour(double investissementBasACeTour) {
+		this.investissementBasACeTour = investissementBasACeTour;
+	}
+
+
+
+	public double getInvestissementSecondaireACeTour() {
+		return investissementSecondaireACeTour;
+	}
+
+	public void setInvestissementSecondaireACeTour(double investissementSecondaireACeTour) {
+		this.investissementSecondaireACeTour = investissementSecondaireACeTour;
+	}
+
 	public Variable getDecouvertsConsecutifsAvantFaillite() {
 		return Filiere.LA_FILIERE.getBanque().getParametres().get(0);
 	}
@@ -131,8 +156,7 @@ public class Tresorerie {
 		this.FacteurPrioriteGamme=Facteur;
 	}
 	/**
-	     * Renvoie l'investissement maximum possible à faire dans le bas de gamme en fonction du facteur de priorité que l'on s'impose
-	     * ainsi que du montant de notre trésorerie
+	     * Renvoie l'investissement maximum possible à faire sur la fillière principale (bas de gamme) par rapport à la filière secondaire
 	     */
 	
 	public void next() {
@@ -141,24 +165,38 @@ public class Tresorerie {
 		 */
 		this.setFacteurPrioriteGamme(this.getFacteurPrioriteGamme()); //pour l'instant constant
 		this.setMontantCompteALaFinDuTour(0); 						//réinitialise la valeur temporaire
+		this.setInvestissementBasACeTour(0);
+		this.setInvestissementSecondaireACeTour(0);
+	}
+	public void jaiAchetePrincipale(double montant) {
+		this.setInvestissementBasACeTour(this.getInvestissementBasACeTour()+montant);
+	}
+	
+	public void jaiAcheteSecondaire(double montant) {
+		this.setInvestissementSecondaireACeTour(this.getInvestissementSecondaireACeTour()+montant);
 	}
 	
 	public double investissementMaxBasDeGamme() {
 		
-		return this.getMontantCompte();
+		return this.getMontantCompte()*this.getFacteurPrioriteGamme();
 	}
 	
 	/**
 	     * Renvoie l'investissement maximum possible à faire dans le haut de gamme en fonction du facteur de priorité que l'on s'impose
 	     * ainsi que du montant de notre trésorerie
 	     */
-	public double investissementMaxHautDeGamme() {
+	
+	public double investissementMaxCompteSecondaire() {
 		
-		return this.getMontantCompte();
+		return this.getMontantCompte()*(1-this.getFacteurPrioriteGamme());
 	}
+	
+	
 	
 	public void diminueTresorerie(double montant) {
 		Filiere.LA_FILIERE.getBanque().virer(this.getActeur(), this.getActeur().getCryptogramme(), Filiere.LA_FILIERE.getBanque(), montant);
 	}
+	
+	
 	
 }
