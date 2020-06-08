@@ -20,6 +20,9 @@ public class Usine {
 	public int getAge() {
 		return this.Age;
 	}
+	public void setAge( int newAge) {
+		this.Age= newAge;
+	}
 	public int getNbMachine() {
 		return this.NbMachine;
 	}
@@ -37,5 +40,12 @@ public class Usine {
 			return this.getNbMachine()*this.getProd()*(1.0-this.getAge()/50.0);
 		}
 		else return 0.0;
+	}
+
+	public double Amortissement() {
+		if (this.getAge()<=15) {
+			return 100; //a remplacer par un pourcentage du cout d'achat
+		}
+		else {return 0;}
 	}
 }

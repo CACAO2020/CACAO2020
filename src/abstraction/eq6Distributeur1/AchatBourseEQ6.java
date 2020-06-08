@@ -28,10 +28,12 @@ public class AchatBourseEQ6 extends Stock implements IAcheteurChocolatBourse{
 	
 	public double EvolutionDemandeChocolat(Chocolat chocolat){ // il faut prendre en compte les ruptures de stocks
 		
-		double anneeYa1AN = Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-24, chocolat );
+		double anneeYa1AN = Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-24+1, chocolat );
 		journalEq6.ajouter("il y a 1 an" + anneeYa1AN);
+		
+		
 		if (Filiere.LA_FILIERE.getEtape()>24) {
-			double anneeYa2AN = Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-48, chocolat );//pareil que l'autre, mais pour le chocolat en question, en pourcentage
+			double anneeYa2AN = Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-48+1, chocolat );//pareil que l'autre, mais pour le chocolat en question, en pourcentage
 			
 		    
 			return anneeYa1AN + (anneeYa1AN-anneeYa2AN)/2;

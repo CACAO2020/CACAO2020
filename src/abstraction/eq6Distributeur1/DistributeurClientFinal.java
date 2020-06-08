@@ -15,20 +15,18 @@ import abstraction.fourni.Filiere;
 public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistributeurChocolatDeMarque{
 	private double capaciteDeVente;
 	private Map<ChocolatDeMarque,Double> catalogueVente;
-	private double margeHGE;
-	private double margeMG;
-	private double margeBG;
+	protected Map<ChocolatDeMarque,Double> margeChocolat;
+	private double marge;
 	private double pctageHGE;
 	private double pctageBG;
 	private double pctageMG;
 
-	public DistributeurClientFinal(double capaciteDeVente, double margeHGE, double margeMG, double margeBG,double capaciteStockmax, double pctageHGE, double pctageMG, double pctageBG) {
+	public DistributeurClientFinal(double capaciteDeVente, double marge, double capaciteStockmax, double pctageHGE, double pctageMG, double pctageBG) {
 		super(capaciteStockmax);
 		this.catalogueVente = new HashMap<ChocolatDeMarque,Double>();
+		this.margeChocolat = new HashMap<ChocolatDeMarque,Double>();
 		this.capaciteDeVente = capaciteDeVente;
-		this.margeHGE=margeHGE;
-		this.margeMG=margeMG;
-		this.margeBG=margeBG;
+		this.marge=marge;
 		this.pctageBG=pctageBG;
 		this.pctageHGE=pctageHGE;
 		this.pctageMG=pctageMG;
@@ -81,14 +79,14 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 
 
         if (choco.getChocolat()==Chocolat.CHOCOLAT_HAUTE_EQUITABLE) {
-            return this.MapStock.keySet().contains(choco) ? Math.min(capaciteHGE/nbmarques, this.MapStock.get(choco)) : capaciteHGE/nbmarques;
+            return this.MapStock.keySet().contains(choco) ? Math.min(capaciteHGE/nbmarques, this.MapStock.get(choco)) : 0;
         }
         else if (choco.getChocolat()==Chocolat.CHOCOLAT_MOYENNE) {
-            return this.MapStock.keySet().contains(choco) ? Math.min(capaciteMG/nbmarques, this.MapStock.get(choco)):capaciteMG/nbmarques;
+            return this.MapStock.keySet().contains(choco) ? Math.min(capaciteMG/nbmarques, this.MapStock.get(choco)):0;
         }
         else if (choco.getChocolat()==Chocolat.CHOCOLAT_BASSE) {
         	System.out.print("Map ="+this.MapStock);
-            return this.MapStock.keySet().contains(choco) ? Math.min(capaciteBG/nbmarques, this.MapStock.get(choco)) : capaciteBG/nbmarques;
+            return this.MapStock.keySet().contains(choco) ? Math.min(capaciteBG/nbmarques, this.MapStock.get(choco)) : 0;
         }
         else {
             return 0;
@@ -102,6 +100,7 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant) {
 		if (client!=null) { 
 			destocker(choco,quantite);
+			this.evolutionVentes.get(Filiere.LA_FILIERE.getEtape()).put(choco, quantite);
 			}
 		}
 		
@@ -116,6 +115,29 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 	public List<ChocolatDeMarque> pubSouhaitee() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	//Début V2
+	
+	public void evolutionMarge(ChocolatDeMarque choco) {
+		double vente2 = Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-2, choco)>0 ? this.evolutionVentes.get(Filiere.LA_FILIERE.getEtape()-2).get(choco)/Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-2, choco):0;
+		double vente1 = Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-1, choco)>0 ? this.evolutionVentes.get(Filiere.LA_FILIERE.getEtape()-1).get(choco)/Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-1, choco):0;
+		if (vente1!=0 && vente2!=0) {
+			if (this.margeChocolat.containsKey(choco)) {
+				double newmarge = this.margeChocolat.get(choco)+((vente1-vente2)/vente2)*0.2;  // faudra faire des tests sur l'évolution des marges
+				if (newmarge<1.5 && newmarge>1.1){
+					this.margeChocolat.replace(choco, newmarge);
+				}
+				if (newmarge>1.5){
+					this.margeChocolat.replace(choco, 1.5);
+				}
+				if (newmarge<1.1) {
+					this.margeChocolat.replace(choco, 1.1);
+				}
+			}
+			else {
+				this.margeChocolat.put(choco, marge);
+			}
+		}
 	}
 
 }

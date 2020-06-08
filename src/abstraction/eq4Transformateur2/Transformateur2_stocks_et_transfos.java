@@ -1,5 +1,6 @@
 package abstraction.eq4Transformateur2; 
 
+import abstraction.fourni.Filiere;
 import abstraction.fourni.Variable;
 
 import java.util.HashMap;
@@ -20,9 +21,13 @@ public class Transformateur2_stocks_et_transfos extends Transformateur2 {
 	
 	//variables
 	
-	//donnent la limite de la quantité transformable (limitation due aux infrastructures et employés disponibles)
+	//donnent la limite de la quantité de materiaux transformable par tour (limitation due aux infrastructures et employés disponibles)
 	private Variable capaciteMaxTFEP ; 
 	private Variable capaciteMaxTPEC ;
+	
+	private double coutPourAugmenterCapaTFEP = 1;
+	private double coutPourAugmenterCapaTPEC = 1;
+	
 	
 	// coût unitaire moyen d'achat de chaque denrée, on ne distingue pas les lots, les stocks sont 
 	// considérés comme constitués d'une seule denrée, peu importe quand il a été acheté
@@ -74,25 +79,25 @@ public class Transformateur2_stocks_et_transfos extends Transformateur2 {
 		this.coutUnitaireEntretienTPEC  = new Variable(getNom()+" cout unitaire d'entretien de la capacité de transformation de pâte en chocolat", this, 1) ;
 		
 		this.coutMoyenFeves = new HashMap<Feve, Variable>() ;
-		this.coutMoyenFeves.put(Feve.FEVE_BASSE, new Variable(getNom()+" cout unitaire moyen à l'achat des feves basses", this, 1)) ;
-		this.coutMoyenFeves.put(Feve.FEVE_MOYENNE, new Variable(getNom()+" cout unitaire moyen à l'achat des feves moyennes", this, 2)) ;
-		this.coutMoyenFeves.put(Feve.FEVE_HAUTE, new Variable(getNom()+" cout unitaire moyen à l'achat des feves hautes", this, 3)) ;
-		this.coutMoyenFeves.put(Feve.FEVE_MOYENNE_EQUITABLE,new Variable(getNom()+" cout unitaire moyen à l'achat des feves moyennes equitables", this, 3)) ;
-		this.coutMoyenFeves.put(Feve.FEVE_HAUTE_EQUITABLE, new Variable(getNom()+" cout unitaire moyen à l'achat des feves hautes equitables", this, 4)) ;
+		this.coutMoyenFeves.put(Feve.FEVE_BASSE, new Variable(getNom()+" cout unitaire moyen à l'achat des feves basses", this, 100)) ;
+		this.coutMoyenFeves.put(Feve.FEVE_MOYENNE, new Variable(getNom()+" cout unitaire moyen à l'achat des feves moyennes", this, 200)) ;
+		this.coutMoyenFeves.put(Feve.FEVE_HAUTE, new Variable(getNom()+" cout unitaire moyen à l'achat des feves hautes", this, 300)) ;
+		this.coutMoyenFeves.put(Feve.FEVE_MOYENNE_EQUITABLE,new Variable(getNom()+" cout unitaire moyen à l'achat des feves moyennes equitables", this, 300)) ;
+		this.coutMoyenFeves.put(Feve.FEVE_HAUTE_EQUITABLE, new Variable(getNom()+" cout unitaire moyen à l'achat des feves hautes equitables", this, 400)) ;
 		
 		this.coutMoyenPate = new HashMap<PateInterne, Variable>() ;
-		this.coutMoyenPate.put(PateInterne.PATE_BASSE, new Variable(getNom()+" cout unitaire moyen à l'achat de pate basse", this, 1)) ;
-		this.coutMoyenPate.put(PateInterne.PATE_MOYENNE, new Variable(getNom()+" cout unitaire moyen à l'achat de pate moyenne", this, 2)) ;
-		this.coutMoyenPate.put(PateInterne.PATE_HAUTE, new Variable(getNom()+" cout unitaire moyen à l'achat de pate haute", this, 3)) ;
-		this.coutMoyenPate.put(PateInterne.PATE_MOYENNE_EQUITABLE, new Variable(getNom()+" cout unitaire moyen à l'achat de pate moyenne equitable", this, 3));
-		this.coutMoyenPate.put(PateInterne.PATE_HAUTE_EQUITABLE, new Variable(getNom()+" cout unitaire moyen à l'achat de pate haute equitable", this, 4));
+		this.coutMoyenPate.put(PateInterne.PATE_BASSE, new Variable(getNom()+" cout unitaire moyen à l'achat de pate basse", this, 200)) ;
+		this.coutMoyenPate.put(PateInterne.PATE_MOYENNE, new Variable(getNom()+" cout unitaire moyen à l'achat de pate moyenne", this, 400)) ;
+		this.coutMoyenPate.put(PateInterne.PATE_HAUTE, new Variable(getNom()+" cout unitaire moyen à l'achat de pate haute", this, 600)) ;
+		this.coutMoyenPate.put(PateInterne.PATE_MOYENNE_EQUITABLE, new Variable(getNom()+" cout unitaire moyen à l'achat de pate moyenne equitable", this, 600));
+		this.coutMoyenPate.put(PateInterne.PATE_HAUTE_EQUITABLE, new Variable(getNom()+" cout unitaire moyen à l'achat de pate haute equitable", this, 800));
 		
 		this.coutMoyenChocolat = new HashMap<Chocolat, Variable>() ;
-		this.coutMoyenChocolat.put(Chocolat.CHOCOLAT_BASSE, new Variable(getNom()+" cout unitaire moyen à l'achat de chocolat basse", this, 1)) ;
-		this.coutMoyenChocolat.put(Chocolat.CHOCOLAT_MOYENNE, new Variable(getNom()+" cout unitaire moyen à l'achat de chocolat moyenne", this, 2)) ;
-		this.coutMoyenChocolat.put(Chocolat.CHOCOLAT_HAUTE, new Variable(getNom()+" cout unitaire moyen à l'achat de chocolat haute", this, 3)) ;
-		this.coutMoyenChocolat.put(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE, new Variable(getNom()+" cout unitaire moyen à l'achat de chocolat moyenne equitable", this, 3)) ;
-		this.coutMoyenChocolat.put(Chocolat.CHOCOLAT_HAUTE_EQUITABLE, new Variable(getNom()+" cout unitaire moyen à l'achat de chocolat haute equitable", this, 4)) ;
+		this.coutMoyenChocolat.put(Chocolat.CHOCOLAT_BASSE, new Variable(getNom()+" cout unitaire moyen à l'achat de chocolat basse", this, 400)) ;
+		this.coutMoyenChocolat.put(Chocolat.CHOCOLAT_MOYENNE, new Variable(getNom()+" cout unitaire moyen à l'achat de chocolat moyenne", this, 800)) ;
+		this.coutMoyenChocolat.put(Chocolat.CHOCOLAT_HAUTE, new Variable(getNom()+" cout unitaire moyen à l'achat de chocolat haute", this, 1200)) ;
+		this.coutMoyenChocolat.put(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE, new Variable(getNom()+" cout unitaire moyen à l'achat de chocolat moyenne equitable", this, 1200)) ;
+		this.coutMoyenChocolat.put(Chocolat.CHOCOLAT_HAUTE_EQUITABLE, new Variable(getNom()+" cout unitaire moyen à l'achat de chocolat haute equitable", this, 1600)) ;
 	
 	}
 	
@@ -134,20 +139,37 @@ public class Transformateur2_stocks_et_transfos extends Transformateur2 {
 		return this.capaciteMaxTPEC.getValeur();
 	}
 	
+	
+	public void setCapaciteMaxTFEP(double capaciteMaxTFEP) {
+		this.capaciteMaxTFEP.setValeur(this, capaciteMaxTFEP);
+	}
+
+	public void setCapaciteMaxTPEC(double capaciteMaxTPEC) {
+		this.capaciteMaxTPEC.setValeur(this, capaciteMaxTPEC);
+	}
+
+	public double getCoutPourAugmenterCapaTFEP() {
+		return coutPourAugmenterCapaTFEP;
+	}
+
+	public double getCoutPourAugmenterCapaTPEC() {
+		return coutPourAugmenterCapaTPEC;
+	}
+	
 	// getters : ici, donne le coût unitaire d'entretien de la capacité de transformation pour les deux transformation
 	// A chaque étape, la quantité totale transformée change, et donc le coût unitaire dû à l'entretien des salaires
 	//  et infrastructures peut varier
 	
 	public double getCoutUnitaireEntretienTFEPauStep (double quantiteTotaleFevesATransfo) {
 		if (quantiteTotaleFevesATransfo != 0) {
-			return this.getCoutUnitaireEntretienTFEP() * this.capaciteMaxTFEP.getValeur() / quantiteTotaleFevesATransfo ;
+			return this.getCoutUnitaireEntretienTFEP() / this.capaciteMaxTFEP.getValeur() * quantiteTotaleFevesATransfo ;
 		}
 		else { throw new IllegalArgumentException ("quantite totale nulle") ; }
 	}
 	
 	public double getCoutUnitaireEntretienTPECauStep (double quantiteTotalePateATransfo) {
 		if (quantiteTotalePateATransfo != 0) {
-			return this.getCoutUnitaireEntretienTPEC() * this.capaciteMaxTPEC.getValeur() / quantiteTotalePateATransfo ;
+			return this.getCoutUnitaireEntretienTPEC() / this.capaciteMaxTPEC.getValeur() * quantiteTotalePateATransfo ;
 		}
 		else { throw new IllegalArgumentException ("quantite totale nulle") ; }
 	}
@@ -462,5 +484,15 @@ public class Transformateur2_stocks_et_transfos extends Transformateur2 {
 			this.transformationPateEnChocolat (quantitesPate.get(pate), pate, this.getQuantiteTPEC(quantitesPate)) ;
 		} 
 	}
+		
+/* AUGMENTER LA CAPACITE DE TRANSFORMATION */
+	public void investirCapaTFEP(double qteAInvestir) {
+			this.capaciteMaxTFEP.setValeur(this, this.getCapaciteMaxTFEP()+ qteAInvestir/this.getCoutPourAugmenterCapaTFEP());
+			Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme, Filiere.LA_FILIERE.getBanque(), qteAInvestir);
+	}
 	
+	public void investirCapaTPEC(double qteAInvestir) {
+		this.capaciteMaxTPEC.setValeur(this, this.getCapaciteMaxTPEC()+ qteAInvestir/this.getCoutPourAugmenterCapaTPEC());
+		Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme, Filiere.LA_FILIERE.getBanque(), qteAInvestir);
+	}
 }
