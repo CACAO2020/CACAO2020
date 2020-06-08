@@ -16,7 +16,7 @@ import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 //cette classe permet de gerer les mouvement de stock
 public class Stock extends AbsStock implements IStock {
-	private int datePeremption;
+	protected int datePeremption;
 	
 	public Stock(Distributeur2 ac) {
 			super(ac);
@@ -50,15 +50,9 @@ public class Stock extends AbsStock implements IStock {
 		journal.ajouter(Journal.texteColore(addStockColor, Color.BLACK, "[STOCK +] " + Journal.doubleSur(quantite,2) + " tonnes de " + chocoDeMarque.name() + " ont été ajoutées au stock (nouveau stock : " + Journal.doubleSur(stocksChocolatDeMarque.get(chocoDeMarque).getValeur(),2) + " tonnes)."));
 		
 		int etape = Filiere.LA_FILIERE.getEtape()+this.datePeremption;
-		
-		if (datesLimites.containsKey(chocoDeMarque)) {
-			datesLimites.get(chocoDeMarque).set(etape, datesLimites.get(chocoDeMarque).getQuantite(etape) + quantite);
-		} else {
-			List<Double> quantites;
-			quantites = new ArrayList<Double>();
-			quantites.add(quantite);
-			datesLimites.put(chocoDeMarque, new Echeancier(etape, quantites));
-		}
+
+		datesLimites.get(chocoDeMarque).set(etape, datesLimites.get(chocoDeMarque).getQuantite(etape) + quantite);
+
 		
 	}
 	public void next() {

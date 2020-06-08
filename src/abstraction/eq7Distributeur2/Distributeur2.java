@@ -84,6 +84,13 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		for (ChocolatDeMarque choco : vendeur.getCatalogue()) {
 			stock.ajouterStockChocolat(choco, vendeur.quantiteAVendreParDefaut);
 		}
+		int etape = Filiere.LA_FILIERE.getEtape() + stock.datePeremption;
+		for (ChocolatDeMarque choco : this.tousLesChocolatsDeMarquePossibles()) {
+			List<Double> quantites;
+			quantites = new ArrayList<Double>();
+			quantites.add(stock.getStockChocolatDeMarque(choco));
+			stock.datesLimites.put(choco, new Echeancier(etape, quantites));
+		}
 	}
 	// La méthode next, qui lance les appels des fonctions next de chaque sous-acteur
 	// Le vendeur est appelé en premier pour évaluer la quantité de chocolat que les acheteurs doivent commander
