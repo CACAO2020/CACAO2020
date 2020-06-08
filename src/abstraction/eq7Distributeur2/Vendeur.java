@@ -191,7 +191,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 	}
 
 	public double prix(ChocolatDeMarque choco) {
-		//renvoie le prix d'un chocolat (selon sa marque)
+		//renvoie le prix d'un chocolat (selon sa marque) 
 		return prixChoco.get(choco).getValeur();
 	}
 
