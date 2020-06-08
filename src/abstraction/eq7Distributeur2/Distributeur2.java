@@ -93,6 +93,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		vendeur.next();
 		acheteurContratCadre.next();
 		acheteurBourse.next();
+		Filiere.LA_FILIERE.getBanque().virer(Filiere.LA_FILIERE.getActeur(getNom()), this.cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), this.masseSalariale1Next+ this.PrixStockageParNext());
 	}
 	public double PrixStockageParNext() {
 		double prix1tonne = 720.0;
