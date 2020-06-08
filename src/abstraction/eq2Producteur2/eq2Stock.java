@@ -28,7 +28,7 @@ public class eq2Stock extends eq2Acteur{
 	private HashMap<Pate,Variable> StockPate;
 	private double nbemployees;
 	private Variable cout_total_Stock;
-	private Variable solde;
+	
 	/**
 	 * @author lucas p
 	 * 	 */
@@ -43,7 +43,7 @@ public class eq2Stock extends eq2Acteur{
 		this.StockFeve.put(Feve.FEVE_HAUTE, new Variable("EQ2Feve.FEVE_HAUTE",this, 30.0));
 		this.StockFeve.put(Feve.FEVE_MOYENNE_EQUITABLE, new Variable("EQ2Feve.FEVE_MOYENNE_EQUITABLE",this, 30.0));
 		this.StockFeve.put(Feve.FEVE_HAUTE_EQUITABLE, new Variable("EQ2Feve.FEVE_HAUTE_EQUITABLE",this, 30.0));
-		this.solde = new Variable("solde",this,-500000000,1000000000000.00, Filiere.LA_FILIERE.getBanque().getSolde(this, this.getCrypto()));
+		
 	}
 	
 public void addStockFeve(Feve feve, double quantité) {
@@ -139,11 +139,6 @@ public void BrûlerStock() {
 	
 }
 
-public Variable getSolde() {
-	return this.solde;
-}
-public void setSolde(double valeur) {
-	this.solde.setValeur(this, valeur);
-}
+
 
 }
