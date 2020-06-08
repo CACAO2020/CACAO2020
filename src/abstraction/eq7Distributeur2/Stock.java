@@ -52,7 +52,7 @@ public class Stock extends AbsStock implements IStock {
 		int etape = Filiere.LA_FILIERE.getEtape()+this.datePeremption;
 		
 		if (datesLimites.containsKey(chocoDeMarque)) {
-			datesLimites.get(chocoDeMarque).set(etape, quantite);
+			datesLimites.get(chocoDeMarque).set(etape, datesLimites.get(chocoDeMarque).getQuantite(etape) + quantite);
 		} else {
 			List<Double> quantites;
 			quantites = new ArrayList<Double>();
@@ -63,7 +63,7 @@ public class Stock extends AbsStock implements IStock {
 	}
 	public void next() {
 		//On retire les chocos périmés
-		Filiere.LA_FILIERE.getBanque().virer(Filiere.LA_FILIERE.getActeur(getNom()), ac.getCryptogramme(superviseur), Filiere.LA_FILIERE.getActeur("Banque"), ac.masseSalarialeParNext+ this.prixStockageParNext());
+		Filiere.LA_FILIERE.getBanque().virer(Filiere.LA_FILIERE.getActeur(getNom()), ac.cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), ac.masseSalarialeParNext+ this.prixStockageParNext());
 		for (Map.Entry<ChocolatDeMarque, Echeancier> mapentry : datesLimites.entrySet()) {
 			Echeancier echeancier = mapentry.getValue();
 			ChocolatDeMarque chocoDeMarque = mapentry.getKey();

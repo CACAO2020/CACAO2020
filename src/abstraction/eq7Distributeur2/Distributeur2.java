@@ -40,7 +40,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	private AcheteurContratCadre acheteurContratCadre;
 	private Vendeur vendeur;
 	private Stock stock;
-	private double masseSalarialeParNext;
+	protected double masseSalarialeParNext;
 	
 	private Journal journal;
 	private Journal journalTransactions;
