@@ -24,12 +24,14 @@ public class eq2Acteur implements IActeur {
 	private Journal journalEq2;
 	private Integer cryptogramme;
 	private List<Variable> parametres;
+	private int compteur_tours;
 
 	public eq2Acteur() {
 		this.journalEq2 = new Journal("Journal Principal Eq2", this);
 		this.PaquetsArbres = new ArrayList<PaquetArbres>();
 		this.parametres = new ArrayList<Variable>();
 		this.Usines = new ArrayList<Usine>();
+		this.compteur_tours = 0;
 	}
 
 	
@@ -160,6 +162,13 @@ public Filiere getFiliere(String nom) {
 	}
 	
 	public void notificationOperationBancaire(double montant) {
+	}
+	
+	public int getCompteur_Tours() {
+		return this.compteur_tours;
+	}
+	public void incrémente_tour() {
+		this.compteur_tours = this.getCompteur_Tours() + 1;
 	}
 
 }

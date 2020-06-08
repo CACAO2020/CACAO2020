@@ -37,7 +37,7 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 	private boolean trinievendu;
 	private boolean criovendu;
 	private boolean crioevendu;
-	
+	private ArrayList ventes;
 
 	
 	public eq2Vendeur() {
@@ -62,6 +62,7 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 		this.trinievendu = false;
 		this.criovendu = false;
 		this.crioevendu = false;
+		this.ventes = new ArrayList();
 	}
 	/*faudrait rajouter un truc qui set les prix en fonction de ce qu'il s'est passé au cycle d'avant et de notre rentabilité
 	 * 
@@ -299,6 +300,7 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 		removeQtFeve(proposition.getLot().getFeve(), proposition.getLot().getQuantiteEnTonnes());
 		this.journal_des_ventes.ajouter("EQ2 : La vente a aboutit, le stock a été actualisé STONKS");
 		this.setcompteurinvendus(0);
+		this.ventes.add(proposition.getPrixPourLeLot());
 		this.journal_des_ventes.ajouter("le compteur des invendus vaut" + this.getcompteurinvendus());
 		Feve feve = proposition.getFeve();
 		double prixtonne = proposition.getPrixPourUneTonne();
@@ -331,6 +333,11 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 			/*if (prixtonne > this.getPrixTCE().getValeur()) {
 				this.prixTCE.setValeur(this, this.getPrixTCE().getValeur() + 0.7*(prixtonne - this.getPrixTCE().getValeur()));
 			}*/
+		}
+	}
+	public void BrûlerStock() { //calcule et compare dérivées de stock et de vente, et décide de brûler une certaine proportion des fèves les moins vendues (s'ils nous en reste) pour diminuer le coût de stockage
+		if (this.getCompteur_Tours() > 10) {
+			
 		}
 	}
 	

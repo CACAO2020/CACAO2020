@@ -135,10 +135,6 @@ public void Maintenance() {
 	this.setCoutTotalStock(stock_total*this.getCoutStock().getValeur()) ;
 	Filiere.LA_FILIERE.getBanque().virer(this,this.getCrypto(),Filiere.LA_FILIERE.getBanque(),this.getCoutTotalStock().getValeur());
 }
-public void BrûlerStock() {
-	
-}
-
 
 
 }
