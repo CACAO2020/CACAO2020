@@ -42,6 +42,7 @@ public class AbsStock {
 	public Color addStockColor = Color.GREEN;
 	public Color removeStockColor = Color.ORANGE;
 	public Color descriptionColor = Color.YELLOW;
+	public Color peremptionColor = Color.MAGENTA;
 	
 	public AbsStock(Distributeur2 ac) {
 		this.ac = ac;

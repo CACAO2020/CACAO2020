@@ -61,6 +61,47 @@ public class Stock extends AbsStock implements IStock {
 		}
 		
 	}
+	public void next() {
+		//On retire les chocos périmés
+		for (Map.Entry<ChocolatDeMarque, Echeancier> mapentry : datesLimites.entrySet()) {
+			Echeancier echeancier = mapentry.getValue();
+			ChocolatDeMarque chocoDeMarque = mapentry.getKey();
+			int stepactuelle = Filiere.LA_FILIERE.getEtape();
+			double quantiteASuppr = echeancier.getQuantite(stepactuelle);
+			if (quantiteASuppr > 0.) {
+				this.retirerStockChocolat(chocoDeMarque, quantiteASuppr);
+				// Le message suivant suit un message venant d'une diminution de stocks "normale", il y a double message, ce n'est pas très optimisé...
+				journal.ajouter(Journal.texteColore(peremptionColor, Color.BLACK, "[STOCK -] " + Journal.doubleSur(quantiteASuppr,2) + " tonnes de " + chocoDeMarque.name() + " ont périmé et on été retirées du stock (nouveau stock : " + Journal.doubleSur(stocksChocolatDeMarque.get(chocoDeMarque).getValeur(),2) + " tonnes)."));
+			}
+		}
+	}
+	
+	public void retirerStockChocolatPerime(ChocolatDeMarque chocoDeMarque, double quantite) {
+		Echeancier echeancier = datesLimites.get(chocoDeMarque);
+		int stepactuelle = Filiere.LA_FILIERE.getEtape();
+		int stepecheance = stepactuelle;
+		boolean bool = echeancier.getQuantite(echeancier.getStepFin()) != 0.;
+		if (bool) {
+			// On a au moins une échéance !
+			while (echeancier.getQuantite(stepecheance) == 0.) {
+				stepecheance ++;
+			}
+			double quantite_actuelle = echeancier.getQuantite(stepecheance);
+			if (quantite_actuelle >= quantite) {
+				// Situation simple, on met simplement à jour la quantité qui périmera à cette échéance
+				echeancier.set(stepecheance, quantite_actuelle - quantite);
+			}
+			else {
+				// Là il va falloir trouver une autre échéance à modifier
+				echeancier.set(stepecheance, 0);
+				this.retirerStockChocolatPerime(chocoDeMarque, quantite - quantite_actuelle);
+			}
+		}
+		else {
+			// On ne fait rien, car il n'y a rien à faire
+		}
+	}
+	
 	//retire les quantités necessaires de chocolat des stocks correspondant (avec la prise en compte des potentiels echecs de mouvements)
 	public void retirerStockChocolat(ChocolatDeMarque chocoDeMarque, double quantite) {
 		if (!stocksChocolatDeMarque.containsKey(chocoDeMarque)) {
@@ -71,6 +112,9 @@ public class Stock extends AbsStock implements IStock {
 			stocksChocolatDeMarque.get(chocoDeMarque).setValeur(ac, stocksChocolatDeMarque.get(chocoDeMarque).getValeur() - quantite);
 			stocksChocolat.get(chocoDeMarque.getChocolat()).setValeur(ac, stocksChocolat.get(chocoDeMarque.getChocolat()).getValeur() - quantite);
 			journal.ajouter(Journal.texteColore(removeStockColor, Color.BLACK, "[STOCK -] " + Journal.doubleSur(quantite,2) + " tonnes de " + chocoDeMarque.name() + " ont été retirées du stock (nouveau stock : " + Journal.doubleSur(stocksChocolatDeMarque.get(chocoDeMarque).getValeur(),2) + " tonnes)."));
+
+			this.retirerStockChocolatPerime(chocoDeMarque, quantite);
+						
 		} else {
 				journal.ajouter(Journal.texteColore(alertColor, Color.BLACK,"[ÉCHEC STOCK -] Tentative de retirer " + Journal.doubleSur(quantite,2) + " tonnes de " + chocoDeMarque.name() + " rejetée (stock actuel : " + Journal.doubleSur(stocksChocolatDeMarque.get(chocoDeMarque).getValeur(),2) + " tonnes)."));
 		}

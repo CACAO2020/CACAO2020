@@ -89,6 +89,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	// Le vendeur est appelé en premier pour évaluer la quantité de chocolat que les acheteurs doivent commander
 	public void next() {
 		this.debutEtape = false; 
+		stock.next();
 		vendeur.next();
 		acheteurContratCadre.next();
 		acheteurBourse.next();
