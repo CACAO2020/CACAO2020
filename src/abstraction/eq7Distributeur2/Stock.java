@@ -63,6 +63,7 @@ public class Stock extends AbsStock implements IStock {
 	}
 	public void next() {
 		//On retire les chocos périmés
+		Filiere.LA_FILIERE.getBanque().virer(Filiere.LA_FILIERE.getActeur(getNom()), ac.getCryptogramme(superviseur), Filiere.LA_FILIERE.getActeur("Banque"), ac.masseSalarialeParNext+ this.prixStockageParNext());
 		for (Map.Entry<ChocolatDeMarque, Echeancier> mapentry : datesLimites.entrySet()) {
 			Echeancier echeancier = mapentry.getValue();
 			ChocolatDeMarque chocoDeMarque = mapentry.getKey();
@@ -74,6 +75,16 @@ public class Stock extends AbsStock implements IStock {
 				journal.ajouter(Journal.texteColore(peremptionColor, Color.BLACK, "[STOCK -] " + Journal.doubleSur(quantiteASuppr,2) + " tonnes de " + chocoDeMarque.name() + " ont périmé et on été retirées du stock (nouveau stock : " + Journal.doubleSur(stocksChocolatDeMarque.get(chocoDeMarque).getValeur(),2) + " tonnes)."));
 			}
 		}
+	}
+	public double prixStockageParNext() {
+		double prix1tonne = 720.0;
+		double prixStockage = 0.0;
+		double qtite = 0.0;
+		for (Chocolat choco : ac.nosChoco) {
+			qtite += this.getStockChocolat(choco);
+		}
+		prixStockage = qtite*prix1tonne;
+		return prixStockage;
 	}
 	
 	public void retirerStockChocolatPerime(ChocolatDeMarque chocoDeMarque, double quantite) {
