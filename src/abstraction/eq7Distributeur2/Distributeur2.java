@@ -2,6 +2,7 @@ package abstraction.eq7Distributeur2;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -40,7 +41,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	private AcheteurContratCadre acheteurContratCadre;
 	private Vendeur vendeur;
 	private Stock stock;
-	protected double masseSalarialeParNext;
+	protected double coutMasseSalariale;
 	
 	private Journal journal;
 	private Journal journalTransactions;
@@ -57,7 +58,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		vendeur = new Vendeur(this);
 		stock = new Stock(this);
 		initJournaux();
-		masseSalarialeParNext = 80000;
+		coutMasseSalariale = 80000;
 	}
 	
 	// Initialise les journaux
@@ -81,15 +82,10 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		acheteurBourse.initialiser();
 		stock.initialiser();
 		// AJOUT D'UN STOCK INITIAL POUR OBSERVER LES VENTES
-		int etape = Filiere.LA_FILIERE.getEtape() + stock.datePeremption;
+		stock.chocoEnStockParEtape.put(0, new HashMap<ChocolatDeMarque, Double>());
 		for (ChocolatDeMarque choco : this.tousLesChocolatsDeMarquePossibles()) {
-			List<Double> quantites;
-			quantites = new ArrayList<Double>();
-			quantites.add(vendeur.quantiteAVendreParDefaut);
-			stock.datesLimites.put(choco, new Echeancier(etape, quantites));
-		}
-		for (ChocolatDeMarque choco : vendeur.getCatalogue()) {
-			stock.ajouterStockChocolat(choco, vendeur.quantiteAVendreParDefaut);
+			stock.chocoEnStockParEtape.get(0).put(choco, 0.);
+			stock.ajouterStockChocolat(choco, 100.);
 		}
 
 	}
@@ -125,6 +121,9 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		if (this==acteur) {
 			System.out.println("I'll be back... or not... "+this.getNom());
 			journal.ajouter(Journal.texteColore(alertColor, Color.BLACK, "[FAILLITE] Cet acteur a fait faillite !"));
+			for (ChocolatDeMarque choco : this.tousLesChocolatsDeMarquePossibles()) {
+				this.vendeur.quantitesEnVente.get(choco).setValeur(this, 0.);;
+			}
 		} else {
 			System.out.println("Poor "+acteur.getNom()+"... We will miss you. "+this.getNom());
 			journal.ajouter(Journal.texteColore(alertColor, Color.BLACK, "[FAILLITE] " + acteur.getNom() + " a fait faillite !"));

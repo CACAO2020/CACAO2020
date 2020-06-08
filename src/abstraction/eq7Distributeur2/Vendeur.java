@@ -84,6 +84,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 			quantiteEnVente = alpha*stockActuel + beta ;
 			quantitesEnVente.get(choco).setValeur(ac, quantiteEnVente);
 		}
+
 	}
 	
 	public void majQuantitesACommander() {
@@ -147,6 +148,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 		//donne quantité en vente de chocolat selon la marque
 		if (!ac.debutEtape) {
 			ac.debutEtape = true;
+			initialiserStocksEtape();
 			adapterQuantitesEnVente();
 			dessinerCatalogue();
 		}
@@ -157,6 +159,14 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 		}
 	}
 
+	public void initialiserStocksEtape() {
+		int etape = Filiere.LA_FILIERE.getEtape();
+		ac.getStock().chocoEnStockParEtape.put(etape, new HashMap<ChocolatDeMarque, Double>());
+		for (ChocolatDeMarque chocoDeMarque : ac.tousLesChocolatsDeMarquePossibles()) {
+			ac.getStock().chocoEnStockParEtape.get(etape).put(chocoDeMarque, 0.);
+		}
+	}
+	
 	public void ajouterProduitAuCatalogue(ChocolatDeMarque choco) {
 		//ajoute au catalogue un chocolat (selon sa marque) en indiquant son prix et sa quantité en vente
 		if (!produitsCatalogue.contains(choco)) {
@@ -186,7 +196,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 	}
 
 	public void adapterQuantitesEnVente() {
-		//met à jour les quantité de chocolat de chaque marque en vente selon le stock qu'on en a
+		//met à jour les quantité de chocolat de chaque marque en vente selon le stock qu'on a
 		for (ChocolatDeMarque produit : produitsCatalogue) {
 			double stockLimite = 10.;
 			quantitesEnVente.get(produit).setValeur(ac, Double.min(quantitesEnVente.get(produit).getValeur(), ac.getStock().getStockChocolatDeMarque(produit)-stockLimite));
@@ -194,7 +204,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 	}
  
 	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant) {
-		//vend le chocolat de tel marque à tel rpix et tel quantité au client final
+		//vend le chocolat de tel marque à tel prix et telle quantité au client final
 		if (client!=null) { 
 			ac.getStock().retirerStockChocolat(choco, quantite);
 			journal.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[VENTE] Vente de " + Journal.doubleSur(quantite,2) + " tonnes de " + choco.name() + " à " + client.getNom() + " pour " + Journal.doubleSur(montant,2) + " (" + Journal.doubleSur(montant/quantite,2) + "/tonne)."));

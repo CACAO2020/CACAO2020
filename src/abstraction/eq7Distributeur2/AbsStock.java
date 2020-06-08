@@ -20,8 +20,9 @@ public class AbsStock {
 	// Enregistre les stocks de chaque chocolat de marque
 	protected Map<ChocolatDeMarque, Variable> stocksChocolatDeMarque;
 	
-	// Une table pour tenir compte des échéances (NE PAS TOUCHER, TRAVAIL EN COURS)
-	protected Map<ChocolatDeMarque, Echeancier> datesLimites;
+	// Une table pour tenir compte des quantités achetée à chaque étape (NE PAS TOUCHER, TRAVAIL EN COURS)
+	protected Map<Integer, Map<ChocolatDeMarque, Double>> chocoEnStockParEtape;
+	protected Map<ChocolatDeMarque, Integer> etapeDuPlusVieuxStock;
 	
 	// Enregistre les stocks de chaque type de chocolat
 	protected Map<Chocolat, Variable> stocksChocolat;
@@ -44,10 +45,13 @@ public class AbsStock {
 	public Color descriptionColor = Color.YELLOW;
 	public Color peremptionColor = Color.MAGENTA;
 	
+	protected int datePeremption = 12; // donc une date de péremption de 6 mois car 12 steps
+	
 	public AbsStock(Distributeur2 ac) {
 		this.ac = ac;
 		stocksChocolatDeMarque=new HashMap<ChocolatDeMarque, Variable>();
-		datesLimites=new HashMap<ChocolatDeMarque, Echeancier>();
+		chocoEnStockParEtape=new HashMap<Integer, Map<ChocolatDeMarque, Double>>();
+		etapeDuPlusVieuxStock = new HashMap<ChocolatDeMarque, Integer>();
 		stocksChocolat=new HashMap<Chocolat, Variable>();
 		chocoReceptionne = new HashMap<Chocolat, Variable>();
 		initJournaux();

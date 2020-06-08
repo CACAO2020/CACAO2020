@@ -16,12 +16,9 @@ import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 //cette classe permet de gerer les mouvement de stock
 public class Stock extends AbsStock implements IStock {
-	protected int datePeremption;
 	
 	public Stock(Distributeur2 ac) {
-			super(ac);
-			this.datePeremption = 12; //Donc une date de péremption de 6 mois car 12 steps
-			
+			super(ac);			
 	}
 	
 	public double getStockChocolat(Chocolat choco) {
@@ -49,28 +46,41 @@ public class Stock extends AbsStock implements IStock {
 		stocksChocolat.get(chocoDeMarque.getChocolat()).setValeur(ac, stocksChocolat.get(chocoDeMarque.getChocolat()).getValeur() + quantite);
 		journal.ajouter(Journal.texteColore(addStockColor, Color.BLACK, "[STOCK +] " + Journal.doubleSur(quantite,2) + " tonnes de " + chocoDeMarque.name() + " ont été ajoutées au stock (nouveau stock : " + Journal.doubleSur(stocksChocolatDeMarque.get(chocoDeMarque).getValeur(),2) + " tonnes)."));
 		
-		int etape = Filiere.LA_FILIERE.getEtape()+this.datePeremption;
+		int etape = Filiere.LA_FILIERE.getEtape();
 
-		datesLimites.get(chocoDeMarque).set(etape, datesLimites.get(chocoDeMarque).getQuantite(etape) + quantite);
-
+		if (chocoEnStockParEtape.containsKey(etape)) {
+			chocoEnStockParEtape.get(etape).put(chocoDeMarque,chocoEnStockParEtape.get(etape).get(chocoDeMarque) + quantite);
+		}
 		
 	}
+	
 	public void next() {
-		//On retire les chocos périmés
-		Filiere.LA_FILIERE.getBanque().virer(Filiere.LA_FILIERE.getActeur(getNom()), ac.cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), ac.masseSalarialeParNext+ this.prixStockageParNext());
-		for (Map.Entry<ChocolatDeMarque, Echeancier> mapentry : datesLimites.entrySet()) {
-			Echeancier echeancier = mapentry.getValue();
-			ChocolatDeMarque chocoDeMarque = mapentry.getKey();
-			int stepactuelle = Filiere.LA_FILIERE.getEtape();
-			double quantiteASuppr = echeancier.getQuantite(stepactuelle);
-			if (quantiteASuppr > 0.) {
-				this.retirerStockChocolat(chocoDeMarque, quantiteASuppr);
-				// Le message suivant suit un message venant d'une diminution de stocks "normale", il y a double message, ce n'est pas très optimisé...
-				journal.ajouter(Journal.texteColore(peremptionColor, Color.BLACK, "[STOCK -] " + Journal.doubleSur(quantiteASuppr,2) + " tonnes de " + chocoDeMarque.name() + " ont périmé et on été retirées du stock (nouveau stock : " + Journal.doubleSur(stocksChocolatDeMarque.get(chocoDeMarque).getValeur(),2) + " tonnes)."));
+		// Paiement masse salariale et coûts de stockage
+		payerFrais();
+		// On jette les chocos périmés
+		jeterChocoPerimes();
+	}
+	
+	public void payerFrais() {
+		Filiere.LA_FILIERE.getBanque().virer(Filiere.LA_FILIERE.getActeur(getNom()), ac.cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), ac.coutMasseSalariale + this.coutStockage());
+	}
+	
+	public void jeterChocoPerimes() {
+		int etape = Filiere.LA_FILIERE.getEtape();
+		if (etape >= this.datePeremption) {
+			for (Map.Entry<ChocolatDeMarque, Double> mapEntry : chocoEnStockParEtape.get(etape-this.datePeremption).entrySet()) {
+				ChocolatDeMarque choco = mapEntry.getKey();
+				double quantiteAJeter = mapEntry.getValue();
+				if (quantiteAJeter > 0.) {
+					this.retirerStockChocolat(choco, quantiteAJeter);
+					// Le message suivant suit un message venant d'une diminution de stocks "normale", il y a double message, ce n'est pas très optimisé...
+					journal.ajouter(Journal.texteColore(peremptionColor, Color.BLACK, "[STOCK -] " + Journal.doubleSur(quantiteAJeter,2) + " tonnes de " + choco.name() + " ont périmé et ont été retirées du stock (nouveau stock : " + Journal.doubleSur(stocksChocolatDeMarque.get(choco).getValeur(),2) + " tonnes)."));
+				}
 			}
 		}
 	}
-	public double prixStockageParNext() {
+	
+	public double coutStockage() {
 		double prix1tonne = 720.0;
 		double prixStockage = 0.0;
 		double qtite = 0.0;
@@ -81,29 +91,39 @@ public class Stock extends AbsStock implements IStock {
 		return prixStockage;
 	}
 	
-	public void retirerStockChocolatPerime(ChocolatDeMarque chocoDeMarque, double quantite) {
-		Echeancier echeancier = datesLimites.get(chocoDeMarque);
-		int stepactuelle = Filiere.LA_FILIERE.getEtape();
-		int stepecheance = stepactuelle;
-		boolean bool = echeancier.getQuantite(echeancier.getStepFin()) != 0.;
-		if (bool) {
-			// On a au moins une échéance !
-			while (echeancier.getQuantite(stepecheance) == 0.) {
-				stepecheance ++;
+	public void majStocksParEtape(ChocolatDeMarque chocoDeMarque, double quantite) {
+
+		int etapeActuelle = Filiere.LA_FILIERE.getEtape();
+		if (this.chocoEnStockParEtape.containsKey(etapeActuelle)) {
+			int etapeDuPlusVieuxStock = this.etapeDuPlusVieuxStock.get(chocoDeMarque);
+			
+			int etape = etapeDuPlusVieuxStock;
+			double quantiteRestanteARetirer = quantite;
+			double quantiteEtapeARetirer;
+			
+			// On retire successivement les quantités de chocolat stockés par ordre chronologique jusqu'à en avoir retiré assez
+			while (quantiteRestanteARetirer != 0.) {
+				quantiteEtapeARetirer = Double.min(quantiteRestanteARetirer, this.chocoEnStockParEtape.get(etape).get(chocoDeMarque));
+				this.chocoEnStockParEtape.get(etape).put(chocoDeMarque, this.chocoEnStockParEtape.get(etape).get(chocoDeMarque) - quantiteEtapeARetirer);
+				quantiteRestanteARetirer -= quantiteEtapeARetirer;
+				etape += 1;
 			}
-			double quantite_actuelle = echeancier.getQuantite(stepecheance);
-			if (quantite_actuelle >= quantite) {
-				// Situation simple, on met simplement à jour la quantité qui périmera à cette échéance
-				echeancier.set(stepecheance, quantite_actuelle - quantite);
+			
+			// On repart de la dernière étape à laquelle on a enlevé du chocolat et on recherche la nouvelle étape du plus vieux stock
+			etape -= 1;
+			while (etape <= etapeActuelle) {
+				if (this.chocoEnStockParEtape.get(etape).get(chocoDeMarque) == 0.) {
+					etape += 1;
+				} else {
+					this.etapeDuPlusVieuxStock.put(chocoDeMarque, etape);
+					etape = etapeActuelle + 2;
+				}
 			}
-			else {
-				// Là il va falloir trouver une autre échéance à modifier
-				echeancier.set(stepecheance, 0);
-				this.retirerStockChocolatPerime(chocoDeMarque, quantite - quantite_actuelle);
+			
+			// Si on n'a plus de stock du tout, on dit que la nouvelle étape du plus vieux stock est l'étape actuelle
+			if (etape == etapeActuelle + 1) {
+				this.etapeDuPlusVieuxStock.put(chocoDeMarque, etapeActuelle);
 			}
-		}
-		else {
-			// On ne fait rien, car il n'y a rien à faire
 		}
 	}
 	
@@ -117,8 +137,7 @@ public class Stock extends AbsStock implements IStock {
 			stocksChocolatDeMarque.get(chocoDeMarque).setValeur(ac, stocksChocolatDeMarque.get(chocoDeMarque).getValeur() - quantite);
 			stocksChocolat.get(chocoDeMarque.getChocolat()).setValeur(ac, stocksChocolat.get(chocoDeMarque.getChocolat()).getValeur() - quantite);
 			journal.ajouter(Journal.texteColore(removeStockColor, Color.BLACK, "[STOCK -] " + Journal.doubleSur(quantite,2) + " tonnes de " + chocoDeMarque.name() + " ont été retirées du stock (nouveau stock : " + Journal.doubleSur(stocksChocolatDeMarque.get(chocoDeMarque).getValeur(),2) + " tonnes)."));
-
-			this.retirerStockChocolatPerime(chocoDeMarque, quantite);
+			this.majStocksParEtape(chocoDeMarque, quantite);
 						
 		} else {
 				journal.ajouter(Journal.texteColore(alertColor, Color.BLACK,"[ÉCHEC STOCK -] Tentative de retirer " + Journal.doubleSur(quantite,2) + " tonnes de " + chocoDeMarque.name() + " rejetée (stock actuel : " + Journal.doubleSur(stocksChocolatDeMarque.get(chocoDeMarque).getValeur(),2) + " tonnes)."));
@@ -127,6 +146,7 @@ public class Stock extends AbsStock implements IStock {
 
 	public void initialiser() {		
 		for (ChocolatDeMarque choco : ac.tousLesChocolatsDeMarquePossibles()) {
+			etapeDuPlusVieuxStock.put(choco, 0);
 			stocksChocolatDeMarque.put(choco, new Variable(ac.getNom() + " : STOCK " + choco.name(), ac, 0.));
 			journal.ajouter(Journal.texteColore(metaColor, Color.BLACK,"[CRÉATION] Création d'un stock pour le " + choco.name() + "."));
 		}
