@@ -12,7 +12,7 @@ import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 import abstraction.eq8Romu.produits.Feve;
 
-public class eq2Investisseur extends eq2Vendeur {
+public class eq2Investisseur extends VenteContratCadre {
 
 	private double prixArbre;
 	private double prixUsine;
