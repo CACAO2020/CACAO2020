@@ -27,7 +27,6 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 	 */
 	public void next() {
 		this.incrémente_tour();
-		this.BrûlerStock();
 		this.resetbooleans();
 		this.RefreshAge();
 		this.RefreshStocks();
@@ -35,7 +34,11 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 		this.setPropal(99999999);
 		this.decideAchatArbres();
 		this.Maintenance();
-		
+		this.BrûlerStock();
+		this.resetDecisionVariable();
+		System.out.println(this.getStock2().get(Feve.FEVE_BASSE).getValeur());
+		System.out.println(this.getStock1().get(Feve.FEVE_BASSE).getValeur());
+		System.out.println(this.getStockFeve().get(Feve.FEVE_BASSE).getValeur());
 	}
 	/**
 	 * Cette méthode avance l'age de chaque paquet d'arbre de 1 et enleve les arbres qui ont atteint les 45 ans
@@ -72,7 +75,6 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 	 * cette fonction calcule la production d'un cycle et la rajoute au stock
 	 */
 	public void RefreshStocks() {
-		
 		float facteur_maladies;
 		if(this.apparitionMaladies()) {
 			facteur_maladies = this.graviteMaladies();
@@ -90,6 +92,7 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 			this.addQtPate(this.getUsines().get(i).getPate(),this.getUsines().get(i).Production()*facteur_maladies);
 			this.journal_de_production.ajouter("Production de " + this.getUsines().get(i).Production()*facteur_maladies + "tonnes de pates de type: " + this.getUsines().get(i).getPate() );
 		}
+		
 	}
 	//cette fonction va essayer de calculer la valeur de notre stock a partir des prix de la criée precedente (pour le moment), il pourra etre amelioré.(lucas p)
 	public double EstimationVenteStock() {
@@ -107,6 +110,7 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 		return res;
 	}
 	
+
 	public List<Variable> getParametres() {
 		List<Variable> res=new ArrayList<Variable>();
 		res.add(new Variable("cout_arbre",this,this.getprixArbre()));

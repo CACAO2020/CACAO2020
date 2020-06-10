@@ -135,6 +135,16 @@ public void Maintenance() {
 	this.setCoutTotalStock(stock_total*this.getCoutStock().getValeur()) ;
 	Filiere.LA_FILIERE.getBanque().virer(this,this.getCrypto(),Filiere.LA_FILIERE.getBanque(),this.getCoutTotalStock().getValeur());
 }
-
+public HashMap<Feve,Variable> VariationStock(HashMap<Feve,Variable> Stock1, HashMap<Feve,Variable> Stock2) {
+	HashMap<Feve,Variable> Variation =new HashMap<Feve,Variable>();
+	for (Feve feve1 :Stock1.keySet()) {
+		for (Feve feve2 :Stock2.keySet()) {
+			if(feve1.equals(feve2)&& Stock2.get(feve2).getValeur()-Stock1.get(feve1).getValeur()!=0) {
+				Variation.put(feve1, new Variable(Stock1.get(feve1).getNom(),this,Stock2.get(feve2).getValeur()-Stock1.get(feve1).getValeur()));
+			}
+		}
+	}
+	return Variation;
+}
 
 }
