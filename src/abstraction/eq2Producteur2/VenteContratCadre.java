@@ -26,6 +26,7 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 			ExemplaireContratCadre contrat = (ExemplaireContratCadre)this.getContratsencours().get(i);
 			if (Filiere.LA_FILIERE.getEtape() > contrat.getEcheancier().getStepFin()) {
 				this.contratsencours.remove(i);
+				this.journal_contrats.ajouter("Le contrat n°"+contrat.getNumero()+" est arrivé à terme. Merci pour la moula");
 			}
 		}
 	}
@@ -62,6 +63,7 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 	@Override
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
 		this.contratsencours.add(contrat);
+		this.journal_contrats.ajouter("Le contrat n°"+contrat.getNumero()+" a été signé.");
 	}
 
 	@Override

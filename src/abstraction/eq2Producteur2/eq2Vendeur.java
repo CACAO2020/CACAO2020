@@ -357,16 +357,16 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 	}
 	/**@author lucas p */
 	public void BrûlerStock() { //calcule et compare dérivées de stock et de vente, et décide de brûler une certaine proportion des fèves les moins vendues (s'ils nous en reste) pour diminuer le coût de stockage
-<<<<<<< HEAD
+
 		System.out.println("hmm");
 		if (this.getCompteur_Tours() ==1) {
 			this.setStock2(this.getStockFeve());
 			this.setVente2(this.getVenteVariation());
 			System.out.println("ici");
-=======
+
 		if (Filiere.LA_FILIERE.getEtape() > 10) {
 			
->>>>>>> branch 'master' of https://github.com/kristofszentes/CACAO2020.git
+
 		}
 		if (this.getCompteur_Tours() ==2) {
 			this.setStock1(this.getStockFeve());
