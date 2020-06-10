@@ -14,6 +14,12 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 	
 	private ArrayList<ExemplaireContratCadre> contratsencours;
 	private Journal journal_contrats;
+	private double prixventecontrat;
+	private double massedispofora;
+	private double massedispotrini;
+	private double massedispotrinie;
+	private double massedispocrio;
+	private double massedispocrioe;
 	
 	public VenteContratCadre() {
 		super();
@@ -36,11 +42,11 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 			Feve prod = (Feve)produit; 
 		
 
-			double massedispofora = this.getStockFeve().get(Feve.FEVE_BASSE).getValeur();
-			double massedispotrini = this.getStockFeve().get(Feve.FEVE_MOYENNE).getValeur();
-			double massedispotrinie = this.getStockFeve().get(Feve.FEVE_MOYENNE_EQUITABLE).getValeur();
-			double massedispocrio = this.getStockFeve().get(Feve.FEVE_HAUTE).getValeur();
-			double massedispocrioe = this.getStockFeve().get(Feve.FEVE_HAUTE_EQUITABLE).getValeur();
+			this.massedispofora = this.getStockFeve().get(Feve.FEVE_BASSE).getValeur();
+			this.massedispotrini = this.getStockFeve().get(Feve.FEVE_MOYENNE).getValeur();
+			this.massedispotrinie = this.getStockFeve().get(Feve.FEVE_MOYENNE_EQUITABLE).getValeur();
+			this.massedispocrio = this.getStockFeve().get(Feve.FEVE_HAUTE).getValeur();
+			this.massedispocrioe = this.getStockFeve().get(Feve.FEVE_HAUTE_EQUITABLE).getValeur();
 			for (int i = 0; i < this.getContratsencours().size(); i++) {
 				ExemplaireContratCadre contrat = (ExemplaireContratCadre)this.getContratsencours().get(i);
 				if ((Feve)contrat.getProduit() == Feve.FEVE_BASSE) {
@@ -59,6 +65,7 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 					massedispocrioe = massedispocrioe - contrat.getQuantiteRestantALivrer();
 				}
 			}
+			//this.journal_contrats.ajouter(""+massedispofora+massedispotrini+massedispotrinie+massedispocrio+massedispocrioe);
 			if (prod == Feve.FEVE_BASSE && massedispofora > 0.5) {
 				return true;
 			}
@@ -83,31 +90,59 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 	}
 
 	public Echeancier contrePropositionDuVendeur(ExemplaireContratCadre contrat) {
-		this.journal_contrats.ajouter("Echeancier accepté");
-		return contrat.getEcheancier();
+		if (contrat.getProduit().equals(Feve.FEVE_BASSE) || contrat.getProduit().equals(Feve.FEVE_MOYENNE) || contrat.getProduit().equals(Feve.FEVE_MOYENNE_EQUITABLE) || contrat.getProduit().equals(Feve.FEVE_HAUTE) || contrat.getProduit().equals(Feve.FEVE_HAUTE_EQUITABLE))  {
+			Feve prod = (Feve)contrat.getProduit(); 
+			if (prod == Feve.FEVE_BASSE && this.massedispofora >= contrat.getQuantiteTotale()) {
+				this.journal_contrats.ajouter("Echéancier accepté");
+				return contrat.getEcheancier();
+			}
+			if (prod == Feve.FEVE_MOYENNE && this.massedispotrini >= contrat.getQuantiteTotale()) {
+				this.journal_contrats.ajouter("Echéancier accepté");
+				return contrat.getEcheancier();
+			}
+			if (prod == Feve.FEVE_MOYENNE_EQUITABLE && this.massedispotrinie >= contrat.getQuantiteTotale()) {
+				this.journal_contrats.ajouter("Echéancier accepté");
+				return contrat.getEcheancier();
+			}
+			if (prod == Feve.FEVE_HAUTE && this.massedispocrio >= contrat.getQuantiteTotale()) {
+				this.journal_contrats.ajouter("Echéancier accepté");
+				return contrat.getEcheancier();
+			}
+			if (prod == Feve.FEVE_HAUTE_EQUITABLE && this.massedispocrioe >= contrat.getQuantiteTotale()) {
+				this.journal_contrats.ajouter("Echéancier accepté");
+				return contrat.getEcheancier();
+			}
+		}
+		this.journal_contrats.ajouter("Echéancier refusé");
+		return null;
 	}
 
 	@Override //pas en-dessous de notre prix min, si au-dessus on prend
 	public double propositionPrix(ExemplaireContratCadre contrat) {
 		if (contrat.getProduit().equals(Feve.FEVE_BASSE)) {
-			this.journal_contrats.ajouter("Proposition d'un prix de "+this.getPrixTF().getValeur() + 150);
-			return this.getPrixTF().getValeur() + 150;
+			this.setPrixVenteContrat(this.getPrixTF().getValeur()*1.07);
+			this.journal_contrats.ajouter("Proposition d'un prix de "+this.getPrixVenteContrat()+"$");
+			return this.getPrixVenteContrat();
 		}
 		else if (contrat.getProduit().equals(Feve.FEVE_MOYENNE)) {
-			this.journal_contrats.ajouter("Proposition d'un prix de "+this.getPrixTT().getValeur() + 150);
-			return this.getPrixTT().getValeur() + 150;
+			this.setPrixVenteContrat(this.getPrixTT().getValeur()*1.07);
+			this.journal_contrats.ajouter("Proposition d'un prix de "+this.getPrixVenteContrat()+"$");
+			return this.getPrixVenteContrat();
 		}
 		else if (contrat.getProduit().equals(Feve.FEVE_MOYENNE_EQUITABLE)) {
-			this.journal_contrats.ajouter("Proposition d'un prix de "+this.getPrixTTE().getValeur() + 150);
-			return this.getPrixTTE().getValeur() + 150;
+			this.setPrixVenteContrat(this.getPrixTTE().getValeur()*1.07);
+			this.journal_contrats.ajouter("Proposition d'un prix de "+this.getPrixVenteContrat()+"$");
+			return this.getPrixVenteContrat();
 		}
 		else if (contrat.getProduit().equals(Feve.FEVE_HAUTE)) {
-			this.journal_contrats.ajouter("Proposition d'un prix de "+this.getPrixTC().getValeur() + 150);
-			return this.getPrixTC().getValeur() + 150;
+			this.setPrixVenteContrat(this.getPrixTC().getValeur()*1.07);
+			this.journal_contrats.ajouter("Proposition d'un prix de "+this.getPrixVenteContrat()+"$");
+			return this.getPrixVenteContrat();
 		}
 		else if (contrat.getProduit().equals(Feve.FEVE_HAUTE_EQUITABLE)) {
-			this.journal_contrats.ajouter("Proposition d'un prix de "+this.getPrixTCE().getValeur() + 150);
-			return this.getPrixTCE().getValeur() + 150;
+			this.setPrixVenteContrat(this.getPrixTCE().getValeur()*1.07);
+			this.journal_contrats.ajouter("Proposition d'un prix de "+this.getPrixVenteContrat()+"$");
+			return this.getPrixVenteContrat();
 		}
 		return 0;
 	}
@@ -116,52 +151,62 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 	public double contrePropositionPrixVendeur(ExemplaireContratCadre contrat) { //pb : si jamais leur prix est trop bas, je leur dit d'aller se faire voir au lieu de négocier. Pour y remédier, mettre les conditions && et || dans un autre if en dessous, et rajouter un elif si leur prix est trop bas
 		if (contrat.getProduit().equals(Feve.FEVE_BASSE)) {
 			if((contrat.getPrixALaTonne() > this.getPrixTF().getValeur() || (Math.abs(this.getPrixTF().getValeur()-contrat.getPrixALaTonne())/100 <= 0.05))) {
-				this.journal_contrats.ajouter("Acceptation du prix de "+ contrat.getPrixALaTonne());
-				return contrat.getPrixALaTonne();
+				this.setPrixVenteContrat(contrat.getPrixALaTonne());
+				this.journal_contrats.ajouter("Acceptation du prix de "+ this.getPrixVenteContrat()+"$");
+				return this.getPrixVenteContrat();
 			}
 			else {
-				this.journal_contrats.ajouter("On négocie ardemment les forasteros");
-				return this.getPrixTF().getValeur() + 100;
+				this.setPrixVenteContrat(this.getPrixTF().getValeur()*1.05);
+				this.journal_contrats.ajouter("On négocie ardemment les forasteros pour "+this.getPrixVenteContrat()+"$");
+				return this.getPrixVenteContrat();
 			}
 		}
 		else if (contrat.getProduit().equals(Feve.FEVE_MOYENNE))  {
 			if (contrat.getPrixALaTonne() > this.getPrixTT().getValeur() || (Math.abs(this.getPrixTT().getValeur()-contrat.getPrixALaTonne())/100 <= 0.05)) {
-				this.journal_contrats.ajouter("Acceptation du prix de "+contrat.getPrixALaTonne());
-				return contrat.getPrixALaTonne();
+				this.setPrixVenteContrat(contrat.getPrixALaTonne());
+				this.journal_contrats.ajouter("Acceptation du prix de "+this.getPrixVenteContrat()+"$");
+				return this.getPrixVenteContrat();
 			}
 			else {
-				this.journal_contrats.ajouter("On négocie ardemment les trinitarios");
-				return this.getPrixTC().getValeur() + 100;
+				this.setPrixVenteContrat(this.getPrixTT().getValeur()*1.05);
+				this.journal_contrats.ajouter("On négocie ardemment les trinitarios pour "+this.getPrixVenteContrat()+"$");
+				return this.getPrixVenteContrat();
 			}
 		}
 		else if (contrat.getProduit().equals(Feve.FEVE_MOYENNE_EQUITABLE))  {
 			if (contrat.getPrixALaTonne() > this.getPrixTTE().getValeur() || (Math.abs(this.getPrixTTE().getValeur()-contrat.getPrixALaTonne())/100 <= 0.05)) {
-				this.journal_contrats.ajouter("Acceptation du prix de "+contrat.getPrixALaTonne());
-				return contrat.getPrixALaTonne();
+				this.setPrixVenteContrat(contrat.getPrixALaTonne());
+				this.journal_contrats.ajouter("Acceptation du prix de "+this.getPrixVenteContrat()+"$");
+				return this.getPrixVenteContrat();
 			}
 			else {
-				this.journal_contrats.ajouter("On négocie ardemment les trinitarios équitables");
-				return this.getPrixTTE().getValeur() + 100;
+				this.setPrixVenteContrat(this.getPrixTTE().getValeur()*1.05);
+				this.journal_contrats.ajouter("On négocie ardemment les trinitarios équitables pour "+this.getPrixVenteContrat()+"$");
+				return this.getPrixVenteContrat();
 			}
 		}
 		else if (contrat.getProduit().equals(Feve.FEVE_HAUTE))  {
 			if (contrat.getPrixALaTonne() > this.getPrixTC().getValeur() || (Math.abs(this.getPrixTC().getValeur()-contrat.getPrixALaTonne())/100 <= 0.05)) {
-				this.journal_contrats.ajouter("Acceptation du prix de "+contrat.getPrixALaTonne());
-				return contrat.getPrixALaTonne();
+				this.setPrixVenteContrat(contrat.getPrixALaTonne());
+				this.journal_contrats.ajouter("Acceptation du prix de "+this.getPrixVenteContrat()+"$");
+				return this.getPrixVenteContrat();
 			}
 			else {
-				this.journal_contrats.ajouter("On négocie ardemment les criollos");
-				return this.getPrixTC().getValeur() + 100;
+				this.setPrixVenteContrat(this.getPrixTC().getValeur()*1.05);
+				this.journal_contrats.ajouter("On négocie ardemment les criollos pour "+this.getPrixVenteContrat()+"$");
+				return this.getPrixVenteContrat();
 			}
 		}
 		else if (contrat.getProduit().equals(Feve.FEVE_HAUTE_EQUITABLE))  {
 			if (contrat.getPrixALaTonne() > this.getPrixTCE().getValeur() || (Math.abs(this.getPrixTCE().getValeur()-contrat.getPrixALaTonne())/100 <= 0.05)) {
-				this.journal_contrats.ajouter("Acceptation du prix de "+this.getPrixTCE().getValeur() + 100);
-				return contrat.getPrixALaTonne();
+				this.setPrixVenteContrat(contrat.getPrixALaTonne());
+				this.journal_contrats.ajouter("Acceptation du prix de "+this.getPrixVenteContrat()+"$");
+				return this.getPrixVenteContrat();
 			}
 			else {
-				this.journal_contrats.ajouter("On négocie ardemment les criollos équitables");
-				return this.getPrixTCE().getValeur() + 100;
+				this.setPrixVenteContrat(this.getPrixTCE().getValeur()*1.05);
+				this.journal_contrats.ajouter("On négocie ardemment les criollos équitables pour "+this.getPrixVenteContrat()+"$");
+				return this.getPrixVenteContrat();
 			}
 		}
 		return 0;
@@ -170,7 +215,7 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 	@Override
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
 		this.contratsencours.add(contrat);
-		this.journal_contrats.ajouter("Le contrat n°"+contrat.getNumero()+" a été signé.");
+		this.journal_contrats.ajouter("Le contrat n°"+contrat.getNumero()+" a été signé. On devra livrer "+contrat.getQuantiteTotale()+" tonnes de "+(Feve)contrat.getProduit()+" en "+contrat.getEcheancier().getNbEcheances()+" étapes.");
 	}
 
 	@Override
@@ -180,7 +225,7 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 			if (prod == Feve.FEVE_BASSE) {
 				if (this.getStockFeve().get(Feve.FEVE_BASSE).getValeur() >= quantite) {
 					this.removeQtFeve(Feve.FEVE_BASSE, quantite);
-					this.journal_contrats.ajouter("Nous avons livré toute la commande du contrat n°"+contrat.getNumero());
+					this.journal_contrats.ajouter("Nous avons livré toute la commande du contrat n°"+contrat.getNumero()+", reste "+(contrat.getQuantiteRestantALivrer()-quantite)+"tonnes à livrer.");
 					return quantite;
 				}
 				else {
@@ -192,7 +237,7 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 			else if (prod == Feve.FEVE_MOYENNE) {
 				if (this.getStockFeve().get(Feve.FEVE_MOYENNE).getValeur() >= quantite) {
 					this.removeQtFeve(Feve.FEVE_MOYENNE, quantite);
-					this.journal_contrats.ajouter("Nous avons livré toute la commande du contrat n°"+contrat.getNumero());
+					this.journal_contrats.ajouter("Nous avons livré toute la commande du contrat n°"+contrat.getNumero()+", reste "+(contrat.getQuantiteRestantALivrer()-quantite)+"tonnes à livrer.");
 					return quantite;
 				}
 				else {
@@ -204,7 +249,7 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 			else if (prod == Feve.FEVE_MOYENNE_EQUITABLE) {
 				if (this.getStockFeve().get(Feve.FEVE_MOYENNE_EQUITABLE).getValeur() >= quantite) {
 					this.removeQtFeve(Feve.FEVE_MOYENNE_EQUITABLE, quantite);
-					this.journal_contrats.ajouter("Nous avons livré toute la commande du contrat n°"+contrat.getNumero());
+					this.journal_contrats.ajouter("Nous avons livré toute la commande du contrat n°"+contrat.getNumero()+", reste "+(contrat.getQuantiteRestantALivrer()-quantite)+"tonnes à livrer.");
 					return quantite;
 				}
 				else {
@@ -216,7 +261,7 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 			else if (prod == Feve.FEVE_HAUTE) {
 				if (this.getStockFeve().get(Feve.FEVE_HAUTE).getValeur() >= quantite) {
 					this.removeQtFeve(Feve.FEVE_HAUTE, quantite);
-					this.journal_contrats.ajouter("Nous avons livré toute la commande du contrat n°"+contrat.getNumero());
+					this.journal_contrats.ajouter("Nous avons livré toute la commande du contrat n°"+contrat.getNumero()+", reste "+(contrat.getQuantiteRestantALivrer()-quantite)+"tonnes à livrer.");
 					return quantite;
 				}
 				else {
@@ -228,7 +273,7 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 			else if (prod == Feve.FEVE_HAUTE_EQUITABLE) {
 				if (this.getStockFeve().get(Feve.FEVE_HAUTE_EQUITABLE).getValeur() >= quantite) {
 					this.removeQtFeve(Feve.FEVE_HAUTE_EQUITABLE, quantite);
-					this.journal_contrats.ajouter("Nous avons livré toute la commande du contrat n°"+contrat.getNumero());
+					this.journal_contrats.ajouter("Nous avons livré toute la commande du contrat n°"+contrat.getNumero()+", reste "+(contrat.getQuantiteRestantALivrer()-quantite)+"tonnes à livrer.");
 					return quantite;
 				}
 				else {
@@ -248,5 +293,11 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 		res.addAll(super.getJournaux());
 		res.add(this.journal_contrats);
 		return res;
+	}
+	public void setPrixVenteContrat(double prix) {
+		this.prixventecontrat = prix;
+	}
+	public double getPrixVenteContrat() {
+		return this.prixventecontrat;
 	}
 }

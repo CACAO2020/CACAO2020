@@ -356,7 +356,7 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 		}
 	}
 	/**@author lucas p */
-	public void BrûlerStock() { //calcule et compare dérivées de stock et de vente, et décide de brûler une certaine proportion des fèves les moins vendues (s'ils nous en reste) pour diminuer le coût de stockage
+	/*public void BrûlerStock() { //calcule et compare dérivées de stock et de vente, et décide de brûler une certaine proportion des fèves les moins vendues (s'ils nous en reste) pour diminuer le coût de stockage
 
 		System.out.println("hmm");
 		if (this.getCompteur_Tours() ==1) {
@@ -394,7 +394,7 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 			this.setVente2(this.getVente1());
 			this.setVente1(this.getVenteVariation());
 		}}
-	}
+	}*/
 	/**
 	 * @return the stock1
 	 */
