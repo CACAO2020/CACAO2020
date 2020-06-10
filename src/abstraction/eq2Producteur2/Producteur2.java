@@ -26,7 +26,8 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 	 * Cette methode est appellee a chaque nouveau tour
 	 */
 	public void next() {
-		this.incrémente_tour();
+
+		this.RefreshContrats();
 		this.resetbooleans();
 		this.RefreshAge();
 		this.RefreshStocks();
