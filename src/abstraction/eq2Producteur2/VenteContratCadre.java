@@ -10,7 +10,6 @@ import abstraction.fourni.Filiere;
 import abstraction.fourni.Journal;
 
 public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadre {
- //on va se faire des contrats cadres de 100 tonnes à chaque fois: seul pb est de trouver moyen de compter les contrats cadres déjà en cours par type de fève pour savoir quelle masse on a vraiment de dispo.
 	
 	private ArrayList<ExemplaireContratCadre> contratsencours;
 	private Journal journal_contrats;
@@ -32,31 +31,108 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 	}
 	@Override
 	public boolean vend(Object produit) {
-		double massedispofora = 0;
-		double massedispotrini = 0;
-		double massedispotrinie = 0;
-		double massedispocrio = 0;
-		double massedispocrioe = 0;
+		if (produit.equals(Feve.FEVE_BASSE) || produit.equals(Feve.FEVE_MOYENNE) || produit.equals(Feve.FEVE_MOYENNE_EQUITABLE) || produit.equals(Feve.FEVE_HAUTE) || produit.equals(Feve.FEVE_HAUTE_EQUITABLE))  {
+			Feve prod = (Feve)produit; 
 		
+
+			double massedispofora = this.getStockFeve().get(Feve.FEVE_BASSE).getValeur();
+			double massedispotrini = this.getStockFeve().get(Feve.FEVE_MOYENNE).getValeur();
+			double massedispotrinie = this.getStockFeve().get(Feve.FEVE_MOYENNE_EQUITABLE).getValeur();
+			double massedispocrio = this.getStockFeve().get(Feve.FEVE_HAUTE).getValeur();
+			double massedispocrioe = this.getStockFeve().get(Feve.FEVE_HAUTE_EQUITABLE).getValeur();
+			for (int i = 0; i < this.getContratsencours().size(); i++) {
+				ExemplaireContratCadre contrat = (ExemplaireContratCadre)this.getContratsencours().get(i);
+				if ((Feve)contrat.getProduit() == Feve.FEVE_BASSE) {
+					massedispofora = massedispofora - contrat.getQuantiteRestantALivrer();
+				}
+				else if ((Feve)contrat.getProduit() == Feve.FEVE_MOYENNE) {
+					massedispotrini = massedispotrini - contrat.getQuantiteRestantALivrer();
+				}
+				else if ((Feve)contrat.getProduit() == Feve.FEVE_MOYENNE_EQUITABLE) {
+					massedispotrinie = massedispotrinie - contrat.getQuantiteRestantALivrer();
+				}
+				else if ((Feve)contrat.getProduit() == Feve.FEVE_HAUTE) {
+					massedispocrio = massedispocrio - contrat.getQuantiteRestantALivrer();
+				}
+				else if ((Feve)contrat.getProduit() == Feve.FEVE_HAUTE_EQUITABLE) {
+					massedispocrioe = massedispocrioe - contrat.getQuantiteRestantALivrer();
+				}
+			}
+			if (prod == Feve.FEVE_BASSE && massedispofora > 0.5) {
+				return true;
+			}
+			else if (prod == Feve.FEVE_MOYENNE && massedispotrini > 0.5) {
+				return true;
+			}
+			else if (prod == Feve.FEVE_MOYENNE_EQUITABLE && massedispotrinie > 0.5) {
+				return true;
+			}
+			else if (prod == Feve.FEVE_HAUTE && massedispocrio > 0.5) {
+				return true;
+			}
+			else if (prod == Feve.FEVE_HAUTE_EQUITABLE && massedispocrioe > 0.5) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
 		
 		return false;
 	}
 
-	@Override //avec les contrats de 100 tonnes fixes on peut accepter à peu près n'importe quel échéancier
 	public Echeancier contrePropositionDuVendeur(ExemplaireContratCadre contrat) {
-		// TODO Auto-generated method stub
-		return null;
+		this.journal_contrats.ajouter("Echeancier accepté");
+		return contrat.getEcheancier();
 	}
 
 	@Override //pas en-dessous de notre prix min, si au-dessus on prend
 	public double propositionPrix(ExemplaireContratCadre contrat) {
-		// TODO Auto-generated method stub
+		if (contrat.getProduit().equals(Feve.FEVE_BASSE)) {
+			this.journal_contrats.ajouter("Proposition d'un prix de "+this.getPrixTF().getValeur() + 100);
+			return this.getPrixTF().getValeur() + 100;
+		}
+		else if (contrat.getProduit().equals(Feve.FEVE_MOYENNE)) {
+			this.journal_contrats.ajouter("Proposition d'un prix de "+this.getPrixTT().getValeur() + 100);
+			return this.getPrixTT().getValeur() + 100;
+		}
+		else if (contrat.getProduit().equals(Feve.FEVE_MOYENNE_EQUITABLE)) {
+			this.journal_contrats.ajouter("Proposition d'un prix de "+this.getPrixTTE().getValeur() + 100);
+			return this.getPrixTTE().getValeur() + 100;
+		}
+		else if (contrat.getProduit().equals(Feve.FEVE_HAUTE)) {
+			this.journal_contrats.ajouter("Proposition d'un prix de "+this.getPrixTC().getValeur() + 100);
+			return this.getPrixTC().getValeur() + 100;
+		}
+		else if (contrat.getProduit().equals(Feve.FEVE_HAUTE_EQUITABLE)) {
+			this.journal_contrats.ajouter("Proposition d'un prix de "+this.getPrixTCE().getValeur() + 100);
+			return this.getPrixTCE().getValeur() + 100;
+		}
 		return 0;
 	}
 
 	@Override
-	public double contrePropositionPrixVendeur(ExemplaireContratCadre contrat) {
-		// TODO Auto-generated method stub
+	public double contrePropositionPrixVendeur(ExemplaireContratCadre contrat) { //pb : si jamais leur prix est trop bas, je leur dit d'aller se faire voir au lieu de négocier. Pour y remédier, mettre les conditions && et || dans un autre if en dessous, et rajouter un elif si leur prix est trop bas
+		if (contrat.getProduit().equals(Feve.FEVE_BASSE) && (contrat.getPrixALaTonne() > this.getPrixTF().getValeur() || (Math.abs(this.getPrixTF().getValeur()-contrat.getPrixALaTonne())/100 <= 0.05))) {
+			this.journal_contrats.ajouter("Acceptation du prix de "+ contrat.getPrixALaTonne());
+			return contrat.getPrixALaTonne();
+		}
+		else if (contrat.getProduit().equals(Feve.FEVE_MOYENNE) && (contrat.getPrixALaTonne() > this.getPrixTT().getValeur() || (Math.abs(this.getPrixTT().getValeur()-contrat.getPrixALaTonne())/100 <= 0.05))) {
+			this.journal_contrats.ajouter("Acceptation du prix de "+contrat.getPrixALaTonne());
+			return contrat.getPrixALaTonne();
+		}
+		else if (contrat.getProduit().equals(Feve.FEVE_MOYENNE_EQUITABLE) && (contrat.getPrixALaTonne() > this.getPrixTTE().getValeur() || (Math.abs(this.getPrixTTE().getValeur()-contrat.getPrixALaTonne())/100 <= 0.05))) {
+			this.journal_contrats.ajouter("Acceptation du prix de "+contrat.getPrixALaTonne());
+			return contrat.getPrixALaTonne();
+		}
+		else if (contrat.getProduit().equals(Feve.FEVE_HAUTE) && (contrat.getPrixALaTonne() > this.getPrixTC().getValeur() || (Math.abs(this.getPrixTC().getValeur()-contrat.getPrixALaTonne())/100 <= 0.05))) {
+			this.journal_contrats.ajouter("Acceptation du prix de "+contrat.getPrixALaTonne());
+			return contrat.getPrixALaTonne();
+		}
+		else if (contrat.getProduit().equals(Feve.FEVE_HAUTE_EQUITABLE) && (contrat.getPrixALaTonne() > this.getPrixTCE().getValeur() || (Math.abs(this.getPrixTCE().getValeur()-contrat.getPrixALaTonne())/100 <= 0.05))) {
+			this.journal_contrats.ajouter("Acceptation du prix de "+this.getPrixTCE().getValeur() + 100);
+			return contrat.getPrixALaTonne();
+		}
 		return 0;
 	}
 
