@@ -40,7 +40,7 @@ public class TestNegoceEtContratCadre {
         SuperviseurVentesContratCadre superviseur3 = new SuperviseurVentesContratCadre();
         f.ajouterActeur(superviseur3);
         f.initialiser();
-        Filiere.LA_FILIERE = f;
+//        Filiere.LA_FILIERE = f;
 		
 		/*LinkedList<Double> li = new LinkedList<Double>();
 		for (int i = 0; i < 10; i++) {

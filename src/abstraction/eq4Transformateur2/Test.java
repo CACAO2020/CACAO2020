@@ -37,7 +37,7 @@ public class Test {
         f.ajouterActeur(superviseur3);
         
         
-        Filiere.LA_FILIERE = f;
+//        Filiere.LA_FILIERE = f;
         
 //		LinkedList<Double> li = new LinkedList<Double>();
 //		for (int i = 0; i < 100; i++) {
