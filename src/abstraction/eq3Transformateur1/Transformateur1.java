@@ -34,17 +34,23 @@ public class Transformateur1 extends VendeurChocolat {
 		this.stockChocolat.put(Chocolat.CHOCOLAT_HAUTE,500.0);
 		this.stockChocolat.put(Chocolat.CHOCOLAT_HAUTE_EQUITABLE,500.0);
 		
-		this.coutFeves.put(Feve.FEVE_BASSE, 10000.0);
-		this.coutFeves.put(Feve.FEVE_MOYENNE, 10000.0);
-		this.coutFeves.put(Feve.FEVE_MOYENNE_EQUITABLE, 10000.0);
-		this.coutFeves.put(Feve.FEVE_HAUTE, 10000.0);
-		this.coutFeves.put(Feve.FEVE_HAUTE_EQUITABLE, 10000.0);
+		this.coutFeves.put(Feve.FEVE_BASSE, 10.0);
+		this.coutFeves.put(Feve.FEVE_MOYENNE, 10.0);
+		this.coutFeves.put(Feve.FEVE_MOYENNE_EQUITABLE, 10.0);
+		this.coutFeves.put(Feve.FEVE_HAUTE, 10.0);
+		this.coutFeves.put(Feve.FEVE_HAUTE_EQUITABLE, 10.0);
 		
-		this.coutChocolat.put(Chocolat.CHOCOLAT_BASSE,10.0);
-		this.coutChocolat.put(Chocolat.CHOCOLAT_MOYENNE,10.0);
-		this.coutChocolat.put(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE,10.0);
-		this.coutChocolat.put(Chocolat.CHOCOLAT_HAUTE,10.0);
-		this.coutChocolat.put(Chocolat.CHOCOLAT_HAUTE_EQUITABLE,10.0);
+		this.coutPate.put(Chocolat.CHOCOLAT_BASSE,0.0);
+		this.coutPate.put(Chocolat.CHOCOLAT_MOYENNE,0.0);
+		this.coutPate.put(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE,0.0);
+		this.coutPate.put(Chocolat.CHOCOLAT_HAUTE,0.0);
+		this.coutPate.put(Chocolat.CHOCOLAT_HAUTE_EQUITABLE,0.0);
+		
+		this.coutChocolat.put(Chocolat.CHOCOLAT_BASSE,10010.0);
+		this.coutChocolat.put(Chocolat.CHOCOLAT_MOYENNE,10010.0);
+		this.coutChocolat.put(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE,10010.0);
+		this.coutChocolat.put(Chocolat.CHOCOLAT_HAUTE,10010.0);
+		this.coutChocolat.put(Chocolat.CHOCOLAT_HAUTE_EQUITABLE,10010.0);
 		
 		this.MontantCompte=500000.0;
 		
@@ -90,7 +96,6 @@ public class Transformateur1 extends VendeurChocolat {
 		}
 	}
 	public void next() {
-
 		this.decisionTransformation();
 	}
 	/** @author KARL GUTIERREZ*/

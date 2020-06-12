@@ -10,7 +10,7 @@ import abstraction.eq8Romu.produits.Gamme;
 import abstraction.fourni.Variable;
 
 /** @author AMAURY COUDRAY / KARL GUTIERREZ*/
-public abstract class Stock extends Tresorerie { 
+public abstract class  Stock extends Tresorerie { 
 
 
 	/* quantite de chaque type de FEVE/CHocolat/PATE */ 
@@ -212,7 +212,7 @@ public abstract class Stock extends Tresorerie {
 	
 	public Double calculCoutFeve(Feve feve, Double quantiteAjoute, Double prixQuantite ) {
 		if(this.coutFeves.containsKey(feve)) {
-			return (prixQuantite+this.coutFeves.get(feve)*this.stockFeves.get(feve))/(quantiteAjoute+this.stockFeves.get(feve));
+			return (prixQuantite*quantiteAjoute+this.coutFeves.get(feve)*this.stockFeves.get(feve))/(quantiteAjoute+this.stockFeves.get(feve));
 		}
 		return prixQuantite/quantiteAjoute;
 	}
