@@ -103,7 +103,7 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 		}
 		//next de la classe venteCriee
 		this.venteCriee.next();
-		fevesVendues = this.venteCriee.getLotVendu():
+		fevesVendues = this.venteCriee.getLotVendu();
 	}
 
 	// Modification pour ajout de la filiere TestCrieeProd1
