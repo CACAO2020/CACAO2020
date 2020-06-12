@@ -35,6 +35,7 @@ public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurCh
 	private VenteChocolat vendeurChocolat;
 	private Tresorerie tresorier;
 	private Stock stock;
+	private SuiviDesCoursDeVente infoCoursVente;
 
 	public Transformateur3() {
 		this.journalEq5 = new Journal("Eq5 activites", this);
@@ -43,6 +44,7 @@ public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurCh
 		this.vendeurChocolat = new VenteChocolat(this);
 		this.tresorier = new Tresorerie(this);
 		this.stock = new Stock(this);
+		this.infoCoursVente = new SuiviDesCoursDeVente(this);
 	}
 
 	public String getNom() {
@@ -168,6 +170,10 @@ public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurCh
 		return stock;
 	}
 
+	public SuiviDesCoursDeVente getInfoCoursVente() {
+		return infoCoursVente;
+	}
+	
 	protected int getCryptogramme() {
 		return this.cryptogramme;
 	}
@@ -191,4 +197,7 @@ public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurCh
 		//errorless commit
 		//this.acheteurPate.receptionner(produit, quantite, contrat);
 	}
+
+
+
 }
