@@ -32,7 +32,9 @@ public class eq2Acteur implements IActeur {
 		this.parametres = new ArrayList<Variable>();
 		this.Usines = new ArrayList<Usine>();
 	}
-
+	public boolean depense(double montant) {
+		return Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme, Filiere.LA_FILIERE.getBanque(), montant);
+	}
 	
 	public int getCrypto(){
 		return this.cryptogramme;

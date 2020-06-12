@@ -35,11 +35,7 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 		this.setPropal(99999999);
 		this.decideAchatArbres();
 		this.Maintenance();
-		//this.BrûlerStock();
-		//this.resetDecisionVariable();
-		/*System.out.println(this.getStock2().get(Feve.FEVE_BASSE).getValeur());
-		System.out.println(this.getStock1().get(Feve.FEVE_BASSE).getValeur());
-		System.out.println(this.getStockFeve().get(Feve.FEVE_BASSE).getValeur());*/
+		this.BrûlerStock();
 	}
 	/**
 	 * Cette méthode avance l'age de chaque paquet d'arbre de 1 et enleve les arbres qui ont atteint les 45 ans
@@ -92,6 +88,7 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 			this.journal_de_production.ajouter("Production de " + this.getPaquetsArbres().get(i).production()*facteur_maladies + "tonnes de fèves de type: " + this.getPaquetsArbres().get(i).getType() );
 		}
 		for (int i = 0; i < this.getUsines().size(); i++) {
+			
 			this.addQtPate(this.getUsines().get(i).getPate(),this.getUsines().get(i).Production()*facteur_maladies);
 			this.journal_de_production.ajouter("Production de " + this.getUsines().get(i).Production()*facteur_maladies + "tonnes de pates de type: " + this.getUsines().get(i).getPate() );
 		}
