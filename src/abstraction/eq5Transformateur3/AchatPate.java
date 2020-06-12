@@ -1,8 +1,11 @@
 package abstraction.eq5Transformateur3;
-import abstraction.eq8Romu.produits.Pate;
 
+import abstraction.eq2Producteur2.Producteur2;
 import abstraction.eq8Romu.contratsCadres.Echeancier;
 import abstraction.eq8Romu.contratsCadres.ExemplaireContratCadre;
+import abstraction.eq8Romu.contratsCadres.IVendeurContratCadre;
+import abstraction.eq8Romu.produits.Pate;
+import abstraction.fourni.Filiere;
 /**Eva DUPUY*/
 public class AchatPate {
     /**
@@ -57,5 +60,16 @@ public class AchatPate {
 			Pate produitPate = (Pate)(produit);
 			this.acteur.getStock().ajoutPate(produitPate, quantite, contrat.getPrixALaTonne());
 		}	
+	}
+
+	/**
+	 * Decide et commence les négociations d'un nouveau contract cadre
+	 * Est appellé par next() de l'acteur Transformateur3
+	 */
+	public void commencerNegociations() {
+		//decision de commencer les négociations
+		//si c'est bon on fait cet appel 
+		IVendeurContratCadre vendeur = (Producteur2) Filiere.LA_FILIERE.getActeur("EQ2");
+		Filiere.LA_FILIERE.getSuperviseurContratCadre().demande(acteur, vendeur, Pate.PATE_BASSE, new Echeancier(), this.acteur.getCryptogramme());
 	}
 }

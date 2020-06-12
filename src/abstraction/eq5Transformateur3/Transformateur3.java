@@ -66,6 +66,7 @@ public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurCh
 
 	public void next() {
 		stock.next();
+		acheteurPate.commencerNegociations();
 	}
 
 	public List<String> getNomsFilieresProposees() {
