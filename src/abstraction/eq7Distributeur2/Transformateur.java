@@ -66,7 +66,7 @@ public class Transformateur implements IAcheteurCacaoCriee, IVendeurChocolatBour
 	public List<String> getNomsFilieresProposees() {
 		return new ArrayList<String>();
 	}
-
+ 
 	public Filiere getFiliere(String nom) { 
 		return Filiere.LA_FILIERE;
 	}
