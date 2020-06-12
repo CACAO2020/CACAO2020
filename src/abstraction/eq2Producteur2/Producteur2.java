@@ -76,6 +76,8 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 	 * cette fonction calcule la production d'un cycle et la rajoute au stock
 	 */
 	public void RefreshStocks() {
+		this.setStockFeveTourPrecedent2(this.getStockFeveTourPrecedent());
+		this.setStockFeveTourPrecedent(this.getStockFeve());
 		float facteur_maladies;
 		if(this.apparitionMaladies()) {
 			facteur_maladies = this.graviteMaladies();
@@ -93,7 +95,6 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 			this.addQtPate(this.getUsines().get(i).getPate(),this.getUsines().get(i).Production()*facteur_maladies);
 			this.journal_de_production.ajouter("Production de " + this.getUsines().get(i).Production()*facteur_maladies + "tonnes de pates de type: " + this.getUsines().get(i).getPate() );
 		}
-		
 	}
 	//cette fonction va essayer de calculer la valeur de notre stock a partir des prix de la criée precedente (pour le moment), il pourra etre amelioré.(lucas p)
 	public double EstimationVenteStock() {

@@ -25,6 +25,8 @@ public class eq2Stock extends eq2Acteur{
 	
 	private Variable coutStock;
 	private HashMap<Feve,Variable> StockFeve;
+	private HashMap<Feve,Variable> StockFeveTourPrecedent;
+	private HashMap<Feve,Variable> StockFeveTourPrecedent2;
 	private HashMap<Pate,Variable> StockPate;
 	private double nbemployees;
 	private Variable cout_total_Stock;
@@ -38,14 +40,50 @@ public class eq2Stock extends eq2Acteur{
 		this.StockFeve = new HashMap<Feve,Variable>();
 		this.StockPate = new HashMap<Pate,Variable>();
 		this.cout_total_Stock= new Variable("cout_total_stock",this,0);
-		this.StockFeve.put(Feve.FEVE_BASSE, new Variable("EQ2Feve.FEVE_BASSE",this, 50.0));
-		this.StockFeve.put(Feve.FEVE_MOYENNE, new Variable("EQ2Feve.FEVE_MOYENNE",this, 50.0));
-		this.StockFeve.put(Feve.FEVE_HAUTE, new Variable("EQ2Feve.FEVE_HAUTE",this, 50.0));
-		this.StockFeve.put(Feve.FEVE_MOYENNE_EQUITABLE, new Variable("EQ2Feve.FEVE_MOYENNE_EQUITABLE",this, 50.0));
-		this.StockFeve.put(Feve.FEVE_HAUTE_EQUITABLE, new Variable("EQ2Feve.FEVE_HAUTE_EQUITABLE",this, 50.0));
+		this.StockFeve.put(Feve.FEVE_BASSE, new Variable("EQ2Feve.FEVE_BASSE",this, 30.0));
+		this.StockFeve.put(Feve.FEVE_MOYENNE, new Variable("EQ2Feve.FEVE_MOYENNE",this, 30.0));
+		this.StockFeve.put(Feve.FEVE_HAUTE, new Variable("EQ2Feve.FEVE_HAUTE",this, 30.0));
+		this.StockFeve.put(Feve.FEVE_MOYENNE_EQUITABLE, new Variable("EQ2Feve.FEVE_MOYENNE_EQUITABLE",this, 30.0));
+		this.StockFeve.put(Feve.FEVE_HAUTE_EQUITABLE, new Variable("EQ2Feve.FEVE_HAUTE_EQUITABLE",this, 30.0));
+		this.StockFeveTourPrecedent = new HashMap<Feve,Variable>();
+		this.StockFeveTourPrecedent2 = new HashMap<Feve,Variable>();
+		
 		
 	}
 	
+/**
+	 * @return the stockFeveTourPrecedent2
+	 */
+	public HashMap<Feve, Variable> getStockFeveTourPrecedent2() {
+		return StockFeveTourPrecedent2;
+	}
+
+	/**
+	 * @param stockFeveTourPrecedent2 the stockFeveTourPrecedent2 to set
+	 */
+	public void setStockFeveTourPrecedent2(HashMap<Feve, Variable> stockFeveTourPrecedent2) {
+		this.StockFeveTourPrecedent2 =new HashMap<Feve,Variable>();
+		for (Feve feve: stockFeveTourPrecedent2.keySet()) {
+			this.StockFeveTourPrecedent2.put(feve, new Variable(stockFeveTourPrecedent2.get(feve).getNom(),this,stockFeveTourPrecedent2.get(feve).getValeur()*this.getCoutStock().getValeur()));
+	}}
+
+/**
+	 * @return the stockFeveTourPrecedent
+	 */
+	public HashMap<Feve, Variable> getStockFeveTourPrecedent() {
+		return StockFeveTourPrecedent;
+	}
+
+	/**
+	 * @param stockFeveTourPrecedent the stockFeveTourPrecedent to set
+	 */
+	public void setStockFeveTourPrecedent(HashMap<Feve, Variable> stockFeveTourPrecedent) {
+		this.StockFeveTourPrecedent =new HashMap<Feve,Variable>();
+		for (Feve feve: stockFeveTourPrecedent.keySet()) {
+			this.StockFeveTourPrecedent.put(feve, new Variable(stockFeveTourPrecedent.get(feve).getNom(),this,stockFeveTourPrecedent.get(feve).getValeur()*this.getCoutStock().getValeur()));
+	}
+	}
+
 public void addStockFeve(Feve feve, double quantité) {
 	String type = "EQ2Feve."+feve;
 	this.StockFeve.put(feve,new Variable(type,this,quantité));
@@ -134,7 +172,12 @@ public void Maintenance() {
 	}
 	this.setCoutTotalStock(stock_total*this.getCoutStock().getValeur()) ;
 	Filiere.LA_FILIERE.getBanque().virer(this,this.getCrypto(),Filiere.LA_FILIERE.getBanque(),this.getCoutTotalStock().getValeur());
+
 }
+
+
+
+
 public HashMap<Feve,Variable> VariationStock(HashMap<Feve,Variable> Stock1, HashMap<Feve,Variable> Stock2) {
 	HashMap<Feve,Variable> Variation =new HashMap<Feve,Variable>();
 	for (Feve feve1 :Stock1.keySet()) {

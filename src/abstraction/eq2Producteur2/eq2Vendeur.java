@@ -42,6 +42,7 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 	//private ArrayList ventes;
 	//variables de décision 
 	/*private HashMap<Feve,Variable> Vente;
+>>>>>>> branch 'master' of https://github.com/kristofszentes/CACAO2020.git
 	private HashMap<Feve,Variable> Stock1 ;
 	private HashMap<Feve,Variable> Stock2 ;
 	private HashMap<Feve,Variable> Vente1 ;
@@ -72,6 +73,7 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 		this.crioevendu = false;
 		/*this.ventes = new ArrayList();
 		this.Vente = new HashMap<Feve,Variable>();
+		this.StockV = new HashMap<Feve,Variable>();
 		this.Stock1 = new HashMap<Feve,Variable>();
 		this.Stock2 = new HashMap<Feve,Variable>();
 		this.Stock2.put(Feve.FEVE_BASSE, new Variable("EQ2Feve.FEVE_BASSE",this, 30.0));
@@ -85,6 +87,7 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 	/*faudrait rajouter un truc qui set les prix en fonction de ce qu'il s'est passé au cycle d'avant et de notre rentabilité
 	 * 
 	 */
+
 
 	/*On vend dès qu'on a du stock
 	 * 
@@ -357,8 +360,13 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 	}
 	/**@author lucas p */
 	/*public void BrûlerStock() { //calcule et compare dérivées de stock et de vente, et décide de brûler une certaine proportion des fèves les moins vendues (s'ils nous en reste) pour diminuer le coût de stockage
+>>>>>>> branch 'master' of https://github.com/kristofszentes/CACAO2020.git
 
 		System.out.println("hmm");
+<<<<<<< HEAD
+		 if(Filiere.LA_FILIERE.getEtape() >1){
+			HashMap<Feve,Variable> Variation = VariationStock(this.getStockFeveTourPrecedent(),this.getStockFeveTourPrecedent2());
+=======
 		if (this.getCompteur_Tours() ==1) {
 			this.setStock2(this.getStockFeve());
 			this.setVente2(this.getVenteVariation());
@@ -375,8 +383,10 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 		}
 		 if(this.getCompteur_Tours() >2){
 			HashMap<Feve,Variable> Variation = VariationStock(this.getStock1(),this.getStock2());
+>>>>>>> branch 'master' of https://github.com/kristofszentes/CACAO2020.git
 			HashMap<Feve,Variable> VariationVente =VariationStock(this.getVente1(),this.getVente2());
 			System.out.println("stock="+Variation);
+			System.out.println("vente="+VariationVente);
 //pour le moment Variation est vide... a corriger 
 			for (Feve feve :Variation.keySet()) {
 				if(VariationVente.containsKey(feve)) {
@@ -408,17 +418,6 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 	/*public void setStock1(HashMap<Feve, Variable> stock1) {
 		Stock1 = stock1;
 	}*/
-
-	/**
-	 * @return the stock2
-	 */
-	/*public HashMap<Feve, Variable> getStock2() {
-		return Stock2;
-	}*/
-
-	/**
-	 * @param stock2 the stock2 to set
-	 */
 	/*public void setStock2(HashMap<Feve, Variable> stock2) {
 		Stock2 = stock2;
 	}*/
