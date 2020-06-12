@@ -36,27 +36,29 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 	/** @author Luca Pinguet & Mélissa Tamine */
 	
 	public List<ChocolatDeMarque> getCatalogue() {
-		/**List<ChocolatDeMarque> produits = new ArrayList<ChocolatDeMarque>();
-		for (ChocolatDeMarque chocos : this.MapStock.keySet()) {
-			produits.add(chocos);
+		List<ChocolatDeMarque> produits = new ArrayList<ChocolatDeMarque>();
+		for (Integer etape : this.MapStock.keySet()) {
+			for (ChocolatDeMarque chocos : MapStock.get(etape).keySet()) {
+				if (!produits.contains(chocos)) {
+					produits.add(chocos);
+				}
+			}
 		}
-		return produits;*/
-		return ClientFinal.tousLesChocolatsDeMarquePossibles();
+		return produits;
 	}
 
 	/** @author Luca Pinguet & Mélissa Tamine */
 	
 	public double prix(ChocolatDeMarque choco) {
-		/**double cours = this.evolutionCours.get(Filiere.LA_FILIERE.getEtape()).get(choco.getChocolat());
+		double cours = this.evolutionCours.get(Filiere.LA_FILIERE.getEtape()).get(choco.getChocolat());
 		if (choco.getChocolat()==Chocolat.CHOCOLAT_HAUTE_EQUITABLE) {
-			return cours+margeHGE*cours;}
+			return cours*this.margeChocolat.get(choco);}
 		else if (choco.getChocolat()==Chocolat.CHOCOLAT_MOYENNE) {
-			return cours+margeMG*cours;}
+			return cours*this.margeChocolat.get(choco);}
 		else if (choco.getChocolat()==Chocolat.CHOCOLAT_BASSE) {
-			return cours+margeBG*cours;}
+			return cours*this.margeChocolat.get(choco);}
 		else {
-			return 0 ;}*/
-		return Filiere.LA_FILIERE.getIndicateur("BourseChoco cours "+choco.getChocolat().name()).getValeur() * 2;
+			return 0 ;}
 		}
 		
 
@@ -68,24 +70,25 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
         double capaciteBG=this.capaciteDeVente*this.pctageBG;
 
         double nbmarques=0;
-
-        for (ChocolatDeMarque chocos : MapStock.keySet()) {
-            if (chocos.getChocolat()==choco.getChocolat()) {
-                nbmarques = nbmarques + 1;
-            }
-
+        
+        ArrayList<ChocolatDeMarque> dejaExplore = new ArrayList<ChocolatDeMarque>();
+        for (Integer etape : MapStock.keySet() ) {
+        	 for (ChocolatDeMarque chocos : MapStock.get(etape).keySet()) {
+        		 if (chocos.getChocolat()==choco.getChocolat() && !dejaExplore.contains(chocos)) {
+        			 nbmarques = nbmarques + 1;
+        			 dejaExplore.add(chocos);
+        		 }
+        	 }
         }
-
 
         if (choco.getChocolat()==Chocolat.CHOCOLAT_HAUTE_EQUITABLE) {
-            return this.MapStock.keySet().contains(choco) ? Math.min(capaciteHGE/nbmarques, this.MapStock.get(choco)) : 0;
+            return quantiteEnStockMarqueChoco(choco)!=0 ? Math.min(capaciteHGE/nbmarques, quantiteEnStockMarqueChoco(choco)) : 0;
         }
         else if (choco.getChocolat()==Chocolat.CHOCOLAT_MOYENNE) {
-            return this.MapStock.keySet().contains(choco) ? Math.min(capaciteMG/nbmarques, this.MapStock.get(choco)):0;
+            return quantiteEnStockMarqueChoco(choco)!=0 ? Math.min(capaciteMG/nbmarques, quantiteEnStockMarqueChoco(choco)) : 0;
         }
         else if (choco.getChocolat()==Chocolat.CHOCOLAT_BASSE) {
-        	System.out.print("Map ="+this.MapStock);
-            return this.MapStock.keySet().contains(choco) ? Math.min(capaciteBG/nbmarques, this.MapStock.get(choco)) : 0;
+            return quantiteEnStockMarqueChoco(choco)!=0 ? Math.min(capaciteBG/nbmarques, quantiteEnStockMarqueChoco(choco)) : 0;
         }
         else {
             return 0;

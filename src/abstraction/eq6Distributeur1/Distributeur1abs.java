@@ -26,7 +26,7 @@ public class Distributeur1abs implements IActeur {
 	protected Variable stockMG;
 	protected Variable stockBG;
 	protected Map<Integer,Map<Chocolat,Double>> evolutionCours;
-	protected Map<ChocolatDeMarque,Double> MapStock;
+	protected Map<Integer,Map<ChocolatDeMarque,Double>> MapStock;
 	protected Map<Integer,Map<ChocolatDeMarque,Double>> evolutionVentes;
 
 	public Distributeur1abs() { 
@@ -36,7 +36,7 @@ public class Distributeur1abs implements IActeur {
 		this.journalEq6=new Journal(this.getNom()+" activites", this);
 		this.journalEq6Stock=new Journal(this.getNom()+" stock", this);
 		evolutionCours = new HashMap<Integer,Map<Chocolat,Double>>();
-		this.MapStock = new HashMap<ChocolatDeMarque,Double>();
+		this.MapStock = new HashMap<Integer,Map<ChocolatDeMarque,Double>>();
 		this.evolutionVentes = new HashMap<Integer, Map<ChocolatDeMarque,Double>>();
 		this.evolutionVentes.put(0,new HashMap<ChocolatDeMarque,Double>());
 	}
@@ -74,30 +74,37 @@ public class Distributeur1abs implements IActeur {
 		return 0;
 	}
 	
-	/** @author Luca Pinguet & Mélissa Tamine */
+	public double quantiteEnStockTotale() {
+		return 0;
+	}
+	
+	/** @author Luca Pinguet & Mélissa Tamine & Thibault Avril */
 	public void next() {
 		journalEq6.ajouter("Etape="+Filiere.LA_FILIERE.getEtape());
 		this.evolutionCours.put(Filiere.LA_FILIERE.getEtape(),new HashMap<Chocolat,Double>());
 		this.evolutionVentes.put(Filiere.LA_FILIERE.getEtape()+1,new HashMap<ChocolatDeMarque,Double>());
+		this.MapStock.put(Filiere.LA_FILIERE.getEtape(),new HashMap<ChocolatDeMarque,Double>());
 		if (Filiere.LA_FILIERE.getEtape()>=1) {
-			for (ChocolatDeMarque chocos : this.MapStock.keySet()) {
+			for (ChocolatDeMarque chocos : this.MapStock.get(Filiere.LA_FILIERE.getEtape()).keySet()) {
 				journalEq6.ajouter("Le prix moyen du chocolat \""+chocos.name()+"\" a l'etape precedente etait de "+Filiere.LA_FILIERE.prixMoyenEtapePrecedente(chocos));
 
 			}
-			for (ChocolatDeMarque chocos : this.MapStock.keySet()) {
+			for (ChocolatDeMarque chocos : this.MapStock.get(Filiere.LA_FILIERE.getEtape()).keySet()) {
 				journalEq6.ajouter("Les ventes de chocolat \""+chocos.name()+" il y a un an etaient de "+Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-24, chocos));
 
 			}
 		}
 		double somme = 0;
-		journalEq6Stock.ajouter("" + this.MapStock.keySet().size());
-		for (ChocolatDeMarque chocos : this.MapStock.keySet()) {
-			somme= somme+ this.MapStock.get(chocos);
+		journalEq6Stock.ajouter("" + this.MapStock.get(Filiere.LA_FILIERE.getEtape()).keySet().size());
+		for (ChocolatDeMarque chocos : this.MapStock.get(Filiere.LA_FILIERE.getEtape()).keySet()) {
+			somme= somme+ this.MapStock.get(Filiere.LA_FILIERE.getEtape()).get(chocos);
 			journalEq6Stock.ajouter("La quantite de chocolat en stock est"+somme);
 		}
 		this.stockMG.setValeur(this, quantiteEnStockTypeChoco(Chocolat.CHOCOLAT_MOYENNE));
 		this.stockBG.setValeur(this, quantiteEnStockTypeChoco(Chocolat.CHOCOLAT_BASSE));
 		this.stockHGE.setValeur(this, quantiteEnStockTypeChoco(Chocolat.CHOCOLAT_HAUTE_EQUITABLE));
+		Filiere.LA_FILIERE.getBanque().virer(this, cryptogramme, Filiere.LA_FILIERE.getActeur("BourseChoco"), this.quantiteEnStockTotale()*720);
+		Filiere.LA_FILIERE.getBanque().virer(this, cryptogramme, Filiere.LA_FILIERE.getActeur("BourseChoco"), 800*20);
 		
 	}
 
