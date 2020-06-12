@@ -244,7 +244,7 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 	}
 	
 
-	@Override
+	@Override 
 	public void notifierAucuneProposition(LotCacaoCriee lot) { 
 		this.setPropal(this.getPrixVente()*0.95);
 		this.journal_des_ventes.ajouter("EQ2 : Aucune proposition de lot n'a abouti à une vente");
