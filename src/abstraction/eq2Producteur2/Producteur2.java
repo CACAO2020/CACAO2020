@@ -31,6 +31,7 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 		this.resetbooleans();
 		this.RefreshAge();
 		this.RefreshStocks();
+		//this.VariateurPrix();
 		this.PayerEmployes();
 		this.setPropal(99999999);
 		this.decideAchatArbres();

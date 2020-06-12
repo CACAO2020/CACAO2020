@@ -46,11 +46,11 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 	
 	public eq2Vendeur() {
 		super();
-		this.prixTF = new Variable("prixTF",this,1900);
-		this.prixTT = new Variable("prixTT",this,2500);
-		this.prixTTE = new Variable("prixTTE",this,2800);
-		this.prixTC = new Variable("prixTC",this,2900);
-		this.prixTCE = new Variable("prixTCE",this,3200);
+		this.prixTF = new Variable("prixTF",this,500);
+		this.prixTT = new Variable("prixTT",this,1100);
+		this.prixTTE = new Variable("prixTTE",this,1400);
+		this.prixTC = new Variable("prixTC",this,1500);
+		this.prixTCE = new Variable("prixTCE",this,1800);
 		this.prixvente = 0;
 		this.propalsnonvendues = new Variable("propalsnonvendues",this,999999999);//première valeur super haute pour permettre ventes
 		this.journal_des_ventes = new Journal("Journal des ventes", this);
@@ -345,6 +345,22 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 			}*/
 		}
 	}
+	public void VariateurPrix() {
+		double rentabilité = 1.10; 
+		double coût_prod_tonne = 5.25; //cf 150 arbres en moyenne pour une tonne, et un employé est payé 3.5 centimes par arbre
+	    double masseFora = this.getStockFeve().get(Feve.FEVE_BASSE).getValeur();
+	    double masseTrini = this.getStockFeve().get(Feve.FEVE_MOYENNE).getValeur();
+	    double masseTriniE = this.getStockFeve().get(Feve.FEVE_MOYENNE_EQUITABLE).getValeur();
+	    double masseCrio = this.getStockFeve().get(Feve.FEVE_HAUTE).getValeur();
+	    double masseCrioE = this.getStockFeve().get(Feve.FEVE_HAUTE_EQUITABLE).getValeur();
+	    //les formules sont éclatées
+	    this.setPrixTF(masseFora*coût_prod_tonne*this.getCoutStock().getValeur()*rentabilité*Math.exp(masseFora*(1-masseFora)/1000000));
+	    this.setPrixTT(masseTrini*coût_prod_tonne*this.getCoutStock().getValeur()*rentabilité*Math.exp(masseTrini*(1-masseTrini)/1000000));
+	    this.setPrixTTE(masseTriniE*coût_prod_tonne*this.getCoutStock().getValeur()*rentabilité*Math.exp(masseTriniE*(1-masseTriniE)/1000000));
+	    this.setPrixTC(masseCrio*coût_prod_tonne*this.getCoutStock().getValeur()*rentabilité*Math.exp(masseCrio*(1-masseCrio)/1000000));
+	    this.setPrixTCE(masseCrioE*coût_prod_tonne*this.getCoutStock().getValeur()*rentabilité*Math.exp(masseCrioE*(1-masseCrioE)/1000000));
+	    this.journal_des_ventes.ajouter("");
+	}
 	/**@author lucas p */
 	public void BrûlerStock() { //calcule et compare dérivées de stock et de vente, et décide de brûler une certaine proportion des fèves les moins vendues (s'ils nous en reste) pour diminuer le coût de stockage
 		System.out.println("nik");
@@ -451,8 +467,8 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 	/**
 	 * @param prixTF the prixTF to set
 	 */
-	public void setPrixTF(Variable prixTF) {
-		this.prixTF = prixTF;
+	public void setPrixTF(double prixTF) {
+		this.prixTF.setValeur(this, prixTF); 
 	}
 
 	/**
@@ -465,8 +481,8 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 	/**
 	 * @param prixTT the prixTT to set
 	 */
-	public void setPrixTT(Variable prixTT) {
-		this.prixTT = prixTT;
+	public void setPrixTT(double prixTT) {
+		this.prixTT.setValeur(this, prixTT);
 	}
 
 	/**
@@ -479,8 +495,8 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 	/**
 	 * @param prixTC the prixTC to set
 	 */
-	public void setPrixTC(Variable prixTC) {
-		this.prixTC = prixTC;
+	public void setPrixTC(double prixTC) {
+		this.prixTC.setValeur(this, prixTC);;
 	}
 
 	/**
@@ -493,8 +509,8 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 	/**
 	 * @param prixTTE the prixTTE to set
 	 */
-	public void setPrixTTE(Variable prixTTE) {
-		this.prixTTE = prixTTE;
+	public void setPrixTTE(double prixTTE) {
+		this.prixTTE.setValeur(this, prixTTE);;
 	}
 
 	/**
@@ -507,8 +523,8 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 	/**
 	 * @param prixTCE the prixTCE to set
 	 */
-	public void setPrixTCE(Variable prixTCE) {
-		this.prixTCE = prixTCE;
+	public void setPrixTCE(double prixTCE) {
+		this.prixTCE.setValeur(this, prixTCE);
 	}
 	
 	public List<Journal> getJournaux() {
