@@ -106,7 +106,7 @@ class GestionCriee //implements IVendeurCacaoCriee
 		{
 			prixVente = this.v1PrixMoyenne;
 		}
-		this.producteur1.ajouterJournaux("[GestionCriee] - Mise en vente de : " + typeFeve + " en quantité "+ quantiteAVendre + " au prix minimum de " + prixVente);
+		this.producteur1.ajouterJournaux(Color.CYAN, "[GestionCriee] - Mise en vente de : " + typeFeve + " en quantité "+ quantiteAVendre + " au prix minimum de " + prixVente);
 		if(quantiteAVendre == 0)
 		{
 			return null;
@@ -172,7 +172,7 @@ class GestionCriee //implements IVendeurCacaoCriee
 			}
 		}
 
-		this.producteur1.ajouterJournaux("[GestionCriee] - Non vente de : " + lot.getQuantiteEnTonnes() + " de type : " + lot.getFeve());
+		this.producteur1.ajouterJournaux(Color.RED, "[GestionCriee] - Non vente de : " + lot.getQuantiteEnTonnes() + " de type : " + lot.getFeve());
 	}
 
 	//Clément
@@ -206,7 +206,7 @@ class GestionCriee //implements IVendeurCacaoCriee
 	//Clément
 	public void notifierVente(PropositionCriee proposition) {
 		Feve typeFeve = proposition.getFeve();
-		this.producteur1.ajouterJournaux("[GestionCriee] - Vente de : " + proposition.getQuantiteEnTonnes() + " de type : " + typeFeve);
+		this.producteur1.ajouterJournaux(Color.GREEN, "[GestionCriee] - Vente de : " + proposition.getQuantiteEnTonnes() + " de type : " + typeFeve);
 		this.producteur1.removeStock(proposition.getQuantiteEnTonnes(), typeFeve);
 		this.venduLog.add(proposition);
 	}

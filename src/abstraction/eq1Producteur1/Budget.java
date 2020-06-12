@@ -174,7 +174,7 @@ public class Budget {
 		ArrayList<Integer> newPlants = new ArrayList<Integer>();
 		if (Filiere.LA_FILIERE.getEtape()!=0) {
 			ArrayList<Double> vendues = venduesDernierement(feves);
-			if (this.getFonds()>this.getEmployes().size()*50*72) {
+			if (this.getFonds()>200000.0) {
 				double fondsInvestis = 0.0;
 				if (this.getFonds()-this.getEmployes().size()*50*24<=10000.0) {
 					fondsInvestis = this.getFonds()-this.getEmployes().size()*50*24;
@@ -182,13 +182,13 @@ public class Budget {
 					fondsInvestis = 10000.0;
 				}
 				newPlants = investissement(fondsInvestis, vendues.get(0), vendues.get(1));
+				this.addEmployes(newPlants.get(2));
+				this.removeFonds(202.18*newPlants.get(2));
 			} else {
 				newPlants.add(0);
 				newPlants.add(0);
 				newPlants.add(0);
 			}
-			this.addEmployes(newPlants.get(2));
-			this.removeFonds(202.18*newPlants.get(2));
 		} else {
 			newPlants.add(0);
 			newPlants.add(0);

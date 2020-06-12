@@ -83,8 +83,8 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 	// Modifiee par Melanie pour l'ajout des differents stocks de feves
 	public void next() {
 		// Ecriture de l'état dans les logs.
-		this.journalEq1.ajouter("Quantité de stock de Trinitario : " + this.getStock(Feve.FEVE_MOYENNE));
-		this.journalEq1.ajouter("Quantité de stock de Forastero : " + this.getStock(Feve.FEVE_BASSE));
+		this.journalEq1.ajouter(Color.BLACK, Color.WHITE, "Quantité de stock de Trinitario : " + this.getStock(Feve.FEVE_MOYENNE));
+		this.journalEq1.ajouter(Color.BLACK, Color.WHITE, "Quantité de stock de Forastero : " + this.getStock(Feve.FEVE_BASSE));
 		ArrayList<Double> recolte = new ArrayList<Double>();
 		ArrayList<Integer> nouveautes = new ArrayList<Integer>();
 		nouveautes.add((Integer) 0);
@@ -101,7 +101,6 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 		this.addStock(recolte.get(0), Feve.FEVE_BASSE);
 		this.addStock(recolte.get(1), Feve.FEVE_MOYENNE);
 		Filiere.LA_FILIERE.getBanque().virer(Filiere.LA_FILIERE.getActeur(this.getNom()), this.getCryptogramme(), Filiere.LA_FILIERE.getBanque(), nouveautes.get(3));
-		
 		//next de la classe venteCriee
 		this.venteCriee.next();
 		fevesVendues = this.venteCriee.getLotVendu();
@@ -184,9 +183,9 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 	}
 
 	//Fonction pour les classes agréger pour ajouter des entrées au journaux
-	public void ajouterJournaux(String notification)
+	public void ajouterJournaux(Color couleur, String notification)
 	{
-		this.journalEq1.ajouter(notification);
+		this.journalEq1.ajouter(couleur, Color.BLACK, notification);
 	}
 
 	//[-] Clément >
