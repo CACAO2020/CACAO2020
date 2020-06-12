@@ -387,6 +387,8 @@ public class Filiere {
 		this.acteursSolvables.remove(acteur);
 		this.journalFiliere.ajouter(Journal.texteColore(acteur,"Faillite de "+acteur.getNom()));
 		this.journalFiliere.notifyObservers();
-		FenetrePrincipale.LA_FENETRE_PRINCIPALE.notificationFaillite(acteur);
+		if (FenetrePrincipale.LA_FENETRE_PRINCIPALE!=null) {
+			FenetrePrincipale.LA_FENETRE_PRINCIPALE.notificationFaillite(acteur);
+		}
 	}
 }
