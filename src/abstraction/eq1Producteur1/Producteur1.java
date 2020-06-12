@@ -89,6 +89,8 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 		ArrayList<Integer> nouveautes = new ArrayList<Integer>();
 		nouveautes.add((Integer) 0);
 		nouveautes.add((Integer) 0);
+		nouveautes.add((Integer) 0);
+		nouveautes.add((Integer) 0);
 		ArrayList<PropositionCriee> fevesVendues = new ArrayList<PropositionCriee>();
 		int newArbresForastero = nouveautes.get(0);
 		int newArbresTrinitario = nouveautes.get(1);
@@ -98,9 +100,8 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 		
 		this.addStock(recolte.get(0), Feve.FEVE_BASSE);
 		this.addStock(recolte.get(1), Feve.FEVE_MOYENNE);
-		if (nouveautes.get(3)>0) {
-			Filiere.LA_FILIERE.getBanque().virer(Filiere.LA_FILIERE.getActeur(this.getNom()), this.getCryptogramme(), Filiere.LA_FILIERE.getBanque(), nouveautes.get(3));
-		}
+		Filiere.LA_FILIERE.getBanque().virer(Filiere.LA_FILIERE.getActeur(this.getNom()), this.getCryptogramme(), Filiere.LA_FILIERE.getBanque(), nouveautes.get(3));
+		
 		//next de la classe venteCriee
 		this.venteCriee.next();
 		fevesVendues = this.venteCriee.getLotVendu();

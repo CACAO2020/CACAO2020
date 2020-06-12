@@ -166,21 +166,20 @@ public class Budget {
 		this.setFonds(fonds);
 		this.removeFonds(this.getEmployes().size()*50);
 		boolean reengager = false;
-		if (this.getFonds()>0) {
+		if (this.getFonds()>this.getEmployes().size()*100) {
 			reengager = true;
 		} 
 		this.actualiserEmployes(reengager);
 		
-
 		ArrayList<Integer> newPlants = new ArrayList<Integer>();
 		if (Filiere.LA_FILIERE.getEtape()!=0) {
 			ArrayList<Double> vendues = venduesDernierement(feves);
-			if (this.getFonds()>this.getEmployes().size()*50*24) {
+			if (this.getFonds()>this.getEmployes().size()*50*72) {
 				double fondsInvestis = 0.0;
-				if (this.getFonds()-this.getEmployes().size()*50*24<=50000.0) {
+				if (this.getFonds()-this.getEmployes().size()*50*24<=10000.0) {
 					fondsInvestis = this.getFonds()-this.getEmployes().size()*50*24;
 				} else {
-					fondsInvestis = 50000.0;
+					fondsInvestis = 10000.0;
 				}
 				newPlants = investissement(fondsInvestis, vendues.get(0), vendues.get(1));
 			} else {
@@ -190,13 +189,12 @@ public class Budget {
 			}
 			this.addEmployes(newPlants.get(2));
 			this.removeFonds(202.18*newPlants.get(2));
-			newPlants.add((int) (fonds - this.getFonds()));
 		} else {
 			newPlants.add(0);
 			newPlants.add(0);
 			newPlants.add(0);
-			newPlants.add((int) (fonds - this.getFonds()));
 		}
+	newPlants.add((int) (fonds - this.getFonds()));
 	return newPlants;
 	
 	}
