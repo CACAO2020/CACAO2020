@@ -1,8 +1,9 @@
 package abstraction.eq5Transformateur3;
+import abstraction.eq8Romu.produits.Pate;
 
 import abstraction.eq8Romu.contratsCadres.Echeancier;
 import abstraction.eq8Romu.contratsCadres.ExemplaireContratCadre;
-
+/**Eva DUPUY*/
 public class AchatPate {
     /**
      * Gère les achats de pates avec le contrat cadre et négocie les prix.
@@ -46,11 +47,15 @@ public class AchatPate {
 	};
 
 
-
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
-		return 0;
+		return contrat.getPrixALaTonne()*contrat.getQuantiteTotale();
 	}
 
+	
 	public void receptionner(Object produit, double quantite, ExemplaireContratCadre contrat) {
+		if(produit instanceof Pate) {
+			Pate produitPate = (Pate)(produit);
+			this.acteur.getStock().ajoutPate(produitPate, quantite, contrat.getPrixALaTonne());
+		}	
 	}
 }
