@@ -211,7 +211,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant) {
 		//vend le chocolat de tel marque à tel prix et telle quantité au client final
 		if (client!=null) { 
-			if (quantite == 0.) {
+			if (quantite != 0.) {
 				this.coutUnitaire.put(choco, montant/quantite); 
 			
 			ac.getStock().retirerStockChocolat(choco, quantite);
