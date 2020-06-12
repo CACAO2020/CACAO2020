@@ -29,6 +29,7 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 	private GestionCriee venteCriee;
 	private Plantations plantation;
 	private Budget budget;
+	private double coutUnitaireStockage;
 
 	public Producteur1() {
 		this.stockFevesForastero=new Variable(getNom()+" stock feves Forastero", this, 0, 10000, 1000);
@@ -37,6 +38,7 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 		this.venteCriee = new GestionCriee(this);
 		this.plantation = new Plantations();
 		this.budget = new Budget(500000, 24);
+		this.coutUnitaireStockage = 0.05;
 	}
 
 	public void setCryptogramme(Integer crypto) {
@@ -104,6 +106,12 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 		//next de la classe venteCriee
 		this.venteCriee.next();
 		fevesVendues = this.venteCriee.getLotVendu();
+
+		/** 
+		 * Coùt des stocks : 
+		 */
+		double cout = (this.getStock(Feve.FEVE_BASSE) + this.getStock(Feve.FEVE_MOYENNE) + this.getStock(Feve.FEVE_MOYENNE_EQUITABLE)) * this.coutUnitaireStockage;
+		Filiere.LA_FILIERE.getBanque().virer(Filiere.LA_FILIERE.getActeur(this.getNom()), this.getCryptogramme(), Filiere.LA_FILIERE.getBanque(), cout);
 	}
 
 	// Modification pour ajout de la filiere TestCrieeProd1
