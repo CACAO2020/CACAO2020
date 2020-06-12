@@ -358,6 +358,18 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 			}*/
 		}
 	}
+	public void VariateurPrix() {
+		double rentabilité = 0.10; 
+		double coût_prod_tonne_par_next = 5.25; //cf 150 arbres en moyenne pour une tonne, et un employé est payé 3.5 centimes par arbre
+	    double masseFora = this.getStockFeve().get(Feve.FEVE_BASSE).getValeur();
+	    double masseTrini = this.getStockFeve().get(Feve.FEVE_MOYENNE).getValeur();
+	    double masseTriniE = this.getStockFeve().get(Feve.FEVE_MOYENNE_EQUITABLE).getValeur();
+	    double masseCrio = this.getStockFeve().get(Feve.FEVE_HAUTE).getValeur();
+	    double masseCrioE = this.getStockFeve().get(Feve.FEVE_HAUTE_EQUITABLE).getValeur();
+	    
+	    
+	    
+	}
 	/**@author lucas p */
 	/*public void BrûlerStock() { //calcule et compare dérivées de stock et de vente, et décide de brûler une certaine proportion des fèves les moins vendues (s'ils nous en reste) pour diminuer le coût de stockage
 >>>>>>> branch 'master' of https://github.com/kristofszentes/CACAO2020.git

@@ -86,9 +86,9 @@ public class eq2Investisseur extends VenteContratCadre {
 	/*
 	 * Paye les employes en fonction du nombre d'arbres
 	 */
-	public void PayerEmployes() {
+	public void PayerEmployes() { //1 employé pour 800 arbres, payé 2 dollars par jour
 		if (this.NbTotalArbres() > 0) {
-			double payeEmployes = this.NbTotalArbres()*0.05+this.getPrime();
+			double payeEmployes = this.NbTotalArbres()*0.035+this.getPrime();
 			Filiere.LA_FILIERE.getBanque().virer(this,this.getCrypto(),Filiere.LA_FILIERE.getBanque(),payeEmployes);
 		}
 	}
