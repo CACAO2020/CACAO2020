@@ -26,7 +26,7 @@ public abstract class ActeurEQ3 implements IActeur{
 		this.journalAchat = new Journal("Eq3 achat", this);
 		this.journalVente =new Journal("Eq3 ventes", this);
 		this.journalTransformation =new Journal("Eq3 transformations", this);
-		this.journalTransformation =new Journal("Eq3 test", this);
+		this.journalTest =new Journal("Eq3 test", this);
 	}
 	
 	public String getNom() {
