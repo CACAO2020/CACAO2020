@@ -42,6 +42,9 @@ class GestionCriee //implements IVendeurCacaoCriee
 	private double v1PrixMoyenne;
 	private int compteurBas;
 	private int compteurMoyen;
+	private double tailleLotBas;
+	private double tailleLotMoyen;
+	public static final int tailleLot = 20;
 
 
 	public GestionCriee(Producteur1 sup) //Clément
@@ -64,16 +67,31 @@ class GestionCriee //implements IVendeurCacaoCriee
 
 	public void next()
 	{
-		this.compteurBas = 0;
-		this.compteurMoyen = 0;
+		boolean bas = true;
+		boolean moy = true;
 		if(this.producteur1.getStock(Feve.FEVE_BASSE) <= 0)
 		{
 			this.compteurBas = -1;
+			bas = false;
 		}
 		if(this.producteur1.getStock(Feve.FEVE_MOYENNE) <= 0)
 		{
 			this.compteurMoyen = -1;
+			moy = false;
 		}
+
+		double stock = 0;
+		if(bas)
+		{
+			stock = this.producteur1.getStock(Feve.FEVE_BASSE);
+			this.compteurBas = (int) stock/this.tailleLot;
+		}
+		if(moy)
+		{
+			stock = this.producteur1.getStock(Feve.FEVE_MOYENNE);
+			this.compteurMoyen = (int) stock/this.tailleLot;
+		}
+
 	}
 
 	private LotCacaoCriee makeLot(Feve typeFeve, double quantiteAVendre)
@@ -100,6 +118,22 @@ class GestionCriee //implements IVendeurCacaoCriee
 
 	//Clément 
 	public LotCacaoCriee getLotEnVente() {
+
+		if(this.compteurBas > 0)
+		{
+			this.compteurBas -= 1;
+			return makeLot(Feve.FEVE_BASSE, this.tailleLot);
+			//min(producteur1.getStock(Feve.FEVE_BASSE), (double) this.tailleLot));
+		}
+		if(this.compteurMoyen > 0)
+		{
+			this.compteurMoyen -= 1;
+			return makeLot(Feve.FEVE_MOYENNE, this.tailleLot);
+			//min(producteur1.getStock(Feve.FEVE_MOYENNE), (double) this.tailleLot));
+		}
+		return makeLot(Feve.FEVE_BASSE, 0);
+
+		/*
 		if(venteBasseSurCeTour)
 		{
 			this.venteBasseSurCeTour = !this.venteBasseSurCeTour;
@@ -109,7 +143,7 @@ class GestionCriee //implements IVendeurCacaoCriee
 		{
 			this.venteBasseSurCeTour = !this.venteBasseSurCeTour;
 			return makeLot(Feve.FEVE_MOYENNE, producteur1.getStock(Feve.FEVE_MOYENNE));
-		}
+		}*/
 
 
 	}
