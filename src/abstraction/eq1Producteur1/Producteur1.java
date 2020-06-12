@@ -87,6 +87,9 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 		// Ecriture de l'état dans les logs.
 		this.journalEq1.ajouter(Color.BLACK, Color.WHITE, "Quantité de stock de Trinitario : " + this.getStock(Feve.FEVE_MOYENNE));
 		this.journalEq1.ajouter(Color.BLACK, Color.WHITE, "Quantité de stock de Forastero : " + this.getStock(Feve.FEVE_BASSE));
+		/**
+		 * Initialisation des différentes variables nécessaires
+		 */
 		ArrayList<Double> recolte = new ArrayList<Double>();
 		ArrayList<Integer> nouveautes = new ArrayList<Integer>();
 		nouveautes.add((Integer) 0);
@@ -96,22 +99,29 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 		ArrayList<PropositionCriee> fevesVendues = new ArrayList<PropositionCriee>();
 		int newArbresForastero = nouveautes.get(0);
 		int newArbresTrinitario = nouveautes.get(1);
-		recolte = this.plantation.plantation_cyclique(newArbresForastero, newArbresTrinitario, this.budget.getEmployes().size());
-		double fonds = Filiere.LA_FILIERE.getBanque().getSolde(this, this.getCryptogramme());
-		nouveautes = this.budget.budget_cyclique(Filiere.LA_FILIERE.getBanque().getSolde(Filiere.LA_FILIERE.getActeur(this.getNom()), this.getCryptogramme()), fevesVendues);
+		double coutStockage = (this.getStock(Feve.FEVE_BASSE) + this.getStock(Feve.FEVE_MOYENNE) + this.getStock(Feve.FEVE_MOYENNE_EQUITABLE)) * this.coutUnitaireStockage;
 		
+		/**
+		 * Actualisation des plantations/récoltes/nouveaux stocks
+		 */
+		recolte = this.plantation.plantation_cyclique(newArbresForastero, newArbresTrinitario, this.budget.getEmployes().size());
 		this.addStock(recolte.get(0), Feve.FEVE_BASSE);
 		this.addStock(recolte.get(1), Feve.FEVE_MOYENNE);
+		/**
+		 * Actualisation des fonds/employés/décisions pour le prochain cycle
+		 */
+		double fonds = Filiere.LA_FILIERE.getBanque().getSolde(this, this.getCryptogramme());
+		nouveautes = this.budget.budget_cyclique(Filiere.LA_FILIERE.getBanque().getSolde(Filiere.LA_FILIERE.getActeur(this.getNom()), this.getCryptogramme()), fevesVendues, coutStockage);
 		Filiere.LA_FILIERE.getBanque().virer(Filiere.LA_FILIERE.getActeur(this.getNom()), this.getCryptogramme(), Filiere.LA_FILIERE.getBanque(), nouveautes.get(3));
+		
 		//next de la classe venteCriee
 		this.venteCriee.next();
 		fevesVendues = this.venteCriee.getLotVendu();
 
 		/** 
-		 * Coùt des stocks : 
+		 * Coût des stocks : 
 		 */
-		double cout = (this.getStock(Feve.FEVE_BASSE) + this.getStock(Feve.FEVE_MOYENNE) + this.getStock(Feve.FEVE_MOYENNE_EQUITABLE)) * this.coutUnitaireStockage;
-		Filiere.LA_FILIERE.getBanque().virer(Filiere.LA_FILIERE.getActeur(this.getNom()), this.getCryptogramme(), Filiere.LA_FILIERE.getBanque(), cout);
+		Filiere.LA_FILIERE.getBanque().virer(Filiere.LA_FILIERE.getActeur(this.getNom()), this.getCryptogramme(), Filiere.LA_FILIERE.getBanque(), coutStockage);
 	}
 
 	// Modification pour ajout de la filiere TestCrieeProd1
