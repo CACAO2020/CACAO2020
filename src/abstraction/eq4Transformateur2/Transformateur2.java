@@ -36,7 +36,7 @@ public class Transformateur2 extends Transformateur2_negoce {
 		}
 		this.mesContratEnTantQueVendeur.removeAll(contratsObsoletes);
 
-		super.majQuantitePateCC();
+		/*super.majQuantitePateCC();
 		
 		double montant = super.coutStocks() ; //coût des stocks de l'année précédente
 
@@ -56,7 +56,7 @@ public class Transformateur2 extends Transformateur2_negoce {
 			double investTFEP = solde * INVESTI_MOYPROD;
 			super.investirCapaTFEP(investTFEP);
 			this.investissementChoco();
-		}
+		}*/
 	}
 
 	public double transformerSelonPriorites() {
