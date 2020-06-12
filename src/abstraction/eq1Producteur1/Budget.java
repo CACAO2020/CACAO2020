@@ -69,6 +69,7 @@ public class Budget {
 		return this.employes;
 	}
 	
+
 	public void setFonds(double n_fonds) {
 		this.fonds = n_fonds;
 	}
