@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
+import abstraction.eq8Romu.cacaoCriee.PropositionCriee;
 import abstraction.fourni.Banque;
 import abstraction.fourni.Filiere;
 
@@ -100,11 +101,11 @@ public class Budget {
 	}
 	
 	public void setNewStockF(double s) {
-		this.oldstockF=s;
+		this.newstockF=s;
 	}
 	
 	public void setNewStockT(double s) {
-		this.oldstockF=s;
+		this.newstockF=s;
 	}
 	
 	public void setFonds(double n_fonds) {
@@ -184,15 +185,12 @@ public class Budget {
 	
 	
 
-	public ArrayList<Integer> budget_cyclique(double fonds, double stockF, double stockT) {
+	public ArrayList<Integer> budget_cyclique(double fonds, ArrayList<PropositionCriee> feves) {
 		this.setFonds(fonds);
 		this.removeFonds(this.getEmployes().size()*50);
 		this.actualiserEmployes();
 		
-		this.setOldStockF(this.getNewStockF());
-		this.setOldStockT(this.getNewStockT());
-		this.setNewStockF(stockF);
-		this.setNewStockT(stockT);
+		
 		ArrayList<Integer> newPlants = new ArrayList<Integer>();
 		if (this.getFonds()>this.getEmployes().size()*50*24) {
 			newPlants = investissement((this.getFonds()-this.getEmployes().size()*50*24), (this.getNewStockF()-this.getOldStockF()), this.getNewStockT()-this.getOldStockT());
