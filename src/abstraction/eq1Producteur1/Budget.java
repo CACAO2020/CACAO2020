@@ -194,7 +194,7 @@ public class Budget {
 			newPlants.add(0);
 			newPlants.add(0);
 		}
-	newPlants.add((int) (fonds - this.getFonds()));
+	newPlants.add((int) (fonds - this.getFonds()*100));
 	return newPlants;
 	
 	}
