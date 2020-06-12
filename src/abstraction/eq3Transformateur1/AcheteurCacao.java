@@ -58,8 +58,8 @@ public abstract class AcheteurCacao extends AchatPateCC implements abstraction.e
 	public double proposerAchat(LotCacaoCriee lot) {
 		double prix_moyen = ((lot.getPrixMinPourUneTonne() + this.getPrixBourse(lot)))/2; /* on calcule la moyenne entre le prix minimum du lot et sa valeur en bourse*/
 		if (prix_moyen < lot.getPrixMinPourUneTonne()) { /* C'est le cas où notre lot vaut moins cher en bourse que le prix auquel on l'achète */
-			this.journalAchat.ajouter("Pas de proposition car on ne peut pas acheter le lot" + lot.toString() +"au prix" + lot.getPrixMinPourUneTonne() + "en faisant des bénéfices");
-			return 0.0;
+			this.journalAchat.ajouter("Le lot" + lot.toString() +"au prix" + lot.getPrixMinPourUneTonne() + "ne permet pas de faire des bénéfices, on fait donc une proposition à un prix très bas");
+			return lot.getPrixMinPourUneTonne()/(2 * this.getPrixBourse(lot));
 		}
 		if((this.getStockFeves().containsKey((lot.getFeve()))==false)||
 				(this.getStockFeves((lot.getFeve()))==0)||
