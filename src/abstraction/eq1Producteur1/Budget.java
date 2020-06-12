@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Random;
 
 import abstraction.eq8Romu.cacaoCriee.PropositionCriee;
+import abstraction.eq8Romu.produits.Feve;
 import abstraction.fourni.Banque;
 import abstraction.fourni.Filiere;
 
@@ -54,18 +55,10 @@ import abstraction.fourni.Filiere;
 public class Budget {
 	private double fonds;
 	private ArrayList<Integer> employes;
-	private double oldstockF;
-	private double newstockF;
-	private double oldstockT;
-	private double newstockT;
 	
-	public Budget(double f, int e, double osf, double ost, double nsf, double nst) {
+	public Budget(double f, int e) {
 		this.fonds = f;
 		this.employes = initialiserEmployes(e);
-		this.oldstockF = osf;
-		this.oldstockT = ost;
-		this.newstockF = nsf;
-		this.newstockT = nst;
 	}
 	
 	public double getFonds() {
@@ -76,38 +69,7 @@ public class Budget {
 		return this.employes;
 	}
 	
-	public double getOldStockF() {
-		return this.oldstockF;
-	}
 
-	public double getOldStockT() {
-		return this.oldstockT;
-	}
-	
-	public double getNewStockF() {
-		return this.oldstockF;
-	}
-
-	public double getNewStockT() {
-		return this.oldstockT;
-	}
-	
-	public void setOldStockF(double s) {
-		this.oldstockF=s;
-	}
-	
-	public void setOldStockT(double s) {
-		this.oldstockF=s;
-	}
-	
-	public void setNewStockF(double s) {
-		this.newstockF=s;
-	}
-	
-	public void setNewStockT(double s) {
-		this.newstockF=s;
-	}
-	
 	public void setFonds(double n_fonds) {
 		this.fonds = n_fonds;
 	}
@@ -131,15 +93,6 @@ public class Budget {
 		}
 	}
 	
-	public void actualiserEmployes() {
-		ArrayList<Integer> l = this.getEmployes();
-		for (int i=0; i<l.size(); i++) {
-			int employe = this.getEmployes().get(0) + 1;
-			if (employe==24) {
-				this.employes.remove(0);
-			}
-		}
-	}
 	
 	public ArrayList<Integer> initialiserEmployes(int i) {
 		Random rand = new Random();
@@ -152,29 +105,61 @@ public class Budget {
 		Collections.reverse(l);
 		return l;
 	}
+	
+	
+	public int actualiserEmployes(boolean b) {
+		ArrayList<Integer> l = this.getEmployes();
+		int diffSize = l.size();
+		boolean vieux = true;
+		while (vieux) {
+			int employe = l.get(0);
+			if (employe==24) {
+				l.remove(0);
+				if (b) {
+					l.add((Integer) 0);
+				}
+			} else {
+				vieux = false;
+			}
+		}
+		this.setEmployes(l);
+		diffSize = diffSize - l.size();
+		return diffSize;
+	}
+	
+	
+	public ArrayList<Double> venduesDernierement(ArrayList<PropositionCriee> l) {
+		ArrayList<Double> ForTri = new ArrayList<Double>();
+		if (l.isEmpty()) {
+			ForTri.add((Double) 0.0);
+			ForTri.add((Double) 0.0);
+		} else {
+			int index = 0;
+			while ((index<l.size()) || (index<24)) {
+				PropositionCriee lot = l.get(index);
+				if (lot.getFeve()==Feve.FEVE_BASSE) {
+					ForTri.set(0, ForTri.get(0) + lot.getQuantiteEnTonnes());
+				} else if (lot.getFeve()==Feve.FEVE_MOYENNE) {
+					ForTri.set(1, ForTri.get(1) + lot.getQuantiteEnTonnes());
+				}
+				index ++;
+			}
+		}
+		return ForTri;
+	}
 
 
-	public ArrayList<Integer> investissement(double somme, double quantiteVendueF, double quantiteVendueT) {
+	public ArrayList<Integer> investissement(double somme, double vendueF, double vendueT) {
 		double coutArbresEmploye = 152.18;
 		int newEmployes = 0;
 		while (somme>(coutArbresEmploye + 50)) {
 			newEmployes += 1;
 			somme = somme - coutArbresEmploye - 50;
 			}
-		double quantiteVendue = quantiteVendueF + quantiteVendueT;
-		double proportionT = quantiteVendueT/quantiteVendue;
-		double proportionF = quantiteVendueF/quantiteVendue;
-		if (proportionF<0) {
-			proportionF = 0;
-		}
-		if (proportionT<0) {
-			proportionT = 0;
-		}
+		double quantiteVendue = vendueF + vendueT;
+		double proportionT = vendueT/quantiteVendue;
 		int newArbresT = (int) proportionT*newEmployes;
-		int newArbresF = (int) proportionF*newEmployes;
-		if (newArbresT+newArbresF == 0) {
-			newEmployes = 0;
-		}
+		int newArbresF = (int) newEmployes - newArbresT;
 		ArrayList<Integer> newPlants = new ArrayList<Integer>();
 		newPlants.add(newArbresF*500);
 		newPlants.add(newArbresT*500);
@@ -188,20 +173,32 @@ public class Budget {
 	public ArrayList<Integer> budget_cyclique(double fonds, ArrayList<PropositionCriee> feves) {
 		this.setFonds(fonds);
 		this.removeFonds(this.getEmployes().size()*50);
-		this.actualiserEmployes();
+		boolean reengager = false;
+		if (this.getFonds()>0) {
+			reengager = true;
+		} 
+		this.actualiserEmployes(reengager);
 		
-		
+
 		ArrayList<Integer> newPlants = new ArrayList<Integer>();
-		if (this.getFonds()>this.getEmployes().size()*50*24) {
-			newPlants = investissement((this.getFonds()-this.getEmployes().size()*50*24), (this.getNewStockF()-this.getOldStockF()), this.getNewStockT()-this.getOldStockT());
+		if (Filiere.LA_FILIERE.getEtape()!=0) {
+			ArrayList<Double> vendues = venduesDernierement(feves);
+			if (this.getFonds()>this.getEmployes().size()*50*24) {
+				newPlants = investissement((this.getFonds()-this.getEmployes().size()*50*24), vendues.get(0), vendues.get(1));
+			} else {
+				newPlants.add(0);
+				newPlants.add(0);
+				newPlants.add(0);
+			}
+			this.addEmployes(newPlants.get(2));
+			newPlants.add((int) 202.18*newPlants.get(2));
 		} else {
-			newPlants.add((Integer) 0);
-			newPlants.add((Integer) 0);
-			newPlants.add((Integer) 0);
+			newPlants.add(0);
+			newPlants.add(0);
+			newPlants.add(0);
 		}
-		this.addEmployes(newPlants.get(2));
-		newPlants.add((int) 202.18*newPlants.get(2));
-		return newPlants;
+	return newPlants;
+	
 	}
 
 }
