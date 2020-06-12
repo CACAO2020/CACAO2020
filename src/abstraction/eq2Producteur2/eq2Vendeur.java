@@ -313,7 +313,6 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 		double prixtonne = proposition.getPrixPourUneTonne();
 		if(this.getVenteVariation().containsKey(feve)) {this.getVenteVariation().get(feve).ajouter(this, proposition.getPrixPourLeLot());}
 		else{this.getVenteVariation().put(feve, new Variable(this.getStockFeve().get(feve).getNom(),this,proposition.getPrixPourLeLot()));}
-		System.out.println("ajout de vente="+this.getVenteVariation());
 		if (feve==Feve.FEVE_BASSE) {
 			compteurfora ++;
 			/*if (prixtonne > this.getPrixTF().getValeur()) {

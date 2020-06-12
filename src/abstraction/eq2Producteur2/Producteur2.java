@@ -152,21 +152,39 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 	}
 	/**@author lucas p */
 	public void BrûlerStock() { //calcule et compare dérivées de stock et de vente, et décide de brûler une certaine proportion des fèves les moins vendues (s'ils nous en reste) pour diminuer le coût de stockage
-		System.out.println("nik");
+		
 		if(Filiere.LA_FILIERE.getEtape() ==0){
 			this.setVenteTourPrecedent2(this.getVenteVariation());
-			System.out.println(this.getVenteTourPrecedent2());
 		}
 		if(Filiere.LA_FILIERE.getEtape() ==1){
 			this.setVenteTourPrecedent(this.getVenteVariation());
-			System.out.println(this.getVenteTourPrecedent());
 		}
 		 if(Filiere.LA_FILIERE.getEtape() >1){
-			 
+			 for (Feve feve:this.getStockFeve().keySet()) {
+				 if(!this.getStockFeveTourPrecedent().containsKey(feve)) {
+					 this.getStockFeveTourPrecedent().put(feve,new Variable(this.getStockFeve().get(feve).getNom(),this,0));
+				 }
+				 if(!this.getStockFeveTourPrecedent2().containsKey(feve)) {
+					 this.getStockFeveTourPrecedent2().put(feve,new Variable(this.getStockFeve().get(feve).getNom(),this,0));
+				 }
+				 if(!this.getVenteTourPrecedent2().containsKey(feve)) {
+					 this.getVenteTourPrecedent2().put(feve,new Variable(this.getStockFeve().get(feve).getNom(),this,0));
+				 }
+				 if(!this.getVenteTourPrecedent().containsKey(feve)) {
+					 this.getVenteTourPrecedent().put(feve,new Variable(this.getStockFeve().get(feve).getNom(),this,0));
+				 }
+				 if(!this.getVenteVariation().containsKey(feve)) {
+					 this.getVenteVariation().put(feve,new Variable(this.getStockFeve().get(feve).getNom(),this,0));
+				 }
+					if((this.getStockFeve().get(feve).getValeur()+this.getStockFeveTourPrecedent().get(feve).getValeur()+this.getStockFeveTourPrecedent2().get(feve).getValeur()/3)*this.getCoutStock().getValeur()>(this.getVenteTourPrecedent().get(feve).getValeur()+this.getVenteTourPrecedent().get(feve).getValeur()+this.getVenteVariation().get(feve).getValeur()/3)&&(this.getStockFeve().get(feve).getValeur()-this.getVenteVariation().get(feve).getValeur()/this.getCoutStock().getValeur()>0)) {
+						this.getStockFeve().get(feve).retirer(this, 0.1*(this.getStockFeve().get(feve).getValeur()-this.getVenteVariation().get(feve).getValeur()/this.getCoutStock().getValeur()));
+						this.journal_de_production.ajouter("on a brûlé " +0.1*(this.getStockFeve().get(feve).getValeur()-this.getVenteVariation().get(feve).getValeur()/this.getCoutStock().getValeur())+"kg de"+this.getStockFeve().get(feve).getNom() +"car leur stockage nous revenait trop cher");
+					}
+				}
 			double stock_cost_variation = 0;
 			HashMap<Feve,Variable> Variation = VariationStock(this.getStockFeveTourPrecedent(),this.getStockFeveTourPrecedent2()); // contient des variations de cout de stock !
 			HashMap<Feve,Variable> VariationVente =VariationStock(this.getVenteTourPrecedent(),this.getVenteTourPrecedent2()); // contient les variations de PRIX !
-			for (Feve feve :Variation.keySet()) {			
+			/*for (Feve feve :Variation.keySet()) {			
 				if(VariationVente.containsKey(feve)) {
 					System.out.println("valeur"+VariationVente.get(feve).getValeur()/(0.0001+Variation.get(feve).getValeur()));//VariationVente.get(feve) n'existe pas
 					if(Variation.get(feve).getValeur()>VariationVente.get(feve).getValeur()&&VariationVente.get(feve).getValeur()>0) {
@@ -174,18 +192,18 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 						//pour le moment en test 
 						//attention ici si on en vends pas on ne detruit pas les stocks... pas ouf faudra changer ça
 						System.out.println("on a brulé" +VariationVente.get(feve).getValeur()/Variation.get(feve).getValeur()*0.1+"kg de "+feve);
-						this.getStockFeve().get(feve).retirer(this, Variation.get(feve).getValeur()/VariationVente.get(feve).getValeur()*0.1);
+						this.getStockFeve().get(feve).retirer(this, 0.1*Variation.get(feve).getValeur()/VariationVente.get(feve).getValeur());
 				}
 					if(Variation.get(feve).getValeur()>VariationVente.get(feve).getValeur()&&Variation.get(feve).getValeur()<0) {
 						
 					}
-			}}
+					if() {
+						
+					}
+			}}*/
 				this.setVenteTourPrecedent2(this.getVenteTourPrecedent());
 				this.setVenteTourPrecedent(this.getVenteVariation());
 				this.resetDecisionVariable();
-				System.out.println("nouvelle valeur t-1"+this.getVenteTourPrecedent());
-				System.out.println("nouvelle valeur t-2"+this.getVenteTourPrecedent2());
-				System.out.println("valeurs differentes"+VariationStock(this.getVenteTourPrecedent(),this.getVenteTourPrecedent2()));
 		}
 	}
 
