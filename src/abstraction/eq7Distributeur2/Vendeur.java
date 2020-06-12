@@ -199,13 +199,16 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 		//met à jour les quantité de chocolat de chaque marque en vente selon le stock qu'on a
 		for (ChocolatDeMarque produit : produitsCatalogue) {
 			double stockLimite = 10.;
+			double prixLastStep = this.coutUnitaire.get(produit);
 			quantitesEnVente.get(produit).setValeur(ac, Double.min(quantitesEnVente.get(produit).getValeur(), ac.getStock().getStockChocolatDeMarque(produit)-stockLimite));
+			
 		}
 	}
  
 	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant) {
 		//vend le chocolat de tel marque à tel prix et telle quantité au client final
 		if (client!=null) { 
+			this.coutUnitaire.put(choco, montant/quantite); 
 			ac.getStock().retirerStockChocolat(choco, quantite);
 			journal.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[VENTE] Vente de " + Journal.doubleSur(quantite,2) + " tonnes de " + choco.name() + " à " + client.getNom() + " pour " + Journal.doubleSur(montant,2) + " (" + Journal.doubleSur(montant/quantite,2) + "/tonne)."));
 			ventesEtapeActuelle.put(choco.getChocolat(), ventesEtapeActuelle.get(choco.getChocolat()) + quantite);

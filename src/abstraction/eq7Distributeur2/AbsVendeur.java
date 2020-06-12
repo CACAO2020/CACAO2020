@@ -51,6 +51,9 @@ public class AbsVendeur {
 	// Liste des chocolats de marque pour lesquels on souhaite réaliser une campagne de publicité
 	protected List<ChocolatDeMarque> publicites;
 	
+	// Liste des prix de ventes unitaires pour chaque marque, à chaque tours
+	protected Map<ChocolatDeMarque, Double> coutUnitaire;
+	
 	// Couleurs d'arrière-plan pour les messages des journaux
 	public Color titleColor = Color.BLACK;
 	public Color metaColor = Color.CYAN;
