@@ -199,7 +199,9 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 		//met à jour les quantité de chocolat de chaque marque en vente selon le stock qu'on a
 		for (ChocolatDeMarque produit : produitsCatalogue) {
 			double stockLimite = 10.;
-			double prixLastStep = this.coutUnitaire.get(produit);
+			if (this.coutUnitaire.containsKey(produit)) {
+				double prixLastStep = this.coutUnitaire.get(produit);
+			}
 			quantitesEnVente.get(produit).setValeur(ac, Double.min(quantitesEnVente.get(produit).getValeur(), ac.getStock().getStockChocolatDeMarque(produit)-stockLimite));
 			
 		}
