@@ -33,6 +33,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 	}
 	
 	public void initialiser() {
+		this.coutUnitaire = new HashMap<ChocolatDeMarque, Double>();
 		for (ChocolatDeMarque choco : ac.tousLesChocolatsDeMarquePossibles()) {
 			ajouterProduitAuCatalogue(choco);
 			prixChoco.put(choco, new Variable("Prix du " + choco.name(), ac, prixParDefaut.get(choco.getChocolat())));
