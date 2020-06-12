@@ -37,7 +37,7 @@ class GestionCriee //implements IVendeurCacaoCriee
 	
 	private Producteur1 producteur1;
 	private List<LotCacaoCriee> miseEnVenteLog;
-	private List<PropositionCriee> venduLog;
+	private ArrayList<PropositionCriee> venduLog;
 	private double v1PrixBasse;
 	private double v1PrixMoyenne;
 	private int compteurBas;
@@ -62,7 +62,7 @@ class GestionCriee //implements IVendeurCacaoCriee
 		this.lastPrixVenteFeveBasse = lastPrixVenteInit;
 	}
 
-	public void next()
+	public ArrayList<PropositionCriee> next()
 	{
 		this.compteurBas = 0;
 		this.compteurMoyen = 0;
@@ -74,6 +74,7 @@ class GestionCriee //implements IVendeurCacaoCriee
 		{
 			this.compteurMoyen = -1;
 		}
+		return this.getLotVendu();
 	}
 
 	private LotCacaoCriee makeLot(Feve typeFeve, double quantiteAVendre)
@@ -162,7 +163,7 @@ class GestionCriee //implements IVendeurCacaoCriee
 	}
 
 
-	public List<PropositionCriee> getLotVendu()
+	public ArrayList<PropositionCriee> getLotVendu()
 	{
 		return this.venduLog;
 	}
