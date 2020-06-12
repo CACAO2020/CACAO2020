@@ -103,6 +103,10 @@ public class Stock {
 		}
 		return somme;
 	}
+	// Overload to support Chocolat with a Feve in argument
+	public double getQuantiteChocolat(Feve feve) {
+		return this.getQuantiteChocolat(Stock.getProduct(feve));
+	}
 
 	public double getQuantitePate(Pate pate) {
 		List<Couple<Variable>> table = this.getStockPate().get(pate);
@@ -301,7 +305,7 @@ public class Stock {
 	public void next() {
 		for (Feve feve : Feve.values()) {
 			for (Couple<Variable> feveInfos : this.stockFeves.get(feve)) {
-				this.stockChocolat.get(this.getProduct(feve)).add(feveInfos);
+				this.stockChocolat.get(Stock.getProduct(feve)).add(feveInfos);
 				feveInfos.get2().ajouter(acteur, this.transformationCostFeve.getValeur());
 				this.acteur.getTresorier().diminueTresorerie(this.transformationCostFeve.getValeur() * feveInfos.get1().getValeur());
 			}
@@ -310,7 +314,7 @@ public class Stock {
 		}
 		for (Pate pate : Pate.values()) {
 			for (Couple<Variable> pateInfos : this.stockPate.get(pate)) {
-				this.stockChocolat.get(this.getProduct(pate)).add(pateInfos);
+				this.stockChocolat.get(Stock.getProduct(pate)).add(pateInfos);
 				pateInfos.get2().ajouter(acteur, this.transformationCostPate.getValeur());
 				this.acteur.getTresorier()
 						.diminueTresorerie(this.transformationCostPate.getValeur() * pateInfos.get1().getValeur());
@@ -349,7 +353,7 @@ public class Stock {
 	 * 
 	 * @return Chocolat produit par la fève associée
 	 */
-	private Chocolat getProduct(Feve feve) {
+	public static Chocolat getProduct(Feve feve) {
 		switch (feve) {
 			case FEVE_BASSE:
 				return Chocolat.CHOCOLAT_BASSE;
@@ -364,7 +368,7 @@ public class Stock {
 		}
 	}
 
-	private Chocolat getProduct(Pate pate) {
+	public static Chocolat getProduct(Pate pate) {
 		switch (pate) {
 			case PATE_BASSE:
 				return Chocolat.CHOCOLAT_BASSE;
@@ -372,6 +376,8 @@ public class Stock {
 				return Chocolat.CHOCOLAT_MOYENNE;
 		}
 	}
+
+
 }
 
 
