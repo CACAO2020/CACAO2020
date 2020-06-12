@@ -57,7 +57,7 @@ public class Transformateur implements IAcheteurCacaoCriee, IVendeurChocolatBour
 	public void next() {
 		double quantiteTransformee = Math.random()*Math.min(100, this.stockFeves.getValeur()); // on suppose qu'on a un stock infini de sucre
 		this.stockFeves.retirer(this, quantiteTransformee);
-		this.stockChocolat.ajouter(this, 100*quantiteTransformee);// 50% cacao, 50% sucre
+		this.stockChocolat.ajouter(this, 1000*quantiteTransformee);// 50% cacao, 50% sucre
 		if (quantiteTransformee != 0) {
 			//this.laBanque.virer(this, cryptogramme, this.laBanque, quantiteTransformee*1.0234); // sucre, main d'oeuvre, autres frais
 		}
