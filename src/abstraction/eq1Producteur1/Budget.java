@@ -30,24 +30,19 @@ import abstraction.fourni.Filiere;
  * Programmes disponibles :
  * double getFonds()
  * ArrayList<Integer> getEmployes()
- * double getOldStockF()
- * double getOldSTockT()
- * double getNewStockF()
- * double getNewStockT()
  * 
  * void setFonds(double)
- * void setOldStockF(double)
- * void setOldStockT(double)
- * void setNewStockF(double)
- * void setNewStockT(double)
- * 
  * double addFonds(double)
  * double removeFonds(double)
- * void addEmployes(int)
- * void actualiserEmployes()
  * 
+ * void setEmployes(ArrayList<Integer>)
+ * void addEmployes(int)
+ * ArrayList<Integer> initialiserEmployes(int)
+ * void actualiserEmployes(boolean)
+ * 
+ * ArrayList<Double> venduesDernierement(ArrayList<PropositionCriee>)
  * ArrayList<Integer> investissement(double, double, double)
- * ArrayList<Integer> budget_cyclique(double, double)
+ * ArrayList<Integer> budget_cyclique(double, ArrayList<PropositionCriee>)
  */
 
 
@@ -107,9 +102,8 @@ public class Budget {
 	}
 	
 	
-	public int actualiserEmployes(boolean b) {
+	public void actualiserEmployes(boolean b) {
 		ArrayList<Integer> l = this.getEmployes();
-		int diffSize = l.size();
 		boolean vieux = true;
 		while (vieux) {
 			int employe = l.get(0);
@@ -123,8 +117,6 @@ public class Budget {
 			}
 		}
 		this.setEmployes(l);
-		diffSize = diffSize - l.size();
-		return diffSize;
 	}
 	
 	
@@ -184,18 +176,26 @@ public class Budget {
 		if (Filiere.LA_FILIERE.getEtape()!=0) {
 			ArrayList<Double> vendues = venduesDernierement(feves);
 			if (this.getFonds()>this.getEmployes().size()*50*24) {
-				newPlants = investissement((this.getFonds()-this.getEmployes().size()*50*24), vendues.get(0), vendues.get(1));
+				double fondsInvestis = 0.0;
+				if (this.getFonds()-this.getEmployes().size()*50*24<=50000.0) {
+					fondsInvestis = this.getFonds()-this.getEmployes().size()*50*24;
+				} else {
+					fondsInvestis = 50000.0;
+				}
+				newPlants = investissement(fondsInvestis, vendues.get(0), vendues.get(1));
 			} else {
 				newPlants.add(0);
 				newPlants.add(0);
 				newPlants.add(0);
 			}
 			this.addEmployes(newPlants.get(2));
-			newPlants.add((int) 202.18*newPlants.get(2));
+			this.removeFonds(202.18*newPlants.get(2));
+			newPlants.add((int) (fonds - this.getFonds()));
 		} else {
 			newPlants.add(0);
 			newPlants.add(0);
 			newPlants.add(0);
+			newPlants.add((int) (fonds - this.getFonds()));
 		}
 	return newPlants;
 	
