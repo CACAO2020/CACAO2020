@@ -41,10 +41,11 @@ public class SuiviDesCoursDeVente {
 			this.prixStat.get(choco).set(2, 0.0);
 		}
 	}
-	public void next() {
+	public HashMap<Chocolat, Integer> next() {
 		this.tour = this.tour + 1;
-		
+		HashMap<Chocolat, Integer> map = this.avisAchat();
 		this.updatePrixStat();
+		return map;
 	}
 	
 	public double getCours(Chocolat choco, int n) {
@@ -66,10 +67,10 @@ public class SuiviDesCoursDeVente {
 	
 	public void updatePrixStat(Chocolat choco) {
 		double cours = this.getCours(choco);
-		if (cours <= this.prixStat.get(choco).get(0) ) {
+		if (cours <= this.getMin(choco) ) {
 			this.prixStat.get(choco).set(0, cours);
 		}
-		if (cours >= this.prixStat.get(choco).get(1) ) {
+		if (cours >= this.getMax(choco) ) {
 			this.prixStat.get(choco).set(1, cours);
 		}
 		double moyenne = this.getMoy(choco);		
@@ -98,7 +99,7 @@ public class SuiviDesCoursDeVente {
 	/**
 	 * 
 	 * @param choco
-	 * @return 0 si le prix est entre min et max : indifférent
+	 * @return 0 si le prix est entre min et max ou entre 0.5 et 2 moyenne : indifférent
 	 * 			1 si le prix est < min ou < 1/2 moyenne : pas d'achat
 	 * 			2 si le prix est > max ou > 2 moyenne : achat
 	 */
@@ -113,6 +114,14 @@ public class SuiviDesCoursDeVente {
 		}
 		return res;
 	}
+	/**
+	 * 
+	 * @param choco
+	 * @return Une map à 5 entrée, une pour chaque type de chocolat, avec pour chaque entrée : 0 si le prix est entre min et max ou entre 0.5 et 2 moyenne : indifférent
+	 * 			1 si le prix est < min ou < 1/2 moyenne : pas d'achat
+	 * 			2 si le prix est > max ou > 2 moyenne : achat
+	 */
+	
 	public HashMap<Chocolat, Integer> avisAchat() {
 		HashMap<Chocolat, Integer> map = new HashMap<Chocolat, Integer>();
 		for (Chocolat choco : Chocolat.values()) {
