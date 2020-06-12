@@ -85,11 +85,11 @@ public class Budget {
 	}
 	
 	public double getNewStockF() {
-		return this.oldstockF;
+		return this.newstockF;
 	}
 
 	public double getNewStockT() {
-		return this.oldstockT;
+		return this.newstockT;
 	}
 	
 	public void setOldStockF(double s) {
