@@ -43,6 +43,8 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	private Stock stock;
 	protected double coutMasseSalariale;
 	
+	protected double stockInitial;
+	
 	private Journal journal;
 	private Journal journalTransactions;
 	
@@ -58,6 +60,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		vendeur = new Vendeur(this);
 		stock = new Stock(this);
 		initJournaux();
+		stockInitial = 1000;
 		coutMasseSalariale = 80000;
 	}
 	
@@ -84,8 +87,8 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		// AJOUT D'UN STOCK INITIAL POUR OBSERVER LES VENTES
 		stock.chocoEnStockParEtape.put(0, new HashMap<ChocolatDeMarque, Double>());
 		for (ChocolatDeMarque choco : this.tousLesChocolatsDeMarquePossibles()) {
-			stock.chocoEnStockParEtape.get(0).put(choco, 0.);
-			stock.ajouterStockChocolat(choco, 100.);
+			stock.chocoEnStockParEtape.get(0).put(choco, stockInitial);
+			stock.ajouterStockChocolat(choco, stockInitial);
 		}
 
 	}

@@ -89,7 +89,9 @@ public class AcheteurBourse extends AbsAcheteurBourse implements IAcheteurChocol
 				}
 			}
 			quantiteTotaleACommander = ac.getVendeur().getQuantiteACommander(choco);
-			quantiteACommander = quantiteTotaleACommander - quantiteARecevoirParContrats; 
+			System.out.println("quantité tot a comm " + quantiteTotaleACommander);
+			System.out.println("quantité a rec par contrats " + quantiteARecevoirParContrats);
+			quantiteACommander = Double.max(0., quantiteTotaleACommander - quantiteARecevoirParContrats); 
 			quantitesACommander.get(choco).setValeur(ac, quantiteACommander);
 		}
 	}
