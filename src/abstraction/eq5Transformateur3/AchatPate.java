@@ -4,6 +4,7 @@ import abstraction.eq2Producteur2.Producteur2;
 import abstraction.eq8Romu.contratsCadres.Echeancier;
 import abstraction.eq8Romu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eq8Romu.contratsCadres.IVendeurContratCadre;
+import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.Pate;
 import abstraction.fourni.Filiere;
 /**Eva DUPUY*/
@@ -13,7 +14,8 @@ public class AchatPate {
      * Elle est agrégé dans la classe Transformateur3.
      */
     //TODO ajouter les methodes pour acheter de la pate de cacao
-
+	
+	private double prixMax;
     private Transformateur3 acteur;
 		
     public AchatPate(Transformateur3 acteur) {
@@ -51,7 +53,16 @@ public class AchatPate {
 
 
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
-		return contrat.getPrixALaTonne()*contrat.getQuantiteTotale();
+		//le prix max est celui qui nous permet de faire 40% de marge
+		Chocolat choco =  (Chocolat)(contrat.getProduit());
+		prixMax = 0.6*this.acteur.getInfoCoursVente().getCours(choco)- 
+				this.acteur.getStock().getTransformationCostPate().getValeur(); //ajouter prix des stocks??
+		if(contrat.getPrixALaTonne()<= prixMax) {
+			return contrat.getPrixALaTonne();
+		}
+		else {
+			return prixMax;
+		}
 	}
 
 	
