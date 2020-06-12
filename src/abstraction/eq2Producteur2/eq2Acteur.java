@@ -108,6 +108,7 @@ public class eq2Acteur implements IActeur {
 		ArrayList<String> filieres = new ArrayList<String>();
 		filieres.add("VCA"); // Ventes  Cacao Aleatoires
 		filieres.add("TESTCRIEEEQ2"); 
+		filieres.add("TestVC");
 		filieres.add("TESTBOURSE"); 
 		filieres.add("TESTCLIENT"); 
 		filieres.add("TESTCC");//Contrat Cadre 
@@ -122,6 +123,7 @@ public Filiere getFiliere(String nom) {
 	case "TESTBOURSE" : return new FiliereTestVentesChocolatBourse();
 	case "TESTCLIENT" : return new FiliereTestClientFinal();
 	case "TESTCC" : return new FiliereTestContratCadre();
+	case "TestVC" : return new TesteurVenteContratsCadre();
     default : return null;
 	}
 }

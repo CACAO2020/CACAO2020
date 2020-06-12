@@ -39,14 +39,14 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 	private boolean trinievendu;
 	private boolean criovendu;
 	private boolean crioevendu;
-	private ArrayList ventes;
+	//private ArrayList ventes;
 	//variables de décision 
-	private HashMap<Feve,Variable> Vente;
-	private HashMap<Feve,Variable> StockV;
+	/*private HashMap<Feve,Variable> Vente;
+>>>>>>> branch 'master' of https://github.com/kristofszentes/CACAO2020.git
 	private HashMap<Feve,Variable> Stock1 ;
 	private HashMap<Feve,Variable> Stock2 ;
 	private HashMap<Feve,Variable> Vente1 ;
-	private HashMap<Feve,Variable> Vente2;
+	private HashMap<Feve,Variable> Vente2;*/
 
 	
 	public eq2Vendeur() {
@@ -71,7 +71,7 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 		this.trinievendu = false;
 		this.criovendu = false;
 		this.crioevendu = false;
-		this.ventes = new ArrayList();
+		/*this.ventes = new ArrayList();
 		this.Vente = new HashMap<Feve,Variable>();
 		this.StockV = new HashMap<Feve,Variable>();
 		this.Stock1 = new HashMap<Feve,Variable>();
@@ -82,28 +82,12 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 		this.Stock2.put(Feve.FEVE_MOYENNE_EQUITABLE, new Variable("EQ2Feve.FEVE_MOYENNE_EQUITABLE",this, 30.0));
 		this.Stock2.put(Feve.FEVE_HAUTE_EQUITABLE, new Variable("EQ2Feve.FEVE_HAUTE_EQUITABLE",this, 30.0));
 		this.Vente1 = new HashMap<Feve,Variable>();
-		this.Vente2 = new HashMap<Feve,Variable>();
+		this.Vente2 = new HashMap<Feve,Variable>();*/
 	}
 	/*faudrait rajouter un truc qui set les prix en fonction de ce qu'il s'est passé au cycle d'avant et de notre rentabilité
 	 * 
 	 */
 
-	/**
-	 * @return the stockV
-	 */
-	public HashMap<Feve, Variable> getStockV() {
-		return this.StockV;
-	}
-
-	/**
-	 * @param stockV the stockV to set
-	 */
-	public void setStockV(HashMap<Feve, Variable> stockV) {
-		this.StockV =new HashMap<Feve,Variable>();
-		for (Feve feve: stockV.keySet()) {
-			this.StockV.put(feve, new Variable(stockV.get(feve).getNom(),this,stockV.get(feve).getValeur()*this.getCoutStock().getValeur()));
-		}
-	}
 
 	/*On vend dès qu'on a du stock
 	 * 
@@ -263,7 +247,7 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 	}
 	
 
-	@Override
+	@Override 
 	public void notifierAucuneProposition(LotCacaoCriee lot) { 
 		this.setPropal(this.getPrixVente()*0.95);
 		this.journal_des_ventes.ajouter("EQ2 : Aucune proposition de lot n'a abouti à une vente");
@@ -335,14 +319,14 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 	@Override
 	public void notifierVente(PropositionCriee proposition) { //enlève fèves vendues de notre stock
 		removeQtFeve(proposition.getLot().getFeve(), proposition.getLot().getQuantiteEnTonnes());
-		this.journal_des_ventes.ajouter("EQ2 : La vente a aboutit, le stock a été actualisé STONKS");
+		this.journal_des_ventes.ajouter("EQ2 : La vente a aboutit, le stock a été actualisé.");
 		this.setcompteurinvendus(0);
-		this.ventes.add(proposition.getPrixPourLeLot());
+		//this.ventes.add(proposition.getPrixPourLeLot());
 		this.journal_des_ventes.ajouter("le compteur des invendus vaut" + this.getcompteurinvendus());
 		Feve feve = proposition.getFeve();
-		double prixtonne = proposition.getPrixPourUneTonne();
-		if(this.getVenteVariation().containsKey(feve)) {this.getVenteVariation().get(feve).ajouter(this, proposition.getPrixPourLeLot());}
-		else{this.getVenteVariation().put(feve, new Variable(this.getStockFeve().get(feve).getNom(),this,proposition.getPrixPourLeLot()));}
+		//double prixtonne = proposition.getPrixPourUneTonne();
+		//if(this.Vente.containsKey(feve)) {this.Vente.get(feve).setValeur(this, proposition.getQuantiteEnTonnes());}
+		//else{this.Vente.put(feve, new Variable(this.getStockFeve().get(feve).getNom(),this,prixtonne));}
 		if (feve==Feve.FEVE_BASSE) {
 			compteurfora ++;
 			/*if (prixtonne > this.getPrixTF().getValeur()) {
@@ -375,11 +359,31 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 		}
 	}
 	/**@author lucas p */
-	public void BrûlerStock() { //calcule et compare dérivées de stock et de vente, et décide de brûler une certaine proportion des fèves les moins vendues (s'ils nous en reste) pour diminuer le coût de stockage
+	/*public void BrûlerStock() { //calcule et compare dérivées de stock et de vente, et décide de brûler une certaine proportion des fèves les moins vendues (s'ils nous en reste) pour diminuer le coût de stockage
+>>>>>>> branch 'master' of https://github.com/kristofszentes/CACAO2020.git
 
 		System.out.println("hmm");
+<<<<<<< HEAD
 		 if(Filiere.LA_FILIERE.getEtape() >1){
 			HashMap<Feve,Variable> Variation = VariationStock(this.getStockFeveTourPrecedent(),this.getStockFeveTourPrecedent2());
+=======
+		if (this.getCompteur_Tours() ==1) {
+			this.setStock2(this.getStockFeve());
+			this.setVente2(this.getVenteVariation());
+			System.out.println("ici");
+
+		if (Filiere.LA_FILIERE.getEtape() > 10) {
+			
+
+		}
+		if (this.getCompteur_Tours() ==2) {
+			this.setStock1(this.getStockFeve());
+			this.setVente1(this.getVenteVariation());
+			System.out.println("la");
+		}
+		 if(this.getCompteur_Tours() >2){
+			HashMap<Feve,Variable> Variation = VariationStock(this.getStock1(),this.getStock2());
+>>>>>>> branch 'master' of https://github.com/kristofszentes/CACAO2020.git
 			HashMap<Feve,Variable> VariationVente =VariationStock(this.getVente1(),this.getVente2());
 			System.out.println("stock="+Variation);
 			System.out.println("vente="+VariationVente);
@@ -400,68 +404,51 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 			this.setVente2(this.getVente1());
 			this.setVente1(this.getVenteVariation());
 		}}
-	}
+	}*/
 	/**
 	 * @return the stock1
 	 */
-	public HashMap<Feve, Variable> getStock1() {
+	/*public HashMap<Feve, Variable> getStock1() {
 		return Stock1;
-	}
+	}*/
 
 	/**
 	 * @param stock1 the stock1 to set
 	 */
-	public void setStock1(HashMap<Feve, Variable> stock1) {
-		this.Stock1 =new HashMap<Feve,Variable>();
-		for (Feve feve: stock1.keySet()) {
-			this.Stock1.put(feve, new Variable(stock1.get(feve).getNom(),this,stock1.get(feve).getValeur()*this.getCoutStock().getValeur()));
-		}
-	}
-
-	/**
-	 * @return the stock2
-	 */
-	public HashMap<Feve, Variable> getStock2() {
-		return Stock2;
-	}
-
-	/**
-	 * @param stock2 the stock2 to set
-	 */
-	public void setStock2(HashMap<Feve, Variable> stock2) {
-		this.Stock2 =new HashMap<Feve,Variable>();
-		for (Feve feve: stock2.keySet()) {
-			this.Stock2.put(feve, new Variable(stock2.get(feve).getNom(),this,stock2.get(feve).getValeur()*this.getCoutStock().getValeur()));
-		}
-	}
+	/*public void setStock1(HashMap<Feve, Variable> stock1) {
+		Stock1 = stock1;
+	}*/
+	/*public void setStock2(HashMap<Feve, Variable> stock2) {
+		Stock2 = stock2;
+	}*/
 
 	/**
 	 * @return the vente1
 	 */
-	public HashMap<Feve, Variable> getVente1() {
+	/*public HashMap<Feve, Variable> getVente1() {
 		return Vente1;
-	}
+	}*/
 
 	/**
 	 * @param vente1 the vente1 to set
 	 */
-	public void setVente1(HashMap<Feve, Variable> vente1) {
+	/*public void setVente1(HashMap<Feve, Variable> vente1) {
 		Vente1 = vente1;
-	}
+	}*/
 
 	/**
 	 * @return the vente2
 	 */
-	public HashMap<Feve, Variable> getVente2() {
+	/*public HashMap<Feve, Variable> getVente2() {
 		return Vente2;
-	}
+	}*/
 
 	/**
 	 * @param vente2 the vente2 to set
 	 */
-	public void setVente2(HashMap<Feve, Variable> vente2) {
+	/*public void setVente2(HashMap<Feve, Variable> vente2) {
 		Vente2 = vente2;
-	}
+	}*/
 
 	public double getPrixVente() {
 		return this.prixvente;
@@ -470,14 +457,14 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 	public void setPrixVente(double prix) {
 		this.prixvente = prix;
 	}
-	public HashMap<Feve,Variable> getVenteVariation() {
+	/*public HashMap<Feve,Variable> getVenteVariation() {
 		return this.Vente;
 	}
 
 	public void resetDecisionVariable() {
 		this.Vente = new HashMap<Feve,Variable>() ;
 
-	}
+	}*/
 	
 	public double getPropal() {
 		return this.propalsnonvendues.getValeur();

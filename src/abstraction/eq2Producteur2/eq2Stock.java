@@ -40,6 +40,7 @@ public class eq2Stock extends eq2Acteur{
 		this.StockFeve = new HashMap<Feve,Variable>();
 		this.StockPate = new HashMap<Pate,Variable>();
 		this.cout_total_Stock= new Variable("cout_total_stock",this,0);
+<<<<<<< HEAD
 		this.StockFeve.put(Feve.FEVE_BASSE, new Variable("EQ2Feve.FEVE_BASSE",this, 30.0));
 		this.StockFeve.put(Feve.FEVE_MOYENNE, new Variable("EQ2Feve.FEVE_MOYENNE",this, 30.0));
 		this.StockFeve.put(Feve.FEVE_HAUTE, new Variable("EQ2Feve.FEVE_HAUTE",this, 30.0));
@@ -49,6 +50,13 @@ public class eq2Stock extends eq2Acteur{
 		this.StockFeveTourPrecedent2 = new HashMap<Feve,Variable>();
 		
 		
+=======
+		this.StockFeve.put(Feve.FEVE_BASSE, new Variable("EQ2Feve.FEVE_BASSE",this, 50.0));
+		this.StockFeve.put(Feve.FEVE_MOYENNE, new Variable("EQ2Feve.FEVE_MOYENNE",this, 50.0));
+		this.StockFeve.put(Feve.FEVE_HAUTE, new Variable("EQ2Feve.FEVE_HAUTE",this, 50.0));
+		this.StockFeve.put(Feve.FEVE_MOYENNE_EQUITABLE, new Variable("EQ2Feve.FEVE_MOYENNE_EQUITABLE",this, 50.0));
+		this.StockFeve.put(Feve.FEVE_HAUTE_EQUITABLE, new Variable("EQ2Feve.FEVE_HAUTE_EQUITABLE",this, 50.0));
+>>>>>>> branch 'master' of https://github.com/kristofszentes/CACAO2020.git
 		
 	}
 	
