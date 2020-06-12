@@ -35,16 +35,11 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 		this.setPropal(99999999);
 		this.decideAchatArbres();
 		this.Maintenance();
-<<<<<<< HEAD
-		this.BrûlerStock();
-		this.resetDecisionVariable();
-=======
 		//this.BrûlerStock();
 		//this.resetDecisionVariable();
 		/*System.out.println(this.getStock2().get(Feve.FEVE_BASSE).getValeur());
 		System.out.println(this.getStock1().get(Feve.FEVE_BASSE).getValeur());
 		System.out.println(this.getStockFeve().get(Feve.FEVE_BASSE).getValeur());*/
->>>>>>> branch 'master' of https://github.com/kristofszentes/CACAO2020.git
 	}
 	/**
 	 * Cette méthode avance l'age de chaque paquet d'arbre de 1 et enleve les arbres qui ont atteint les 45 ans
