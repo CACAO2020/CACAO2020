@@ -3,7 +3,7 @@ package abstraction.eq2Producteur2;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
+import abstraction.eq8Romu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eq8Romu.cacaoCriee.IVendeurCacaoCriee;
 import abstraction.eq8Romu.cacaoCriee.LotCacaoCriee;
 import abstraction.eq8Romu.cacaoCriee.PropositionCriee;
@@ -361,40 +361,7 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 	    this.setPrixTCE(masseCrioE*coût_prod_tonne*this.getCoutStock().getValeur()*rentabilité*Math.exp(masseCrioE*(1-masseCrioE)/1000000));
 	    this.journal_des_ventes.ajouter("");
 	}
-	/**@author lucas p */
-	public void BrûlerStock() { //calcule et compare dérivées de stock et de vente, et décide de brûler une certaine proportion des fèves les moins vendues (s'ils nous en reste) pour diminuer le coût de stockage
-		System.out.println("nik");
-		if(Filiere.LA_FILIERE.getEtape() ==0){
-			this.setVenteTourPrecedent2(this.getVenteVariation());
-			System.out.println(this.getVenteTourPrecedent2());
-		}
-		if(Filiere.LA_FILIERE.getEtape() ==1){
-			this.setVenteTourPrecedent(this.getVenteVariation());
-			System.out.println(this.getVenteTourPrecedent());
-		}
-		 if(Filiere.LA_FILIERE.getEtape() >1){
-			 
-			double stock_cost_variation = 0;
-			HashMap<Feve,Variable> Variation = VariationStock(this.getStockFeveTourPrecedent(),this.getStockFeveTourPrecedent2()); // contient des variations de cout de stock !
-			HashMap<Feve,Variable> VariationVente =VariationStock(this.getVenteTourPrecedent(),this.getVenteTourPrecedent2()); // contient les variations de PRIX !
-			for (Feve feve :Variation.keySet()) {			
-				if(VariationVente.containsKey(feve)) {
-					System.out.println("valeur"+VariationVente.get(feve).getValeur()/(0.0001+Variation.get(feve).getValeur()));//VariationVente.get(feve) n'existe pas
-					if(Variation.get(feve).getValeur()>VariationVente.get(feve).getValeur()&&Variation.get(feve).getValeur()!=0) {
-						//pour le moment en test 
-						//attention ici si on en vends pas on ne detruit pas les stocks... pas ouf faudra changer ça
-						System.out.println("on a brulé" +VariationVente.get(feve).getValeur()/Variation.get(feve).getValeur()*0.1+"kg de "+feve);
-						//this.getStockFeve().get(feve).retirer(this, VariationVente.get(feve).getValeur()/Variation.get(feve).getValeur()*0.1);
-				}
-			}}
-				this.setVenteTourPrecedent2(this.getVenteTourPrecedent());
-				this.setVenteTourPrecedent(this.getVenteVariation());
-				this.resetDecisionVariable();
-				System.out.println("nouvelle valeur t-1"+this.getVenteTourPrecedent());
-				System.out.println("nouvelle valeur t-2"+this.getVenteTourPrecedent2());
-				System.out.println("valeurs differentes"+VariationStock(this.getVenteTourPrecedent(),this.getVenteTourPrecedent2()));
-		}
-	}
+	
 	/**
 	 * @return the stock1
 	 */
