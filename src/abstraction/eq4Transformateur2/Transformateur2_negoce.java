@@ -12,7 +12,6 @@ import abstraction.eq8Romu.cacaoCriee.SuperviseurCacaoCriee;
 import abstraction.eq8Romu.chocolatBourse.IVendeurChocolatBourse;
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.Feve;
-import abstraction.eq8Romu.produits.Pate;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
@@ -44,10 +43,6 @@ public class Transformateur2_negoce extends Transformateur2_gestion_stocks imple
 
 	public List<Variable> getIndicateurs() { 
 		List<Variable> res=super.getIndicateurs();
-		for (Feve feve :Feve.values()) {
-		}
-		for (Chocolat chocolat : Chocolat.values()) {
-		}
 		return res;
 	}
 
@@ -169,7 +164,7 @@ public class Transformateur2_negoce extends Transformateur2_gestion_stocks imple
 				return quantite/2;
 			}
 			else {
-				marge = Math.max(0.1, marge-0.1); // je comprends pas à quoi sert cette ligne
+				this.MARGE_VISEE_CHOCOLAT.get(chocolat).setValeur(this, Math.max(0.1, marge-0.1)); 
 				return 0;
 			}
 		}
@@ -197,10 +192,7 @@ public class Transformateur2_negoce extends Transformateur2_gestion_stocks imple
 		public double margeChoc() {
 			double rapport = super.coutStocksChoc()/super.getSolde();
 			double visee = 0.01/rapport;								//Stock coute 2% de notre solde par tour -> marge esperee de 50%, 1% -> 100%, 5% -> 20%, 10% -> 10%
-			if (rapport > 0.11) {
-				visee = -2; //pas compris
-			}
-			else if (rapport < 0.005) { 								//visee capee a 200%
+			if (rapport < 0.005) { 								//visee capee a 200%
 				visee = 2;
 			}
 			return visee;
