@@ -102,7 +102,8 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 			Filiere.LA_FILIERE.getBanque().virer(Filiere.LA_FILIERE.getActeur(this.getNom()), this.getCryptogramme(), Filiere.LA_FILIERE.getBanque(), nouveautes.get(3));
 		}
 		//next de la classe venteCriee
-		fevesVendues = this.venteCriee.next();
+		this.venteCriee.next();
+		fevesVendues = this.venteCriee.getLotVendu():
 	}
 
 	// Modification pour ajout de la filiere TestCrieeProd1

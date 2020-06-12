@@ -65,7 +65,7 @@ class GestionCriee //implements IVendeurCacaoCriee
 		this.lastPrixVenteFeveBasse = lastPrixVenteInit;
 	}
 
-	public ArrayList<PropositionCriee> next()
+	public void next()
 	{
 		boolean bas = true;
 		boolean moy = true;
@@ -92,7 +92,6 @@ class GestionCriee //implements IVendeurCacaoCriee
 			this.compteurMoyen = (int) stock/this.tailleLot;
 		}
 
-		return this.getLotVendu();
 	}
 
 	private LotCacaoCriee makeLot(Feve typeFeve, double quantiteAVendre)
