@@ -96,27 +96,29 @@ public class Transformateur2_negoce extends Transformateur2_gestion_stocks imple
 		//FAIRE AUGMENTER LA MARGE VISEE
 	}
 
-	
+
 	/* CALCUL DES COUTS DE PRODUCTION */
 	// à effectuer avant de réaliser les transformations, pour déterminer quelle quantité il faut transformer effectivement
 	
-	//Renvoie le cout de production d'une tonne de pate
-	public double getCoutProdPate(PateInterne pate, double quantiteTransfo) {
+	//Renvoie le cout de production d'une tonne de pate 
+	// N'EST PLUS UTILISE
+	public double getCoutProdPate(PateInterne pate, double quantiteTotaleTransfo) {
 		Feve feve = super.creerFeve(pate) ;
-		return super.prixApresTFEP(feve, quantiteTransfo/super.getCoeffTFEP());
+		return super.prixApresTFEP(feve, quantiteTotaleTransfo/super.getCoeffTFEP());
 	}
 	
 	//Renvoie le cout de production d'une tonne de chocolat 
-	public double getCoutProdChocolat(Chocolat chocolat, double quantiteTransfo) {
+	// N'EST PLUS UTILISE
+	public double getCoutProdChocolat(Chocolat chocolat, double quantiteTotaleTransfo) {
 		PateInterne pate = super.creerPateAPartirDeChocolat(chocolat) ;
-		return super.prixApresTPEC(pate, quantiteTransfo/super.getCoeffTPEC()) ;
-	}
-	
+		return super.prixApresTPEC(pate, quantiteTotaleTransfo/super.getCoeffTPEC()) ;
+	} 
+
 	
 	/* Calcule si un prix d'achat des fèves est rentable en fonction des prix de reventes du marché */
 	public double prixRentablePourReventeChocolat(Feve feve) {
 		if (Filiere.LA_FILIERE.getEtape()>1) {
-		double cout_process_product = this.getCoutProdChocolat(super.creerChocolat(super.creerPateAPartirDeFeve(feve)), 1) - this.getCoutMoyenFeveValeur(feve)*super.getCoeffTFEP()*super.getCoeffTPEC();
+		double cout_process_product = this.getCoutMoyenChocolatValeur(super.creerChocolat(super.creerPateAPartirDeFeve(feve))) - this.getCoutMoyenFeveValeur(feve)*super.getCoeffTFEP()*super.getCoeffTPEC();
 		String indicateur = "BourseChoco cours ";
 		if (feve == Feve.FEVE_MOYENNE_EQUITABLE) {
 			indicateur += "CHOCOLAT_MOYENNE_EQUITABLE" ;
@@ -139,10 +141,9 @@ public class Transformateur2_negoce extends Transformateur2_gestion_stocks imple
 		}
 	}
 	
-	
 	//AU DEBUT DE LA SIMUL CEST NEGATIF ->> A EVITER
 	public double prixRentablePourReventePate(Feve feve) {
-		double cout_process_product = this.getCoutProdPate(super.creerPateAPartirDeFeve(feve), 1) - this.getCoutMoyenFeveValeur(feve)*super.getCoeffTFEP();
+		double cout_process_product = this.getCoutMoyenPateValeur(super.creerPateAPartirDeFeve(feve)) - this.getCoutMoyenFeveValeur(feve)*super.getCoeffTFEP();
 		double prix_moy_revente_pate = super.getPrixMoyReventePate(super.creerPateAPartirDeFeve(feve));
 		return prix_moy_revente_pate*(1-MARGE_VISEE_PATE.get(super.creerPateAPartirDeFeve(feve)).getValeur()) - cout_process_product;
 	}
@@ -158,18 +159,17 @@ public class Transformateur2_negoce extends Transformateur2_gestion_stocks imple
 		public double getOffre(Chocolat chocolat, double cours) {
 			double marge = this.margeChoc();
 			double quantite = this.getStockChocolatValeur(chocolat) ;
-			double cout_prod = this.getCoutProdChocolat(chocolat, 1);
+			double cout_prod = this.getCoutMoyenChocolatValeur(chocolat);
 			double prix_semi_ideal = cout_prod*(1+marge*0.5);
-			double prix_ideal = this.getCoutProdChocolat(chocolat, 1)*(1+marge);
-			if ((cours >= prix_semi_ideal) &&
-					(cours < prix_ideal)) {
-				return quantite/2 ;
+			double prix_ideal = cout_prod*(1+marge);
+			if (cours >= prix_ideal) {
+				return quantite ;
 			}
-			else if (cours >= prix_ideal) {
-				return quantite;
+			else if (cours >= prix_semi_ideal) {
+				return quantite/2;
 			}
 			else {
-				marge = Math.max(0.1, marge-0.1);
+				marge = Math.max(0.1, marge-0.1); // je comprends pas à quoi sert cette ligne
 				return 0;
 			}
 		}
@@ -198,7 +198,7 @@ public class Transformateur2_negoce extends Transformateur2_gestion_stocks imple
 			double rapport = super.coutStocksChoc()/super.getSolde();
 			double visee = 0.01/rapport;								//Stock coute 2% de notre solde par tour -> marge esperee de 50%, 1% -> 100%, 5% -> 20%, 10% -> 10%
 			if (rapport > 0.11) {
-				visee = -2;
+				visee = -2; //pas compris
 			}
 			else if (rapport < 0.005) { 								//visee capee a 200%
 				visee = 2;

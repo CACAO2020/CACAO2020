@@ -21,7 +21,7 @@ import abstraction.fourni.Filiere;
 public class Test {
 
 	public static void main(String[] args) {
-		Transformateur2_next t = new Transformateur2_next();
+		Transformateur2 t = new Transformateur2();
 
 		Filiere f = new Filiere();
 		f.ajouterActeur(new ExempleAcheteurChocolatBourse());
