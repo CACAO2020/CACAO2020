@@ -171,6 +171,8 @@ class GestionCriee //implements IVendeurCacaoCriee
 				this.lastPrixVenteFeveMoyenne = 0.001;
 			}
 		}
+
+		this.producteur1.ajouterJournaux("[GestionCriee] - Non vente de : " + lot.getQuantiteEnTonnes() + " de type : " + lot.getFeve());
 	}
 
 	//Clément
