@@ -36,7 +36,6 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 	/** @author Luca Pinguet & Mélissa Tamine */
 	
 	public List<ChocolatDeMarque> getCatalogue() {
-		System.out.print("getcata");
 		/**List<ChocolatDeMarque> produits = new ArrayList<ChocolatDeMarque>();
 		for (ChocolatDeMarque chocos : this.MapStock.keySet()) {
 			produits.add(chocos);
