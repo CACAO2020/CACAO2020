@@ -13,12 +13,6 @@ import abstraction.fourni.Filiere;
 import abstraction.fourni.Variable;
 
 public class Transformateur2_contratCadre extends Transformateur2_stocks_et_transfos implements IVendeurContratCadre {
-
-	
-	/* ***!*** IL PEUT ETRE INTERESSANT LORS DE L'INIT DE NOTRE ACTEUR DE METTRE DES FAUX CONTRATS CADRES
-	 *  POUR QU'ON PUISSANCE LANCER NOS FONCTIONS POUR POUVOIR PROPOSER DES PRIX D'ACHAT
-	 *  PARCE QUE SINON CA VA BUGUER POUR L'ESTIMATION
-	 */
 	
 	//Variables
 	protected List<ExemplaireContratCadre> mesContratEnTantQueVendeur; //ne peut pas être ajouté dans les fonctions d'affichage
@@ -132,8 +126,7 @@ public class Transformateur2_contratCadre extends Transformateur2_stocks_et_tran
 		double resu = 0;
 		for (ExemplaireContratCadre exemplaireContratCadre : mesContratEnTantQueVendeur) {
 			if ((Pate)exemplaireContratCadre.getProduit() == pate.conversionPateInterne()) {
-				System.out.println("montant restant a regler : " + exemplaireContratCadre.getMontantRestantARegler());
-			resu += exemplaireContratCadre.getMontantRestantARegler();
+				resu += exemplaireContratCadre.getMontantRestantARegler();
 			}
 		}
 		if (resu == 0) {
@@ -193,30 +186,25 @@ public class Transformateur2_contratCadre extends Transformateur2_stocks_et_tran
 		}
 	}
 	
-	// renvoie un booléen qui vaut true si l'échéancier a été modifié, false sinon
 	// modifie l'échéancier, avec la capacité actuelle (ou prévue, par la suite) permettant d'assurer la 
 	// quantité voulue par l'acheteur pour chaque étape
 	// si parfait == true, retourne l'échéancier idéal pour notre production
 	// on prend une marge et on fixe le seuil plus bas, à 80%, dans le cas d'une rupture d'approvisionnement
 	// on prend une marge sur la première quantité, histoire d'assurer le coup
 	
-	public boolean echeancierLimite (Echeancier e, PateInterne pate, boolean parfait) {
+	public void echeancierLimite (Echeancier e, PateInterne pate, boolean parfait) {
 		
-		boolean b = false ;
 		double quantiteLimite = this.getFacteurQuantiteLimite()*super.getCapaciteMaxTFEP() ;
 		quantiteLimite -= this.getQuantitePateCCTotaleValeur() ;
 		
 		for (int i = e.getStepDebut() ; i < e.getNbEcheances() ; i++) {
 			if (parfait || e.getQuantite(i)>quantiteLimite) {
 				e.set(i, quantiteLimite);
-				b = true ;
 			}
 		}
 		if (super.getStockPateValeur(pate) - e.getQuantite(e.getStepDebut()) < this.getStockPateMin()) {
 			e.set(e.getStepDebut(), super.getStockPateValeur(pate) - this.getStockPateMin()) ;
-			b = true ;
 		}
-		return b ;
 	}
 	
 	// renvoie un échéancier dont les quantités sont la moyenne des quantités des deux échéanciers en argument
@@ -309,8 +297,8 @@ public class Transformateur2_contratCadre extends Transformateur2_stocks_et_tran
 			prixVoulu = (liste.get(n-2) + liste.get(n-1))/2 ;
 			double ecartRelatif = Math.abs(liste.get(n-2) - liste.get(n-1))/liste.get(n-1) ;
 			
-			if (prixVoulu < 1.1*super.getCoutMoyenPateValeur(pate)) { //marge minimum à 10%
-				return 0 ;
+			if (prixVoulu < 1.1*super.getCoutMoyenPateValeur(pate)) { //marge minimum à 10%, on reste sur nos positions
+				return liste.get(n-2) ;
 			} else { 
 				if (ecartRelatif < 0.1) { // si l'écart relatif est inférieur à 10% (arbitraire), on ne chipote plus
 					return contrat.getPrixALaTonne() ;
@@ -332,11 +320,12 @@ public class Transformateur2_contratCadre extends Transformateur2_stocks_et_tran
 	
 	// renvoie true si on vend le produit : si on a pas un stock minimal, on ne vend pas (ou alors on permet
 	// d'avoir un contrat avec une première année à vide si on arrive à le négocier ?)
+	// dans nos contraintes d'acteur, on ne vend que des pates basse et moyenne
 	
 	public boolean vend(Object produit) {
 		PateInterne pate = this.conversionPate(produit) ;
-		if (pate != null) {
-			return super.getStockPateValeur(pate) > this.getStockPateMin() ; // quantité de stock minimale
+		if (pate != null && ((pate == PateInterne.PATE_BASSE) || (pate == PateInterne.PATE_MOYENNE))) {
+			return super.getStockPateValeur(pate) - this.getQuantitePateCCValeur(pate) > this.getStockPateMin() ; // quantité de stock minimale
 		}
 		else { return false ; }
 	}
