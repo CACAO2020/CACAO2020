@@ -178,7 +178,7 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 				 }
 					if((this.getStockFeve().get(feve).getValeur()+this.getStockFeveTourPrecedent().get(feve).getValeur()+this.getStockFeveTourPrecedent2().get(feve).getValeur()/3)*this.getCoutStock().getValeur()>(this.getVenteTourPrecedent().get(feve).getValeur()+this.getVenteTourPrecedent().get(feve).getValeur()+this.getVenteVariation().get(feve).getValeur()/3)&&(this.getStockFeve().get(feve).getValeur()-this.getVenteVariation().get(feve).getValeur()/this.getCoutStock().getValeur()>0)) {
 						this.getStockFeve().get(feve).retirer(this, 0.1*(this.getStockFeve().get(feve).getValeur()-this.getVenteVariation().get(feve).getValeur()/this.getCoutStock().getValeur()));
-						this.journal_de_production.ajouter("on a brûlé " +0.1*(this.getStockFeve().get(feve).getValeur()-this.getVenteVariation().get(feve).getValeur()/this.getCoutStock().getValeur())+"kg de"+this.getStockFeve().get(feve).getNom() +"car leur stockage nous revenait trop cher");
+						this.journal_de_production.ajouter("On a brûlé " +0.1*(this.getStockFeve().get(feve).getValeur()-this.getVenteVariation().get(feve).getValeur()/this.getCoutStock().getValeur())+" tonnes de"+this.getStockFeve().get(feve).getNom() +" car leur stockage nous revenait trop cher");
 					}
 				}
 			double stock_cost_variation = 0;
