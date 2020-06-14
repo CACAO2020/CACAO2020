@@ -79,35 +79,18 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 	 * 
 	 */
 	public LotCacaoCriee getLotEnVente() { 
-		List<Variable> Stock = this.getVariablesFeve(); 
-	    double masseFora = 0;
-	    double masseTrini = 0;
-	    double masseTriniE = 0;
-	    double masseCrio = 0;
-	    double masseCrioE = 0;
+		 
+	    double masseFora = this.getStockFeve().get(Feve.FEVE_BASSE).getValeur();
+	    double masseTrini = this.getStockFeve().get(Feve.FEVE_MOYENNE).getValeur();
+	    double masseTriniE = this.getStockFeve().get(Feve.FEVE_MOYENNE_EQUITABLE).getValeur();
+	    double masseCrio = this.getStockFeve().get(Feve.FEVE_HAUTE).getValeur();
+	    double masseCrioE = this.getStockFeve().get(Feve.FEVE_HAUTE_EQUITABLE).getValeur();
 	    double prixfora = 0;
 	    double prixtrini = 0;
 	    double prixtrinie = 0;
 	    double prixcrio = 0;
 	    double prixcrioe = 0;
-	    
-	    for (int i = 0; i < Stock.size();i++) { //changer ça vu que c'est plus une liste de couples mais un dictionnaire (en fait y'a peut-être pas besoin de le changer)
-	    	if (Stock.get(i).getNom() == "EQ2Feve.FEVE_BASSE") {
-	    		masseFora = masseFora + Stock.get(i).getValeur();
-	    	}
-	    	if (Stock.get(i).getNom() == "EQ2Feve.FEVE_MOYENNE") {
-	    		masseTrini = masseTrini + Stock.get(i).getValeur();
-	    	}
-	    	if (Stock.get(i).getNom() == "EQ2Feve.FEVE_MOYENNE_EQUITABLE") {
-	    		masseTriniE = masseTriniE + Stock.get(i).getValeur();
-	    	}
-	    	if (Stock.get(i).getNom() == "EQ2Feve.FEVE_HAUTE") {
-	    		masseCrio = masseCrio + Stock.get(i).getValeur();
-	    	}
-	    	if (Stock.get(i).getNom() == "EQ2Feve.FEVE_HAUTE_EQUITABLE") {
-	    		masseCrioE = masseCrioE + Stock.get(i).getValeur();
-	    	}
-	    }
+	   
 	    //this.journal_des_ventes.ajouter("masseFora="+masseFora+"  masseTrini="+masseTrini+"  masseTriniE"+masseTriniE+"  masseCrio="+masseCrio+"  masseCrioE="+masseCrioE); //pour débugger
 
 	    prixfora = masseFora*this.getPrixTF().getValeur();
@@ -225,7 +208,7 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 	    }
 	    
 	    
-	    this.journal_des_ventes.ajouter("Aucun lot n'a été proposé à la vente");
+	    //this.journal_des_ventes.ajouter("Aucun lot n'a été proposé à la vente " + this.getforavendu()+" "+this.gettrinivendu()+" "+this.gettrinievendu()+" "+this.getcriovendu()+" "+this.getcrioevendu());
 	    this.setcompteurinvendus(this.getcompteurinvendus()+10);
 	    return null;
 	    
@@ -315,33 +298,50 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 		else{this.getVenteVariation().put(feve, new Variable(this.getStockFeve().get(feve).getNom(),this,proposition.getPrixPourLeLot()));}
 		if (feve==Feve.FEVE_BASSE) {
 			compteurfora ++;
-			/*if (prixtonne > this.getPrixTF().getValeur()) {
-				this.prixTF.setValeur(this, this.getPrixTF().getValeur() + 0.7*(prixtonne - this.getPrixTF().getValeur()));
-			}*/
+			if (this.getStockFeve().get(Feve.FEVE_BASSE).getValeur() < 0.5) {
+				this.foravendu = true;
+				if (this.getforavendu() == true && this.gettrinivendu() == true && this.gettrinievendu() == true && this.getcriovendu() == true && this.getcrioevendu() == true) {
+			    	this.resetbooleans();
+			    }
+			}
 		}
 		else if (feve==Feve.FEVE_MOYENNE) {
 			compteurtrini ++;
-			/*if (prixtonne > this.getPrixTT().getValeur()) {
-				this.prixTT.setValeur(this, this.getPrixTT().getValeur() + 0.7*(prixtonne - this.getPrixTT().getValeur()));
-			}*/
+			if (this.getStockFeve().get(Feve.FEVE_MOYENNE).getValeur() < 0.5) {
+				this.trinivendu = true;
+				if (this.getforavendu() == true && this.gettrinivendu() == true && this.gettrinievendu() == true && this.getcriovendu() == true && this.getcrioevendu() == true) {
+			    	this.resetbooleans();
+			    }
+			}
+			
 		}
 		else if (feve==Feve.FEVE_MOYENNE_EQUITABLE) {
 			compteurtrinie ++;
-			/*if (prixtonne > this.getPrixTTE().getValeur()) {
-				this.prixTTE.setValeur(this, this.getPrixTTE().getValeur() + 0.7*(prixtonne - this.getPrixTTE().getValeur()));
-			}*/
+			if (this.getStockFeve().get(Feve.FEVE_MOYENNE_EQUITABLE).getValeur() < 0.5) {
+				this.trinievendu = true;
+				if (this.getforavendu() == true && this.gettrinivendu() == true && this.gettrinievendu() == true && this.getcriovendu() == true && this.getcrioevendu() == true) {
+			    	this.resetbooleans();
+			    }
+			}
 		}
 		else if (feve==Feve.FEVE_HAUTE) {
 			compteurcrio ++;
-			/*if (prixtonne > this.getPrixTC().getValeur()) {
-				this.prixTC.setValeur(this, this.getPrixTC().getValeur() + 0.7*(prixtonne - this.getPrixTC().getValeur()));
-			}*/
+			if (this.getStockFeve().get(Feve.FEVE_HAUTE).getValeur() < 0.5) {
+				this.criovendu = true;
+				if (this.getforavendu() == true && this.gettrinivendu() == true && this.gettrinievendu() == true && this.getcriovendu() == true && this.getcrioevendu() == true) {
+			    	this.resetbooleans();
+			    }
+			}
+			
 		}
 		else if (feve==Feve.FEVE_HAUTE_EQUITABLE) {
 			compteurcrioe ++;
-			/*if (prixtonne > this.getPrixTCE().getValeur()) {
-				this.prixTCE.setValeur(this, this.getPrixTCE().getValeur() + 0.7*(prixtonne - this.getPrixTCE().getValeur()));
-			}*/
+			if (this.getStockFeve().get(Feve.FEVE_HAUTE_EQUITABLE).getValeur() < 0.5) {
+				this.crioevendu = true;
+				if (this.getforavendu() == true && this.gettrinivendu() == true && this.gettrinievendu() == true && this.getcriovendu() == true && this.getcrioevendu() == true) {
+			    	this.resetbooleans();
+			    }
+			}
 		}
 	}
 	public void VariateurPrix() {
