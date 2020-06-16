@@ -36,9 +36,9 @@ public class SuiviDesCoursDeVente {
 		this.prixStat.put(Chocolat.CHOCOLAT_HAUTE_EQUITABLE, new ArrayList<Double>(3));
 				
 		for (Chocolat choco : Chocolat.values()) {
-			this.prixStat.get(choco).set(0, 0.0);
-			this.prixStat.get(choco).set(1, 0.0);
-			this.prixStat.get(choco).set(2, 0.0);
+			this.prixStat.get(choco).add(0.0);
+			this.prixStat.get(choco).add(0.0);
+			this.prixStat.get(choco).add(0.0);
 		}
 	}
 	public HashMap<Chocolat, Integer> next() {
