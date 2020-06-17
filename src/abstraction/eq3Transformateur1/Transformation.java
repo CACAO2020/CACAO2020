@@ -35,7 +35,7 @@ public abstract class Transformation extends Stock {
 			this.setCoutPate(this.equivalentChocoFeve(feve),this.calculCoutPate(this.equivalentChocoFeve(feve), quantite, quantite*(6000+this.getCoutFeves(feve))));
 			this.setStockFeves(feve, -quantite);
 			this.setStockPate(this.equivalentChocoFeve(feve), quantite);
-			this.journalTransformation.ajouter("transformation de "+quantite +"T de FEVES"+feve+" en pate");
+			this.journalTransformation.ajouter("transformation de "+quantite +"T de  FEVES"+feve+" en pate");
 
 		}
 	}
