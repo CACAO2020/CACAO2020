@@ -46,11 +46,11 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 	
 	public eq2Vendeur() {
 		super();
-		this.prixTF = new Variable("prixTF",this,500);
-		this.prixTT = new Variable("prixTT",this,1100);
-		this.prixTTE = new Variable("prixTTE",this,1400);
-		this.prixTC = new Variable("prixTC",this,1500);
-		this.prixTCE = new Variable("prixTCE",this,1800);
+		this.prixTF = new Variable("prixTF",this,50);
+		this.prixTT = new Variable("prixTT",this,52);
+		this.prixTTE = new Variable("prixTTE",this,60);
+		this.prixTC = new Variable("prixTC",this,58);
+		this.prixTCE = new Variable("prixTCE",this,75);
 		this.prixvente = 0;
 		this.propalsnonvendues = new Variable("propalsnonvendues",this,999999999);//première valeur super haute pour permettre ventes
 		this.journal_des_ventes = new Journal("Journal des ventes", this);
