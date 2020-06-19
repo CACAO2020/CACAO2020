@@ -2,18 +2,23 @@ package abstraction.eq7Distributeur2;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import abstraction.eq8Romu.contratsCadres.ExemplaireContratCadre;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
+import abstraction.eq8Romu.produits.Chocolat;
 
 public class AbsAcheteurContratCadre {
 
 	// Stocke la liste des exemplaires des contrats en cours
 	protected List<ExemplaireContratCadre> nosContrats;
+	
+	protected Map<Chocolat, Double> quantitesARecevoirParContrats;
 	
 	// Référence à l'acteur principal
 	protected Distributeur2 ac;
@@ -33,6 +38,10 @@ public class AbsAcheteurContratCadre {
 	public Color metaColor = Color.CYAN;
 	
 	public AbsAcheteurContratCadre(Distributeur2 ac) {
+		this.quantitesARecevoirParContrats = new HashMap<Chocolat, Double>();
+		for (Chocolat choco : Chocolat.values()) {
+			this.quantitesARecevoirParContrats.put(choco, 0.);
+		}
 		this.ac = ac;
 		this.nosContrats = new ArrayList<ExemplaireContratCadre>();
 		initJournaux();
