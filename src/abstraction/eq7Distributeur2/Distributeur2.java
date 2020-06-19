@@ -98,6 +98,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	public void next() {
 		this.debutEtape = false; 
 		gestionPanik();
+		
 		stock.next();
 		vendeur.next();
 		acheteurContratCadre.next();
