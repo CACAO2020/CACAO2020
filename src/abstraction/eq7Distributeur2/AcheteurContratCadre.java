@@ -33,7 +33,7 @@ public class AcheteurContratCadre extends AbsAcheteurContratCadre implements IAc
 		// Proposition de nouveaux contrats pour les chocolats de marque
 		proposerContratsChocoDeMarque();
 		// Proposition de nouveaux contrats pour les types de chocolat
-		proposerContratsChoco();	
+		proposerContratsChoco();	 
 	}
 
 	// Supprime de la liste nosContrats tous les contrats devenus obsolètes
