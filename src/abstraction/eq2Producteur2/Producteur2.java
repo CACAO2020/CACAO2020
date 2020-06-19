@@ -37,7 +37,7 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 		this.setPropal(99999999);
 		this.decideAchatArbres();
 		this.Maintenance();
-		//this.fairepâte();
+		this.fairepâte();
 		this.BrûlerStock();
 	}
 	/**
@@ -220,18 +220,22 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 		if (this.getStockPate().get(Pate.PATE_BASSE).getValeur() < proportion*(this.getStockFeve().get(Feve.FEVE_BASSE).getValeur()+this.getStockPate().get(Pate.PATE_BASSE).getValeur())) {
 			if (((this.getStockFeve().get(Feve.FEVE_BASSE).getValeur()+this.getStockPate().get(Pate.PATE_BASSE).getValeur())*proportion-this.getStockPate().get(Pate.PATE_BASSE).getValeur())*coût_par_tonne < Filiere.LA_FILIERE.getBanque().getSolde(this, this.getCrypto())) {
 				if (this.getmassedispofora() > (this.getStockFeve().get(Feve.FEVE_BASSE).getValeur()+this.getStockPate().get(Pate.PATE_BASSE).getValeur())*proportion-this.getStockPate().get(Pate.PATE_BASSE).getValeur()) {
-					this.removeQtFeve(Feve.FEVE_BASSE, (this.getStockFeve().get(Feve.FEVE_BASSE).getValeur()+this.getStockPate().get(Pate.PATE_BASSE).getValeur())*proportion-this.getStockPate().get(Pate.PATE_BASSE).getValeur());
-					this.addQtPate(Pate.PATE_BASSE, (this.getStockFeve().get(Feve.FEVE_BASSE).getValeur()+this.getStockPate().get(Pate.PATE_BASSE).getValeur())*proportion-this.getStockPate().get(Pate.PATE_BASSE).getValeur());
-					Filiere.LA_FILIERE.getBanque().virer(this, this.getCrypto(), Filiere.LA_FILIERE.getBanque(), coût_par_tonne*(this.getStockFeve().get(Feve.FEVE_BASSE).getValeur()+this.getStockPate().get(Pate.PATE_BASSE).getValeur())*proportion-this.getStockPate().get(Pate.PATE_BASSE).getValeur());
+					double quantité = (this.getStockFeve().get(Feve.FEVE_BASSE).getValeur()+this.getStockPate().get(Pate.PATE_BASSE).getValeur())*proportion-this.getStockPate().get(Pate.PATE_BASSE).getValeur();
+					this.removeQtFeve(Feve.FEVE_BASSE, quantité);
+					this.addQtPate(Pate.PATE_BASSE, quantité);
+					this.journal_de_production.ajouter("on a transformé "+quantité+ "tonnes de" +Feve.FEVE_BASSE+ "pour un coût total de" +quantité*coût_par_tonne);
+					Filiere.LA_FILIERE.getBanque().virer(this, this.getCrypto(), Filiere.LA_FILIERE.getBanque(), coût_par_tonne*quantité);
 				}
 			}
 		}
 		if (this.getStockPate().get(Pate.PATE_MOYENNE).getValeur() < proportion*(this.getStockFeve().get(Feve.FEVE_MOYENNE).getValeur()+this.getStockPate().get(Pate.PATE_MOYENNE).getValeur())) {
 			if (((this.getStockFeve().get(Feve.FEVE_MOYENNE).getValeur()+this.getStockPate().get(Pate.PATE_MOYENNE).getValeur())*proportion-this.getStockPate().get(Pate.PATE_BASSE).getValeur())*coût_par_tonne < Filiere.LA_FILIERE.getBanque().getSolde(this, this.getCrypto())) {
 				if (this.getmassedispofora() > (this.getStockFeve().get(Feve.FEVE_MOYENNE).getValeur()+this.getStockPate().get(Pate.PATE_MOYENNE).getValeur())*proportion-this.getStockPate().get(Pate.PATE_MOYENNE).getValeur()) {
-					this.removeQtFeve(Feve.FEVE_MOYENNE, (this.getStockFeve().get(Feve.FEVE_MOYENNE).getValeur()+this.getStockPate().get(Pate.PATE_MOYENNE).getValeur())*proportion-this.getStockPate().get(Pate.PATE_MOYENNE).getValeur());
-					this.addQtPate(Pate.PATE_MOYENNE, (this.getStockFeve().get(Feve.FEVE_MOYENNE).getValeur()+this.getStockPate().get(Pate.PATE_MOYENNE).getValeur())*proportion-this.getStockPate().get(Pate.PATE_MOYENNE).getValeur());
-					Filiere.LA_FILIERE.getBanque().virer(this, this.getCrypto(), Filiere.LA_FILIERE.getBanque(), coût_par_tonne*(this.getStockFeve().get(Feve.FEVE_MOYENNE).getValeur()+this.getStockPate().get(Pate.PATE_MOYENNE).getValeur())*proportion-this.getStockPate().get(Pate.PATE_MOYENNE).getValeur());
+					double quantité =(this.getStockFeve().get(Feve.FEVE_MOYENNE).getValeur()+this.getStockPate().get(Pate.PATE_MOYENNE).getValeur())*proportion-this.getStockPate().get(Pate.PATE_MOYENNE).getValeur();
+					this.removeQtFeve(Feve.FEVE_MOYENNE,quantité);
+					this.addQtPate(Pate.PATE_MOYENNE, quantité);
+					this.journal_de_production.ajouter("on a transformé "+quantité+ "tonnes de" +Feve.FEVE_MOYENNE+ "pour un coût total de" +quantité*coût_par_tonne);
+					Filiere.LA_FILIERE.getBanque().virer(this, this.getCrypto(), Filiere.LA_FILIERE.getBanque(), coût_par_tonne*quantité);
 				}
 			}
 		}}
