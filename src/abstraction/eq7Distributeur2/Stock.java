@@ -51,14 +51,25 @@ public class Stock extends AbsStock implements IStock {
 		if (chocoEnStockParEtape.containsKey(etape)) {
 			chocoEnStockParEtape.get(etape).put(chocoDeMarque,chocoEnStockParEtape.get(etape).get(chocoDeMarque) + quantite);
 		}
+
+			
 		
 	}
 	
 	public void next() {
+		initialiserStocksEtape();
 		// Paiement masse salariale et coûts de stockage
 		payerFrais();
 		// On jette les chocos périmés
 		jeterChocoPerimes();
+	}
+	
+	public void initialiserStocksEtape() {    // Stocks initiaux nul du coup ?
+		int etape = Filiere.LA_FILIERE.getEtape();
+		ac.getStock().chocoEnStockParEtape.put(etape, new HashMap<ChocolatDeMarque, Double>());
+		for (ChocolatDeMarque chocoDeMarque : ac.tousLesChocolatsDeMarquePossibles()) {
+			ac.getStock().chocoEnStockParEtape.get(etape).put(chocoDeMarque, 0.);
+		}
 	}
 	
 	public void payerFrais() {

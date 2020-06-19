@@ -84,7 +84,6 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 			}
 			
 		}
-
 	}
 	
 	public void majQuantitesACommander() { //!!!!!!!!!!!!!!!!!!On n'achète que pour compenser les ventes
@@ -155,7 +154,6 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 		//donne quantité en vente de chocolat selon la marque
 		if (!ac.debutEtape) {
 			ac.debutEtape = true;
-			initialiserStocksEtape();
 			adapterQuantitesEnVente();  // Appelée une seule fois à l'initialisation ?
 			dessinerCatalogue();
 		}
@@ -163,14 +161,6 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 			return quantiteAVendreParDefaut;
 		} else {
 			return quantitesEnVente.get(choco).getValeur();
-		}
-	}
-
-	public void initialiserStocksEtape() {    // Stocks initiaux nul du coup ?
-		int etape = Filiere.LA_FILIERE.getEtape();
-		ac.getStock().chocoEnStockParEtape.put(etape, new HashMap<ChocolatDeMarque, Double>());
-		for (ChocolatDeMarque chocoDeMarque : ac.tousLesChocolatsDeMarquePossibles()) {
-			ac.getStock().chocoEnStockParEtape.get(etape).put(chocoDeMarque, 0.);
 		}
 	}
 	
