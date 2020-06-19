@@ -111,5 +111,9 @@ public class eq2Investisseur extends VenteContratCadre {
 		res.add(this.journal_achats);
 		return res;
 	}
+	
+	public void decideAchatUsine() {
+		
+	}
 }
 
