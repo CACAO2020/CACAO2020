@@ -212,10 +212,26 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 				this.resetDecisionVariable();
 		}
 	}
-	public void fairepâte() {
-		double proportion = 0.25;
+	public void fairepâte() { 
+		double proportion = 0.2;
+		double coût_par_tonne = 6000;
 		if (this.getStockPate().get(Pate.PATE_BASSE).getValeur() < proportion*this.getStockFeve().get(Feve.FEVE_BASSE).getValeur()) {
-			
+			if ((this.getStockFeve().get(Feve.FEVE_BASSE).getValeur()*proportion-this.getStockPate().get(Pate.PATE_BASSE).getValeur())*coût_par_tonne < Filiere.LA_FILIERE.getBanque().getSolde(this, this.getCrypto())) {
+				if (this.getmassedispofora() > this.getStockFeve().get(Feve.FEVE_BASSE).getValeur()*proportion-this.getStockPate().get(Pate.PATE_BASSE).getValeur()) {
+					this.removeQtFeve(Feve.FEVE_BASSE, this.getStockFeve().get(Feve.FEVE_BASSE).getValeur()*proportion-this.getStockPate().get(Pate.PATE_BASSE).getValeur());
+					this.addQtPate(Pate.PATE_BASSE, this.getStockFeve().get(Feve.FEVE_BASSE).getValeur()*proportion-this.getStockPate().get(Pate.PATE_BASSE).getValeur());
+					Filiere.LA_FILIERE.getBanque().virer(this, this.getCrypto(), Filiere.LA_FILIERE.getBanque(), coût_par_tonne*(this.getStockFeve().get(Feve.FEVE_BASSE).getValeur()*proportion-this.getStockPate().get(Pate.PATE_BASSE).getValeur()));
+				}
+			}
+		}
+		if (this.getStockPate().get(Pate.PATE_MOYENNE).getValeur() < proportion*this.getStockFeve().get(Feve.FEVE_MOYENNE).getValeur()) {
+			if ((this.getStockFeve().get(Feve.FEVE_MOYENNE).getValeur()*proportion-this.getStockPate().get(Pate.PATE_MOYENNE).getValeur())*coût_par_tonne < Filiere.LA_FILIERE.getBanque().getSolde(this, this.getCrypto())) {
+				if (this.getmassedispofora() > this.getStockFeve().get(Feve.FEVE_MOYENNE).getValeur()*proportion-this.getStockPate().get(Pate.PATE_MOYENNE).getValeur()) {
+					this.removeQtFeve(Feve.FEVE_MOYENNE, this.getStockFeve().get(Feve.FEVE_MOYENNE).getValeur()*proportion-this.getStockPate().get(Pate.PATE_MOYENNE).getValeur());
+					this.addQtPate(Pate.PATE_MOYENNE, this.getStockFeve().get(Feve.FEVE_MOYENNE).getValeur()*proportion-this.getStockPate().get(Pate.PATE_MOYENNE).getValeur());
+					Filiere.LA_FILIERE.getBanque().virer(this, this.getCrypto(), Filiere.LA_FILIERE.getBanque(), coût_par_tonne*(this.getStockFeve().get(Feve.FEVE_MOYENNE).getValeur()*proportion-this.getStockPate().get(Pate.PATE_MOYENNE).getValeur()));
+				}
+			}
 		}
 	}
 
