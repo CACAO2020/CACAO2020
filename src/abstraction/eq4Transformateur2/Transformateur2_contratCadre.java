@@ -225,7 +225,7 @@ public class Transformateur2_contratCadre extends Transformateur2_stocks_et_tran
 		Echeancier echeancier = contrat.getEcheancier() ;
 		List<Echeancier> liste = contrat.getEcheanciers() ;
 		
-		if (!this.vend(pate)) { return null ; } // on ne vend pas cette pâte 
+		if (!this.vend(contrat.getProduit())) { return null ; } // on ne vend pas cette pâte 
 		
 		if (liste.size()<2) { //aucune proposition n'a été faite, on envoie notre échéancier idéal
 			 this.echeancierLimite(echeancier, pate, true) ;
@@ -300,7 +300,7 @@ public class Transformateur2_contratCadre extends Transformateur2_stocks_et_tran
 			if (prixVoulu < 1.1*super.getCoutMoyenPateValeur(pate)) { //marge minimum à 10%, on reste sur nos positions
 				return liste.get(n-2) ;
 			} else { 
-				if (ecartRelatif < 0.1) { // si l'écart relatif est inférieur à 10% (arbitraire), on ne chipote plus
+				if (ecartRelatif < 0.04) { // si l'écart relatif est inférieur à 4% (arbitraire), on ne chipote plus
 					return contrat.getPrixALaTonne() ;
 			}
 			else { return prixVoulu ; }} // on propose notre prix
@@ -327,7 +327,8 @@ public class Transformateur2_contratCadre extends Transformateur2_stocks_et_tran
 		if (pate != null && ((pate == PateInterne.PATE_BASSE) || (pate == PateInterne.PATE_MOYENNE))) {
 			return super.getStockPateValeur(pate) - this.getQuantitePateCCValeur(pate) > this.getStockPateMin() ; // quantité de stock minimale
 		}
-		else { return false ; }
+		else { 	
+			return false ; }
 	}
 	
 	// met à jour le stock et renvoie la quantité livrée effectivement

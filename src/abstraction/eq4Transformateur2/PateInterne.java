@@ -1,5 +1,6 @@
 package abstraction.eq4Transformateur2;
 
+import abstraction.eq8Romu.contratsCadres.FiliereTestContratCadre;
 import abstraction.eq8Romu.produits.Gamme;
 import abstraction.eq8Romu.produits.Pate;
 
@@ -35,6 +36,17 @@ public enum PateInterne {
 	public static void main(String[] args) {
 		for (PateInterne p : PateInterne.values()) {
 			System.out.println(p);
+		}
+	}
+	
+	public String toString () {
+		switch (this) { 
+		case PATE_BASSE : return "pate basse" ;
+		case PATE_MOYENNE : return "pate moyenne" ;
+		case PATE_HAUTE : return "pate haute" ;
+		case PATE_MOYENNE_EQUITABLE : return "pate moyenne équitable" ;
+		case PATE_HAUTE_EQUITABLE : return "pate haute équitable" ;
+	    default : return "pate nulle";
 		}
 	}
 	
