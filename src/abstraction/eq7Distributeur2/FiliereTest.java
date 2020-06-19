@@ -38,22 +38,22 @@ public class FiliereTest extends Filiere {
 		this.ajouterActeur(cf);
 		
 		// PRODUCTEURS
-		this.ajouterActeur(new Producteur(Feve.FEVE_MOYENNE));
-		this.ajouterActeur(new Producteur(Feve.FEVE_MOYENNE_EQUITABLE));
-		this.ajouterActeur(new Producteur(Feve.FEVE_HAUTE));
-		this.ajouterActeur(new Producteur(Feve.FEVE_HAUTE_EQUITABLE));
+	//	this.ajouterActeur(new Producteur(Feve.FEVE_MOYENNE));
+	//	this.ajouterActeur(new Producteur(Feve.FEVE_MOYENNE_EQUITABLE));
+	//	this.ajouterActeur(new Producteur(Feve.FEVE_HAUTE));
+	//	this.ajouterActeur(new Producteur(Feve.FEVE_HAUTE_EQUITABLE));
 		
 		// TRANSFORMATEURS BOURSE
 		this.ajouterActeur(new Transformateur(Chocolat.CHOCOLAT_MOYENNE));
-		this.ajouterActeur(new Transformateur(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE));
-		this.ajouterActeur(new Transformateur(Chocolat.CHOCOLAT_HAUTE));
-		this.ajouterActeur(new Transformateur(Chocolat.CHOCOLAT_HAUTE_EQUITABLE));
+	//	this.ajouterActeur(new Transformateur(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE));
+	//	this.ajouterActeur(new Transformateur(Chocolat.CHOCOLAT_HAUTE));
+	//	this.ajouterActeur(new Transformateur(Chocolat.CHOCOLAT_HAUTE_EQUITABLE));
 		
 		// TRANSFORMATEURS CONTRAT-CADRE
-		this.ajouterActeur(new ExempleTransformateurContratCadreVendeurAcheteur(Chocolat.CHOCOLAT_MOYENNE));
-		this.ajouterActeur(new ExempleTransformateurContratCadreVendeurAcheteur(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE));
-		this.ajouterActeur(new ExempleTransformateurContratCadreVendeurAcheteur(Chocolat.CHOCOLAT_HAUTE));
-		this.ajouterActeur(new ExempleTransformateurContratCadreVendeurAcheteur(Chocolat.CHOCOLAT_HAUTE_EQUITABLE));
+	//	this.ajouterActeur(new ExempleTransformateurContratCadreVendeurAcheteur(Chocolat.CHOCOLAT_MOYENNE));
+	//	this.ajouterActeur(new ExempleTransformateurContratCadreVendeurAcheteur(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE));
+	//	this.ajouterActeur(new ExempleTransformateurContratCadreVendeurAcheteur(Chocolat.CHOCOLAT_HAUTE));
+	//	this.ajouterActeur(new ExempleTransformateurContratCadreVendeurAcheteur(Chocolat.CHOCOLAT_HAUTE_EQUITABLE));
 		
 		// DISTRIBUTEUR (NOUS)
 		this.ajouterActeur(new Distributeur2());

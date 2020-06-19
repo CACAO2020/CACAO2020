@@ -29,6 +29,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 	
 	public void initialiser() {
 		this.coutUnitaire = new HashMap<ChocolatDeMarque, Double>();
+		quantiteAVendreParDefaut = ac.stockInitial-ac.getStock().stockLimite;
 		for (ChocolatDeMarque choco : ac.tousLesChocolatsDeMarquePossibles()) {
 			ajouterProduitAuCatalogue(choco);
 			prixChoco.put(choco, new Variable("Prix du " + choco.name(), ac, prixParDefaut.get(choco.getChocolat())));
@@ -38,7 +39,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 	}
 	
 	public void next() {
-		// Le vendeur met à jour ses indicateurs de vente (dont ont besoin les acheteurs)
+		// Le vendeur met à jour ses indicateurs de vente
 		majIndicateursDeVente();
 		// Le vendeur détermine les quantités à vendre et à commander
 		majAchatsEtVentes();
@@ -60,20 +61,19 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 		//cette fonction actualise la liste des chocolats (selon gamme) dont le distributeur fait la publicité
 		// IA : publicités sur les chocolats équitables uniquement
 		for (ChocolatDeMarque choco : produitsCatalogue) {
-			if (choco.getChocolat() == Chocolat.CHOCOLAT_MOYENNE_EQUITABLE ||choco.getChocolat() == Chocolat.CHOCOLAT_HAUTE_EQUITABLE) {
+			if (choco.getChocolat().isEquitable()) {
 				publicites.add(choco);
 			}
 		}
 	}
 	
-	public void majAchatsEtVentes() {//si solde trop faible on écoule les stocks
-		//le solde seuil est calculé à partir du cours actuel
+	public void majAchatsEtVentes() {
 		double soldeActuel = ac.getSolde();
 		double quantiteAVendre;
 		double quantiteACommander;
 		double stockActuel;
 		double stockLimite = ac.getStock().stockLimite;
-		
+		double surplus;
 		for (ChocolatDeMarque choco : produitsCatalogue) {
 			stockActuel = ac.getStock().getStockChocolatDeMarque(choco);
 			if (panik){
@@ -81,12 +81,14 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 				quantitesEnVente.get(choco).setValeur(ac, stockActuel);
 				quantiteACommander = 0.;
 			} else if (stockActuel < stockLimite) {
-				quantitesEnVente.get(choco).setValeur(ac, 0.);
-				quantiteACommander = (stockLimite-stockActuel)*10;
+				surplus = stockLimite*0.5;
+				quantitesEnVente.get(choco).setValeur(ac, surplus/2);
+				quantiteACommander = stockLimite-stockActuel + surplus;
 			} else {
-				quantiteAVendre = stockActuel - stockLimite;
+				surplus = stockLimite*0.5;
+				quantiteAVendre = stockActuel - stockLimite + surplus;
 				quantitesEnVente.get(choco).setValeur(ac, quantiteAVendre);
-				quantiteACommander = Double.max(quantitesEnVente.get(choco).getValeur() - ac.getStock().getStockChocolatDeMarque(choco), 0.);
+				quantiteACommander = Double.max(surplus*2, 0.);
 				quantitesACommander.get(choco).setValeur(ac, quantiteACommander);
 			}
 		}
@@ -113,7 +115,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 			
 			if (panik) {
 				//On a besoin de plus d'argent !
-				prix *= 10;  //Valeur arbitraire
+				prix *= 1;  //Valeur arbitraire
 			}
 			prixChoco.get(choco).setValeur(ac, prix);
 		}
@@ -190,23 +192,23 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 
 	public void adapterQuantitesEnVente() {
 		//met à jour les quantité de chocolat de chaque marque en vente selon le stock qu'on a
-		for (ChocolatDeMarque produit : produitsCatalogue) {
-			double stockLimite = ac.getStock().stockLimite;
-			double temp = Double.max(ac.getStock().getStockChocolatDeMarque(produit)-stockLimite, 0.);
-			temp = Double.min(quantitesEnVente.get(produit).getValeur(), temp);
-			quantitesEnVente.get(produit).setValeur(ac, temp);
-		}	
+		if (!panik) {
+			for (ChocolatDeMarque produit : produitsCatalogue) {
+				double stockLimite = ac.getStock().stockLimite;
+				double temp = Double.max(ac.getStock().getStockChocolatDeMarque(produit)-stockLimite, 0.);
+				temp = Double.min(quantitesEnVente.get(produit).getValeur(), temp);
+				quantitesEnVente.get(produit).setValeur(ac, temp);
+			}
+		}
 	}
  
 	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant) {
 		//vend le chocolat de tel marque à tel prix et telle quantité au client final
-		if (client!=null) { 
-			if (quantite != 0.) {
+		if (client!=null && quantite != 0.) {
 			this.coutUnitaire.put(choco, montant/quantite); 
 			ac.getStock().retirerStockChocolat(choco, quantite);
 			journal.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[VENTE] Vente de " + Journal.doubleSur(quantite,2) + " tonnes de " + choco.name() + " à " + client.getNom() + " pour " + Journal.doubleSur(montant,2) + " (" + Journal.doubleSur(montant/quantite,2) + "/tonne)."));
 			ventesEtapeActuelle.put(choco.getChocolat(), ventesEtapeActuelle.get(choco.getChocolat()) + quantite);
-			}
 		}
 	}
 

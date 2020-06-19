@@ -75,7 +75,6 @@ public class AbsVendeur {
 	public AbsVendeur(Distributeur2 ac) {	
 		this.ac = ac;
 		this.coeffCoursMoyen = 100;
-		quantiteAVendreParDefaut = 100.;
 		produitsCatalogue = new ArrayList<ChocolatDeMarque>();
 		publicites = new ArrayList<ChocolatDeMarque>();
 		quantitesEnVente = new HashMap<ChocolatDeMarque, Variable>();

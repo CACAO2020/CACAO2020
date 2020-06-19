@@ -41,9 +41,9 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	private AcheteurContratCadre acheteurContratCadre;
 	private Vendeur vendeur;
 	private Stock stock;
-	protected double coutMasseSalariale = 80000;
 	
-	protected double stockInitial = 1000;
+	protected double coutMasseSalariale = 80000;
+	protected double stockInitial = 100;
 	
 	private Journal journal;
 	private Journal journalTransactions;
@@ -171,7 +171,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 
 	public boolean estEnPanik() {
 		double soldeActuel = this.getSolde();
-		double soldeMini = vendeur.calculSoldeMini();
+		double soldeMini = 0;
 		if (soldeActuel <= soldeMini) {
 			return true;
 		} else {
