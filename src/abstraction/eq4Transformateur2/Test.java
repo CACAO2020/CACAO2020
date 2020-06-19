@@ -21,7 +21,7 @@ import abstraction.fourni.Filiere;
 public class Test {
 
 	public static void main(String[] args) {
-		Transformateur2_next t = new Transformateur2_next();
+		Transformateur2 t = new Transformateur2();
 
 		Filiere f = new Filiere();
 		f.ajouterActeur(new ExempleAcheteurChocolatBourse());
@@ -37,7 +37,7 @@ public class Test {
         f.ajouterActeur(superviseur3);
         
         
-        Filiere.LA_FILIERE = f;
+//        Filiere.LA_FILIERE = f;
         
 //		LinkedList<Double> li = new LinkedList<Double>();
 //		for (int i = 0; i < 100; i++) {
