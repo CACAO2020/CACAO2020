@@ -7,6 +7,7 @@ import java.util.Map;
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.Feve;
 import abstraction.eq8Romu.produits.Pate;
+import abstraction.fourni.Filiere;
 import abstraction.fourni.Variable;
 import java.util.List;
 import java.util.ArrayList;
@@ -23,6 +24,8 @@ public class Stock {
 	private Map<Pate, List<Couple<Variable>>> stockPate;
 	private Variable transformationCostFeve;
 	private Variable transformationCostPate;
+	private Variable stockCostFixe;
+	private Variable stockCostVar;
 	private List<Variable> indicateurs;
 
 	public Stock(Transformateur3 acteur) {
@@ -50,6 +53,8 @@ public class Stock {
 		this.stockPate.put(Pate.PATE_MOYENNE, new ArrayList<Couple<Variable>>());
 		this.transformationCostFeve = new Variable(acteur.getNom() + "Cout transformation feve à chocolat", acteur, 10000);
 		this.transformationCostPate = new Variable(acteur.getNom() + "Cout transformation pate à chocolat", acteur, 4000);
+		this.stockCostFixe = new Variable(acteur.getNom() + "Cout fixe du stockage", acteur, 1000);
+		this.stockCostVar = new Variable(acteur.getNom() + "Cout Variable du stockage", acteur, 100);
 		this.indicateurs = new ArrayList<Variable>();
 		
 		this.indicateurs.add(0,new Variable(acteur.getNom() + "Stock fève basse qualité", acteur, 50));
@@ -104,6 +109,13 @@ public class Stock {
 		return somme;
 	}
 
+	/** 
+	 * Overload to support Chocolat with a Feve in argument
+	 */
+	public double getQuantiteChocolat(Feve feve) {
+		return this.getQuantiteChocolat(Stock.getProduct(feve));
+	}
+	
 	public double getQuantitePate(Pate pate) {
 		List<Couple<Variable>> table = this.getStockPate().get(pate);
 		double somme = 0;
@@ -112,7 +124,7 @@ public class Stock {
 		}
 		return somme;
 	}
-
+	
 	public double getQuantitePrixFeve(Feve feve, double prix) {
 		List<Couple<Variable>> table = this.getStockFeves().get(feve);
 		double somme = 0;
@@ -123,7 +135,7 @@ public class Stock {
 		}
 		return somme;
 	}
-
+	
 	public double getQuantitePrixChocolat(Chocolat choco, double prix) {
 		List<Couple<Variable>> table = this.getStockChocolat().get(choco);
 		double somme = 0;
@@ -134,7 +146,7 @@ public class Stock {
 		}
 		return somme;
 	}
-
+	
 	public double getQuantitePrixPate(Pate pate, double prix) {
 		List<Couple<Variable>> table = this.getStockPate().get(pate);
 		double somme = 0;
@@ -145,7 +157,7 @@ public class Stock {
 		}
 		return somme;
 	}
-
+	
 	public void ajoutFeves(Feve feve, double quantite, double prix) {
 		if (quantite > 0) {
 			this.stockFeves.get(feve)
@@ -155,7 +167,7 @@ public class Stock {
 			throw new IllegalArgumentException("Quantité négative");
 		}
 	}
-
+	
 	public void retirerFevesPrix(Feve feve, double quantite, double prix) {
 		List<Couple<Variable>> table = this.stockFeves.get(feve);
 		double quantiteAEnlever = quantite;
@@ -177,9 +189,9 @@ public class Stock {
 		} else {
 			throw new IllegalArgumentException("Quantite trop importante");
 		}
-
+	
 	}
-
+	
 	public void retirerPatePrix(Pate pate, double quantite, double prix) {
 		List<Couple<Variable>> table = this.stockPate.get(pate);
 		double quantiteAEnlever = quantite;
@@ -201,9 +213,9 @@ public class Stock {
 		} else {
 			throw new IllegalArgumentException("Quantite trop importante");
 		}
-
+	
 	}
-
+	
 	public void retirerChocolatPrix(Chocolat choco, double quantite, double prix) {
 		List<Couple<Variable>> table = this.stockChocolat.get(choco);
 		double quantiteAEnlever = quantite;
@@ -225,7 +237,7 @@ public class Stock {
 		} else {
 			throw new IllegalArgumentException("Quantite trop importante");
 		}
-
+	
 	}
 	public double prixMaxStock(List<Couple<Variable>> table) {
 		if (table.isEmpty()) {
@@ -269,7 +281,7 @@ public class Stock {
 			throw new IllegalArgumentException("Quantité négative");
 		}
 	}
-
+	
 	public void ajoutPate(Pate pate, double quantite, double prix) {
 		if (quantite > 0) {
 			this.stockPate.get(pate).add(new Couple<Variable>(new Variable(acteur.getNom() + "Stock", acteur, quantite),
@@ -286,12 +298,12 @@ public class Stock {
 		List<Couple<Variable>> table = this.getStockPate().get(pate);
 		table.removeIf(c -> c.get1().getValeur()==0);
 	}
-
+	
 	public void majStockChocolat(Chocolat choco) {
 		List<Couple<Variable>> table = this.getStockChocolat().get(choco);
 		table.removeIf(c -> c.get1().getValeur() == 0);
 	}
-
+	
 	/**
 	 * Fonction appelé lorsque le prochain tour arrive
 	 * Elle transforme les fèves et la pate automatiquement en chocolat
@@ -301,7 +313,7 @@ public class Stock {
 	public void next() {
 		for (Feve feve : Feve.values()) {
 			for (Couple<Variable> feveInfos : this.stockFeves.get(feve)) {
-				this.stockChocolat.get(this.getProduct(feve)).add(feveInfos);
+				this.stockChocolat.get(Stock.getProduct(feve)).add(feveInfos);
 				feveInfos.get2().ajouter(acteur, this.transformationCostFeve.getValeur());
 				this.acteur.getTresorier().diminueTresorerie(this.transformationCostFeve.getValeur() * feveInfos.get1().getValeur());
 			}
@@ -310,7 +322,7 @@ public class Stock {
 		}
 		for (Pate pate : Pate.values()) {
 			for (Couple<Variable> pateInfos : this.stockPate.get(pate)) {
-				this.stockChocolat.get(this.getProduct(pate)).add(pateInfos);
+				this.stockChocolat.get(Stock.getProduct(pate)).add(pateInfos);
 				pateInfos.get2().ajouter(acteur, this.transformationCostPate.getValeur());
 				this.acteur.getTresorier()
 						.diminueTresorerie(this.transformationCostPate.getValeur() * pateInfos.get1().getValeur());
@@ -318,12 +330,25 @@ public class Stock {
 			this.stockPate.get(pate).clear();
 		}
 		this.updateIndicateurs();
-
+		this.stockCosts();
 	}
-	
-	
-	// Indicateurs : quantité de stock pour chaque chocolat et fèves
 
+	/**
+	 * permet de calculer le prix du stock et de perdre l'argent correspondant
+	 */
+	private void stockCosts() {
+		double tailleDuStock = 0;
+		for(Feve feve : Feve.values()){
+			tailleDuStock += this.getQuantiteChocolat(feve) + this.getQuantiteFeves(feve);
+		}
+		for(Pate pate : Pate.values()){
+			tailleDuStock += this.getQuantitePate(pate);
+		}
+		double prixDuStock = tailleDuStock * this.getStockCostVar().getValeur() + this.getStockCostFixe().getValeur();
+		Filiere.LA_FILIERE.getBanque().virer(this.acteur, this.acteur.getCryptogramme(), Filiere.LA_FILIERE.getBanque(), prixDuStock);
+	}
+
+	// Indicateurs : quantité de stock pour chaque chocolat et fèves
 	public List<Variable> getIndicateurs() {
 		return this.indicateurs;
 	}
@@ -349,7 +374,7 @@ public class Stock {
 	 * 
 	 * @return Chocolat produit par la fève associée
 	 */
-	private Chocolat getProduct(Feve feve) {
+	public static Chocolat getProduct(Feve feve) {
 		switch (feve) {
 			case FEVE_BASSE:
 				return Chocolat.CHOCOLAT_BASSE;
@@ -364,7 +389,7 @@ public class Stock {
 		}
 	}
 
-	private Chocolat getProduct(Pate pate) {
+	public static Chocolat getProduct(Pate pate) {
 		switch (pate) {
 			case PATE_BASSE:
 				return Chocolat.CHOCOLAT_BASSE;
@@ -372,6 +397,15 @@ public class Stock {
 				return Chocolat.CHOCOLAT_MOYENNE;
 		}
 	}
+
+	public Variable getStockCostFixe() {
+		return stockCostFixe;
+	}
+
+	public Variable getStockCostVar() {
+		return stockCostVar;
+	}
+
 }
 
 
