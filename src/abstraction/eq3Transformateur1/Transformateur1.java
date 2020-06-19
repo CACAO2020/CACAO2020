@@ -14,52 +14,52 @@ import abstraction.eq8Romu.produits.Feve;
 import abstraction.fourni.Filiere;
 /** @author AMAURY COUDRAY / KARL GUTIERREZ*/
 public class Transformateur1 extends VendeurChocolat {
-	
+
 	public Transformateur1() { 
 		this.stockFeves.put(Feve.FEVE_BASSE,10.0);
 		this.stockFeves.put(Feve.FEVE_MOYENNE,10.0);
 		this.stockFeves.put(Feve.FEVE_MOYENNE_EQUITABLE,10.0);
 		this.stockFeves.put(Feve.FEVE_HAUTE,10.0);
 		this.stockFeves.put(Feve.FEVE_HAUTE_EQUITABLE,10.0);
-		
+
 		this.stockPate.put(Chocolat.CHOCOLAT_BASSE,0.0);
 		this.stockPate.put(Chocolat.CHOCOLAT_MOYENNE,0.0);
 		this.stockPate.put(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE,0.0);
 		this.stockPate.put(Chocolat.CHOCOLAT_HAUTE,0.0);
 		this.stockPate.put(Chocolat.CHOCOLAT_HAUTE_EQUITABLE,0.0);
-		
+
 		this.stockChocolat.put(Chocolat.CHOCOLAT_BASSE,500.0);
 		this.stockChocolat.put(Chocolat.CHOCOLAT_MOYENNE,500.0);
 		this.stockChocolat.put(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE,500.0);
 		this.stockChocolat.put(Chocolat.CHOCOLAT_HAUTE,500.0);
 		this.stockChocolat.put(Chocolat.CHOCOLAT_HAUTE_EQUITABLE,500.0);
-		
+
 		this.coutFeves.put(Feve.FEVE_BASSE, 10.0);
 		this.coutFeves.put(Feve.FEVE_MOYENNE, 10.0);
 		this.coutFeves.put(Feve.FEVE_MOYENNE_EQUITABLE, 10.0);
 		this.coutFeves.put(Feve.FEVE_HAUTE, 10.0);
 		this.coutFeves.put(Feve.FEVE_HAUTE_EQUITABLE, 10.0);
-		
+
 		this.coutPate.put(Chocolat.CHOCOLAT_BASSE,0.0);
 		this.coutPate.put(Chocolat.CHOCOLAT_MOYENNE,0.0);
 		this.coutPate.put(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE,0.0);
 		this.coutPate.put(Chocolat.CHOCOLAT_HAUTE,0.0);
 		this.coutPate.put(Chocolat.CHOCOLAT_HAUTE_EQUITABLE,0.0);
-		
+
 		this.coutChocolat.put(Chocolat.CHOCOLAT_BASSE,10010.0);
 		this.coutChocolat.put(Chocolat.CHOCOLAT_MOYENNE,10010.0);
 		this.coutChocolat.put(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE,10010.0);
 		this.coutChocolat.put(Chocolat.CHOCOLAT_HAUTE,10010.0);
 		this.coutChocolat.put(Chocolat.CHOCOLAT_HAUTE_EQUITABLE,10010.0);
-		
+
 		this.MontantCompte=500000.0;
-		
+
 		this.stockFevesBasse=new Variable("Feves basse qualité "+getNom(),this,this.stockFeves.get(Feve.FEVE_BASSE));
 		this.stockFevesMoyenne=new Variable("Feves moyenne qualité "+getNom(),this,this.stockFeves.get(Feve.FEVE_MOYENNE));
 		this.stockFevesMoyenneEquitable=new Variable("Feves moyenne qualité équitable "+getNom(),this,this.stockFeves.get(Feve.FEVE_MOYENNE_EQUITABLE));
 		this.stockFevesHaute=new Variable("Feves haute qualité "+getNom(),this,this.stockFeves.get(Feve.FEVE_HAUTE));
 		this.stockFevesHauteEquitable=new Variable("Feves haute qualité équitable "+getNom(),this,this.stockFeves.get(Feve.FEVE_HAUTE_EQUITABLE));
-		
+
 		this.stockPateBasse=new Variable("Pate basse qualité "+getNom(),this,this.stockPate.get(Chocolat.CHOCOLAT_BASSE));
 		this.stockPateMoyenne=new Variable("Pate moyenne qualité "+getNom(),this,this.stockPate.get(Chocolat.CHOCOLAT_MOYENNE));
 		this.stockPateMoyenneEquitable=new Variable("Pate moyenne qualité équitable "+getNom(),this,this.stockPate.get(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE));
@@ -71,32 +71,33 @@ public class Transformateur1 extends VendeurChocolat {
 		this.stockChocolatMoyenneEquitable=new Variable("Chocolat moyenne qualité équitable "+getNom(),this,this.stockChocolat.get(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE));
 		this.stockChocolatHaute=new Variable("Chocolat haute qualité "+getNom(),this,this.stockChocolat.get(Chocolat.CHOCOLAT_HAUTE));
 		this.stockChocolatHauteEquitable=new Variable("Chocolat haute qualité équitable "+getNom(),this,this.stockChocolat.get(Chocolat.CHOCOLAT_HAUTE_EQUITABLE));
-		
+
 	}
 	public Color getColor() {
 		return new Color(52, 152, 219);
 	}
 	public void decisionTransformation() {
 		for(Chocolat chocolat:this.getStockPate().keySet()) {
-			if(this.getStockPate(chocolat)*4000<=this.getMontantCompte()){
+			if(this.getStockPate(chocolat)*4000<Filiere.LA_FILIERE.getBanque().getSolde(this, cryptogramme)){
 				this.transformationPateChocolat(chocolat, this.getStockPate(chocolat));
 			}
 			else {
-				this.transformationPateChocolat(chocolat, this.getMontantCompte()/4000);
+				this.transformationPateChocolat(chocolat, Filiere.LA_FILIERE.getBanque().getSolde(this, cryptogramme)/4000*0.9);
 			}
 		}
 		for(Feve feve:this.getStockFeves().keySet()) {
-			if(this.getStockFeves(feve)*8000<=this.getMontantCompte()) {
+			if(this.getStockFeves(feve)*8000<Filiere.LA_FILIERE.getBanque().getSolde(this, cryptogramme)) {
 				this.transformationFevePate(feve, this.getStockFeves(feve));
 			}
 			else {
-				this.transformationFevePate(feve, this.getMontantCompte()/8000);
+				this.transformationFevePate(feve, Filiere.LA_FILIERE.getBanque().getSolde(this, cryptogramme)/8000*0.9);
 
 			}
 		}
 	}
 	public void next() {
 		this.decisionTransformation();
+
 	}
 	/** @author KARL GUTIERREZ*/
 	public List<Variable> getIndicateurs() {
@@ -106,13 +107,13 @@ public class Transformateur1 extends VendeurChocolat {
 		res.add(this.stockFevesMoyenneEquitable);
 		res.add(this.stockFevesHaute);
 		res.add(this.stockFevesHauteEquitable);
-		
+
 		res.add(this.stockPateBasse);
 		res.add(this.stockPateMoyenne);
 		res.add(this.stockPateMoyenneEquitable);
 		res.add(this.stockPateHaute);
 		res.add(this.stockPateHauteEquitable);
-		
+
 		res.add(this.stockChocolatBasse);
 		res.add(this.stockChocolatMoyenne);
 		res.add(this.stockChocolatMoyenneEquitable);
@@ -122,6 +123,6 @@ public class Transformateur1 extends VendeurChocolat {
 		return res;
 	}
 
-	
+
 
 }

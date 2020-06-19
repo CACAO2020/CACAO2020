@@ -3,7 +3,7 @@ package abstraction.eq2Producteur2;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
+import abstraction.eq8Romu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eq8Romu.cacaoCriee.IVendeurCacaoCriee;
 import abstraction.eq8Romu.cacaoCriee.LotCacaoCriee;
 import abstraction.eq8Romu.cacaoCriee.PropositionCriee;
@@ -39,23 +39,18 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 	private boolean trinievendu;
 	private boolean criovendu;
 	private boolean crioevendu;
-	//private ArrayList ventes;
-	//variables de décision 
-	/*private HashMap<Feve,Variable> Vente;
->>>>>>> branch 'master' of https://github.com/kristofszentes/CACAO2020.git
-	private HashMap<Feve,Variable> Stock1 ;
-	private HashMap<Feve,Variable> Stock2 ;
-	private HashMap<Feve,Variable> Vente1 ;
-	private HashMap<Feve,Variable> Vente2;*/
+	private HashMap<Feve,Variable> VenteTourPrecedent ;
+	private HashMap<Feve,Variable> VenteTourPrecedent2;
+	private HashMap<Feve,Variable> Vente;
 
 	
 	public eq2Vendeur() {
 		super();
-		this.prixTF = new Variable("prixTF",this,1900);
-		this.prixTT = new Variable("prixTT",this,2500);
-		this.prixTTE = new Variable("prixTTE",this,2800);
-		this.prixTC = new Variable("prixTC",this,2900);
-		this.prixTCE = new Variable("prixTCE",this,3200);
+		this.prixTF = new Variable("prixTF",this,50);
+		this.prixTT = new Variable("prixTT",this,52);
+		this.prixTTE = new Variable("prixTTE",this,60);
+		this.prixTC = new Variable("prixTC",this,58);
+		this.prixTCE = new Variable("prixTCE",this,75);
 		this.prixvente = 0;
 		this.propalsnonvendues = new Variable("propalsnonvendues",this,999999999);//première valeur super haute pour permettre ventes
 		this.journal_des_ventes = new Journal("Journal des ventes", this);
@@ -71,18 +66,9 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 		this.trinievendu = false;
 		this.criovendu = false;
 		this.crioevendu = false;
-		/*this.ventes = new ArrayList();
 		this.Vente = new HashMap<Feve,Variable>();
-		this.StockV = new HashMap<Feve,Variable>();
-		this.Stock1 = new HashMap<Feve,Variable>();
-		this.Stock2 = new HashMap<Feve,Variable>();
-		this.Stock2.put(Feve.FEVE_BASSE, new Variable("EQ2Feve.FEVE_BASSE",this, 30.0));
-		this.Stock2.put(Feve.FEVE_MOYENNE, new Variable("EQ2Feve.FEVE_MOYENNE",this, 30.0));
-		this.Stock2.put(Feve.FEVE_HAUTE, new Variable("EQ2Feve.FEVE_HAUTE",this, 30.0));
-		this.Stock2.put(Feve.FEVE_MOYENNE_EQUITABLE, new Variable("EQ2Feve.FEVE_MOYENNE_EQUITABLE",this, 30.0));
-		this.Stock2.put(Feve.FEVE_HAUTE_EQUITABLE, new Variable("EQ2Feve.FEVE_HAUTE_EQUITABLE",this, 30.0));
-		this.Vente1 = new HashMap<Feve,Variable>();
-		this.Vente2 = new HashMap<Feve,Variable>();*/
+		this.VenteTourPrecedent =new HashMap<Feve,Variable>();
+		this.VenteTourPrecedent2 = new HashMap<Feve,Variable>();
 	}
 	/*faudrait rajouter un truc qui set les prix en fonction de ce qu'il s'est passé au cycle d'avant et de notre rentabilité
 	 * 
@@ -93,35 +79,18 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 	 * 
 	 */
 	public LotCacaoCriee getLotEnVente() { 
-		List<Variable> Stock = this.getVariablesFeve(); 
-	    double masseFora = 0;
-	    double masseTrini = 0;
-	    double masseTriniE = 0;
-	    double masseCrio = 0;
-	    double masseCrioE = 0;
+		 
+	    double masseFora = this.getStockFeve().get(Feve.FEVE_BASSE).getValeur();
+	    double masseTrini = this.getStockFeve().get(Feve.FEVE_MOYENNE).getValeur();
+	    double masseTriniE = this.getStockFeve().get(Feve.FEVE_MOYENNE_EQUITABLE).getValeur();
+	    double masseCrio = this.getStockFeve().get(Feve.FEVE_HAUTE).getValeur();
+	    double masseCrioE = this.getStockFeve().get(Feve.FEVE_HAUTE_EQUITABLE).getValeur();
 	    double prixfora = 0;
 	    double prixtrini = 0;
 	    double prixtrinie = 0;
 	    double prixcrio = 0;
 	    double prixcrioe = 0;
-	    
-	    for (int i = 0; i < Stock.size();i++) { //changer ça vu que c'est plus une liste de couples mais un dictionnaire (en fait y'a peut-être pas besoin de le changer)
-	    	if (Stock.get(i).getNom() == "EQ2Feve.FEVE_BASSE") {
-	    		masseFora = masseFora + Stock.get(i).getValeur();
-	    	}
-	    	if (Stock.get(i).getNom() == "EQ2Feve.FEVE_MOYENNE") {
-	    		masseTrini = masseTrini + Stock.get(i).getValeur();
-	    	}
-	    	if (Stock.get(i).getNom() == "EQ2Feve.FEVE_MOYENNE_EQUITABLE") {
-	    		masseTriniE = masseTriniE + Stock.get(i).getValeur();
-	    	}
-	    	if (Stock.get(i).getNom() == "EQ2Feve.FEVE_HAUTE") {
-	    		masseCrio = masseCrio + Stock.get(i).getValeur();
-	    	}
-	    	if (Stock.get(i).getNom() == "EQ2Feve.FEVE_HAUTE_EQUITABLE") {
-	    		masseCrioE = masseCrioE + Stock.get(i).getValeur();
-	    	}
-	    }
+	   
 	    //this.journal_des_ventes.ajouter("masseFora="+masseFora+"  masseTrini="+masseTrini+"  masseTriniE"+masseTriniE+"  masseCrio="+masseCrio+"  masseCrioE="+masseCrioE); //pour débugger
 
 	    prixfora = masseFora*this.getPrixTF().getValeur();
@@ -239,7 +208,7 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 	    }
 	    
 	    
-	    this.journal_des_ventes.ajouter("Aucun lot n'a été proposé à la vente");
+	    //this.journal_des_ventes.ajouter("Aucun lot n'a été proposé à la vente " + this.getforavendu()+" "+this.gettrinivendu()+" "+this.gettrinievendu()+" "+this.getcriovendu()+" "+this.getcrioevendu());
 	    this.setcompteurinvendus(this.getcompteurinvendus()+10);
 	    return null;
 	    
@@ -249,7 +218,7 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 
 	@Override 
 	public void notifierAucuneProposition(LotCacaoCriee lot) { 
-		this.setPropal(this.getPrixVente()*0.95);
+		this.setPropal(this.getPrixVente()*0.90);
 		this.journal_des_ventes.ajouter("EQ2 : Aucune proposition de lot n'a abouti à une vente");
 		this.setcompteurinvendus(this.getcompteurinvendus()+1);
 		this.journal_des_ventes.ajouter("compteur des invendus = "+this.getcompteurinvendus());	
@@ -275,6 +244,7 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 
 	@Override
 	public PropositionCriee choisir(List<PropositionCriee> propositions) { // récupère l'offre d'achat la plus élevée et l'accepte si écart prix <= 5%
+		double écart = 0.05;
 		int indice = 0;
 		double max_actuel = 0;
 		for (int i = 0; i < propositions.size(); i++) {
@@ -284,31 +254,31 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 			} //rajouter prix de vente du lot au journal pour être sur
 		}
 		if (propositions.get(indice).getLot().getFeve()==Feve.FEVE_BASSE) { //changer le abs pour qu'ils puissent nous l'acheter plus cher
-			if ((propositions.get(indice).getPrixPourUneTonne() > this.getPrixTF().getValeur()) || (Math.abs(propositions.get(indice).getPrixPourUneTonne() - this.getPrixTF().getValeur()))/100 <= 0.05) {
+			if ((propositions.get(indice).getPrixPourUneTonne() > this.getPrixTF().getValeur()) || (Math.abs(propositions.get(indice).getPrixPourUneTonne() - this.getPrixTF().getValeur()))/100 <= écart) {
 				this.journal_des_ventes.ajouter("EQ2 accepte la proposition d'achat de l'acteur "+propositions.get(indice).getAcheteur());
 				return propositions.get(indice);
 			}
 		}
 		else if (propositions.get(indice).getLot().getFeve()==Feve.FEVE_MOYENNE) {
-			if (propositions.get(indice).getPrixPourUneTonne() > this.getPrixTT().getValeur() || (Math.abs(propositions.get(indice).getPrixPourUneTonne() - this.getPrixTT().getValeur()))/100 <= 0.05) {
+			if (propositions.get(indice).getPrixPourUneTonne() > this.getPrixTT().getValeur() || (Math.abs(propositions.get(indice).getPrixPourUneTonne() - this.getPrixTT().getValeur()))/100 <= écart) {
 				this.journal_des_ventes.ajouter("EQ2 accepte la proposition d'achat de l'acteur "+propositions.get(indice).getAcheteur());
 				return propositions.get(indice);
 			}
 		}
 		else if (propositions.get(indice).getLot().getFeve()==Feve.FEVE_MOYENNE_EQUITABLE) {
-			if (propositions.get(indice).getPrixPourUneTonne() > this.getPrixTTE().getValeur() || (Math.abs(propositions.get(indice).getPrixPourUneTonne() - this.getPrixTTE().getValeur()))/100 <= 0.05) {
+			if (propositions.get(indice).getPrixPourUneTonne() > this.getPrixTTE().getValeur() || (Math.abs(propositions.get(indice).getPrixPourUneTonne() - this.getPrixTTE().getValeur()))/100 <= écart) {
 				this.journal_des_ventes.ajouter("EQ2 accepte la proposition d'achat de l'acteur "+propositions.get(indice).getAcheteur());
 				return propositions.get(indice);
 			}
 		}
 		else if (propositions.get(indice).getLot().getFeve()==Feve.FEVE_HAUTE) {
-			if (propositions.get(indice).getPrixPourUneTonne() > this.getPrixTC().getValeur() || (Math.abs(propositions.get(indice).getPrixPourUneTonne() - this.getPrixTC().getValeur()))/100 <= 0.05) {
+			if (propositions.get(indice).getPrixPourUneTonne() > this.getPrixTC().getValeur() || (Math.abs(propositions.get(indice).getPrixPourUneTonne() - this.getPrixTC().getValeur()))/100 <= écart) {
 				this.journal_des_ventes.ajouter("EQ2 accepte la proposition d'achat de l'acteur "+propositions.get(indice).getAcheteur());
 				return propositions.get(indice);
 			}
 		}
 		else if (propositions.get(indice).getLot().getFeve()==Feve.FEVE_HAUTE_EQUITABLE) {
-			if (propositions.get(indice).getPrixPourUneTonne() > this.getPrixTCE().getValeur() || (Math.abs(propositions.get(indice).getPrixPourUneTonne() - this.getPrixTCE().getValeur()))/100 <= 0.05) {
+			if (propositions.get(indice).getPrixPourUneTonne() > this.getPrixTCE().getValeur() || (Math.abs(propositions.get(indice).getPrixPourUneTonne() - this.getPrixTCE().getValeur()))/100 <= écart) {
 				this.journal_des_ventes.ajouter("EQ2 accepte la proposition d'achat de l'acteur "+propositions.get(indice).getAcheteur());
 				return propositions.get(indice);
 			}
@@ -324,133 +294,98 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 		//this.ventes.add(proposition.getPrixPourLeLot());
 		this.journal_des_ventes.ajouter("le compteur des invendus vaut" + this.getcompteurinvendus());
 		Feve feve = proposition.getFeve();
-		//double prixtonne = proposition.getPrixPourUneTonne();
-		//if(this.Vente.containsKey(feve)) {this.Vente.get(feve).setValeur(this, proposition.getQuantiteEnTonnes());}
-		//else{this.Vente.put(feve, new Variable(this.getStockFeve().get(feve).getNom(),this,prixtonne));}
+		double prixtonne = proposition.getPrixPourUneTonne();
+		if(this.getVenteVariation().containsKey(feve)) {this.getVenteVariation().get(feve).ajouter(this, proposition.getPrixPourLeLot());}
+		else{this.getVenteVariation().put(feve, new Variable(this.getStockFeve().get(feve).getNom(),this,proposition.getPrixPourLeLot()));}
 		if (feve==Feve.FEVE_BASSE) {
 			compteurfora ++;
-			/*if (prixtonne > this.getPrixTF().getValeur()) {
-				this.prixTF.setValeur(this, this.getPrixTF().getValeur() + 0.7*(prixtonne - this.getPrixTF().getValeur()));
-			}*/
+			if (this.getStockFeve().get(Feve.FEVE_BASSE).getValeur() < 0.5) {
+				this.foravendu = true;
+				if (this.getforavendu() == true && this.gettrinivendu() == true && this.gettrinievendu() == true && this.getcriovendu() == true && this.getcrioevendu() == true) {
+			    	this.resetbooleans();
+			    }
+			}
 		}
 		else if (feve==Feve.FEVE_MOYENNE) {
 			compteurtrini ++;
-			/*if (prixtonne > this.getPrixTT().getValeur()) {
-				this.prixTT.setValeur(this, this.getPrixTT().getValeur() + 0.7*(prixtonne - this.getPrixTT().getValeur()));
-			}*/
+			if (this.getStockFeve().get(Feve.FEVE_MOYENNE).getValeur() < 0.5) {
+				this.trinivendu = true;
+				if (this.getforavendu() == true && this.gettrinivendu() == true && this.gettrinievendu() == true && this.getcriovendu() == true && this.getcrioevendu() == true) {
+			    	this.resetbooleans();
+			    }
+			}
+			
 		}
 		else if (feve==Feve.FEVE_MOYENNE_EQUITABLE) {
 			compteurtrinie ++;
-			/*if (prixtonne > this.getPrixTTE().getValeur()) {
-				this.prixTTE.setValeur(this, this.getPrixTTE().getValeur() + 0.7*(prixtonne - this.getPrixTTE().getValeur()));
-			}*/
+			if (this.getStockFeve().get(Feve.FEVE_MOYENNE_EQUITABLE).getValeur() < 0.5) {
+				this.trinievendu = true;
+				if (this.getforavendu() == true && this.gettrinivendu() == true && this.gettrinievendu() == true && this.getcriovendu() == true && this.getcrioevendu() == true) {
+			    	this.resetbooleans();
+			    }
+			}
 		}
 		else if (feve==Feve.FEVE_HAUTE) {
 			compteurcrio ++;
-			/*if (prixtonne > this.getPrixTC().getValeur()) {
-				this.prixTC.setValeur(this, this.getPrixTC().getValeur() + 0.7*(prixtonne - this.getPrixTC().getValeur()));
-			}*/
+			if (this.getStockFeve().get(Feve.FEVE_HAUTE).getValeur() < 0.5) {
+				this.criovendu = true;
+				if (this.getforavendu() == true && this.gettrinivendu() == true && this.gettrinievendu() == true && this.getcriovendu() == true && this.getcrioevendu() == true) {
+			    	this.resetbooleans();
+			    }
+			}
+			
 		}
 		else if (feve==Feve.FEVE_HAUTE_EQUITABLE) {
 			compteurcrioe ++;
-			/*if (prixtonne > this.getPrixTCE().getValeur()) {
-				this.prixTCE.setValeur(this, this.getPrixTCE().getValeur() + 0.7*(prixtonne - this.getPrixTCE().getValeur()));
-			}*/
+			if (this.getStockFeve().get(Feve.FEVE_HAUTE_EQUITABLE).getValeur() < 0.5) {
+				this.crioevendu = true;
+				if (this.getforavendu() == true && this.gettrinivendu() == true && this.gettrinievendu() == true && this.getcriovendu() == true && this.getcrioevendu() == true) {
+			    	this.resetbooleans();
+			    }
+			}
 		}
 	}
 	public void VariateurPrix() {
 		double rentabilité = 1.10; 
-		double coût_prod_tonne_par_next = 5.25; //cf 150 arbres en moyenne pour une tonne, et un employé est payé 3.5 centimes par arbre
+		double coût_prod_tonne = 5.25; //cf 150 arbres en moyenne pour une tonne, et un employé est payé 3.5 centimes par arbre
 	    double masseFora = this.getStockFeve().get(Feve.FEVE_BASSE).getValeur();
 	    double masseTrini = this.getStockFeve().get(Feve.FEVE_MOYENNE).getValeur();
 	    double masseTriniE = this.getStockFeve().get(Feve.FEVE_MOYENNE_EQUITABLE).getValeur();
 	    double masseCrio = this.getStockFeve().get(Feve.FEVE_HAUTE).getValeur();
 	    double masseCrioE = this.getStockFeve().get(Feve.FEVE_HAUTE_EQUITABLE).getValeur();
-	    this.setPrixTF(masseFora*coût_prod_tonne_par_next*this.getCoutStock().getValeur()*rentabilité);
-	    this.setPrixTT(masseTrini*coût_prod_tonne_par_next*this.getCoutStock().getValeur()*rentabilité);
-	    this.setPrixTTE(masseTriniE*coût_prod_tonne_par_next*this.getCoutStock().getValeur()*rentabilité);
-	    this.setPrixTC(masseCrio*coût_prod_tonne_par_next*this.getCoutStock().getValeur()*rentabilité);
-	    this.setPrixTCE(masseCrioE*coût_prod_tonne_par_next*this.getCoutStock().getValeur()*rentabilité);
-	    this.journal_des_ventes.ajouter(""+this.getPrixTF().getValeur()+this.getPrixTT().getValeur());
+	    //les formules sont éclatées
+	    this.setPrixTF(masseFora*coût_prod_tonne*this.getCoutStock().getValeur()*rentabilité*Math.exp(masseFora*(1-masseFora)/1000000));
+	    this.setPrixTT(masseTrini*coût_prod_tonne*this.getCoutStock().getValeur()*rentabilité*Math.exp(masseTrini*(1-masseTrini)/1000000));
+	    this.setPrixTTE(masseTriniE*coût_prod_tonne*this.getCoutStock().getValeur()*rentabilité*Math.exp(masseTriniE*(1-masseTriniE)/1000000));
+	    this.setPrixTC(masseCrio*coût_prod_tonne*this.getCoutStock().getValeur()*rentabilité*Math.exp(masseCrio*(1-masseCrio)/1000000));
+	    this.setPrixTCE(masseCrioE*coût_prod_tonne*this.getCoutStock().getValeur()*rentabilité*Math.exp(masseCrioE*(1-masseCrioE)/1000000));
+	    this.journal_des_ventes.ajouter("");
 	}
-	/**@author lucas p */
-	/*public void BrûlerStock() { //calcule et compare dérivées de stock et de vente, et décide de brûler une certaine proportion des fèves les moins vendues (s'ils nous en reste) pour diminuer le coût de stockage
->>>>>>> branch 'master' of https://github.com/kristofszentes/CACAO2020.git
-
-		System.out.println("hmm");
-<<<<<<< HEAD
-		 if(Filiere.LA_FILIERE.getEtape() >1){
-			HashMap<Feve,Variable> Variation = VariationStock(this.getStockFeveTourPrecedent(),this.getStockFeveTourPrecedent2());
-=======
-		if (this.getCompteur_Tours() ==1) {
-			this.setStock2(this.getStockFeve());
-			this.setVente2(this.getVenteVariation());
-			System.out.println("ici");
-
-		if (Filiere.LA_FILIERE.getEtape() > 10) {
-			
-
-		}
-		if (this.getCompteur_Tours() ==2) {
-			this.setStock1(this.getStockFeve());
-			this.setVente1(this.getVenteVariation());
-			System.out.println("la");
-		}
-		 if(this.getCompteur_Tours() >2){
-			HashMap<Feve,Variable> Variation = VariationStock(this.getStock1(),this.getStock2());
->>>>>>> branch 'master' of https://github.com/kristofszentes/CACAO2020.git
-			HashMap<Feve,Variable> VariationVente =VariationStock(this.getVente1(),this.getVente2());
-			System.out.println("stock="+Variation);
-			System.out.println("vente="+VariationVente);
-//pour le moment Variation est vide... a corriger 
-			for (Feve feve :Variation.keySet()) {
-				if(VariationVente.containsKey(feve)) {
-				System.out.println("ouf");
-				System.out.println("valeur"+VariationVente.get(feve).getValeur()/(0.0001+Variation.get(feve).getValeur()));//VariationVente.get(feve) n'existe pas
-				if(Variation.get(feve).getValeur()>VariationVente.get(feve).getValeur()&&Variation.get(feve).getValeur()!=0) {
-					//pour le moment en test 
-					//attention ici si on en vends pas on ne detruit pas les stocks... pas ouf faudra changer ça
-					System.out.println("on a brulé" +VariationVente.get(feve).getValeur()/Variation.get(feve).getValeur()*0.1+"kg de "+feve);
-					this.getStockFeve().get(feve).retirer(this, VariationVente.get(feve).getValeur()/Variation.get(feve).getValeur()*0.1);
-				}
-			}
-			this.setStock2(this.getStock1());
-			this.setStock1(this.getStockFeve());
-			this.setVente2(this.getVente1());
-			this.setVente1(this.getVenteVariation());
-		}}
-	}*/
+	
 	/**
 	 * @return the stock1
 	 */
-	/*public HashMap<Feve, Variable> getStock1() {
-		return Stock1;
-	}*/
+	public HashMap<Feve, Variable> getVenteTourPrecedent() {
+		return this.VenteTourPrecedent;
+	}
 
-	/**
-	 * @param stock1 the stock1 to set
-	 */
-	/*public void setStock1(HashMap<Feve, Variable> stock1) {
-		Stock1 = stock1;
-	}*/
-	/*public void setStock2(HashMap<Feve, Variable> stock2) {
-		Stock2 = stock2;
-	}*/
 
 	/**
 	 * @return the vente1
 	 */
-	/*public HashMap<Feve, Variable> getVente1() {
-		return Vente1;
-	}*/
+	public HashMap<Feve, Variable> getVenteTourPrecedent2() {
+		return this.VenteTourPrecedent2;
+	}
 
 	/**
 	 * @param vente1 the vente1 to set
 	 */
-	/*public void setVente1(HashMap<Feve, Variable> vente1) {
-		Vente1 = vente1;
-	}*/
-
+	public void setVenteTourPrecedent(HashMap<Feve, Variable> vente1) {
+		this.VenteTourPrecedent =new HashMap<Feve,Variable>(vente1);
+		}
+	public void setVenteTourPrecedent2(HashMap<Feve, Variable> vente2) {
+		this.VenteTourPrecedent2 =new HashMap<Feve,Variable>(vente2);
+		}
 	/**
 	 * @return the vente2
 	 */
@@ -472,14 +407,14 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 	public void setPrixVente(double prix) {
 		this.prixvente = prix;
 	}
-	/*public HashMap<Feve,Variable> getVenteVariation() {
+	public HashMap<Feve,Variable> getVenteVariation() {
 		return this.Vente;
 	}
 
 	public void resetDecisionVariable() {
 		this.Vente = new HashMap<Feve,Variable>() ;
 
-	}*/
+	}
 	
 	public double getPropal() {
 		return this.propalsnonvendues.getValeur();
