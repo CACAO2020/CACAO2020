@@ -75,7 +75,9 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 	 */
 	public void RefreshStocks() {
 		this.setStockFeveTourPrecedent2(this.getStockFeveTourPrecedent());
+		this.setStockPateTourPrecedent2(this.getStockPateTourPrecedent());
 		this.setStockFeveTourPrecedent(this.getStockFeve());
+		this.setStockPateTourPrecedent(this.getStockPate());
 		float facteur_maladies;
 		if(this.apparitionMaladies()) {
 			facteur_maladies = this.graviteMaladies();
@@ -148,7 +150,7 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 	
 	/*
 	 * Cette méthode calcule la gravité de la maladie si une maladie est apparue
-	 * Pour l'instant le facteur d'atténuation varie entre 0.9 et 0.3
+	 * Pour l'instant le facteur d'atténuation varie entre 0.9 et 0.3 (pour le criollo la production est complétement supprimée)
 	 */
 	public float graviteMaladies() {
 		Random rand2 = new Random();
@@ -208,6 +210,12 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 				this.setVenteTourPrecedent2(this.getVenteTourPrecedent());
 				this.setVenteTourPrecedent(this.getVenteVariation());
 				this.resetDecisionVariable();
+		}
+	}
+	public void fairepâte() {
+		double proportion = 0.25;
+		if (this.getStockPate().get(Pate.PATE_BASSE).getValeur() < proportion*this.getStockFeve().get(Feve.FEVE_BASSE).getValeur()) {
+			
 		}
 	}
 
