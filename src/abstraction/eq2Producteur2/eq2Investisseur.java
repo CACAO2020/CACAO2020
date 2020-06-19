@@ -11,6 +11,7 @@ import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 import abstraction.eq8Romu.produits.Feve;
+import abstraction.eq8Romu.produits.Pate;
 
 public class eq2Investisseur extends VenteContratCadre {
 
@@ -112,8 +113,5 @@ public class eq2Investisseur extends VenteContratCadre {
 		return res;
 	}
 	
-	public void decideTransformationPate() {
-		
-	}
 }
 
