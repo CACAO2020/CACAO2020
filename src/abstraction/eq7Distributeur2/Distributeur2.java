@@ -60,7 +60,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		vendeur = new Vendeur(this);
 		stock = new Stock(this);
 		initJournaux();
-		stockInitial = 1000;
+		stockInitial = 1000000;
 		coutMasseSalariale = 80000;
 	}
 	

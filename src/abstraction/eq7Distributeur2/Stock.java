@@ -103,8 +103,9 @@ public class Stock extends AbsStock implements IStock {
 			
 			// On retire successivement les quantités de chocolat stockés par ordre chronologique jusqu'à en avoir retiré assez
 			while (quantiteRestanteARetirer != 0.) {
-				quantiteEtapeARetirer = Double.min(quantiteRestanteARetirer, this.chocoEnStockParEtape.get(etape).get(chocoDeMarque));
-				this.chocoEnStockParEtape.get(etape).put(chocoDeMarque, this.chocoEnStockParEtape.get(etape).get(chocoDeMarque) - quantiteEtapeARetirer);
+				double stockEtape = this.chocoEnStockParEtape.get(etape).get(chocoDeMarque);
+				quantiteEtapeARetirer = Double.min(quantiteRestanteARetirer, stockEtape);
+				this.chocoEnStockParEtape.get(etape).put(chocoDeMarque, stockEtape - quantiteEtapeARetirer);
 				quantiteRestanteARetirer -= quantiteEtapeARetirer;
 				etape += 1;
 			}

@@ -72,7 +72,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 		// IA : quantité en vente = 
 		double quantiteEnVente;
 		double stockActuel;
-		double stockLimite = 100.;
+		double stockLimite = 1000.;
 		for (ChocolatDeMarque choco : produitsCatalogue) {
 			stockActuel = ac.getStock().getStockChocolatDeMarque(choco);
 			if (stockActuel < stockLimite) {
