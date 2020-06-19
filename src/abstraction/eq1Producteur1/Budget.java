@@ -175,7 +175,7 @@ public class Budget {
 		ArrayList<Integer> newPlants = new ArrayList<Integer>();
 		if (Filiere.LA_FILIERE.getEtape()!=0) {
 			ArrayList<Double> vendues = venduesDernierement(feves);
-			if (this.getFonds()>(this.getEmployes().size()*50 + coutStockage)*240) {
+			if (this.getFonds()>(this.getEmployes().size()*50 + coutStockage)*120) {
 				double fondsInvestis = 0.0;
 				if (this.getFonds()-this.getEmployes().size()*50*24<=10000.0) {
 					fondsInvestis = this.getFonds()-this.getEmployes().size()*50*24;

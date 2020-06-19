@@ -253,20 +253,12 @@ public class Plantations {
 		if (lF != new ArrayList<Double>()) {
 			for (int i=0; i<lF.size(); i+=1) {
 				double age = (double) lF.get(i);
-				if (age==3) {
-					totalF += rendement/4;
-				} else if (age==4) {
-					totalF += rendement/2;
-				} else if (age==5) {
-					totalF += 3*rendement/4;
-				}else if (age<36) {
+				if ((age>=3) && (age<6)) {
+					totalF += rendement*(age/6 - 0.5);
+				}else if (age<=36) {
 					totalF += rendement;
-				} else if (age<39) {
-					totalF += 3*rendement/4;
-				} else if (age<42) {
-					totalF += rendement/2;
-				} else {
-					totalF += rendement/4;
+				} else if (age>36) {
+					totalF += rendement*(-age/9 + 5.0);
 				}
 			}
 		}
@@ -274,20 +266,12 @@ public class Plantations {
 		if (lT != new ArrayList<Double>()) {
 			for (int i=0; i<lT.size(); i+=1) {
 				double age = (double) lT.get(i);
-				if (age==3) {
-					totalT += rendement/4;
-				} else if (age==4) {
-					totalT += rendement/2;
-				} else if (age==5) {
-					totalT += 3*rendement/4;
-				}else if (age<36) {
+				if ((age>=3) && (age<6)) {
+					totalT += rendement*(age/6 - 0.5);
+				}else if (age<=36) {
 					totalT += rendement;
-				} else if (age<39) {
-					totalT += 3*rendement/4;
-				} else if (age<42) {
-					totalT += rendement/2;
-				} else {
-					totalT += rendement/4;
+				} else if (age>36) {
+					totalT += rendement*(-age/9 + 5.0);
 				}
 			}
 		}
