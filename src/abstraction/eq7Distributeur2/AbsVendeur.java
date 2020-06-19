@@ -54,6 +54,10 @@ public class AbsVendeur {
 	// Liste des prix de ventes unitaires pour chaque marque, à chaque tours
 	protected Map<ChocolatDeMarque, Double> coutUnitaire;
 	
+	// Coefficient déterminant le solde minimal que doit avoir l'acteur avant de commencer à "paniquer". C'est un coefficient
+	// multiplicateur du cours moyen de la bourse
+	protected double coeffCoursMoyen;
+	
 	// Couleurs d'arrière-plan pour les messages des journaux
 	public Color titleColor = Color.BLACK;
 	public Color metaColor = Color.CYAN;
@@ -64,6 +68,7 @@ public class AbsVendeur {
 	
 	public AbsVendeur(Distributeur2 ac) {	
 		this.ac = ac;
+		this.coeffCoursMoyen = 100;
 		quantiteAVendreParDefaut = 100.;
 		produitsCatalogue = new ArrayList<ChocolatDeMarque>();
 		publicites = new ArrayList<ChocolatDeMarque>();

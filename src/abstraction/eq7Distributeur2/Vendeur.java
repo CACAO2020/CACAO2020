@@ -24,6 +24,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 
 	public Vendeur(Distributeur2 ac) {
 		super(ac);
+		
 	}
 	
 	public void initialiser() {
@@ -84,7 +85,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 			moyenneCours += coursActuel;
 		}
 		moyenneCours /= produitsCatalogue.size();
-		soldeMini = 100*moyenneCours; //Valeur complétement arbitraire
+		soldeMini = coeffCoursMoyen*moyenneCours; //Valeur complétement arbitraire
 		
 		for (ChocolatDeMarque choco : produitsCatalogue) {
 			stockActuel = ac.getStock().getStockChocolatDeMarque(choco);
@@ -109,9 +110,26 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 		double quantiteACommander;
 		double stockActuel;
 		double stockLimite = 1000.;
+		double coursActuel;
+		double moyenneCours = 0;
+		double soldeMini;
+		double soldeActuel = ac.getSolde();
+		
+		// On calcule d'abord le cours moyen de la bourse pour nos chocolats
+		for (ChocolatDeMarque choco : produitsCatalogue) {
+			coursActuel = Filiere.LA_FILIERE.getIndicateur("BourseChoco cours " + choco.getChocolat().name()).getHistorique().get(Filiere.LA_FILIERE.getEtape()).getValeur();
+			moyenneCours += coursActuel;
+		}
+		moyenneCours /= produitsCatalogue.size();
+		soldeMini = coeffCoursMoyen*moyenneCours; //Valeur complétement arbitraire	
+		
 		for (ChocolatDeMarque choco : produitsCatalogue) {
 			stockActuel = ac.getStock().getStockChocolatDeMarque(choco);
-			if (stockActuel <= stockLimite) {
+			if (soldeActuel <= soldeMini) {
+				// Il faut tout arrêter !
+				quantiteACommander = 0.;
+			}
+			else if (stockActuel <= stockLimite) {
 				quantiteACommander = (stockLimite-stockActuel)*10;
 			} else {
 				quantiteACommander = Double.max(quantitesEnVente.get(choco).getValeur() - ac.getStock().getStockChocolatDeMarque(choco), 0.);
