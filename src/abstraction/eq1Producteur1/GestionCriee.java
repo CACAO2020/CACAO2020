@@ -10,8 +10,10 @@ import abstraction.fourni.Variable;
 import abstraction.eq8Romu.cacaoCriee.IVendeurCacaoCriee;
 import abstraction.eq8Romu.cacaoCriee.LotCacaoCriee;
 import abstraction.eq8Romu.cacaoCriee.PropositionCriee;
+import abstraction.eq8Romu.cacaoCriee.SuperviseurCacaoCriee;
 import abstraction.eq8Romu.produits.Feve;
 import abstraction.fourni.Filiere;
+import abstraction.eq2Producteur2.eq2Vendeur;
 
 
 
@@ -98,6 +100,7 @@ class GestionCriee //implements IVendeurCacaoCriee
 	{
 		double PrixMoy = this.prixMoyenDernierreVentes(typeFeve);
 		double prixVente = 0; //quantiteAVendre * (PrixMoy+0.004);
+		
 		if(typeFeve == Feve.FEVE_BASSE)
 		{
 			prixVente = this.v1PrixBasse;
@@ -235,5 +238,55 @@ class GestionCriee //implements IVendeurCacaoCriee
 			i++;
 		}
 		return moyenne / (double) j;
+	}
+	
+	public double moyenneDerniersTours(Feve typeFeve)
+	{
+	    int n = this.venduLog.size();
+	    int i = 0;
+	    double sum = 0;
+	    while(n-i >= 0 && i <= 10)
+	    {
+	        if(this.venduLog.get(n-i).getFeve() == typeFeve)
+	        {
+	            sum += this.venduLog.get(n-i).getPrixPourUneTonne();
+	        }
+	        i += 1;
+	    }
+
+	    //
+	    if(sum == 0 || i == 0)
+	    {
+	        if(typeFeve == Feve.FEVE_BASSE)
+	        {
+	            return this.v1PrixBasse;
+	        }
+	        if(typeFeve == Feve.FEVE_MOYENNE)
+	        {
+	            return this.v1PrixMoyenne;
+	        }
+	    }
+
+
+	    return sum/(double)i;
+	}
+	
+	public double getPrixVente(Feve typeFeve)
+	{
+	    double prixCentral = moyenneDerniersTours(typeFeve);
+	    double prixVar = 0;
+	    
+	    double prixVenteEq2 = 0;
+	    for (PropositionCriee proposition:SuperviseurCacaoCriee.getHistorique(Filiere.LA_FILIERE.getEtape())) {
+	    	if ((proposition.getVendeur() == eq2Vendeur()) && (proposition.getLot().getFeve() == typeFeve)) {
+	    		prixVenteEq2 = proposition.getPrixPourUneTonne();
+	    	}
+	    }
+	    
+	    if (this.producteur1.getStock(Feve.FEVE_BASSE) > 1000) {
+			prixVar = prixCentral - prixVenteEq2 +20;
+		}
+
+	    return prixCentral - prixVar;
 	}
 }
