@@ -91,21 +91,15 @@ public class AchatCacao {
 	public void notifierPropositionRefusee(PropositionCriee proposition) {
 		NB_precedent = NB_propositions_refusees;
 		NB_propositions_refusees += 1;
-	}
-
-	
-	
-//getCryptogramme renvoyé par transformateur donc pas besoin de l'implémenter ici
-	
-	
-	
+	}	
 	
 	//diminue le nombre de propositions refusées donc on peut diminuer le prix de proposition
 	//ajoute les feves du lot au stock de feves de l'entprise
 	
 	public void notifierVente(PropositionCriee proposition) {
 		NB_precedent = NB_propositions_refusees;
-		NB_propositions_refusees = Math.max(NB_propositions_refusees - 1,0);
+		NB_propositions_refusees = Math.max(NB_propositions_refusees - 1, 0);
+		
 		this.acteur.getStock().ajoutFeves(proposition.getFeve(), 
 				tentativeDachat.get(proposition.getFeve()).get(0).get1().getValeur(),
 				tentativeDachat.get(proposition.getFeve()).get(0).get2().getValeur());

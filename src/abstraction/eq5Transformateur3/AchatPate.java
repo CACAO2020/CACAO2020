@@ -52,26 +52,26 @@ public class AchatPate {
     }
     
     public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
-		//TODO: changer les 4 lignes de code, elles sont écrites de façon a ne pas faire d'erreur de compilations 
+    	
 		//on releve les parametres importants de l'offre du vendeur
 		int stepDeb = contrat.getEcheancier().getStepDebut();
 		int stepFin = contrat.getEcheancier().getStepFin();
 				
 		//notre offre initial
 		int stepDeb0 = contrat.getEcheancier().getStepDebut();
-		double quantite0 = contrat.getEcheancier().getQuantite(0);
 		
 		//si on est d'accord avec la proposition:
 		if(stepDeb == stepDeb0 && stepFin<10 && valideOffre(contrat, quantiteParTourMax, stepFin)) {
 			return contrat.getEcheancier();
 		}
 		//sinon, on peut soit arreter les negociations, soit reproproposer
+
 		//StepFin pas OK; Quantitées OK
 		else if(stepFin>= 10 && valideOffre(contrat, quantiteParTourMax, 10)) {
 			List<Double> quantites = new ArrayList<>();
 			for (int i = 0; i<10; i++) {
 				quantites.add(contrat.getEcheancier().getQuantite(i));
-			}
+				}
 			return new Echeancier(stepDeb0, quantites ) ;
 			}
 		//StepFin OK mais pas quantitées
@@ -89,10 +89,8 @@ public class AchatPate {
 				quantites.add(contrat.getEcheancier().getQuantite(i));
 			}
 			return new Echeancier(stepDeb0, quantites);
-		}
-		
-	}
-
+     }
+}
 
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 		//le prix max est celui qui nous permet de faire 40% de marge
@@ -122,7 +120,7 @@ public class AchatPate {
 	public void commencerNegociations() {
 		//decision de commencer les négociations
 		//si c'est bon on fait cet appel 
-		IVendeurContratCadre vendeur = (Producteur2) Filiere.LA_FILIERE.getActeur("EQ2");
-		Filiere.LA_FILIERE.getSuperviseurContratCadre().demande(acteur, vendeur, Pate.PATE_BASSE, new Echeancier(), this.acteur.getCryptogramme());
+		//IVendeurContratCadre vendeur = (Producteur2) Filiere.LA_FILIERE.getActeur("EQ2");
+		//Filiere.LA_FILIERE.getSuperviseurContratCadre().demande(acteur, vendeur, Pate.PATE_BASSE, new Echeancier(), this.acteur.getCryptogramme());
 	}
 }
