@@ -11,6 +11,7 @@ import abstraction.eq8Romu.cacaoCriee.IVendeurCacaoCriee;
 import abstraction.eq8Romu.cacaoCriee.LotCacaoCriee;
 import abstraction.eq8Romu.cacaoCriee.PropositionCriee;
 import abstraction.eq8Romu.produits.Feve;
+import abstraction.fourni.Banque;
 import abstraction.fourni.Filiere;
 
 /*
@@ -28,6 +29,7 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 	private GestionCriee venteCriee;
 	private Plantations plantation;
 	private Budget budget;
+	private double coutUnitaireStockage;
 
 	public Producteur1() {
 		this.stockFevesForastero=new Variable(getNom()+" stock feves Forastero", this, 0, 10000, 1000);
@@ -35,7 +37,8 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 		this.journalEq1 = new Journal("Eq1 activites", this);
 		this.venteCriee = new GestionCriee(this);
 		this.plantation = new Plantations();
-		this.budget = new Budget(1000, 24, 0.0, 0.0, 0, 0);
+		this.budget = new Budget(500000.0, 24);
+		this.coutUnitaireStockage = 0.05;
 	}
 
 	public void setCryptogramme(Integer crypto) {
@@ -61,6 +64,7 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 
 	public void initialiser() {
 		this.plantation.initialiserArbres(10000, 2000);
+		Filiere.LA_FILIERE.getBanque().initialiser();
 	}
 	
 	// Modifiee par Melanie pour l'ajout des differents stocks de feves
@@ -81,18 +85,45 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 	// Modifiee par Melanie pour l'ajout des differents stocks de feves
 	public void next() {
 		// Ecriture de l'état dans les logs.
-		this.journalEq1.ajouter("Quantité de stock de Trinitario : " + this.getStock(Feve.FEVE_MOYENNE));
-		this.journalEq1.ajouter("Quantité de stock de Forastero : " + this.getStock(Feve.FEVE_BASSE));
+		this.journalEq1.ajouter(Color.BLACK, Color.WHITE, "Quantité de stock de Trinitario : " + this.getStock(Feve.FEVE_MOYENNE));
+		this.journalEq1.ajouter(Color.BLACK, Color.WHITE, "Quantité de stock de Forastero : " + this.getStock(Feve.FEVE_BASSE));
+		this.journalEq1.ajouter(Color.BLACK, Color.WHITE, "Nombre d'employés : " + this.budget.getEmployes().size());
+		/**
+		 * Initialisation des différentes variables nécessaires
+		 */
 		ArrayList<Double> recolte = new ArrayList<Double>();
 		ArrayList<Integer> nouveautes = new ArrayList<Integer>();
 		nouveautes.add((Integer) 0);
 		nouveautes.add((Integer) 0);
+		nouveautes.add((Integer) 0);
+		nouveautes.add((Integer) 0);
+		ArrayList<PropositionCriee> fevesVendues = new ArrayList<PropositionCriee>();
 		int newArbresForastero = nouveautes.get(0);
 		int newArbresTrinitario = nouveautes.get(1);
-		recolte = this.plantation.plantation_cyclique(newArbresForastero, newArbresTrinitario, this.budget.getEmployes());
-		nouveautes = this.budget.budget_cyclique(this.stockFevesForastero.getValeur(), this.stockFevesTrinitario.getValeur());
+		double coutStockage = (this.getStock(Feve.FEVE_BASSE) + this.getStock(Feve.FEVE_MOYENNE) + this.getStock(Feve.FEVE_MOYENNE_EQUITABLE)) * this.coutUnitaireStockage;
+		
+		/**
+		 * Actualisation des plantations/récoltes/nouveaux stocks
+		 */
+		recolte = this.plantation.plantation_cyclique(newArbresForastero, newArbresTrinitario, this.budget.getEmployes().size());
 		this.addStock(recolte.get(0), Feve.FEVE_BASSE);
 		this.addStock(recolte.get(1), Feve.FEVE_MOYENNE);
+		/**
+		 * Actualisation des fonds/employés/décisions pour le prochain cycle
+		 */
+		double fonds = Filiere.LA_FILIERE.getBanque().getSolde(this, this.getCryptogramme());
+		nouveautes = this.budget.budget_cyclique(Filiere.LA_FILIERE.getBanque().getSolde(Filiere.LA_FILIERE.getActeur(this.getNom()), this.getCryptogramme()), fevesVendues, coutStockage);
+		Filiere.LA_FILIERE.getBanque().virer(Filiere.LA_FILIERE.getActeur(this.getNom()), this.getCryptogramme(), Filiere.LA_FILIERE.getBanque(),(double) nouveautes.get(3)/100);
+
+		System.out.println(nouveautes.get(3));
+		//next de la classe venteCriee
+		this.venteCriee.next();
+		fevesVendues = this.venteCriee.getLotVendu();
+
+		/** 
+		 * Coût des stocks : 
+		 */
+		Filiere.LA_FILIERE.getBanque().virer(Filiere.LA_FILIERE.getActeur(this.getNom()), this.getCryptogramme(), Filiere.LA_FILIERE.getBanque(), coutStockage);
 	}
 
 	// Modification pour ajout de la filiere TestCrieeProd1
@@ -172,9 +203,9 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 	}
 
 	//Fonction pour les classes agréger pour ajouter des entrées au journaux
-	public void ajouterJournaux(String notification)
+	public void ajouterJournaux(Color couleur, String notification)
 	{
-		this.journalEq1.ajouter(notification);
+		this.journalEq1.ajouter(couleur, Color.BLACK, notification);
 	}
 
 	//[-] Clément >
