@@ -3,22 +3,19 @@ package abstraction.eq2Producteur2;
 import abstraction.eq8Romu.produits.Pate;
 
 public class Usine {
-	public Pate pate;
 	public int NbMachine;
 	public double Prod;
 	public int Age;
 	public int rendement;
 
-	public Usine(Pate pate, int NbMachine) {
-		this.pate = pate;
+	public Usine(int NbMachine) {
+	
 		this.NbMachine =NbMachine;
 		this.Prod = 10;
 		this.Age =0;
 		this.rendement=1;
 	}
-	public Pate getPate() {
-		return this.pate;
-	}
+
 	public int getAge() {
 		return this.Age;
 	}
