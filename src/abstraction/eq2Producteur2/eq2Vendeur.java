@@ -558,6 +558,21 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 	public boolean getcrioevendu() {
 		return this.crioevendu;
 	}
+	public void incrementercompteurfora() {
+		this.compteurfora++;
+	}
+	public void incrementercompteurtrini() {
+		this.compteurtrini++;
+	}
+	public void incrementercompteurtrinie() {
+		this.compteurtrinie++;
+	}
+	public void incrementercompteurcrio() {
+		this.compteurcrio++;
+	}
+	public void incrementercompteurcrioe() {
+		this.compteurcrioe++;
+	}
 }
 
 
