@@ -100,8 +100,8 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 			
 			this.addQtPate(this.getUsines().get(i).getPate(),this.getUsines().get(i).Production());
 			this.journal_de_production.ajouter("Production de " + this.getUsines().get(i).Production() + "tonnes de pates de type: " + this.getUsines().get(i).getPate() );
-		}
-	}*/
+		}*/
+	}
 	//cette fonction va essayer de calculer la valeur de notre stock a partir des prix de la criée precedente (pour le moment), il pourra etre amelioré.(lucas p)
 	public double EstimationVenteStock() {
 		return this.getPrixTC().getValeur()*this.getQuantiteFeve(Feve.FEVE_HAUTE)+this.getPrixTT().getValeur()*this.getQuantiteFeve(Feve.FEVE_MOYENNE)+this.getPrixTF().getValeur()*this.getQuantiteFeve(Feve.FEVE_BASSE);

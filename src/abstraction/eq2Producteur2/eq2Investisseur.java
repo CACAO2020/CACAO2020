@@ -112,7 +112,7 @@ public class eq2Investisseur extends VenteContratCadre {
 		return res;
 	}
 	
-	public void decideAchatUsine() {
+	public void decideTransformationPate() {
 		
 	}
 }
