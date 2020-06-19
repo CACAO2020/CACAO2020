@@ -12,7 +12,7 @@ public class Usine {
 	public Usine(Pate pate, int NbMachine) {
 		this.pate = pate;
 		this.NbMachine =NbMachine;
-		this.Prod = 100;
+		this.Prod = 10;
 		this.Age =0;
 		this.rendement=1;
 	}
@@ -35,11 +35,11 @@ public class Usine {
 		this.Prod = newProd;
 	}
 	public double Production() {
-		if (this.getAge()<=30) {
+		if (this.getAge()<=15) {
 			return this.getNbMachine()*this.getProd();
 		}
-		if (this.getAge()<=50) {
-			return this.getNbMachine()*this.getProd()*(1.0-this.getAge()/50.0);
+		if (this.getAge()<=30) {
+			return this.getNbMachine()*this.getProd()*(1.0-this.getAge()/30.0);
 		}
 		else return 0.0;
 	}
