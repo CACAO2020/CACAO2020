@@ -72,7 +72,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 		//le solde seuil est calculé à partir du cours actuel
 		double quantiteEnVente;
 		double stockActuel;
-		double stockLimite = 1000.;
+		double stockLimite = ac.getStock().stockLimite;
 		
 		for (ChocolatDeMarque choco : produitsCatalogue) {
 			stockActuel = ac.getStock().getStockChocolatDeMarque(choco);
@@ -95,7 +95,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 		// IA : quantité à commander = max(0, quantité en vente - (stockActuel - stockLimite))
 		double quantiteACommander;
 		double stockActuel;
-		double stockLimite = 1000.;
+		double stockLimite = ac.getStock().stockLimite;
 		
 		for (ChocolatDeMarque choco : produitsCatalogue) {
 			stockActuel = ac.getStock().getStockChocolatDeMarque(choco);
