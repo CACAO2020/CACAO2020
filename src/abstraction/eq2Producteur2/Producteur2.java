@@ -212,5 +212,11 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 				this.resetDecisionVariable();
 		}
 	}
+	public void fairepâte() {
+		double proportion = 0.25;
+		if (this.getStockPate().get(Pate.PATE_BASSE).getValeur() < proportion*this.getStockFeve().get(Feve.FEVE_BASSE).getValeur()) {
+			
+		}
+	}
 
 }
