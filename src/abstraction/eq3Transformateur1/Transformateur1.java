@@ -81,17 +81,16 @@ public class Transformateur1 extends VendeurChocolat {
 			if(this.getStockPate(chocolat)*4000<Filiere.LA_FILIERE.getBanque().getSolde(this, cryptogramme)){
 				this.transformationPateChocolat(chocolat, this.getStockPate(chocolat));
 			}
-			else {
-				this.transformationPateChocolat(chocolat, Filiere.LA_FILIERE.getBanque().getSolde(this, cryptogramme)/4000*0.9);
+			else if((this.getStockPate(chocolat)*4000)/2<Filiere.LA_FILIERE.getBanque().getSolde(this, cryptogramme)*0.9){
+				this.transformationPateChocolat(chocolat, this.getStockPate(chocolat)/2);
 			}
 		}
 		for(Feve feve:this.getStockFeves().keySet()) {
-			if(this.getStockFeves(feve)*8000<Filiere.LA_FILIERE.getBanque().getSolde(this, cryptogramme)) {
+			if(this.getStockFeves(feve)*7000<Filiere.LA_FILIERE.getBanque().getSolde(this, cryptogramme)) {
 				this.transformationFevePate(feve, this.getStockFeves(feve));
 			}
-			else {
-				this.transformationFevePate(feve, Filiere.LA_FILIERE.getBanque().getSolde(this, cryptogramme)/8000*0.9);
-
+			else if(this.getStockFeves(feve)*7000/2<Filiere.LA_FILIERE.getBanque().getSolde(this, cryptogramme)*0.9) {
+				this.transformationFevePate(feve, this.getStockFeves(feve)/2);
 			}
 		}
 	}
