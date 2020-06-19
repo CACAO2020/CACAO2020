@@ -171,9 +171,9 @@ public class Budget {
 			reengager = true;
 		} 
 		this.actualiserEmployes(reengager);
-		
-		/**
-		 * if (Filiere.LA_FILIERE.getEtape()!=0) {
+
+		ArrayList<Integer> newPlants = new ArrayList<Integer>();
+		if (Filiere.LA_FILIERE.getEtape()!=0) {
 			ArrayList<Double> vendues = venduesDernierement(feves);
 			if (this.getFonds()>(this.getEmployes().size()*50 + coutStockage)*240) {
 				double fondsInvestis = 0.0;
@@ -197,20 +197,19 @@ public class Budget {
 		}
 	newPlants.add((int) ((fonds - this.getFonds())*100));
 	return newPlants;
-		 */
-		ArrayList<Integer> newPlants = new ArrayList<Integer>();
+		/**
 		if ((gain>0) && (this.getFonds()>500000.0)) {
 			ArrayList<Double> vendues = venduesDernierement(feves);
 			newPlants = investissement(gain, vendues.get(0), vendues.get(1));
 			this.addEmployes(newPlants.get(2));
 			this.removeFonds(202.18*newPlants.get(2));
 		}  else {
-		
 			newPlants.add(0);
 			newPlants.add(0);
 			newPlants.add(0);
 		}
 	newPlants.add((int) (Math.abs(fonds - this.getFonds())*100));
 	return newPlants;
+	*/
 	}
 }
