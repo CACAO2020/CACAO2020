@@ -196,7 +196,7 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 					System.out.println("valeur"+VariationVente.get(feve).getValeur()/(0.0001+Variation.get(feve).getValeur()));//VariationVente.get(feve) n'existe pas
 					if(Variation.get(feve).getValeur()>VariationVente.get(feve).getValeur()&&VariationVente.get(feve).getValeur()>0) {
 						
-						ss
+						
 						System.out.println("on a brulé" +VariationVente.get(feve).getValeur()/Variation.get(feve).getValeur()*0.1+"kg de "+feve);
 						this.getStockFeve().get(feve).retirer(this, 0.1*Variation.get(feve).getValeur()/VariationVente.get(feve).getValeur());
 				}
