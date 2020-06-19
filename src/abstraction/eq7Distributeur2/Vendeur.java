@@ -40,10 +40,8 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 	public void next() {
 		// Le vendeur met à jour ses indicateurs de vente (dont ont besoin les acheteurs)
 		majIndicateursDeVente();
-		// Le vendeur détermine quelle quantité de chaque chocolat de marque proposer à la vente à l'étape suivante
-		majQuantitesEnVente();
-		// Le vendeur met à jour la liste des quantités de chocolat à commander
-		majQuantitesACommander();
+		// Le vendeur détermine les quantités à vendre et à commander
+		majAchatsEtVentes();
 		// Le vendeur met à jour les prix de vente de chaque chocolat de marque
 		majPrixDeVente();
 		// Le vendeur choisit les campagnes de pub à mener lors de l'étape courante
@@ -68,47 +66,29 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 		}
 	}
 	
-	public void majQuantitesEnVente() {//si solde trop faible on écoule les stocks
+	public void majAchatsEtVentes() {//si solde trop faible on écoule les stocks
 		//le solde seuil est calculé à partir du cours actuel
-		double quantiteEnVente;
-		double stockActuel;
-		double stockLimite = ac.getStock().stockLimite;
-		
-		for (ChocolatDeMarque choco : produitsCatalogue) {
-			stockActuel = ac.getStock().getStockChocolatDeMarque(choco);
-			if (panik){
-				//il faut vendre tout !
-				quantitesEnVente.get(choco).setValeur(ac, stockActuel);
-			} else if (stockActuel < stockLimite) {
-				quantitesEnVente.get(choco).setValeur(ac, 0.);
-			} else {
-				double k = (stockActuel-stockLimite)/stockLimite;
-				quantiteEnVente = Double.max(k*stockActuel - stockLimite, stockLimite);
-				quantitesEnVente.get(choco).setValeur(ac, quantiteEnVente);
-			}
-			
-		}
-	}
-	
-	public void majQuantitesACommander() { //!!!!!!!!!!!!!!!!!!On n'achète que pour compenser les ventes
-		//cette fonction met à jour la quantité de chocolat à commander pour chaque chocolat du catalogue
-		// IA : quantité à commander = max(0, quantité en vente - (stockActuel - stockLimite))
+		double soldeActuel = ac.getSolde();
+		double quantiteAVendre;
 		double quantiteACommander;
 		double stockActuel;
 		double stockLimite = ac.getStock().stockLimite;
 		
 		for (ChocolatDeMarque choco : produitsCatalogue) {
 			stockActuel = ac.getStock().getStockChocolatDeMarque(choco);
-			if (panik) {
-				// Il faut tout arrêter !
+			if (panik){
+				// on vend tout, et on n'achète rien en bourse !
+				quantitesEnVente.get(choco).setValeur(ac, stockActuel);
 				quantiteACommander = 0.;
-			}
-			else if (stockActuel <= stockLimite) {
+			} else if (stockActuel < stockLimite) {
+				quantitesEnVente.get(choco).setValeur(ac, 0.);
 				quantiteACommander = (stockLimite-stockActuel)*10;
 			} else {
+				quantiteAVendre = stockActuel - stockLimite;
+				quantitesEnVente.get(choco).setValeur(ac, quantiteAVendre);
 				quantiteACommander = Double.max(quantitesEnVente.get(choco).getValeur() - ac.getStock().getStockChocolatDeMarque(choco), 0.);
+				quantitesACommander.get(choco).setValeur(ac, quantiteACommander);
 			}
-			quantitesACommander.get(choco).setValeur(ac, quantiteACommander);
 		}
 	}
 	
@@ -211,7 +191,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 	public void adapterQuantitesEnVente() {
 		//met à jour les quantité de chocolat de chaque marque en vente selon le stock qu'on a
 		for (ChocolatDeMarque produit : produitsCatalogue) {
-			double stockLimite = 10.;
+			double stockLimite = ac.getStock().stockLimite;
 			double temp = Double.max(ac.getStock().getStockChocolatDeMarque(produit)-stockLimite, 0.);
 			temp = Double.min(quantitesEnVente.get(produit).getValeur(), temp);
 			quantitesEnVente.get(produit).setValeur(ac, temp);

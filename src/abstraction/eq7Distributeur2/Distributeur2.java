@@ -97,7 +97,9 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		this.debutEtape = false; 
 		// Paiement des frais (masse salariale et coûts de stockage)
 		payerFrais();
-		gestionPanik();
+		if (Filiere.LA_FILIERE.getEtape() > 0) {
+			gestionPanik();
+		}
 		stock.next();
 		vendeur.next();
 		acheteurContratCadre.next();
@@ -167,11 +169,28 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		}
 	}
 
+	public boolean estEnPanik() {
+		double soldeActuel = this.getSolde();
+		double soldeMini = vendeur.calculSoldeMini();
+		if (soldeActuel <= soldeMini) {
+			return true;
+		} else {
+			double res = 0.;
+			for (ChocolatDeMarque choco : this.tousLesChocolatsDeMarquePossibles()) {
+				double cours = Filiere.LA_FILIERE.getIndicateur("BourseChoco cours " + choco.getChocolat().name()).getHistorique().get(Filiere.LA_FILIERE.getEtape()-1).getValeur();
+				res += Double.max(0., (this.stock.getStockChocolatDeMarque(choco)-this.stock.stockLimite)*cours);
+			}
+			return (res > soldeActuel - soldeMini);
+		}
+		
+		
+	}
 	// Gère la panik de l'acteur
 	public void gestionPanik() {
 		//Le mode panique est-il actif ?
 		double soldeMini = vendeur.calculSoldeMini();
-		if (getSolde() <= soldeMini && !vendeur.triggerPanik) {
+		boolean estEnPanik = estEnPanik(); 
+		if (estEnPanik && !vendeur.triggerPanik) {
 			if (!vendeur.triggerPanik) {
 				//Mode panique vient de s'activer !
 				vendeur.triggerPanik = true;
@@ -185,7 +204,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 				// Ajout au journal la poursuite de la panique
 				journal.ajouter(Journal.texteColore(behaviorColor, Color.BLACK, "[PANIK] Mode PANIK toujours actif !"));
 			}
-		} else if (getSolde() > soldeMini && vendeur.triggerPanik) {
+		} else if (!estEnPanik && vendeur.triggerPanik) {
 			// La panik vient de se terminer (et nous sommes toujours là)
 			vendeur.triggerPanik = false;
 			vendeur.panik = false;
