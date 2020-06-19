@@ -92,6 +92,8 @@ public abstract class AcheteurCacao extends AchatPateCC implements abstraction.e
 	public void notifierPropositionRefusee(PropositionCriee proposition) {
 		this.journalAchat.ajouter("La proposition " + proposition.getLot().toString() + ", de " + proposition.getVendeur().toString() + ", au prix" + proposition.getPrixPourLeLot()
 		+ "a été refusée");
+		nb_proposition.put(proposition.getFeve(),nb_proposition.get(proposition.getFeve())+1);
+		
 	}
 
 	public void notifierVente(PropositionCriee proposition) {
@@ -99,6 +101,7 @@ public abstract class AcheteurCacao extends AchatPateCC implements abstraction.e
 		this.setCoutFeves(proposition.getLot().getFeve(), this.calculCoutFeve(proposition.getLot().getFeve(), proposition.getQuantiteEnTonnes(), proposition.getPrixPourUneTonne()));
 		this.setStockFeves(proposition.getLot().getFeve(), proposition.getQuantiteEnTonnes());
 		this.journalAchat.ajouter("Lot " + proposition.getLot().toString() + ", de " + proposition.getVendeur().toString() + ", au prix" + proposition.getPrixPourLeLot() + " a été effectué");
+		nb_proposition.put(proposition.getFeve(), 0.0);
 
 	}
 
