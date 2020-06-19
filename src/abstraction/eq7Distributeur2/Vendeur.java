@@ -81,7 +81,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 				quantitesEnVente.get(choco).setValeur(ac, stockActuel);
 			} else if (stockActuel < stockLimite) {
 				quantitesEnVente.get(choco).setValeur(ac, 0.);
-			}else {
+			} else {
 				double k = (stockActuel-stockLimite)/stockLimite;
 				quantiteEnVente = Double.max(k*stockActuel - stockLimite, stockLimite);
 				quantitesEnVente.get(choco).setValeur(ac, quantiteEnVente);

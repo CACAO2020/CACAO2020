@@ -108,9 +108,9 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		double coutMasseSalariale = this.coutMasseSalariale;
 		double fraisStockage = this.getStock().fraisStockage();
 		double fraisTotaux = coutMasseSalariale + fraisStockage;
+		journalTransactions.ajouter(Journal.texteColore(warningColor, Color.BLACK, "[PAIEMENT SALAIRES] Paiement de " + coutMasseSalariale + " de coût de masse salariale."));
+		journalTransactions.ajouter(Journal.texteColore(warningColor, Color.BLACK, "[FRAIS STOCKAGE] Paiement de " + fraisStockage + " de frais de stockage."));
 		Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), fraisTotaux);
-		journal.ajouter(Journal.texteColore(warningColor, Color.BLACK, "[PAIEMENT SALAIRES] Paiement de " + coutMasseSalariale + " de coût de masse salariale."));
-		journal.ajouter(Journal.texteColore(warningColor, Color.BLACK, "[FRAIS STOCKAGE] Paiement de " + fraisStockage + " de frais de stockage."));
 	}
 	
 	public String getNom() {
@@ -170,25 +170,27 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	// Gère la panik de l'acteur
 	public void gestionPanik() {
 		//Le mode panique est-il actif ?
-		if (getSolde() <= vendeur.calculSoldeMini() && !vendeur.triggerPanik) {
-			//Mode panique vient de s'activer !
-			vendeur.triggerPanik = true;
-			vendeur.panik = true;
-			//Ajout au journal le début du mode panik
-			journal.ajouter(Journal.texteColore(alertColor, Color.RED, "Solde actuel inférieur au cours moyen boursier, mode Panik activé !"));
-			
-		} else if (getSolde() <= vendeur.calculSoldeMini() && vendeur.triggerPanik) {
-			// Le mode panik est actif mais ce n'est pas le premier tour de panik
-			vendeur.triggerPanik = false;
-			vendeur.panik = true; // On sait jamais
-			// Ajout au journal la poursuite de la panique
-			journal.ajouter(Journal.texteColore(alertColor, Color.RED, "Solde actuel toujours inférieur au cours moyen boursier, le mode Panik est toujours actif !"));
-		} else if (getSolde() > vendeur.calculSoldeMini() && vendeur.triggerPanik) {
+		double soldeMini = vendeur.calculSoldeMini();
+		if (getSolde() <= soldeMini && !vendeur.triggerPanik) {
+			if (!vendeur.triggerPanik) {
+				//Mode panique vient de s'activer !
+				vendeur.triggerPanik = true;
+				vendeur.panik = true;
+				//Ajout au journal le début du mode panik
+				journal.ajouter(Journal.texteColore(behaviorColor, Color.BLACK, "[PANIK ON] Mode PANIK activé !"));
+			} else {
+				// Le mode panik est actif mais ce n'est pas le premier tour de panik
+				vendeur.triggerPanik = false;
+				vendeur.panik = true; // On sait jamais
+				// Ajout au journal la poursuite de la panique
+				journal.ajouter(Journal.texteColore(behaviorColor, Color.BLACK, "[PANIK] Mode PANIK toujours actif !"));
+			}
+		} else if (getSolde() > soldeMini && vendeur.triggerPanik) {
 			// La panik vient de se terminer (et nous sommes toujours là)
 			vendeur.triggerPanik = false;
 			vendeur.panik = false;
 			//Ajouter au journal la fin de la panik
-			journal.ajouter(Journal.texteColore(alertColor, Color.RED, "Solde actuel supérieur au cours moyen boursier, mode Panik désactivé ! Ouf !"));
+			journal.ajouter(Journal.texteColore(behaviorColor, Color.BLACK, "[PANIK OFF] Mode PANIK désactivé ! Ouf !"));
 		} else {
 			//Pas de panik en vue, rien à afficher
 		}
