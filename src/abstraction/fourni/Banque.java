@@ -270,12 +270,14 @@ public class Banque implements IActeur {
 			this.journalBanque.ajouter(Color.RED, Color.WHITE," Appel de virer de Banque avec l'acteur dont le compte est a crediter qui a fait faillite : "+Journal.texteColore(acteurACrediter.getColor(), Color.BLACK, acteurACrediter.getNom()));
 			return false;
 		} else{
-			if (!acteurADebiter.getNom().equals("CLIENTFINAL")) {
+			if (!acteurADebiter.getNom().equals("CLIENTFINAL") && !acteurADebiter.getNom().equals("BourseChoco")) {
 				comptes.get(acteurADebiter).retirer(this, montant);
 				acteurADebiter.notificationOperationBancaire(-montant);
 			}
+			if (!acteurACrediter.getNom().equals("BourseChoco")) {
 			comptes.get(acteurACrediter).ajouter(this,  montant);
 			acteurACrediter.notificationOperationBancaire(montant);
+			}
 			this.journalBanque.ajouter("virement de "+Journal.texteColore(acteurADebiter.getColor(), Color.BLACK, Journal.texteSurUneLargeurDe(acteurADebiter.getNom(),10))+" vers "+Journal.texteColore(acteurACrediter.getColor(), Color.BLACK, Journal.texteSurUneLargeurDe(acteurACrediter.getNom(),10))+" d'un mondant de "+Journal.doubleSur(montant, 15,3));
 			return true;
 		}

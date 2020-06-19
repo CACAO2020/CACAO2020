@@ -40,7 +40,7 @@ public class eq2Stock extends eq2Acteur{
 		this.StockFeve = new HashMap<Feve,Variable>();
 		this.StockPate = new HashMap<Pate,Variable>();
 		this.cout_total_Stock= new Variable("cout_total_stock",this,0);
-		this.StockFeve.put(Feve.FEVE_BASSE, new Variable("EQ2Feve.FEVE_BASSE",this, 30.0));
+		this.StockFeve.put(Feve.FEVE_BASSE, new Variable("EQ2Feve.FEVE_BASSE",this, 100.0));
 		this.StockFeve.put(Feve.FEVE_MOYENNE, new Variable("EQ2Feve.FEVE_MOYENNE",this, 30.0));
 		this.StockFeve.put(Feve.FEVE_HAUTE, new Variable("EQ2Feve.FEVE_HAUTE",this, 30.0));
 		this.StockFeve.put(Feve.FEVE_MOYENNE_EQUITABLE, new Variable("EQ2Feve.FEVE_MOYENNE_EQUITABLE",this, 30.0));
@@ -182,9 +182,15 @@ public HashMap<Feve,Variable> VariationStock(HashMap<Feve,Variable> Stock1, Hash
 	HashMap<Feve,Variable> Variation =new HashMap<Feve,Variable>();
 	for (Feve feve1 :Stock1.keySet()) {
 		for (Feve feve2 :Stock2.keySet()) {
-			if(feve1.equals(feve2)&& Stock2.get(feve2).getValeur()-Stock1.get(feve1).getValeur()!=0) {
+			if(feve1.name().equals(feve2.name())&& Stock2.get(feve2).getValeur()-Stock1.get(feve1).getValeur()!=0) {
 				Variation.put(feve1, new Variable(Stock1.get(feve1).getNom(),this,Stock2.get(feve2).getValeur()-Stock1.get(feve1).getValeur()));
 			}
+			if( !Stock1.containsKey(feve2)) {
+				Variation.put(feve2,new Variable(Stock2.get(feve2).getNom(),this,Stock2.get(feve2).getValeur()) );
+			}
+		}
+		if(!Stock2.containsKey(feve1)) {
+			Variation.put(feve1, new Variable(Stock1.get(feve1).getNom(),this,-Stock1.get(feve1).getValeur()));
 		}
 	}
 	return Variation;
