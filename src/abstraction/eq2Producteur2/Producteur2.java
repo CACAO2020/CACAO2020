@@ -150,7 +150,7 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 	
 	/*
 	 * Cette méthode calcule la gravité de la maladie si une maladie est apparue
-	 * Pour l'instant le facteur d'atténuation varie entre 0.9 et 0.3
+	 * Pour l'instant le facteur d'atténuation varie entre 0.9 et 0.3 (pour le criollo la production est complétement supprimée)
 	 */
 	public float graviteMaladies() {
 		Random rand2 = new Random();
