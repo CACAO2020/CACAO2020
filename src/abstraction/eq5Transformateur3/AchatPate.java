@@ -17,28 +17,39 @@ public class AchatPate {
 	
 	private double prixMax;
     private Transformateur3 acteur;
+    private double quantiteParTourMax;
+//la quantité max reste à calculer!!!
 		
     public AchatPate(Transformateur3 acteur) {
         this.acteur = acteur;
     }
+    public boolean valideOffre(ExemplaireContratCadre contrat, double quantiteParTourMax ) {
+    	boolean flag = true;
+    	for (int i = 0; i< contrat.getEcheancier().getStepFin(); i++) {
+    		if (contrat.getEcheancier().getQuantite(i) > quantiteParTourMax ) {
+    			flag = false;
+    		}
+    	}
+    	return flag;
+    }
+    
     public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
 		//TODO: changer les 4 lignes de code, elles sont écrites de façon a ne pas faire d'erreur de compilations 
 		//on releve les parametres importants de l'offre du vendeur
 		int stepDeb = contrat.getEcheancier().getStepDebut();
-		double quantite = contrat.getEcheancier().getQuantite(0);
+		int stepFin = contrat.getEcheancier().getStepFin();
+		
 		//notre offre initial
 		int stepDeb0 = contrat.getEcheancier().getStepDebut();
 		double quantite0 = contrat.getEcheancier().getQuantite(0);
 		
 		//si on est d'accord avec la proposition:
-		if(stepDeb == stepDeb0 && Math.abs(quantite - quantite0) < 0.25*quantite0) {
-			// la date intitile gardee et l'écart est inférieur à 25% de la quantité demandée
+		if(stepDeb == stepDeb0 && stepFin<10 && valideOffre(contrat, quantiteParTourMax)) {
 			return contrat.getEcheancier();
 		}
-		
 		//sinon, on peut soit arreter les negociations, soit reproproposer
-		else if(true/*acheteur met fin aux négo*/) {
-			return null;
+		else if() {
+			return ;
 			}
 		
 		else {
