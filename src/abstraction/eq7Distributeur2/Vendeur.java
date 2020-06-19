@@ -67,17 +67,33 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 		}
 	}
 	
-	public void majQuantitesEnVente() {
-		//cette fonction met à jour la quantité de chocolat en vente pour chaque chocolat du catalogue
-		// IA : quantité en vente = 
+	public void majQuantitesEnVente() {//si solde trop faible on écoule les stocks
+		//le solde seuil est calculé à partir du cours actuel
 		double quantiteEnVente;
 		double stockActuel;
+		double soldeActuel;
 		double stockLimite = 1000.;
+		soldeActuel = ac.getSolde();
+		double coursActuel; //dépend du chocolat en vente !
+		double moyenneCours = 0;
+		double soldeMini; // fonction du cours
+		
+		// On calcule d'abord le cours moyen de la bourse pour nos chocolats
+		for (ChocolatDeMarque choco : produitsCatalogue) {
+			coursActuel = Filiere.LA_FILIERE.getIndicateur("BourseChoco cours " + choco.getChocolat().name()).getHistorique().get(Filiere.LA_FILIERE.getEtape()).getValeur();
+			moyenneCours += coursActuel;
+		}
+		moyenneCours /= produitsCatalogue.size();
+		soldeMini = 100*moyenneCours; //Valeur complétement arbitraire
+		
 		for (ChocolatDeMarque choco : produitsCatalogue) {
 			stockActuel = ac.getStock().getStockChocolatDeMarque(choco);
-			if (stockActuel < stockLimite) {
+			if (soldeActuel <= soldeMini){
+				//il faut vendre tout !
+				quantitesEnVente.get(choco).setValeur(ac, stockActuel);
+			} else if (stockActuel < stockLimite) {
 				quantitesEnVente.get(choco).setValeur(ac, 0.);
-			} else {
+			}else {
 				double k = (stockActuel-stockLimite)/stockLimite;
 				quantiteEnVente = Double.max(k*stockActuel - stockLimite, stockLimite);
 				quantitesEnVente.get(choco).setValeur(ac, quantiteEnVente);
