@@ -58,7 +58,7 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 		
 		for (int i = 0; i < this.getUsines().size(); i++) {
 			this.getUsines().get(i).setAge(this.getUsines().get(i).getAge() + 1);
-			if (this.getPaquetsArbres().get(i).getAge() >= 50*24) {
+			if (this.getPaquetsArbres().get(i).getAge() >= 30*24) {
 				terminator.add(i);
 			}
 		}
@@ -98,8 +98,8 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 		}	
 		for (int i = 0; i < this.getUsines().size(); i++) {
 			
-			this.addQtPate(this.getUsines().get(i).getPate(),this.getUsines().get(i).Production()*facteur_maladies);
-			this.journal_de_production.ajouter("Production de " + this.getUsines().get(i).Production()*facteur_maladies + "tonnes de pates de type: " + this.getUsines().get(i).getPate() );
+			this.addQtPate(this.getUsines().get(i).getPate(),this.getUsines().get(i).Production());
+			this.journal_de_production.ajouter("Production de " + this.getUsines().get(i).Production() + "tonnes de pates de type: " + this.getUsines().get(i).getPate() );
 		}
 	}
 	//cette fonction va essayer de calculer la valeur de notre stock a partir des prix de la criée precedente (pour le moment), il pourra etre amelioré.(lucas p)
