@@ -215,7 +215,6 @@ public class Budget {
 
 	public ArrayList<Integer> budget_cyclique(double fonds, ArrayList<PropositionCriee> feves, double coutStockage, int nbArbres) {
 		this.setArbres(nbArbres);
-		double gain = fonds - this.getFonds();
 		this.setFonds(fonds);
 		this.removeFonds(this.getEmployes().size()*50);
 		boolean reengager = false;
@@ -249,19 +248,5 @@ public class Budget {
 		}
 	newPlants.add((int) ((fonds - this.getFonds())*100));
 	return newPlants;
-		/**
-		if ((gain>0) && (this.getFonds()>500000.0)) {
-			ArrayList<Double> vendues = venduesDernierement(feves);
-			newPlants = investissement(gain, vendues.get(0), vendues.get(1));
-			this.addEmployes(newPlants.get(2));
-			this.removeFonds(202.18*newPlants.get(2));
-		}  else {
-			newPlants.add(0);
-			newPlants.add(0);
-			newPlants.add(0);
-		}
-	newPlants.add((int) (Math.abs(fonds - this.getFonds())*100));
-	return newPlants;
-	*/
 	}
 }
