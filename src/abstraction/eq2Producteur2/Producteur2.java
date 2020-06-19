@@ -75,7 +75,9 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 	 */
 	public void RefreshStocks() {
 		this.setStockFeveTourPrecedent2(this.getStockFeveTourPrecedent());
+		this.setStockPateTourPrecedent2(this.getStockPateTourPrecedent());
 		this.setStockFeveTourPrecedent(this.getStockFeve());
+		this.setStockPateTourPrecedent(this.getStockPate());
 		float facteur_maladies;
 		if(this.apparitionMaladies()) {
 			facteur_maladies = this.graviteMaladies();

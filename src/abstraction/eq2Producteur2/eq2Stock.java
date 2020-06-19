@@ -28,6 +28,8 @@ public class eq2Stock extends eq2Acteur{
 	private HashMap<Feve,Variable> StockFeveTourPrecedent;
 	private HashMap<Feve,Variable> StockFeveTourPrecedent2;
 	private HashMap<Pate,Variable> StockPate;
+	private HashMap<Pate,Variable> StockPateTourPrecedent;
+	private HashMap<Pate,Variable> StockPateTourPrecedent2;
 	private double nbemployees;
 	private Variable cout_total_Stock;
 	
@@ -47,7 +49,8 @@ public class eq2Stock extends eq2Acteur{
 		this.StockFeve.put(Feve.FEVE_HAUTE_EQUITABLE, new Variable("EQ2Feve.FEVE_HAUTE_EQUITABLE",this, 30.0));
 		this.StockFeveTourPrecedent = new HashMap<Feve,Variable>();
 		this.StockFeveTourPrecedent2 = new HashMap<Feve,Variable>();
-		
+		this.StockPateTourPrecedent = new HashMap<Pate,Variable>();
+		this.StockPateTourPrecedent2 = new HashMap<Pate,Variable>();
 		
 	}
 	
@@ -66,12 +69,21 @@ public class eq2Stock extends eq2Acteur{
 		for (Feve feve: stockFeveTourPrecedent2.keySet()) {
 			this.StockFeveTourPrecedent2.put(feve, new Variable(stockFeveTourPrecedent2.get(feve).getNom(),this,stockFeveTourPrecedent2.get(feve).getValeur()*this.getCoutStock().getValeur()));
 	}}
+	
+	public void setStockPateTourPrecedent2(HashMap<Pate, Variable> stockPateTourPrecedent2) {
+		this.StockPateTourPrecedent2 =new HashMap<Pate,Variable>();
+		for (Pate pate: stockPateTourPrecedent2.keySet()) {
+			this.StockPateTourPrecedent2.put(pate, new Variable(stockPateTourPrecedent2.get(pate).getNom(),this,stockPateTourPrecedent2.get(pate).getValeur()*this.getCoutStock().getValeur()));
+	}}
 
 /**
 	 * @return the stockFeveTourPrecedent
 	 */
 	public HashMap<Feve, Variable> getStockFeveTourPrecedent() {
 		return StockFeveTourPrecedent;
+	}
+	public HashMap<Pate, Variable> getStockPateTourPrecedent() {
+		return StockPateTourPrecedent;
 	}
 
 	/**
@@ -84,6 +96,12 @@ public class eq2Stock extends eq2Acteur{
 	}
 	}
 
+	public void setStockPateTourPrecedent(HashMap<Pate, Variable> stockPateTourPrecedent) {
+		this.StockPateTourPrecedent =new HashMap<Pate,Variable>();
+		for (Pate pate: stockPateTourPrecedent.keySet()) {
+			this.StockPateTourPrecedent.put(pate, new Variable(stockPateTourPrecedent.get(pate).getNom(),this,stockPateTourPrecedent.get(pate).getValeur()*this.getCoutStock().getValeur()));
+	}
+	}
 public void addStockFeve(Feve feve, double quantité) {
 	String type = "EQ2Feve."+feve;
 	this.StockFeve.put(feve,new Variable(type,this,quantité));
