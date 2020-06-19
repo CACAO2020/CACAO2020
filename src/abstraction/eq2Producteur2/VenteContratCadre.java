@@ -371,6 +371,33 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 				}
 			}
 		}
+		else if (contrat.getProduit().equals(Pate.PATE_BASSE) || contrat.getProduit().equals(Pate.PATE_MOYENNE)) {
+			Pate pat = (Pate)contrat.getProduit();
+			if (pat == Pate.PATE_BASSE) {
+				if (this.getStockPate().get(Pate.PATE_BASSE).getValeur() >= quantite) {
+					this.removeQtPate(Pate.PATE_BASSE, quantite);
+					this.journal_contrats.ajouter("Nous avons livré toute la commande du contrat n°"+contrat.getNumero()+", reste "+(contrat.getQuantiteRestantALivrer()-quantite)+"tonnes à livrer.");
+					return quantite;
+				}
+				else {
+					this.removeQtPate(Pate.PATE_BASSE, this.getStockPate().get(Pate.PATE_BASSE).getValeur());
+					this.journal_contrats.ajouter("On est cours sur la livraison pour le contrat n°"+contrat.getNumero()+", on va être pénalisés");
+					return this.getStockPate().get(Pate.PATE_BASSE).getValeur();
+				}
+			}
+			else if (pat == Pate.PATE_MOYENNE) {
+				if (this.getStockPate().get(Pate.PATE_MOYENNE).getValeur() >= quantite) {
+					this.removeQtPate(Pate.PATE_MOYENNE, quantite);
+					this.journal_contrats.ajouter("Nous avons livré toute la commande du contrat n°"+contrat.getNumero()+", reste "+(contrat.getQuantiteRestantALivrer()-quantite)+"tonnes à livrer.");
+					return quantite;
+				}
+				else {
+					this.removeQtPate(Pate.PATE_MOYENNE, this.getStockPate().get(Pate.PATE_MOYENNE).getValeur());
+					this.journal_contrats.ajouter("On est cours sur la livraison pour le contrat n°"+contrat.getNumero()+", on va être pénalisés");
+					return this.getStockPate().get(Pate.PATE_MOYENNE).getValeur();
+				}
+			}
+		}
 		return 0;
 	}
 	public ArrayList getContratsencours() {
