@@ -52,9 +52,8 @@ public class Stock extends AbsStock implements IStock {
 	}
 	
 	public void next() {
+		// Initialisation du suivi des stocks par étape
 		initialiserStocksEtape();
-		// Paiement masse salariale et coûts de stockage
-		payerFrais();
 		// On jette les chocos périmés
 		jeterChocoPerimes();
 	}
@@ -66,10 +65,7 @@ public class Stock extends AbsStock implements IStock {
 			ac.getStock().chocoEnStockParEtape.get(etape).put(chocoDeMarque, 0.);
 		}
 	}
-	
-	public void payerFrais() {
-		Filiere.LA_FILIERE.getBanque().virer(Filiere.LA_FILIERE.getActeur(getNom()), ac.cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), ac.coutMasseSalariale + this.coutStockage());
-	}
+
 	
 	public void jeterChocoPerimes() {
 		int etape = Filiere.LA_FILIERE.getEtape();
@@ -90,14 +86,14 @@ public class Stock extends AbsStock implements IStock {
 		}
 	}
 	
-	public double coutStockage() {
-		double prix1tonne = 720.0;
-		double prixStockage = 0.0;
-		double qtite = 0.0;
+	public double fraisStockage() {
+		double fraisUnitairesStockage = this.fraisUnitairesStockage;
+		double prixStockage = 0.;
+		double qtite = 0.;
 		for (Chocolat choco : ac.nosChoco) {
 			qtite += this.getStockChocolat(choco);
 		}
-		prixStockage = qtite*prix1tonne;
+		prixStockage = qtite*fraisUnitairesStockage;
 		return prixStockage;
 	}
 	

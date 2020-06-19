@@ -41,9 +41,9 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	private AcheteurContratCadre acheteurContratCadre;
 	private Vendeur vendeur;
 	private Stock stock;
-	protected double coutMasseSalariale;
+	protected double coutMasseSalariale = 80000;
 	
-	protected double stockInitial;
+	protected double stockInitial = 1000;
 	
 	private Journal journal;
 	private Journal journalTransactions;
@@ -60,8 +60,6 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		vendeur = new Vendeur(this);
 		stock = new Stock(this);
 		initJournaux();
-		stockInitial = 1000000;
-		coutMasseSalariale = 80000;
 	}
 	
 	// Initialise les journaux
@@ -85,7 +83,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		vendeur.initialiser();
 		acheteurBourse.initialiser();
 		stock.initialiser();
-		// AJOUT D'UN STOCK INITIAL POUR OBSERVER LES VENTES
+		// Ajout d'un stock initial
 		stock.chocoEnStockParEtape.put(0, new HashMap<ChocolatDeMarque, Double>());
 		for (ChocolatDeMarque choco : tousLesChocolatsDeMarquePossibles()) {
 			getStock().chocoEnStockParEtape.get(0).put(choco, 0.);
@@ -97,12 +95,22 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	// Le vendeur est appelé en premier pour évaluer la quantité de chocolat que les acheteurs doivent commander
 	public void next() {
 		this.debutEtape = false; 
+		// Paiement des frais (masse salariale et coûts de stockage)
+		payerFrais();
 		gestionPanik();
-		
 		stock.next();
 		vendeur.next();
 		acheteurContratCadre.next();
 		acheteurBourse.next();
+	}
+	
+	public void payerFrais() {
+		double coutMasseSalariale = this.coutMasseSalariale;
+		double fraisStockage = this.getStock().fraisStockage();
+		double fraisTotaux = coutMasseSalariale + fraisStockage;
+		Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), fraisTotaux);
+		journal.ajouter(Journal.texteColore(warningColor, Color.BLACK, "[PAIEMENT SALAIRES] Paiement de " + coutMasseSalariale + " de coût de masse salariale."));
+		journal.ajouter(Journal.texteColore(warningColor, Color.BLACK, "[FRAIS STOCKAGE] Paiement de " + fraisStockage + " de frais de stockage."));
 	}
 	
 	public String getNom() {
@@ -162,20 +170,20 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	// Gère la panik de l'acteur
 	public void gestionPanik() {
 		//Le mode panique est-il actif ?
-		if (getSolde() <= vendeur.CalculSoldeMini() && !vendeur.triggerPanik) {
+		if (getSolde() <= vendeur.calculSoldeMini() && !vendeur.triggerPanik) {
 			//Mode panique vient de s'activer !
 			vendeur.triggerPanik = true;
 			vendeur.panik = true;
 			//Ajout au journal le début du mode panik
 			journal.ajouter(Journal.texteColore(alertColor, Color.RED, "Solde actuel inférieur au cours moyen boursier, mode Panik activé !"));
 			
-		} else if (getSolde() <= vendeur.CalculSoldeMini() && vendeur.triggerPanik) {
+		} else if (getSolde() <= vendeur.calculSoldeMini() && vendeur.triggerPanik) {
 			// Le mode panik est actif mais ce n'est pas le premier tour de panik
 			vendeur.triggerPanik = false;
 			vendeur.panik = true; // On sait jamais
 			// Ajout au journal la poursuite de la panique
 			journal.ajouter(Journal.texteColore(alertColor, Color.RED, "Solde actuel toujours inférieur au cours moyen boursier, le mode Panik est toujours actif !"));
-		} else if (getSolde() > vendeur.CalculSoldeMini() && vendeur.triggerPanik) {
+		} else if (getSolde() > vendeur.calculSoldeMini() && vendeur.triggerPanik) {
 			// La panik vient de se terminer (et nous sommes toujours là)
 			vendeur.triggerPanik = false;
 			vendeur.panik = false;

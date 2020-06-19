@@ -239,7 +239,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 		return publicites;
 	}
 	
-	public double CalculSoldeMini() {
+	public double calculSoldeMini() {
 		double coursActuel;
 		double moyenneCours = 0;
 		double soldeMini;
@@ -250,7 +250,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 			moyenneCours += coursActuel;
 		}
 		moyenneCours /= produitsCatalogue.size();
-		soldeMini = coeffCoursMoyen*moyenneCours; //Valeur complétement arbitraire
+		soldeMini = coeffCoursMoyen*moyenneCours; //Valeur complètement arbitraire
 		return soldeMini;
 	}
 }

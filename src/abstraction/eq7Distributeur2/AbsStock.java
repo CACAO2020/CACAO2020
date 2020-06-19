@@ -46,6 +46,7 @@ public class AbsStock {
 	public Color peremptionColor = Color.MAGENTA;
 	
 	protected int datePeremption = 12; // donc une date de péremption de 6 mois car 12 steps
+	protected int fraisUnitairesStockage = 1;
 	
 	public AbsStock(Distributeur2 ac) {
 		this.ac = ac;
