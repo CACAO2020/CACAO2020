@@ -15,7 +15,7 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 	private ArrayList<ExemplaireContratCadre> contratsencours;
 	private Journal journal_contrats;
 	private double prixventecontrat;
-	private double massedispofora;
+	private double massedispofora; 
 	private double massedispotrini;
 	private double massedispotrinie;
 	private double massedispocrio;
