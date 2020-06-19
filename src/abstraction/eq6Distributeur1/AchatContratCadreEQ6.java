@@ -61,6 +61,7 @@ public class AchatContratCadreEQ6 extends AchatBourseEQ6 implements IAcheteurCon
 		// On enleve les contrats obsolete (nous pourrions vouloir les conserver pour "archive"...)
 		List<ExemplaireContratCadre> contratsObsoletes=new LinkedList<ExemplaireContratCadre>();
 		for (ExemplaireContratCadre contrat : this.mesContratEnTantQuAcheteur) {
+			
 			if (contrat.getQuantiteRestantALivrer()==0.0 && contrat.getMontantRestantARegler()==0.0) {
 				contratsObsoletes.add(contrat);
 			}
