@@ -9,29 +9,44 @@ import abstraction.eq8Romu.produits.Feve;
 import abstraction.eq8Romu.produits.Gamme;
 import abstraction.fourni.Variable;
 
-/** @author AMAURY COUDRAY*/
-public abstract class Stock extends Tresorerie {
+/** @author AMAURY COUDRAY / KARL GUTIERREZ*/
+public abstract class  Stock extends Tresorerie { 
 
 
-	/* quantite de chaque type de FEVE/CHocolat/PATE */
+	/* quantite de chaque type de FEVE/CHocolat/PATE */ 
 	protected Map<Feve,Double> stockFeves;
-	protected Map<Chocolat,Double> stockChocolat;
-	protected Map<Chocolat,Double> stockPateInterne;
+	protected Map<Chocolat,Double> stockChocolat; 
+	protected Map<Chocolat,Double> stockPate;
 	/* cout pour chaque unité de chaque type de FEVE/CHocolat */
 	protected Map<Feve,Double> coutFeves;
 	protected Map<Chocolat,Double> coutChocolat;
-	protected Map<Chocolat,Double> coutPateInterne;
+	protected Map<Chocolat,Double> coutPate;
 	
-	protected Variable stockTotalFeves;
-	protected Variable stockTotalChocolat;
-	protected Variable stockTotalPateInterne;
+	protected Variable stockFevesBasse;
+	protected Variable stockFevesMoyenne;
+	protected Variable stockFevesMoyenneEquitable;
+	protected Variable stockFevesHaute;
+	protected Variable stockFevesHauteEquitable;
+	
+	protected Variable stockPateBasse;
+	protected Variable stockPateMoyenne;
+	protected Variable stockPateMoyenneEquitable;
+	protected Variable stockPateHaute;
+	protected Variable stockPateHauteEquitable;
+	
+	protected Variable stockChocolatBasse;
+	protected Variable stockChocolatMoyenne;
+	protected Variable stockChocolatMoyenneEquitable;
+	protected Variable stockChocolatHaute;
+	protected Variable stockChocolatHauteEquitable;
+	
 	
 	public Stock() {
 		this.stockFeves=new HashMap<Feve,Double>();
 		this.stockChocolat=new HashMap<Chocolat,Double>();
-		this.stockPateInterne=new HashMap<Chocolat,Double>();
+		this.stockPate=new HashMap<Chocolat,Double>();
 		this.coutChocolat=new HashMap<Chocolat,Double>();;
-		this.coutPateInterne=new HashMap<Chocolat,Double>();;
+		this.coutPate=new HashMap<Chocolat,Double>();;
 		this.coutFeves=new HashMap<Feve,Double>();
 		/*
 		 * FAKE VALEUR pour le moment
@@ -44,18 +59,34 @@ public abstract class Stock extends Tresorerie {
 	/* gestion FEVE */
 	
 	public void setStockFeves(Feve feve,Double quantite) {
-		if(quantite>=0) {
+		if(quantite+this.stockFeves.get(feve)>=0) {
 			if(this.stockFeves.containsKey(feve)) {
 				this.stockFeves.put(feve,quantite+this.stockFeves.get(feve));
 			}
 			else{
 				this.stockFeves.put(feve,quantite);
 			}
-			this.stockTotalFeves.setValeur(this,this.stockTotalFeves.getValeur()+ quantite);
-		}
-		else if((this.stockFeves.containsKey(feve))&&(quantite+this.stockFeves.get(feve)>=0)) {
-			this.stockFeves.put(feve,quantite+this.stockFeves.get(feve));
-			this.stockTotalFeves.setValeur(this, this.stockTotalFeves.getValeur()+ quantite);
+			switch(feve.getGamme()) {
+			case BASSE:
+				this.stockFevesBasse.setValeur(this,this.stockFevesBasse.getValeur()+ quantite);
+				break;
+			case MOYENNE:
+				if (!feve.isEquitable()) {
+					this.stockFevesMoyenne.setValeur(this,this.stockFevesMoyenne.getValeur()+ quantite);
+				}
+				else {
+					this.stockFevesMoyenneEquitable.setValeur(this,this.stockFevesMoyenneEquitable.getValeur()+ quantite);
+				}
+				break;
+			case HAUTE:
+				if (!feve.isEquitable()) {
+					this.stockFevesHaute.setValeur(this,this.stockFevesHaute.getValeur()+ quantite);
+				}
+				else {
+					this.stockFevesHauteEquitable.setValeur(this,this.stockFevesHauteEquitable.getValeur()+ quantite);
+				}
+				break;
+			}
 		}
 	}
 	public Map<Feve,Double> getStockFeves() {
@@ -68,18 +99,34 @@ public abstract class Stock extends Tresorerie {
 	/* gestion CHOCOLAT */
 	
 	public void setStockChocolat(Chocolat chocolat,Double quantite) {
-		if(quantite>=0) {
+		if(quantite+this.stockChocolat.get(chocolat)>=0) {
 			if(this.stockChocolat.containsKey(chocolat)) {
 				this.stockChocolat.put(chocolat,quantite+this.stockChocolat.get(chocolat));
 			}
 			else {
 				this.stockChocolat.put(chocolat,quantite);
 			}
-			this.stockTotalChocolat.setValeur(this, this.stockTotalChocolat.getValeur()+ quantite);
-		}
-		else if((this.stockChocolat.containsKey(chocolat))&&(quantite+this.stockChocolat.get(chocolat)>=0)) {
-			this.stockChocolat.put(chocolat,quantite+this.stockChocolat.get(chocolat));
-			this.stockTotalChocolat.setValeur(this, this.stockTotalChocolat.getValeur()+quantite);
+			switch(chocolat.getGamme()) {
+			case BASSE:
+				this.stockChocolatBasse.setValeur(this,this.stockChocolatBasse.getValeur()+ quantite);
+				break;
+			case MOYENNE:
+				if (!chocolat.isEquitable()) {
+					this.stockChocolatMoyenne.setValeur(this,this.stockChocolatMoyenne.getValeur()+ quantite);
+				}
+				else {
+					this.stockChocolatMoyenneEquitable.setValeur(this,this.stockChocolatMoyenneEquitable.getValeur()+ quantite);
+				}
+				break;
+			case HAUTE:
+				if (!chocolat.isEquitable()) {
+					this.stockChocolatHaute.setValeur(this,this.stockChocolatHaute.getValeur()+ quantite);
+				}
+				else {
+					this.stockChocolatHauteEquitable.setValeur(this,this.stockChocolatHauteEquitable.getValeur()+ quantite);
+				}
+				break;
+			}
 		}
 	}
 	public Map<Chocolat,Double> getStockChocolat() {
@@ -91,27 +138,43 @@ public abstract class Stock extends Tresorerie {
 	
 	/* gestion PATE INERNE */
 	
-	public void setStockPateInterne(Chocolat chocolat,Double quantite) {
+	public void setStockPate(Chocolat chocolat,Double quantite) {
 		
-		if(quantite>=0) {
-			if(this.stockPateInterne.containsKey(chocolat)) {
-				this.stockPateInterne.put(chocolat,quantite+this.stockPateInterne.get(chocolat));
+		if(quantite+this.stockPate.get(chocolat)>=0) {
+			if(this.stockPate.containsKey(chocolat)) {
+				this.stockPate.put(chocolat,quantite+this.stockPate.get(chocolat));
 			}
 			else {
-				this.stockPateInterne.put(chocolat,quantite);
+				this.stockPate.put(chocolat,quantite);
 			}
-			this.stockTotalPateInterne.setValeur(this,this.stockTotalPateInterne.getValeur()+ quantite);
-		}
-		else if((this.stockPateInterne.containsKey(chocolat))&&(quantite+this.stockPateInterne.get(chocolat)>=0)) {
-			this.stockPateInterne.put(chocolat,quantite+this.stockPateInterne.get(chocolat));
-			this.stockTotalPateInterne.setValeur(this, this.stockTotalPateInterne.getValeur()+ quantite);
+			switch(chocolat.getGamme()) {
+			case BASSE:
+				this.stockPateBasse.setValeur(this,this.stockPateBasse.getValeur()+ quantite);
+				break;
+			case MOYENNE:
+				if (!chocolat.isEquitable()) {
+					this.stockPateMoyenne.setValeur(this,this.stockPateMoyenne.getValeur()+ quantite);
+				}
+				else {
+					this.stockPateMoyenneEquitable.setValeur(this,this.stockPateMoyenneEquitable.getValeur()+ quantite);
+				}
+				break;
+			case HAUTE:
+				if (!chocolat.isEquitable()) {
+					this.stockPateHaute.setValeur(this,this.stockPateHaute.getValeur()+ quantite);
+				}
+				else {
+					this.stockPateHauteEquitable.setValeur(this,this.stockPateHauteEquitable.getValeur()+ quantite);
+				}
+				break;
+			}
 		}
 	}
-	public Map<Chocolat,Double> getStockPateInterne(){
-		return this.stockPateInterne;
+	public Map<Chocolat,Double> getStockPate(){
+		return this.stockPate;
 	}
-	public Double getStockPateInterne(Chocolat chocolat){
-		return this.stockPateInterne.get(chocolat);
+	public Double getStockPate(Chocolat chocolat){
+		return this.stockPate.get(chocolat);
 	}	
 	
 	/* getters COUT */
@@ -122,8 +185,8 @@ public abstract class Stock extends Tresorerie {
 	public void setCoutChocolat(Chocolat chocolat,Double cout) {
 		this.coutChocolat.put(chocolat,cout);
 	}
-	public void setCoutPateInterne(Chocolat chocolat,Double cout) {
-		this.coutPateInterne.put(chocolat,cout);
+	public void setCoutPate(Chocolat chocolat,Double cout) {
+		this.coutPate.put(chocolat,cout);
 	}
 	public Map<Feve,Double> getCoutFeves() {
 		return this.coutFeves;
@@ -137,11 +200,11 @@ public abstract class Stock extends Tresorerie {
 	public Double getCoutChocolat(Chocolat chocolat) {
 		return this.coutChocolat.get(chocolat);
 	}
-	public Map<Chocolat, Double> getCoutPateInterne() {
-		return coutPateInterne;
+	public Map<Chocolat, Double> getCoutPate() {
+		return coutPate;
 	}
-	public Double getCoutPateInterne(Chocolat chocolat) {
-		return coutPateInterne.get(chocolat);
+	public Double getCoutPate(Chocolat chocolat) {
+		return coutPate.get(chocolat);
 	}
 	/*calcul COUT */
 	
@@ -149,7 +212,7 @@ public abstract class Stock extends Tresorerie {
 	
 	public Double calculCoutFeve(Feve feve, Double quantiteAjoute, Double prixQuantite ) {
 		if(this.coutFeves.containsKey(feve)) {
-			return (prixQuantite+this.coutFeves.get(feve)*this.stockFeves.get(feve))/(quantiteAjoute+this.stockFeves.get(feve));
+			return (prixQuantite*quantiteAjoute+this.coutFeves.get(feve)*this.stockFeves.get(feve))/(quantiteAjoute+this.stockFeves.get(feve));
 		}
 		return prixQuantite/quantiteAjoute;
 	}
@@ -161,14 +224,15 @@ public abstract class Stock extends Tresorerie {
 			return prixQuantite/quantiteAjoute;
 		}
 	}
-	public Double calculCoutPateInterne(Chocolat chocolat,Double quantiteAjoute, Double prixQuantite) {
-		if(this.coutPateInterne.containsKey(chocolat)) {
-			return (prixQuantite+this.coutPateInterne.get(chocolat)*this.stockPateInterne.get(chocolat))/(quantiteAjoute+this.stockPateInterne.get(chocolat));
+	public Double calculCoutPate(Chocolat chocolat,Double quantiteAjoute, Double prixQuantite) {
+		if(this.coutPate.containsKey(chocolat)) {
+			return (prixQuantite+this.coutPate.get(chocolat)*this.stockPate.get(chocolat))/(quantiteAjoute+this.stockPate.get(chocolat));
 		}
 		else {
 			return prixQuantite/quantiteAjoute;
 		}
 	}
+	
 	
 
 }

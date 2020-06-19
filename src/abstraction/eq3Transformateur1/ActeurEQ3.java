@@ -17,6 +17,7 @@ public abstract class ActeurEQ3 implements IActeur{
 	protected Integer cryptogramme;
 	protected Journal journalAchat;
 	protected Journal journalVente;
+	protected Journal journalTest;
 	protected Journal journalTransformation;
 
 	public ActeurEQ3() {
@@ -25,6 +26,7 @@ public abstract class ActeurEQ3 implements IActeur{
 		this.journalAchat = new Journal("Eq3 achat", this);
 		this.journalVente =new Journal("Eq3 ventes", this);
 		this.journalTransformation =new Journal("Eq3 transformations", this);
+		this.journalTest =new Journal("Eq3 test", this);
 	}
 	
 	public String getNom() {
@@ -75,6 +77,7 @@ public abstract class ActeurEQ3 implements IActeur{
 		res.add(this.journalAchat);
 		res.add(this.journalVente);
 		res.add(this.journalTransformation);
+		res.add(this.journalTest);
 		return res;
 	}
 

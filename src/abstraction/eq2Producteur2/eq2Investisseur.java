@@ -12,14 +12,16 @@ import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 import abstraction.eq8Romu.produits.Feve;
 
-public class eq2Investisseur extends eq2Vendeur {
+public class eq2Investisseur extends VenteContratCadre {
 
 	private double prixArbre;
 	private double prixUsine;
 	private Journal journal_achats;
+	private double prime;
 
 	public eq2Investisseur() {
 		super();
+		this.prime = 0;
 		this.prixUsine=100;
 		this.prixArbre = 3;
 		this.journal_achats = new Journal("Investissements",this);
@@ -67,7 +69,7 @@ public class eq2Investisseur extends eq2Vendeur {
 			this.AchatArbres((int)Math.floor(ecart*proportioncrioe), Feve.FEVE_HAUTE_EQUITABLE);
 			this.journal_achats.ajouter("on a acheté des arbres car trop peu d'arbres");
 		}
-		else if ((Filiere.LA_FILIERE.getBanque().getSolde(this,this.getCrypto())) > (this.NbTotalArbres()*0.05)*1080 + +this.getCoutTotalStock().getValeur()*300) {
+		else if ((Filiere.LA_FILIERE.getBanque().getSolde(this,this.getCrypto())) > (this.NbTotalArbres()*0.05)*1080 + +this.getCoutTotalStock().getValeur()*1080) {
 			if (this.getcompteurinvendus()<75) {
 				double investissement_max = Filiere.LA_FILIERE.getBanque().getSolde(this,this.getCrypto())*0.005;
 				double nbre_arbresmax = Math.floor(investissement_max/this.getprixArbre());
@@ -84,9 +86,9 @@ public class eq2Investisseur extends eq2Vendeur {
 	/*
 	 * Paye les employes en fonction du nombre d'arbres
 	 */
-	public void PayerEmployes() {
+	public void PayerEmployes() { //1 employé pour 800 arbres, payé 2 dollars par jour
 		if (this.NbTotalArbres() > 0) {
-			double payeEmployes = this.NbTotalArbres()*0.05;
+			double payeEmployes = this.NbTotalArbres()*0.035+this.getPrime();
 			Filiere.LA_FILIERE.getBanque().virer(this,this.getCrypto(),Filiere.LA_FILIERE.getBanque(),payeEmployes);
 		}
 	}
@@ -94,6 +96,12 @@ public class eq2Investisseur extends eq2Vendeur {
 		return this.prixArbre;
 	}
 	
+	public double getPrime() {
+		return this.prime;
+	}
+	public void setPrime(double new_prime) {
+		this.prime=new_prime;
+	}
 	public double getprixUsine() {
 		return this.prixUsine;
 	}
