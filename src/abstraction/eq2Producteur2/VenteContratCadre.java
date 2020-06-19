@@ -15,7 +15,7 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 	private ArrayList<ExemplaireContratCadre> contratsencours;
 	private Journal journal_contrats;
 	private double prixventecontrat;
-	private double massedispofora;
+	private double massedispofora; 
 	private double massedispotrini;
 	private double massedispotrinie;
 	private double massedispocrio;
@@ -67,18 +67,23 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 			}
 			//this.journal_contrats.ajouter(""+massedispofora+massedispotrini+massedispotrinie+massedispocrio+massedispocrioe);
 			if (prod == Feve.FEVE_BASSE && massedispofora > 0.5) {
+				this.journal_contrats.ajouter("On est disposé à passer un contrat pour vendre des fèves forastero");
 				return true;
 			}
 			else if (prod == Feve.FEVE_MOYENNE && massedispotrini > 0.5) {
+				this.journal_contrats.ajouter("On est disposé à passer un contrat pour vendre des fèves trinitario");
 				return true;
 			}
 			else if (prod == Feve.FEVE_MOYENNE_EQUITABLE && massedispotrinie > 0.5) {
+				this.journal_contrats.ajouter("On est disposé à passer un contrat pour vendre des fèves trinitario équitables");
 				return true;
 			}
 			else if (prod == Feve.FEVE_HAUTE && massedispocrio > 0.5) {
+				this.journal_contrats.ajouter("On est disposé à passer un contrat pour vendre des fèves criollo");
 				return true;
 			}
 			else if (prod == Feve.FEVE_HAUTE_EQUITABLE && massedispocrioe > 0.5) {
+				this.journal_contrats.ajouter("On est disposé à passer un contrat pour vendre des fèves criollo équitables");
 				return true;
 			}
 			else {
