@@ -11,7 +11,7 @@ import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.Pate;
 import abstraction.fourni.Filiere;
 
-/**Eva DUPUY*/
+/**@Eva DUPUY et @Simon MORO*/
 public class AchatPate {
     /**
      * Gère les achats de pates avec le contrat cadre et négocie les prix.
@@ -120,7 +120,7 @@ public class AchatPate {
 	public void commencerNegociations() {
 		//decision de commencer les négociations
 		//si c'est bon on fait cet appel 
-		//IVendeurContratCadre vendeur = (Producteur2) Filiere.LA_FILIERE.getActeur("EQ2");
+		//IVendeurContratCadre vendeur = (Transformateur4) Filiere.LA_FILIERE.getActeur("EQ4");
 		//Filiere.LA_FILIERE.getSuperviseurContratCadre().demande(acteur, vendeur, Pate.PATE_BASSE, new Echeancier(), this.acteur.getCryptogramme());
 	}
 }
