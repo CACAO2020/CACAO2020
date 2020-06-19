@@ -7,6 +7,7 @@ import abstraction.eq8Romu.contratsCadres.Echeancier;
 import abstraction.eq8Romu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eq8Romu.contratsCadres.IVendeurContratCadre;
 import abstraction.eq8Romu.produits.Feve;
+import abstraction.eq8Romu.produits.Pate;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.Journal;
 
@@ -20,6 +21,8 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 	private double massedispotrinie;
 	private double massedispocrio;
 	private double massedispocrioe;
+	private double patedispofora;
+	private double patedispotrini;
 	
 	public VenteContratCadre() {
 		super();
@@ -30,6 +33,8 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 		this.massedispotrinie = 0;
 		this.massedispocrio = 0;
 		this.massedispocrioe = 0;
+		this.patedispofora = 0;
+		this.patedispotrini = 0;
 	}
 	
 	public void RefreshContrats() {
@@ -95,6 +100,19 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 				return false;
 			}
 		}
+		else if (produit.equals(Pate.PATE_BASSE) || produit.equals(Pate.PATE_MOYENNE)) {
+			Pate pat = (Pate)produit;
+			this.patedispofora = this.getpatedispofora();
+			this.patedispotrini = this.getpatedispotrini();
+			if (pat == Pate.PATE_BASSE && this.patedispofora > 0) {
+				this.journal_contrats.ajouter("On est disposé à passer un contrat pour vendre de la pate basse");
+				return true;
+			}
+			else if (pat == Pate.PATE_MOYENNE && this.patedispotrini > 0) {
+				this.journal_contrats.ajouter("On est disposé à passer un contrat pour vendre de la pate moyenne");
+				return true;
+			}
+		}
 		
 		return false;
 	}
@@ -119,6 +137,17 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 				return contrat.getEcheancier();
 			}
 			if (prod == Feve.FEVE_HAUTE_EQUITABLE && this.massedispocrioe >= contrat.getQuantiteTotale()) {
+				this.journal_contrats.ajouter("Echéancier accepté");
+				return contrat.getEcheancier();
+			}
+		}
+		else if (contrat.getProduit().equals(Pate.PATE_BASSE) || contrat.getProduit().equals(Pate.PATE_MOYENNE)) {
+			Pate pat = (Pate)contrat.getProduit();
+			if (pat == Pate.PATE_BASSE && this.patedispofora >= contrat.getQuantiteTotale()) {
+				this.journal_contrats.ajouter("Echéancier accepté");
+				return contrat.getEcheancier();
+			}
+			if (pat == Pate.PATE_MOYENNE && this.patedispotrini >= contrat.getQuantiteTotale()) {
 				this.journal_contrats.ajouter("Echéancier accepté");
 				return contrat.getEcheancier();
 			}
@@ -355,6 +384,26 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 		for (int i = 0; i < this.getContratsencours().size(); i++) {
 			ExemplaireContratCadre contrat = (ExemplaireContratCadre)this.getContratsencours().get(i);
 			if ((Feve)contrat.getProduit() == Feve.FEVE_HAUTE_EQUITABLE) {
+				masse = masse - contrat.getQuantiteRestantALivrer();
+			}
+		}
+		return masse;
+	}
+	public double getpatedispofora() {
+		double masse = this.getStockPate().get(Pate.PATE_BASSE).getValeur();
+		for (int i = 0; i < this.getContratsencours().size(); i++) {
+			ExemplaireContratCadre contrat = (ExemplaireContratCadre)this.getContratsencours().get(i);
+			if ((Pate)contrat.getProduit() == Pate.PATE_BASSE) {
+				masse = masse - contrat.getQuantiteRestantALivrer();
+			}
+		}
+		return masse;
+	}
+	public double getpatedispotrini() {
+		double masse = this.getStockPate().get(Pate.PATE_MOYENNE).getValeur();
+		for (int i = 0; i < this.getContratsencours().size(); i++) {
+			ExemplaireContratCadre contrat = (ExemplaireContratCadre)this.getContratsencours().get(i);
+			if ((Pate)contrat.getProduit() == Pate.PATE_MOYENNE) {
 				masse = masse - contrat.getQuantiteRestantALivrer();
 			}
 		}
