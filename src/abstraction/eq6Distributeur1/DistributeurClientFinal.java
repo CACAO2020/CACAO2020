@@ -20,7 +20,7 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 	private double pctageHGE;
 	private double pctageBG;
 	private double pctageMG;
-	protected Map<Integer,Map<ChocolatDeMarque,Double>> VenteSiPasRuptureDeStock;
+	public Map<Integer,Map<ChocolatDeMarque,Double>> VenteSiPasRuptureDeStock;
 	
 	public DistributeurClientFinal(double capaciteDeVente, double marge, double capaciteStockmax, double pctageHGE, double pctageMG, double pctageBG) {
 		super(capaciteStockmax);

@@ -13,18 +13,21 @@ import abstraction.fourni.IActeur;
 
 
 
-public class AchatContratCadreEQ6 extends AchatBourseEQ6 implements IAcheteurContratCadre{
+public class AchatContratCadreEQ6 extends DistributeurClientFinal implements IAcheteurContratCadre{
 
 	protected ChocolatDeMarque choco;
 	protected List<ExemplaireContratCadre> mesContratEnTantQuAcheteur;
 
-	public AchatContratCadreEQ6(double capaciteStockmax,ChocolatDeMarque choco) {
-		super(capaciteStockmax);
-		this.choco= choco;
-
+	
+	public AchatContratCadreEQ6(double capaciteDeVente, double marge, double capaciteStockmax, double pctageHGE,
+			double pctageMG, double pctageBG) {
+		super(capaciteDeVente, marge, capaciteStockmax, pctageHGE, pctageMG, pctageBG);
+		// TODO Auto-generated constructor stub
 		this.mesContratEnTantQuAcheteur=new LinkedList<ExemplaireContratCadre>();
-
 	}
+
+	
+	
 
 
 	@Override
@@ -72,8 +75,16 @@ public class AchatContratCadreEQ6 extends AchatBourseEQ6 implements IAcheteurCon
 		
 		for (IActeur acteur : Filiere.LA_FILIERE.getActeurs()) {
 			if (acteur!=this && acteur instanceof IVendeurContratCadre && ((IVendeurContratCadre)acteur).vend(this.choco)) {
-				
-				Filiere.LA_FILIERE.getSuperviseurContratCadre().demande((IAcheteurContratCadre)this, ((IVendeurContratCadre)acteur), this.choco, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, 5.0), cryptogramme);
+				double valeurMin = 10E10;
+				for(int i=0 ; i<10; i++ ) {
+					double newValeur = this.VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()+1+i-24).get(this.choco);
+					if(newValeur<valeurMin) {
+						valeurMin=newValeur;
+						
+						
+					}
+				}
+				Filiere.LA_FILIERE.getSuperviseurContratCadre().demande((IAcheteurContratCadre)this, ((IVendeurContratCadre)acteur), this.choco, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, valeurMin), cryptogramme);
 			}
 		}
 		
