@@ -37,7 +37,7 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 		this.setPropal(99999999);
 		this.decideAchatArbres();
 		this.Maintenance();
-		//this.fairepâte();
+		this.fairepâte();
 		this.BrûlerStock();
 	}
 	/**
