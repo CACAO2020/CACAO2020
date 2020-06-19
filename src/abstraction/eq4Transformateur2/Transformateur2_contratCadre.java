@@ -147,10 +147,11 @@ public class Transformateur2_contratCadre extends Transformateur2_stocks_et_tran
 			double valeur = 0 ;
 			for (ExemplaireContratCadre contrat : this.mesContratEnTantQueVendeur) {
 				if (contrat.getProduit() == pate.conversionPateInterne()) {
-				valeur += contrat.getQuantiteALivrerAuStep() ; }
+					valeur += this.getQuantiteALivrerAuStep(contrat, Filiere.LA_FILIERE.getEtape()+1) ; }
 			}
 			Variable nouvelleQuantite = this.quantitePateCC.get(pate) ;
 			nouvelleQuantite.setValeur(this, valeur);
+			this.journalEq4.ajouter("valeur maj" + valeur);
 			this.quantitePateCC.replace(pate, nouvelleQuantite) ;
 		}
 	}
@@ -196,6 +197,10 @@ public class Transformateur2_contratCadre extends Transformateur2_stocks_et_tran
 		
 		double quantiteLimite = this.getFacteurQuantiteLimite()*super.getCapaciteMaxTFEP() ;
 		quantiteLimite -= this.getQuantitePateCCTotaleValeur() ;
+		if (quantiteLimite < 0) {
+			this.journalEq4.ajouter("quantite limite" + quantiteLimite);
+		}
+		
 		
 		for (int i = e.getStepDebut() ; i < e.getNbEcheances() ; i++) {
 			if (parfait || e.getQuantite(i)>quantiteLimite) {
@@ -315,6 +320,7 @@ public class Transformateur2_contratCadre extends Transformateur2_stocks_et_tran
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
 		this.mesContratEnTantQueVendeur.add(contrat);
 		this.majQuantitePateCC(); 
+		this.journalEq4.ajouter("quantite pate cc totale" + this.getQuantitePateCCTotaleValeur());
 	}
 	
 	
