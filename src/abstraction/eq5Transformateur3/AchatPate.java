@@ -48,18 +48,18 @@ public class AchatPate {
 			return contrat.getEcheancier();
 		}
 		//sinon, on peut soit arreter les negociations, soit reproproposer
-		else if() {
-			return ;
+		else if(true) {
+			return null;
 			}
 		
 		else {
-			if(quantite-quantite0<0) {
+			if(quantite0-quantite0<0) {
 				return new Echeancier(stepDeb0,contrat.getEcheancier().getStepFin(),quantite0*(1-0.25));
 			}
 			else {
 				return new Echeancier( stepDeb0, contrat.getEcheancier().getStepFin(), quantite0*(1+0.25));
 			}
-			}
+		}
 	};
 
 
@@ -91,7 +91,7 @@ public class AchatPate {
 	public void commencerNegociations() {
 		//decision de commencer les négociations
 		//si c'est bon on fait cet appel 
-		IVendeurContratCadre vendeur = (Producteur2) Filiere.LA_FILIERE.getActeur("EQ2");
-		Filiere.LA_FILIERE.getSuperviseurContratCadre().demande(acteur, vendeur, Pate.PATE_BASSE, new Echeancier(), this.acteur.getCryptogramme());
+		//IVendeurContratCadre vendeur = (Producteur2) Filiere.LA_FILIERE.getActeur("EQ2");
+		//Filiere.LA_FILIERE.getSuperviseurContratCadre().demande(acteur, vendeur, Pate.PATE_BASSE, new Echeancier(), this.acteur.getCryptogramme());
 	}
 }
