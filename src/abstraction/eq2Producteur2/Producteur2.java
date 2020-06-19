@@ -37,6 +37,7 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 		this.setPropal(99999999);
 		this.decideAchatArbres();
 		this.Maintenance();
+		//this.fairepâte();
 		this.BrûlerStock();
 	}
 	/**
@@ -213,6 +214,7 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 		}
 	}
 	public void fairepâte() { 
+		if (Filiere.LA_FILIERE.getEtape() > 10) {
 		double proportion = 0.2;
 		double coût_par_tonne = 6000;
 		if (this.getStockPate().get(Pate.PATE_BASSE).getValeur() < proportion*(this.getStockFeve().get(Feve.FEVE_BASSE).getValeur()+this.getStockPate().get(Pate.PATE_BASSE).getValeur())) {
@@ -232,7 +234,7 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 					Filiere.LA_FILIERE.getBanque().virer(this, this.getCrypto(), Filiere.LA_FILIERE.getBanque(), coût_par_tonne*(this.getStockFeve().get(Feve.FEVE_MOYENNE).getValeur()+this.getStockPate().get(Pate.PATE_MOYENNE).getValeur())*proportion-this.getStockPate().get(Pate.PATE_MOYENNE).getValeur());
 				}
 			}
-		}
+		}}
 	}
 
 }
