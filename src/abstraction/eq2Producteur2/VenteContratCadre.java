@@ -15,6 +15,20 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 	
 	private ArrayList<ExemplaireContratCadre> contratsencours;
 	private Journal journal_contrats;
+	private double PrixMoyen; //prix a la tonne
+	/**
+	 * @return the prixMoyen
+	 */
+	public double getPrixMoyen() {
+		return PrixMoyen;
+	}
+
+	/**
+	 * @param prixMoyen the prixMoyen to set
+	 */
+	public void setPrixMoyen(double prixMoyen) {
+		PrixMoyen = prixMoyen;
+	}
 	private double prixventecontrat;
 	private double massedispofora; 
 	private double massedispotrini;
@@ -35,6 +49,7 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 		this.massedispocrioe = 0;
 		this.patedispofora = 0;
 		this.patedispotrini = 0;
+		this.PrixMoyen=0;
 	}
 	
 	public void RefreshContrats() {
@@ -42,6 +57,7 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 			ExemplaireContratCadre contrat = (ExemplaireContratCadre)this.getContratsencours().get(i);
 			if (Filiere.LA_FILIERE.getEtape() > contrat.getEcheancier().getStepFin()) {
 				this.contratsencours.remove(i);
+				this.PrixMoyen = (this.PrixMoyen +this.contratsencours.get(i).getPrixALaTonne())/2;
 				this.journal_contrats.ajouter("Le contrat n°"+contrat.getNumero()+" est arrivé à terme. Merci pour la moula");
 			}
 		}
