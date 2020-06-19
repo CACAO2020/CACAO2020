@@ -30,15 +30,15 @@ public abstract class Transformation extends Stock {
 
 	public  void transformationFevePate(Feve feve, Double quantite) {
 		if(quantite!=0.0) {
-			this.journalTransformation.ajouter("cela va couté "+quantite*6000+" alors que sur notre compte on a" +Filiere.LA_FILIERE.getBanque().getSolde(this, cryptogramme));
+			this.journalTransformation.ajouter("cela va couté "+quantite*3000+" alors que sur notre compte on a" +Filiere.LA_FILIERE.getBanque().getSolde(this, cryptogramme));
 		}
 
 
 		if((quantite>0)&&
 				(this.getStockFeves().containsKey(feve))&&
 				(this.getStockFeves(feve)>=quantite)&&
-				(this.depense(quantite*6000))) {
-			this.setCoutPate(this.equivalentChocoFeve(feve),this.calculCoutPate(this.equivalentChocoFeve(feve), quantite, quantite*(6000+this.getCoutFeves(feve))));
+				(this.depense(quantite*3000))) {
+			this.setCoutPate(this.equivalentChocoFeve(feve),this.calculCoutPate(this.equivalentChocoFeve(feve), quantite, quantite*(3000+this.getCoutFeves(feve))));
 			this.setStockFeves(feve, -quantite);
 			this.setStockPate(this.equivalentChocoFeve(feve), quantite);
 			this.journalTransformation.ajouter("transformation de "+quantite +"T de  FEVES"+feve);
@@ -47,13 +47,13 @@ public abstract class Transformation extends Stock {
 
 	public  void transformationPateChocolat(Chocolat chocolat, Double quantite) {
 		if(quantite!=0.0) {
-			this.journalTransformation.ajouter("cela va couté "+quantite*4000+" alors que sur notre compte on a" +Filiere.LA_FILIERE.getBanque().getSolde(this, cryptogramme));		
+			this.journalTransformation.ajouter("cela va couté "+quantite*2000+" alors que sur notre compte on a" +Filiere.LA_FILIERE.getBanque().getSolde(this, cryptogramme));		
 		}
 		if((quantite>0)&&
 				(this.getStockPate().containsKey(chocolat))&&
 				(this.getStockPate(chocolat)>=quantite)&&
-				(this.depense(quantite*4000))) {
-			this.setCoutChocolat(chocolat, this.calculCoutChocolat(chocolat, quantite, (4000+this.getCoutPate(chocolat))*quantite));
+				(this.depense(quantite*2000))) {
+			this.setCoutChocolat(chocolat, this.calculCoutChocolat(chocolat, quantite, (2000+this.getCoutPate(chocolat))*quantite));
 			this.setStockPate(chocolat, -quantite);
 			this.setStockChocolat(chocolat,quantite);
 			this.journalTransformation.ajouter("transformation de "+quantite +"T de Pate"+chocolat+" en chocolat");

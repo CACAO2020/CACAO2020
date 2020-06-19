@@ -78,18 +78,18 @@ public class Transformateur1 extends VendeurChocolat {
 	}
 	public void decisionTransformation() {
 		for(Chocolat chocolat:this.getStockPate().keySet()) {
-			if(this.getStockPate(chocolat)*4000<Filiere.LA_FILIERE.getBanque().getSolde(this, cryptogramme)){
+			if(this.getStockPate(chocolat)*2000<Filiere.LA_FILIERE.getBanque().getSolde(this, cryptogramme)){
 				this.transformationPateChocolat(chocolat, this.getStockPate(chocolat));
 			}
-			else if((this.getStockPate(chocolat)*4000)/2<Filiere.LA_FILIERE.getBanque().getSolde(this, cryptogramme)*0.9){
+			else if((this.getStockPate(chocolat)*2000)/2<Filiere.LA_FILIERE.getBanque().getSolde(this, cryptogramme)*0.9){
 				this.transformationPateChocolat(chocolat, this.getStockPate(chocolat)/2);
 			}
 		}
 		for(Feve feve:this.getStockFeves().keySet()) {
-			if(this.getStockFeves(feve)*7000<Filiere.LA_FILIERE.getBanque().getSolde(this, cryptogramme)) {
+			if(this.getStockFeves(feve)*3500<Filiere.LA_FILIERE.getBanque().getSolde(this, cryptogramme)) {
 				this.transformationFevePate(feve, this.getStockFeves(feve));
 			}
-			else if(this.getStockFeves(feve)*7000/2<Filiere.LA_FILIERE.getBanque().getSolde(this, cryptogramme)*0.9) {
+			else if(this.getStockFeves(feve)*3500/2<Filiere.LA_FILIERE.getBanque().getSolde(this, cryptogramme)*0.9) {
 				this.transformationFevePate(feve, this.getStockFeves(feve)/2);
 			}
 		}
