@@ -188,7 +188,6 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	// Gère la panik de l'acteur
 	public void gestionPanik() {
 		//Le mode panique est-il actif ?
-		double soldeMini = vendeur.calculSoldeMini();
 		boolean estEnPanik = estEnPanik(); 
 		if (estEnPanik && !vendeur.triggerPanik) {
 			if (!vendeur.triggerPanik) {
