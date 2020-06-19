@@ -183,6 +183,16 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 			this.journal_contrats.ajouter("Proposition d'un prix de "+this.getPrixVenteContrat()+"$");
 			return this.getPrixVenteContrat();
 		}
+		else if (contrat.getProduit().equals(Pate.PATE_BASSE)) {
+			this.setPrixVenteContrat(this.getPrixTPF().getValeur()*1.07);
+			this.journal_contrats.ajouter("Proposition d'un prix de "+this.getPrixVenteContrat()+"$");
+			return this.getPrixVenteContrat();
+		}
+		else if (contrat.getProduit().equals(Pate.PATE_MOYENNE)) {
+			this.setPrixVenteContrat(this.getPrixTPT().getValeur()*1.07);
+			this.journal_contrats.ajouter("Proposition d'un prix de "+this.getPrixVenteContrat()+"$");
+			return this.getPrixVenteContrat();
+		}
 		return 0;
 	}
 
@@ -248,6 +258,30 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 				return this.getPrixVenteContrat();
 			}
 		}
+		else if (contrat.getProduit().equals(Pate.PATE_BASSE))  {
+			if (contrat.getPrixALaTonne() > this.getPrixTPF().getValeur() || (Math.abs(this.getPrixTPF().getValeur()-contrat.getPrixALaTonne())/100 <= 0.05)) {
+				this.setPrixVenteContrat(contrat.getPrixALaTonne());
+				this.journal_contrats.ajouter("Acceptation du prix de "+this.getPrixVenteContrat()+"$");
+				return this.getPrixVenteContrat();
+			}
+			else {
+				this.setPrixVenteContrat(this.getPrixTPF().getValeur()*1.05);
+				this.journal_contrats.ajouter("On négocie ardemment la pâte basse pour "+this.getPrixVenteContrat()+"$");
+				return this.getPrixVenteContrat();
+			}
+		}
+		else if (contrat.getProduit().equals(Pate.PATE_MOYENNE))  {
+			if (contrat.getPrixALaTonne() > this.getPrixTPT().getValeur() || (Math.abs(this.getPrixTPT().getValeur()-contrat.getPrixALaTonne())/100 <= 0.05)) {
+				this.setPrixVenteContrat(contrat.getPrixALaTonne());
+				this.journal_contrats.ajouter("Acceptation du prix de "+this.getPrixVenteContrat()+"$");
+				return this.getPrixVenteContrat();
+			}
+			else {
+				this.setPrixVenteContrat(this.getPrixTPT().getValeur()*1.05);
+				this.journal_contrats.ajouter("On négocie ardemment la pâte moyenne pour "+this.getPrixVenteContrat()+"$");
+				return this.getPrixVenteContrat();
+			}
+		}
 		return 0;
 	}
 
@@ -255,6 +289,21 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
 		this.contratsencours.add(contrat);
 		this.journal_contrats.ajouter("Le contrat n°"+contrat.getNumero()+" a été signé. On devra livrer "+contrat.getQuantiteTotale()+" tonnes de "+(Feve)contrat.getProduit()+" en "+contrat.getEcheancier().getNbEcheances()+" étapes.");
+		if (contrat.getProduit().equals(Feve.FEVE_BASSE)||contrat.getProduit().equals(Pate.PATE_BASSE)) {
+			this.incrementercompteurfora();
+		}
+		else if (contrat.getProduit().equals(Feve.FEVE_MOYENNE)||contrat.getProduit().equals(Pate.PATE_MOYENNE)) {
+			this.incrementercompteurtrini();
+		}
+		else if (contrat.getProduit().equals(Feve.FEVE_MOYENNE_EQUITABLE)) {
+			this.incrementercompteurtrinie();
+		}
+		else if (contrat.getProduit().equals(Feve.FEVE_HAUTE)) {
+			this.incrementercompteurcrio();
+		}
+		else if (contrat.getProduit().equals(Feve.FEVE_HAUTE_EQUITABLE)) {
+			this.incrementercompteurcrioe();
+		}
 	}
 
 	@Override
