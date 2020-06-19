@@ -111,6 +111,12 @@ public class VenteChocolat {
                 acteur.getStock().retirerChocolatPrix(chocolat, paquet.get1().getValeur(), paquet.get2().getValeur());
             }
         }
+
+        if (chocolat == Chocolat.CHOCOLAT_BASSE) {
+            this.acteur.getTresorier().jaiVenduPrincipale(resteALivrer);
+        } else {
+            this.acteur.getTresorier().jaiVenduSecondaire(resteALivrer);
+        }
     }
 
     /**
