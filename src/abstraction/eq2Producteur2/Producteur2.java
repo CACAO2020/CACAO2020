@@ -86,9 +86,14 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 		}
 		
 		for (int i = 0; i < this.getPaquetsArbres().size(); i++) {
-			this.addQtFeve(this.getPaquetsArbres().get(i).getType(),this.getPaquetsArbres().get(i).production()*facteur_maladies);
+			if (facteur_maladies !=1 && (this.getPaquetsArbres().get(i).getType()==Feve.FEVE_HAUTE_EQUITABLE || this.getPaquetsArbres().get(i).getType()==Feve.FEVE_HAUTE)) {
+				
+				this.journal_de_production.ajouter("Perte de " + this.getPaquetsArbres().get(i).production()*facteur_maladies + "tonnes de fèves de type: " + this.getPaquetsArbres().get(i).getType() +"à cause de la maladie");
+			}
+			else {this.addQtFeve(this.getPaquetsArbres().get(i).getType(),this.getPaquetsArbres().get(i).production()*facteur_maladies);
 			this.journal_de_production.ajouter("Production de " + this.getPaquetsArbres().get(i).production()*facteur_maladies + "tonnes de fèves de type: " + this.getPaquetsArbres().get(i).getType() );
 		}
+		}	
 		for (int i = 0; i < this.getUsines().size(); i++) {
 			
 			this.addQtPate(this.getUsines().get(i).getPate(),this.getUsines().get(i).Production()*facteur_maladies);
@@ -189,8 +194,7 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 					System.out.println("valeur"+VariationVente.get(feve).getValeur()/(0.0001+Variation.get(feve).getValeur()));//VariationVente.get(feve) n'existe pas
 					if(Variation.get(feve).getValeur()>VariationVente.get(feve).getValeur()&&VariationVente.get(feve).getValeur()>0) {
 						
-						//pour le moment en test 
-						//attention ici si on en vends pas on ne detruit pas les stocks... pas ouf faudra changer ça
+						
 						System.out.println("on a brulé" +VariationVente.get(feve).getValeur()/Variation.get(feve).getValeur()*0.1+"kg de "+feve);
 						this.getStockFeve().get(feve).retirer(this, 0.1*Variation.get(feve).getValeur()/VariationVente.get(feve).getValeur());
 				}
