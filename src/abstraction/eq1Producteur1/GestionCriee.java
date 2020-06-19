@@ -278,7 +278,7 @@ class GestionCriee //implements IVendeurCacaoCriee
 	    
 	    double prixVenteEq2 = 0;
 	    for (PropositionCriee proposition:SuperviseurCacaoCriee.getHistorique(Filiere.LA_FILIERE.getEtape())) {
-	    	if ((proposition.getVendeur() == eq2Vendeur()) && (proposition.getLot().getFeve() == typeFeve)) {
+	    	if ((proposition.getVendeur().getNom() == "EQ2") && (proposition.getLot().getFeve() == typeFeve)) {
 	    		prixVenteEq2 = proposition.getPrixPourUneTonne();
 	    	}
 	    }
