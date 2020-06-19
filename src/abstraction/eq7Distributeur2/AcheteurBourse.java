@@ -21,6 +21,7 @@ import abstraction.fourni.Variable;
 public class AcheteurBourse extends AbsAcheteurBourse implements IAcheteurChocolatBourse, IActeur {
 	
 	public void next() {
+		majQuantitesARecevoirParContrats();
 		// L'acheteur à la bourse détermine quelle quantité de chaque type de chocolat commander
 		majAchatsBourse();
 	}
@@ -69,25 +70,27 @@ public class AcheteurBourse extends AbsAcheteurBourse implements IAcheteurChocol
 		ac.getStock().chocoReceptionne.get(chocolat.getChocolat()).setValeur(ac, ac.getStock().chocoReceptionne.get(chocolat.getChocolat()).getValeur() + quantite);
 	}
 	
+	public void majQuantitesARecevoirParContrats() {
+		// MAJ quantités à recevoir par contrat
+		Map<Chocolat, Double> quantitesARecevoirParContrats = ac.getAcheteurContratCadre().quantitesARecevoirParContrats;
+		for (ExemplaireContratCadre contrat : ac.getAcheteurContratCadre().nosContrats) {
+			Object produit = contrat.getProduit();
+			if (contrat.getProduit() instanceof Chocolat) {
+				quantitesARecevoirParContrats.put((Chocolat)produit,quantitesARecevoirParContrats.get((Chocolat)produit));
+			} else {
+				quantitesARecevoirParContrats.put(((ChocolatDeMarque)produit).getChocolat(),quantitesARecevoirParContrats.get(((ChocolatDeMarque)produit).getChocolat()));
+			}
+		}
+	}
+	
 	// Méthode qui calcule la quantité qui doit être achetée en bourse, en tenant compte des contrats, pour chaque gamme de chocolat. La table des demandes est tenue à jour.
 	public void majAchatsBourse() {
-		// IA : quantité à commander = quantité demandée par le vendeur MOINS les quantités reçues à l'étape suivante grâce aux contrats actuels
+		// IA : quantité à commander = quantité demandée par le vendeur MOINS quantité reçue à l'étape suivante grâce aux contrats en cours
 		double quantiteTotaleACommander;
 		double quantiteACommander;
-		double quantiteARecevoirParContrats = 0.;
+		double quantiteARecevoirParContrats;
 		for (Chocolat choco : ac.nosChoco) {
-			ac.getStock().chocoReceptionne.get(choco).setValeur(ac, 0.);
-			Chocolat typeChoco;
-			for (ExemplaireContratCadre contrat : ac.getAcheteurContratCadre().nosContrats) {
-				if (contrat.getProduit() instanceof Chocolat) {
-					typeChoco = ((Chocolat)contrat.getProduit());
-				} else {
-					typeChoco = ((ChocolatDeMarque)contrat.getProduit()).getChocolat();
-				}
-				if (choco == typeChoco) {
-					quantiteARecevoirParContrats += contrat.getQuantiteALivrerAuStep();
-				}
-			}
+			quantiteARecevoirParContrats = ac.getAcheteurContratCadre().quantitesARecevoirParContrats.get(choco);
 			quantiteTotaleACommander = ac.getVendeur().getQuantiteACommander(choco);
 			quantiteACommander = Double.max(0., quantiteTotaleACommander - quantiteARecevoirParContrats); 
 			quantitesACommander.get(choco).setValeur(ac, quantiteACommander);
