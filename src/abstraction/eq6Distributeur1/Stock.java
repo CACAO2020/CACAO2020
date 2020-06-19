@@ -9,7 +9,7 @@ import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.ChocolatDeMarque;
 import abstraction.fourni.Filiere;
 
-public class Stock  extends Distributeur1abs implements IStock { /** @author Avril Thibault et Tamine Mélissa*/
+public class Stock  extends Distributeur1abs implements IStock { /** @author Avril Thibault et Tamine Mélissa et Luca Pinguet*/
 	protected double capaciteStockmax;
 	
 		

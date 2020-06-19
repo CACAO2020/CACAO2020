@@ -13,7 +13,7 @@ import abstraction.eq8Romu.produits.Gamme;
 
 //extension gérant les stocks et la transformation
 
-public class Transformateur2_stocks_et_transfos extends Transformateur2 {
+public class Transformateur2_stocks_et_transfos extends Transformateur2_acteur {
 	
 	// Notation : TFEP : transformation fève en pâte
 	// 			  TPEC : transformation pâte en chocolat
@@ -60,7 +60,7 @@ public class Transformateur2_stocks_et_transfos extends Transformateur2 {
 		
 		super () ; 
 		
-		this.capaciteMaxTFEP = new Variable(getNom()+" limite transformation feve en pate", this, 250) ;
+		this.capaciteMaxTFEP = new Variable(getNom()+" limite transformation feve en pate", this, 500) ;
 		this.capaciteMaxTPEC = new Variable(getNom()+" limite transformation pate en chocolat", this, 500) ;
 		this.coeffTFEP = new Variable(getNom()+" équivalent en pâte d'une unité de fèves", this, 1) ;
 		this.coeffTPEC = new Variable(getNom()+" équivalent en chocolat d'une unité de chocolat", this, 1) ;
@@ -162,14 +162,14 @@ public class Transformateur2_stocks_et_transfos extends Transformateur2 {
 	
 	public double getCoutUnitaireEntretienTFEPauStep (double quantiteTotaleFevesATransfo) {
 		if (quantiteTotaleFevesATransfo != 0) {
-			return this.getCoutUnitaireEntretienTFEP() / this.capaciteMaxTFEP.getValeur() * quantiteTotaleFevesATransfo ;
+			return this.getCoutUnitaireEntretienTFEP() * this.capaciteMaxTFEP.getValeur() / quantiteTotaleFevesATransfo ;
 		}
 		else { throw new IllegalArgumentException ("quantite totale nulle") ; }
 	}
 	
 	public double getCoutUnitaireEntretienTPECauStep (double quantiteTotalePateATransfo) {
 		if (quantiteTotalePateATransfo != 0) {
-			return this.getCoutUnitaireEntretienTPEC() / this.capaciteMaxTPEC.getValeur() * quantiteTotalePateATransfo ;
+			return this.getCoutUnitaireEntretienTPEC() * this.capaciteMaxTPEC.getValeur() / quantiteTotalePateATransfo ;
 		}
 		else { throw new IllegalArgumentException ("quantite totale nulle") ; }
 	}
@@ -362,12 +362,15 @@ public class Transformateur2_stocks_et_transfos extends Transformateur2 {
 		return prix ;
 	}
 	
-	public void transformationFeveEnPate (double quantiteFeve, Feve feve, double quantiteTotaleFeveTransfo) { 
+	public double transformationFeveEnPate (double quantiteFeve, Feve feve, double quantiteTotaleFeveTransfo) { 
 			double nouveauStockFeve = super.getStockFevesValeur(feve) - quantiteFeve ;
 			if (nouveauStockFeve >= 0) {
+				double cout = 0 ;
 				PateInterne pate = this.creerPateAPartirDeFeve(feve) ;
 				double quantitePate = this.getCoeffTFEP()*quantiteFeve ;
 				if (quantitePate > 0) {
+					cout = quantitePate*this.getCoutUnitaireTFEP(feve.getGamme()) ;
+					cout += this.getCapaciteMaxTFEP()*this.getCoutUnitaireEntretienTFEP() ;
 					double prix = this.prixApresTFEP(feve, quantiteTotaleFeveTransfo);
 					/*System.out.println("prix");
 					System.out.println(prix);*/
@@ -375,6 +378,7 @@ public class Transformateur2_stocks_et_transfos extends Transformateur2 {
 				}
 				super.setStockFevesValeur(feve,nouveauStockFeve) ;
 				super.setStockPateValeur(pate, super.getStockPateValeur(pate) + quantitePate ) ;
+				return cout ;
 			} 
 			else {throw new IllegalArgumentException("stock negatif") ;} 
 		}
@@ -390,12 +394,15 @@ public class Transformateur2_stocks_et_transfos extends Transformateur2 {
 			return prix ;
 		}
 	
-	public void transformationPateEnChocolat (double quantitePate, PateInterne pate, double quantiteTotalePateTransfo) {
+	public double transformationPateEnChocolat (double quantitePate, PateInterne pate, double quantiteTotalePateTransfo) {
 		double nouveauStockPate = super.getStockPateValeur(pate) - quantitePate ;
 		if (nouveauStockPate >= 0) {
+			double cout = 0 ;
 			Chocolat chocolat = this.creerChocolat(pate) ;
 			double quantiteChocolat = this.getCoeffTPEC()*quantitePate ;
 			if (quantiteChocolat > 0) {
+				cout = quantitePate*this.getCoutUnitaireTPEC(pate.getGamme()) ;
+				cout += this.getCapaciteMaxTPEC()*this.getCoutUnitaireEntretienTPEC() ;
 				double prix = this.prixApresTPEC(pate, quantiteTotalePateTransfo );
 				/*System.out.println("prix");
 				System.out.println(prix);*/
@@ -403,6 +410,7 @@ public class Transformateur2_stocks_et_transfos extends Transformateur2 {
 			}
 			super.setStockPateValeur(pate,nouveauStockPate) ;
 			super.setStockChocolatValeur(chocolat, super.getStockChocolatValeur(chocolat) + quantiteChocolat ) ;
+			return cout ;
 		}
 		else {throw new IllegalArgumentException("stock negatif") ;} 
 	}
@@ -471,18 +479,22 @@ public class Transformateur2_stocks_et_transfos extends Transformateur2 {
 	//argument : dictionnaire donnant la quantité à transformer pour chaque type de denrée
 	// on le corrige, puis on effectue la transformation pour chaque denrée 
 			
-	public void transformationFeves (Map<Feve,Double> quantitesFeve) { 
+	public double transformationFeves (Map<Feve,Double> quantitesFeve) { 
 		this.correctionQuantitesTFEP(quantitesFeve) ;
+		double cout = 0 ;
 		for (Feve feve : quantitesFeve.keySet()) {
-			this.transformationFeveEnPate (quantitesFeve.get(feve), feve, this.getQuantiteTFEP(quantitesFeve)) ;
+			cout += this.transformationFeveEnPate (quantitesFeve.get(feve), feve, this.getQuantiteTFEP(quantitesFeve)) ;
 		} 
+		return cout ;
 	}
 	
-	public void transformationPate (Map<PateInterne,Double> quantitesPate) { 
+	public double transformationPate (Map<PateInterne,Double> quantitesPate) { 
 		this.correctionQuantitesTPEC(quantitesPate) ;
+		double cout = 0 ;
 		for (PateInterne pate : quantitesPate.keySet()) {
-			this.transformationPateEnChocolat (quantitesPate.get(pate), pate, this.getQuantiteTPEC(quantitesPate)) ;
+			cout += this.transformationPateEnChocolat (quantitesPate.get(pate), pate, this.getQuantiteTPEC(quantitesPate)) ;
 		} 
+		return cout ;
 	}
 		
 /* AUGMENTER LA CAPACITE DE TRANSFORMATION */

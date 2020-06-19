@@ -56,7 +56,7 @@ public class Romu implements IActeur {
 	}
 
 	public Filiere getFiliere(String nom) {
-		switch (nom) {
+		switch (nom) { 
 		case "VCA" : return new FiliereVentesCacaoAleatoires();
 		case "TESTCRIEE" : return new FiliereTestVentesCacaoCriee();
 		case "TESTBOURSE" : return new FiliereTestVentesChocolatBourse();
