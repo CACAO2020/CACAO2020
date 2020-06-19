@@ -37,7 +37,7 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 		this.journalEq1 = new Journal("Eq1 activites", this);
 		this.venteCriee = new GestionCriee(this);
 		this.plantation = new Plantations();
-		this.budget = new Budget(500000, 24);
+		this.budget = new Budget(500000.0, 24);
 		this.coutUnitaireStockage = 0.05;
 	}
 
