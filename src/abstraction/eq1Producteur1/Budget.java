@@ -19,7 +19,9 @@ import abstraction.fourni.Filiere;
  * On paie un employe (recolteur, pas de diversification des employes pour l'instant)
  * 65 000 francs CFA par mois, ce qui correspond a 100 euros.
  * Chaque récolteur est embauché pour une durée de un an (24 cycles).
- * Un nouveau plant coute 200 francs CFA (0.3), on compte 500 plants par récolteur.
+ * Un nouveau plant coute 200 francs CFA (0.3), on compte 500 plants par récolteur,
+ * et on considère qu'il y a 1 000 arbres par hectare, avec un coût du terrain
+ * à l'hectare de 1 000 euros.
  * On ne prend pas en compte le terrain lors de la plantation de nouveaux arbres.
  * Pour investir dans de nouvelles plantations, on s'assurera d'avoir suffisamment
  * d'argent pour payer les récolteurs que l'on a déjà pendant un an (choix arbitraire).
@@ -50,10 +52,14 @@ import abstraction.fourni.Filiere;
 public class Budget {
 	private double fonds;
 	private ArrayList<Integer> employes;
+	private int arbres;
+	private double hectares;
 	
 	public Budget(double f, int e) {
 		this.fonds = f;
 		this.employes = initialiserEmployes(e);
+		this.hectares = e*0.5;
+		this.arbres = e*500;
 	}
 	
 	public double getFonds() {
@@ -62,6 +68,15 @@ public class Budget {
 	
 	public ArrayList<Integer> getEmployes() {
 		return this.employes;
+	}
+	
+	public int getArbres() {
+		return this.arbres;
+	}
+	
+	
+	public double getHectares() {
+		return this.hectares;
 	}
 	
 
@@ -119,6 +134,36 @@ public class Budget {
 		this.setEmployes(l);
 	}
 	
+
+	public void setArbres(int i) {
+		this.arbres = i;
+	}
+	
+	
+	public void addArbres(int i) {
+		this.setArbres(this.getArbres() + i);
+	}
+	
+	
+	public void removeArbres(int i) {
+		this.setArbres(this.getArbres() - i);
+	}
+	
+	
+	public void setHectares(double d) {
+		this.hectares = d;
+	}
+	
+	
+	public void addHectares(double d) {
+		this.setHectares(this.getHectares() + d);
+	}
+	
+	
+	public void removeHectares(double d) {
+		this.setHectares(this.getHectares() - d);
+	}
+	
 	
 	public ArrayList<Double> venduesDernierement(ArrayList<PropositionCriee> l) {
 		ArrayList<Double> ForTri = new ArrayList<Double>();
@@ -144,10 +189,16 @@ public class Budget {
 	public ArrayList<Integer> investissement(double somme, double vendueF, double vendueT) {
 		double coutArbresEmploye = 152.18;
 		int newEmployes = 0;
+		double hectaresOccupes = this.getHectares() - this.getArbres()/1000;
 		while (somme>(coutArbresEmploye + 50)) {
 			newEmployes += 1;
-			somme = somme - coutArbresEmploye - 50;
+			somme -= (coutArbresEmploye + 50);
+			hectaresOccupes += 0.5;
+			if (hectaresOccupes>this.getHectares()) {
+				this.addHectares(1);
+				somme -= 1000;
 			}
+		}
 		double quantiteVendue = vendueF + vendueT;
 		double proportionT = vendueT/quantiteVendue;
 		int newArbresT = (int) proportionT*newEmployes;
@@ -162,7 +213,8 @@ public class Budget {
 	
 	
 
-	public ArrayList<Integer> budget_cyclique(double fonds, ArrayList<PropositionCriee> feves, double coutStockage) {
+	public ArrayList<Integer> budget_cyclique(double fonds, ArrayList<PropositionCriee> feves, double coutStockage, int nbArbres) {
+		this.setArbres(nbArbres);
 		double gain = fonds - this.getFonds();
 		this.setFonds(fonds);
 		this.removeFonds(this.getEmployes().size()*50);
