@@ -47,11 +47,6 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 		majPrixDeVente();
 		// Le vendeur choisit les campagnes de pub à mener lors de l'étape courante
 		majPublicites();
-		
-		//System.out.println("____________________________\n");
-		//for (Chocolat choco : ac.getStock().stocksChocolat.keySet()) {
-		//	System.out.println(ac.getStock().getStockChocolat(choco));
-		//}
 	}
 	
 	public void majIndicateursDeVente() {
