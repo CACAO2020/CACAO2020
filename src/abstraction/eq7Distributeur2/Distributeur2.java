@@ -97,6 +97,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	// Le vendeur est appelé en premier pour évaluer la quantité de chocolat que les acheteurs doivent commander
 	public void next() {
 		this.debutEtape = false; 
+		gestionPanik();
 		stock.next();
 		vendeur.next();
 		acheteurContratCadre.next();
@@ -157,6 +158,33 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		}
 	}
 
+	// Gère la panik de l'acteur
+	public void gestionPanik() {
+		//Le mode panique est-il actif ?
+		if (getSolde() <= vendeur.CalculSoldeMini() && !vendeur.triggerPanik) {
+			//Mode panique vient de s'activer !
+			vendeur.triggerPanik = true;
+			vendeur.panik = true;
+			//Ajout au journal le début du mode panik
+			journal.ajouter(Journal.texteColore(alertColor, Color.RED, "Solde actuel inférieur au cours moyen boursier, mode Panik activé !"));
+			
+		} else if (getSolde() <= vendeur.CalculSoldeMini() && vendeur.triggerPanik) {
+			// Le mode panik est actif mais ce n'est pas le premier tour de panik
+			vendeur.triggerPanik = false;
+			vendeur.panik = true; // On sait jamais
+			// Ajout au journal la poursuite de la panique
+			journal.ajouter(Journal.texteColore(alertColor, Color.RED, "Solde actuel toujours inférieur au cours moyen boursier, le mode Panik est toujours actif !"));
+		} else if (getSolde() > vendeur.CalculSoldeMini() && vendeur.triggerPanik) {
+			// La panik vient de se terminer (et nous sommes toujours là)
+			vendeur.triggerPanik = false;
+			vendeur.panik = false;
+			//Ajouter au journal la fin de la panik
+			journal.ajouter(Journal.texteColore(alertColor, Color.RED, "Solde actuel supérieur au cours moyen boursier, mode Panik désactivé ! Ouf !"));
+		} else {
+			//Pas de panik en vue, rien à afficher
+		}
+	}
+	
 	// Renvoie la liste des filières proposées par l'acteur
 	public List<String> getNomsFilieresProposees() {
 		ArrayList<String> filieres = new ArrayList<String>();

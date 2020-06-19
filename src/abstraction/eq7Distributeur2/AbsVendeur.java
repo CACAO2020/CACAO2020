@@ -58,6 +58,12 @@ public class AbsVendeur {
 	// multiplicateur du cours moyen de la bourse
 	protected double coeffCoursMoyen;
 	
+	//Marqueur de la panique, lorsqu'il est activé le vendeur panique et essaie d'engranger de l'argent le plus possible
+	protected boolean panik;
+	
+	//Le mode panik vient de démarrer/terminer !
+	protected boolean triggerPanik;
+	
 	// Couleurs d'arrière-plan pour les messages des journaux
 	public Color titleColor = Color.BLACK;
 	public Color metaColor = Color.CYAN;

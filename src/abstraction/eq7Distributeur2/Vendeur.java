@@ -72,24 +72,11 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 		//le solde seuil est calculé à partir du cours actuel
 		double quantiteEnVente;
 		double stockActuel;
-		double soldeActuel;
 		double stockLimite = 1000.;
-		soldeActuel = ac.getSolde();
-		double coursActuel; //dépend du chocolat en vente !
-		double moyenneCours = 0;
-		double soldeMini; // fonction du cours
-		
-		// On calcule d'abord le cours moyen de la bourse pour nos chocolats
-		for (ChocolatDeMarque choco : produitsCatalogue) {
-			coursActuel = Filiere.LA_FILIERE.getIndicateur("BourseChoco cours " + choco.getChocolat().name()).getHistorique().get(Filiere.LA_FILIERE.getEtape()).getValeur();
-			moyenneCours += coursActuel;
-		}
-		moyenneCours /= produitsCatalogue.size();
-		soldeMini = coeffCoursMoyen*moyenneCours; //Valeur complétement arbitraire
 		
 		for (ChocolatDeMarque choco : produitsCatalogue) {
 			stockActuel = ac.getStock().getStockChocolatDeMarque(choco);
-			if (soldeActuel <= soldeMini){
+			if (panik){
 				//il faut vendre tout !
 				quantitesEnVente.get(choco).setValeur(ac, stockActuel);
 			} else if (stockActuel < stockLimite) {
@@ -109,22 +96,10 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 		double quantiteACommander;
 		double stockActuel;
 		double stockLimite = 1000.;
-		double coursActuel;
-		double moyenneCours = 0;
-		double soldeMini;
-		double soldeActuel = ac.getSolde();
-		
-		// On calcule d'abord le cours moyen de la bourse pour nos chocolats
-		for (ChocolatDeMarque choco : produitsCatalogue) {
-			coursActuel = Filiere.LA_FILIERE.getIndicateur("BourseChoco cours " + choco.getChocolat().name()).getHistorique().get(Filiere.LA_FILIERE.getEtape()).getValeur();
-			moyenneCours += coursActuel;
-		}
-		moyenneCours /= produitsCatalogue.size();
-		soldeMini = coeffCoursMoyen*moyenneCours; //Valeur complétement arbitraire	
 		
 		for (ChocolatDeMarque choco : produitsCatalogue) {
 			stockActuel = ac.getStock().getStockChocolatDeMarque(choco);
-			if (soldeActuel <= soldeMini) {
+			if (panik) {
 				// Il faut tout arrêter !
 				quantiteACommander = 0.;
 			}
@@ -142,17 +117,24 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 		// IA : prix vente = (1 + pourcentageMarge/100) * cours
 		double cours;
 		double pourcentageMarge;
+		double prix;
 		for (ChocolatDeMarque choco : produitsCatalogue) {
 			if (this.coutUnitaire.containsKey(choco)) {
 				double prixLastStep = this.coutUnitaire.get(choco);
 			}
+			
 			pourcentageMarge = 10.;
 			if (Filiere.LA_FILIERE.getEtape() > 1) {
 	            cours = Filiere.LA_FILIERE.getIndicateur("BourseChoco cours " + choco.getChocolat().name()).getHistorique().get(Filiere.LA_FILIERE.getEtape()-1).getValeur();
 	        } else {
 	        	cours = prixParDefaut.get(choco.getChocolat());
 	        }
-			double prix = (1. + pourcentageMarge/100.) * cours;
+			prix = (1. + pourcentageMarge/100.) * cours;
+			
+			if (panik) {
+				//On a besoin de plus d'argent !
+				prix *= 10;  //Valeur arbitraire
+			}
 			prixChoco.get(choco).setValeur(ac, prix);
 		}
 	}
@@ -256,5 +238,19 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 	public List<ChocolatDeMarque> pubSouhaitee() {
 		return publicites;
 	}
-
+	
+	public double CalculSoldeMini() {
+		double coursActuel;
+		double moyenneCours = 0;
+		double soldeMini;
+		
+		// On calcule d'abord le cours moyen de la bourse pour nos chocolats
+		for (ChocolatDeMarque choco : produitsCatalogue) {
+			coursActuel = Filiere.LA_FILIERE.getIndicateur("BourseChoco cours " + choco.getChocolat().name()).getHistorique().get(Filiere.LA_FILIERE.getEtape()).getValeur();
+			moyenneCours += coursActuel;
+		}
+		moyenneCours /= produitsCatalogue.size();
+		soldeMini = coeffCoursMoyen*moyenneCours; //Valeur complétement arbitraire
+		return soldeMini;
+	}
 }
