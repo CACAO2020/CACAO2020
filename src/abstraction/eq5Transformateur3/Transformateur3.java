@@ -97,6 +97,8 @@ public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurCh
 		List<Variable> res = new ArrayList<Variable>();
 		res.add(this.stock.getTransformationCostFeve());
 		res.add(this.stock.getTransformationCostPate());
+		res.add(this.stock.getStockCostFixe());
+		res.add(this.stock.getStockCostVar());
 		return res;
 	}
 
@@ -173,7 +175,7 @@ public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurCh
 	public SuiviDesCoursDeVente getInfoCoursVente() {
 		return infoCoursVente;
 	}
-	
+
 	protected int getCryptogramme() {
 		return this.cryptogramme;
 	}
