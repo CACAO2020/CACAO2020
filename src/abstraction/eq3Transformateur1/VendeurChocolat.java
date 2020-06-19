@@ -31,7 +31,7 @@ public abstract class VendeurChocolat extends AcheteurCacao implements IVendeurC
             }
             if(cours<1.06*this.getCoutChocolat(chocolat)) {
             	this.journalVente.ajouter("On essaye de vendre 60% de chocolat"+chocolat);
-                return 0.06*this.getStockChocolat(chocolat);
+                return 0.6*this.getStockChocolat(chocolat);
             }
             if(cours<1.08*this.getCoutChocolat(chocolat)) {
             	this.journalVente.ajouter("On essaye de vendre 80% de chocolat"+chocolat);
