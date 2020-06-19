@@ -38,8 +38,6 @@ public class Stock extends AbsStock implements IStock {
 	}
 	//ajoute les quantités necessaires de chocolat des stocks correspondant 
 	public void ajouterStockChocolat(ChocolatDeMarque chocoDeMarque, double quantite) {
-		if (!stocksChocolatDeMarque.containsKey(chocoDeMarque)) {
-		}
 		if (!stocksChocolat.containsKey(chocoDeMarque.getChocolat())) {
 		}
 		stocksChocolatDeMarque.get(chocoDeMarque).setValeur(ac, stocksChocolatDeMarque.get(chocoDeMarque).getValeur() + quantite);
@@ -50,15 +48,23 @@ public class Stock extends AbsStock implements IStock {
 
 		if (chocoEnStockParEtape.containsKey(etape)) {
 			chocoEnStockParEtape.get(etape).put(chocoDeMarque,chocoEnStockParEtape.get(etape).get(chocoDeMarque) + quantite);
-		}
-		
+		}	
 	}
 	
 	public void next() {
+		initialiserStocksEtape();
 		// Paiement masse salariale et coûts de stockage
 		payerFrais();
 		// On jette les chocos périmés
 		jeterChocoPerimes();
+	}
+	
+	public void initialiserStocksEtape() {    // Stocks initiaux nul du coup ?
+		int etape = Filiere.LA_FILIERE.getEtape();
+		ac.getStock().chocoEnStockParEtape.put(etape, new HashMap<ChocolatDeMarque, Double>());
+		for (ChocolatDeMarque chocoDeMarque : ac.tousLesChocolatsDeMarquePossibles()) {
+			ac.getStock().chocoEnStockParEtape.get(etape).put(chocoDeMarque, 0.);
+		}
 	}
 	
 	public void payerFrais() {
@@ -73,6 +79,10 @@ public class Stock extends AbsStock implements IStock {
 				double quantiteAJeter = mapEntry.getValue();
 				if (quantiteAJeter > 0.) {
 					this.retirerStockChocolat(choco, quantiteAJeter);
+					boolean b = quantiteAJeter < 0.01;
+					if (b) {
+						System.out.println(b);
+					}
 					// Le message suivant suit un message venant d'une diminution de stocks "normale", il y a double message, ce n'est pas très optimisé...
 					journal.ajouter(Journal.texteColore(peremptionColor, Color.BLACK, "[STOCK -] " + Journal.doubleSur(quantiteAJeter,2) + " tonnes de " + choco.name() + " ont périmé et ont été retirées du stock (nouveau stock : " + Journal.doubleSur(stocksChocolatDeMarque.get(choco).getValeur(),2) + " tonnes)."));
 				}
@@ -130,8 +140,6 @@ public class Stock extends AbsStock implements IStock {
 	
 	//retire les quantités necessaires de chocolat des stocks correspondant (avec la prise en compte des potentiels echecs de mouvements)
 	public void retirerStockChocolat(ChocolatDeMarque chocoDeMarque, double quantite) {
-		if (!stocksChocolatDeMarque.containsKey(chocoDeMarque)) {
-		}
 		if (!stocksChocolat.containsKey(chocoDeMarque.getChocolat())) {
 		}
 		if (stocksChocolatDeMarque.get(chocoDeMarque).getValeur() >= quantite) {

@@ -101,7 +101,6 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 			}
 			
 		}
-
 	}
 	
 	public void majQuantitesACommander() { //!!!!!!!!!!!!!!!!!!On n'achète que pour compenser les ventes
@@ -189,7 +188,6 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 		//donne quantité en vente de chocolat selon la marque
 		if (!ac.debutEtape) {
 			ac.debutEtape = true;
-			initialiserStocksEtape();
 			adapterQuantitesEnVente();  // Appelée une seule fois à l'initialisation ?
 			dessinerCatalogue();
 		}
@@ -197,14 +195,6 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 			return quantiteAVendreParDefaut;
 		} else {
 			return quantitesEnVente.get(choco).getValeur();
-		}
-	}
-
-	public void initialiserStocksEtape() {    // Stocks initiaux nul du coup ?
-		int etape = Filiere.LA_FILIERE.getEtape();
-		ac.getStock().chocoEnStockParEtape.put(etape, new HashMap<ChocolatDeMarque, Double>());
-		for (ChocolatDeMarque chocoDeMarque : ac.tousLesChocolatsDeMarquePossibles()) {
-			ac.getStock().chocoEnStockParEtape.get(etape).put(chocoDeMarque, 0.);
 		}
 	}
 	
@@ -243,18 +233,14 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 			double temp = Double.max(ac.getStock().getStockChocolatDeMarque(produit)-stockLimite, 0.);
 			temp = Double.min(quantitesEnVente.get(produit).getValeur(), temp);
 			quantitesEnVente.get(produit).setValeur(ac, temp);
-
-		}
-
-			
+		}	
 	}
  
 	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant) {
 		//vend le chocolat de tel marque à tel prix et telle quantité au client final
 		if (client!=null) { 
 			if (quantite != 0.) {
-				this.coutUnitaire.put(choco, montant/quantite); 
-			
+			this.coutUnitaire.put(choco, montant/quantite); 
 			ac.getStock().retirerStockChocolat(choco, quantite);
 			journal.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[VENTE] Vente de " + Journal.doubleSur(quantite,2) + " tonnes de " + choco.name() + " à " + client.getNom() + " pour " + Journal.doubleSur(montant,2) + " (" + Journal.doubleSur(montant/quantite,2) + "/tonne)."));
 			ventesEtapeActuelle.put(choco.getChocolat(), ventesEtapeActuelle.get(choco.getChocolat()) + quantite);

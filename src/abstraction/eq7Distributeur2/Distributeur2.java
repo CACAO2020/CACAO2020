@@ -79,6 +79,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	public int getNumero() {
 		return this.numero; 
 	}
+	
 	// Lance les procédures d'initialisation des acteurs
 	public void initialiser() {
 		vendeur.initialiser();
@@ -86,12 +87,12 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		stock.initialiser();
 		// AJOUT D'UN STOCK INITIAL POUR OBSERVER LES VENTES
 		stock.chocoEnStockParEtape.put(0, new HashMap<ChocolatDeMarque, Double>());
-		for (ChocolatDeMarque choco : this.tousLesChocolatsDeMarquePossibles()) {
-			stock.chocoEnStockParEtape.get(0).put(choco, stockInitial);
+		for (ChocolatDeMarque choco : tousLesChocolatsDeMarquePossibles()) {
+			getStock().chocoEnStockParEtape.get(0).put(choco, 0.);
 			stock.ajouterStockChocolat(choco, stockInitial);
 		}
-
 	}
+	
 	// La méthode next, qui lance les appels des fonctions next de chaque sous-acteur
 	// Le vendeur est appelé en premier pour évaluer la quantité de chocolat que les acheteurs doivent commander
 	public void next() {
