@@ -41,8 +41,8 @@ public class eq2Stock extends eq2Acteur{
 		this.coutStock = new Variable ("cout",this,1);
 		this.StockFeve = new HashMap<Feve,Variable>();
 		this.StockPate = new HashMap<Pate,Variable>();
-		this.StockPate.put(Pate.PATE_BASSE, new Variable("EQ2Pate.PATE_BASSE",this,0.0));
-		this.StockPate.put(Pate.PATE_MOYENNE, new Variable("EQ2Pate.PATE_MOYENNE",this,0.0));
+		this.StockPate.put(Pate.PATE_BASSE, new Variable("EQ2Pate.PATE_BASSE",this,50));
+		this.StockPate.put(Pate.PATE_MOYENNE, new Variable("EQ2Pate.PATE_MOYENNE",this,50));
 		
 		this.cout_total_Stock= new Variable("cout_total_stock",this,0);
 		this.StockFeve.put(Feve.FEVE_BASSE, new Variable("EQ2Feve.FEVE_BASSE",this, 100.0));

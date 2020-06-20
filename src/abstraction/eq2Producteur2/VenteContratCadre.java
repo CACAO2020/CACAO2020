@@ -16,19 +16,6 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 	private ArrayList<ExemplaireContratCadre> contratsencours;
 	private Journal journal_contrats;
 	private double PrixMoyen; //prix a la tonne
-	/**
-	 * @return the prixMoyen
-	 */
-	public double getPrixMoyen() {
-		return PrixMoyen;
-	}
-
-	/**
-	 * @param prixMoyen the prixMoyen to set
-	 */
-	public void setPrixMoyen(double prixMoyen) {
-		PrixMoyen = prixMoyen;
-	}
 	private double prixventecontrat;
 	private double massedispofora; 
 	private double massedispotrini;
@@ -64,33 +51,15 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 	}
 	@Override
 	public boolean vend(Object produit) {
-		if (produit.equals(Feve.FEVE_BASSE) || produit.equals(Feve.FEVE_MOYENNE) || produit.equals(Feve.FEVE_MOYENNE_EQUITABLE) || produit.equals(Feve.FEVE_HAUTE) || produit.equals(Feve.FEVE_HAUTE_EQUITABLE))  {
+		if (produit instanceof Feve)  {
 			Feve prod = (Feve)produit; 
 		
 
-			this.massedispofora = this.getStockFeve().get(Feve.FEVE_BASSE).getValeur();
-			this.massedispotrini = this.getStockFeve().get(Feve.FEVE_MOYENNE).getValeur();
-			this.massedispotrinie = this.getStockFeve().get(Feve.FEVE_MOYENNE_EQUITABLE).getValeur();
-			this.massedispocrio = this.getStockFeve().get(Feve.FEVE_HAUTE).getValeur();
-			this.massedispocrioe = this.getStockFeve().get(Feve.FEVE_HAUTE_EQUITABLE).getValeur();
-			for (int i = 0; i < this.getContratsencours().size(); i++) {
-				ExemplaireContratCadre contrat = (ExemplaireContratCadre)this.getContratsencours().get(i);
-				if ((Feve)contrat.getProduit() == Feve.FEVE_BASSE) {
-					massedispofora = massedispofora - contrat.getQuantiteRestantALivrer();
-				}
-				else if ((Feve)contrat.getProduit() == Feve.FEVE_MOYENNE) {
-					massedispotrini = massedispotrini - contrat.getQuantiteRestantALivrer();
-				}
-				else if ((Feve)contrat.getProduit() == Feve.FEVE_MOYENNE_EQUITABLE) {
-					massedispotrinie = massedispotrinie - contrat.getQuantiteRestantALivrer();
-				}
-				else if ((Feve)contrat.getProduit() == Feve.FEVE_HAUTE) {
-					massedispocrio = massedispocrio - contrat.getQuantiteRestantALivrer();
-				}
-				else if ((Feve)contrat.getProduit() == Feve.FEVE_HAUTE_EQUITABLE) {
-					massedispocrioe = massedispocrioe - contrat.getQuantiteRestantALivrer();
-				}
-			}
+			this.massedispofora = this.getmassedispofora();
+			this.massedispotrini = this.getmassedispotrini();
+			this.massedispotrinie = this.getmassedispotrinie();
+			this.massedispocrio = this.getmassedispocrio();
+			this.massedispocrioe = this.getmassedispocrioe();
 			//this.journal_contrats.ajouter(""+massedispofora+massedispotrini+massedispotrinie+massedispocrio+massedispocrioe);
 			if (prod == Feve.FEVE_BASSE && massedispofora > 0.5) {
 				this.journal_contrats.ajouter("On est disposé à passer un contrat pour vendre des fèves forastero");
@@ -116,16 +85,16 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 				return false;
 			}
 		}
-		else if (produit.equals(Pate.PATE_BASSE) || produit.equals(Pate.PATE_MOYENNE)) {
+		else if (produit instanceof Pate) {
 			Pate pat = (Pate)produit;
 			this.patedispofora = this.getpatedispofora();
 			this.patedispotrini = this.getpatedispotrini();
 			if (pat == Pate.PATE_BASSE && this.patedispofora > 0) {
-				this.journal_contrats.ajouter("On est disposé à passer un contrat pour vendre de la pate basse");
+				this.journal_contrats.ajouter("On est disposé à passer un contrat pour vendre de la pâte basse");
 				return true;
 			}
 			else if (pat == Pate.PATE_MOYENNE && this.patedispotrini > 0) {
-				this.journal_contrats.ajouter("On est disposé à passer un contrat pour vendre de la pate moyenne");
+				this.journal_contrats.ajouter("On est disposé à passer un contrat pour vendre de la pâte moyenne");
 				return true;
 			}
 		}
@@ -304,7 +273,7 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 	@Override
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
 		this.contratsencours.add(contrat);
-		this.journal_contrats.ajouter("Le contrat n°"+contrat.getNumero()+" a été signé. On devra livrer "+contrat.getQuantiteTotale()+" tonnes de "+(Feve)contrat.getProduit()+" en "+contrat.getEcheancier().getNbEcheances()+" étapes.");
+		this.journal_contrats.ajouter("Le contrat n°"+contrat.getNumero()+" a été signé. On devra livrer "+contrat.getQuantiteTotale()+" tonnes de "+contrat.getProduit()+" en "+contrat.getEcheancier().getNbEcheances()+" étapes.");
 		if (contrat.getProduit().equals(Feve.FEVE_BASSE)||contrat.getProduit().equals(Pate.PATE_BASSE)) {
 			this.incrementercompteurfora();
 		}
@@ -435,8 +404,10 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 		double masse = this.getStockFeve().get(Feve.FEVE_BASSE).getValeur();
 		for (int i = 0; i < this.getContratsencours().size(); i++) {
 			ExemplaireContratCadre contrat = (ExemplaireContratCadre)this.getContratsencours().get(i);
-			if ((Feve)contrat.getProduit() == Feve.FEVE_BASSE) {
-				masse = masse - contrat.getQuantiteRestantALivrer();
+			if (contrat.getProduit() instanceof Feve) {
+				if ((Feve)contrat.getProduit() == Feve.FEVE_BASSE) {
+					masse = masse - contrat.getQuantiteRestantALivrer();
+				}
 			}
 		}
 		return masse;
@@ -445,8 +416,10 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 		double masse = this.getStockFeve().get(Feve.FEVE_MOYENNE).getValeur();
 		for (int i = 0; i < this.getContratsencours().size(); i++) {
 			ExemplaireContratCadre contrat = (ExemplaireContratCadre)this.getContratsencours().get(i);
-			if ((Feve)contrat.getProduit() == Feve.FEVE_MOYENNE) {
-				masse = masse - contrat.getQuantiteRestantALivrer();
+			if (contrat.getProduit() instanceof Feve) {
+				if ((Feve)contrat.getProduit() == Feve.FEVE_MOYENNE) {
+					masse = masse - contrat.getQuantiteRestantALivrer();
+				}
 			}
 		}
 		return masse;
@@ -455,8 +428,10 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 		double masse = this.getStockFeve().get(Feve.FEVE_MOYENNE_EQUITABLE).getValeur();
 		for (int i = 0; i < this.getContratsencours().size(); i++) {
 			ExemplaireContratCadre contrat = (ExemplaireContratCadre)this.getContratsencours().get(i);
-			if ((Feve)contrat.getProduit() == Feve.FEVE_MOYENNE_EQUITABLE) {
-				masse = masse - contrat.getQuantiteRestantALivrer();
+			if (contrat.getProduit() instanceof Feve) {
+				if ((Feve)contrat.getProduit() == Feve.FEVE_MOYENNE_EQUITABLE) {
+					masse = masse - contrat.getQuantiteRestantALivrer();
+				}
 			}
 		}
 		return masse;
@@ -465,8 +440,10 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 		double masse = this.getStockFeve().get(Feve.FEVE_HAUTE).getValeur();
 		for (int i = 0; i < this.getContratsencours().size(); i++) {
 			ExemplaireContratCadre contrat = (ExemplaireContratCadre)this.getContratsencours().get(i);
-			if ((Feve)contrat.getProduit() == Feve.FEVE_HAUTE) {
-				masse = masse - contrat.getQuantiteRestantALivrer();
+			if (contrat.getProduit() instanceof Feve) {
+				if ((Feve)contrat.getProduit() == Feve.FEVE_HAUTE) {
+					masse = masse - contrat.getQuantiteRestantALivrer();
+				}
 			}
 		}
 		return masse;
@@ -475,8 +452,10 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 		double masse = this.getStockFeve().get(Feve.FEVE_HAUTE_EQUITABLE).getValeur();
 		for (int i = 0; i < this.getContratsencours().size(); i++) {
 			ExemplaireContratCadre contrat = (ExemplaireContratCadre)this.getContratsencours().get(i);
-			if ((Feve)contrat.getProduit() == Feve.FEVE_HAUTE_EQUITABLE) {
-				masse = masse - contrat.getQuantiteRestantALivrer();
+			if (contrat.getProduit() instanceof Feve) {
+				if ((Feve)contrat.getProduit() == Feve.FEVE_HAUTE_EQUITABLE) {
+					masse = masse - contrat.getQuantiteRestantALivrer();
+				}
 			}
 		}
 		return masse;
@@ -485,8 +464,10 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 		double masse = this.getStockPate().get(Pate.PATE_BASSE).getValeur();
 		for (int i = 0; i < this.getContratsencours().size(); i++) {
 			ExemplaireContratCadre contrat = (ExemplaireContratCadre)this.getContratsencours().get(i);
-			if ((Pate)contrat.getProduit() == Pate.PATE_BASSE) {
-				masse = masse - contrat.getQuantiteRestantALivrer();
+			if (contrat.getProduit() instanceof Pate) {
+				if ((Pate)contrat.getProduit() == Pate.PATE_BASSE) {
+					masse = masse - contrat.getQuantiteRestantALivrer();
+				}
 			}
 		}
 		return masse;
@@ -495,10 +476,25 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 		double masse = this.getStockPate().get(Pate.PATE_MOYENNE).getValeur();
 		for (int i = 0; i < this.getContratsencours().size(); i++) {
 			ExemplaireContratCadre contrat = (ExemplaireContratCadre)this.getContratsencours().get(i);
-			if ((Pate)contrat.getProduit() == Pate.PATE_MOYENNE) {
-				masse = masse - contrat.getQuantiteRestantALivrer();
+			if (contrat.getProduit() instanceof Pate) {
+				if ((Pate)contrat.getProduit() == Pate.PATE_MOYENNE) {
+					masse = masse - contrat.getQuantiteRestantALivrer();
+				}
 			}
 		}
 		return masse;
+	}
+	/**
+	 * @return the prixMoyen
+	 */
+	public double getPrixMoyen() {
+		return PrixMoyen;
+	}
+
+	/**
+	 * @param prixMoyen the prixMoyen to set
+	 */
+	public void setPrixMoyen(double prixMoyen) {
+		PrixMoyen = prixMoyen;
 	}
 }
