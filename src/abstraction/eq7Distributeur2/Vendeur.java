@@ -68,7 +68,6 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 	}
 	
 	public void majAchatsEtVentes() {
-		double soldeActuel = ac.getSolde();
 		double quantiteAVendre;
 		double quantiteACommander;
 		double stockActuel;
@@ -80,17 +79,19 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 				// on vend tout, et on n'achète rien en bourse !
 				quantitesEnVente.get(choco).setValeur(ac, stockActuel);
 				quantiteACommander = 0.;
-			} else if (stockActuel < stockLimite) {
+			} else if (stockActuel <= stockLimite) {
 				surplus = stockLimite*0.5;
-				quantitesEnVente.get(choco).setValeur(ac, surplus/2);
-				quantiteACommander = stockLimite-stockActuel + surplus;
+//				quantitesEnVente.get(choco).setValeur(ac, surplus/2); // Si le stock est nul, on met en vente ce que l'on a pas
+				quantitesEnVente.get(choco).setValeur(ac, stockActuel/4);
+				quantiteACommander = 2*stockLimite-stockActuel + surplus; //Il faut refaire les stocks !
 			} else {
 				surplus = stockLimite*0.5;
 				quantiteAVendre = stockActuel - stockLimite + surplus;
 				quantitesEnVente.get(choco).setValeur(ac, quantiteAVendre);
-				quantiteACommander = Double.max(surplus*2, 0.);
-				quantitesACommander.get(choco).setValeur(ac, quantiteACommander);
-			}
+				quantiteACommander = Double.max(surplus*2, 0.); //On ne commande que le stock limite 
+				
+					}
+			quantitesACommander.get(choco).setValeur(ac, quantiteACommander);
 		}
 	}
 	
@@ -115,7 +116,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 			
 			if (panik) {
 				//On a besoin de plus d'argent !
-				prix *= 6;  //Valeur arbitraire
+				prix *= 6;  //Valeur arbitraire, et un peu empirique surtout
 			}
 			prixChoco.get(choco).setValeur(ac, prix);
 		}
@@ -193,7 +194,6 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 	public void adapterQuantitesEnVente() {
 		//met à jour les quantité de chocolat de chaque marque en vente selon le stock qu'on a
 		if (!panik) {
-			System.out.println("Hey\n\n");
 			for (ChocolatDeMarque produit : produitsCatalogue) {
 				double stockLimite = ac.getStock().stockLimite;
 				double temp = Double.max(ac.getStock().getStockChocolatDeMarque(produit)-stockLimite, 0.);
@@ -204,12 +204,13 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 	}
  
 	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant) {
-		//vend le chocolat de tel marque à tel prix et telle quantité au client final
-		if (client!=null && quantite != 0.) {
+		//vend le chocolat de telle marque à tel prix et telle quantité au client final
+		if (client!=null && quantite > 0.0001) {
 			this.coutUnitaire.put(choco, montant/quantite); 
 			ac.getStock().retirerStockChocolat(choco, quantite);
 			journal.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[VENTE] Vente de " + Journal.doubleSur(quantite,2) + " tonnes de " + choco.name() + " à " + client.getNom() + " pour " + Journal.doubleSur(montant,2) + " (" + Journal.doubleSur(montant/quantite,2) + "/tonne)."));
 			ventesEtapeActuelle.put(choco.getChocolat(), ventesEtapeActuelle.get(choco.getChocolat()) + quantite);
+			
 		}
 	}
 
