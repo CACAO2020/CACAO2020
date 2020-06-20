@@ -115,7 +115,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 			
 			if (panik) {
 				//On a besoin de plus d'argent !
-				prix *= 1;  //Valeur arbitraire
+				prix *= 6;  //Valeur arbitraire
 			}
 			prixChoco.get(choco).setValeur(ac, prix);
 		}
@@ -193,6 +193,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 	public void adapterQuantitesEnVente() {
 		//met à jour les quantité de chocolat de chaque marque en vente selon le stock qu'on a
 		if (!panik) {
+			System.out.println("Hey\n\n");
 			for (ChocolatDeMarque produit : produitsCatalogue) {
 				double stockLimite = ac.getStock().stockLimite;
 				double temp = Double.max(ac.getStock().getStockChocolatDeMarque(produit)-stockLimite, 0.);
