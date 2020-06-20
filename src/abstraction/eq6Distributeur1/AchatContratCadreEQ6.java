@@ -32,12 +32,14 @@ public class AchatContratCadreEQ6 extends DistributeurClientFinal implements IAc
 
 	@Override
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
-		if (Math.random()<0.1) {
+		if (Math.random()<0.5) {
 			return contrat.getEcheancier(); // on ne cherche pas a negocier sur le previsionnel de livraison
-		} else {//dans 90% des cas on fait une contreproposition pour l'echeancier
+		} else {
 			Echeancier e = contrat.getEcheancier();
-			e.set(e.getStepDebut(), e.getQuantite(e.getStepDebut())*2.5);// on souhaite livrer 2.5 fois plus lors de la 1ere livraison... un choix arbitraire, juste pour l'exemple...
-			return e;
+			Echeancier nouveau = new Echeancier(e.getStepDebut(),e.getStepFin()-e.getStepDebut(),e.getQuantite(e.getStepDebut())*1.05); // on leur commande un plus gros stock
+
+		
+			return nouveau;
 		}
 	}
 
