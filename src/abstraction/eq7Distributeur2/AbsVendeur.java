@@ -61,8 +61,8 @@ public class AbsVendeur {
 	//Marqueur de la panique, lorsqu'il est activé le vendeur panique et essaie d'engranger de l'argent le plus possible
 	protected boolean panik;
 	
-	//Le mode panik vient de démarrer/terminer !
-	protected boolean triggerPanik;
+	//Le mode panik était actif au tour précédent !
+	protected boolean wasPanik;
 	
 	// Couleurs d'arrière-plan pour les messages des journaux
 	public Color titleColor = Color.BLACK;

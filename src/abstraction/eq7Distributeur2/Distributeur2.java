@@ -189,28 +189,29 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	public void gestionPanik() {
 		//Le mode panique est-il actif ?
 		boolean estEnPanik = estEnPanik(); 
-		if (estEnPanik && !vendeur.triggerPanik) {
-			if (!vendeur.triggerPanik) {
+		if (estEnPanik) {
+			if (!vendeur.wasPanik) {
 				//Mode panique vient de s'activer !
-				vendeur.triggerPanik = true;
+				vendeur.wasPanik = true;
 				vendeur.panik = true;
 				//Ajout au journal le début du mode panik
 				journal.ajouter(Journal.texteColore(behaviorColor, Color.BLACK, "[PANIK ON] Mode PANIK activé !"));
 			} else {
 				// Le mode panik est actif mais ce n'est pas le premier tour de panik
-				vendeur.triggerPanik = false;
+				vendeur.wasPanik = true;
 				vendeur.panik = true; // On sait jamais
-				// Ajout au journal la poursuite de la panique
+				// Ajout au journal la poursuite de la panik
 				journal.ajouter(Journal.texteColore(behaviorColor, Color.BLACK, "[PANIK] Mode PANIK toujours actif !"));
 			}
-		} else if (!estEnPanik && vendeur.triggerPanik) {
+		} else if (!estEnPanik && vendeur.wasPanik) {
 			// La panik vient de se terminer (et nous sommes toujours là)
-			vendeur.triggerPanik = false;
+			vendeur.wasPanik = false;
 			vendeur.panik = false;
 			//Ajouter au journal la fin de la panik
 			journal.ajouter(Journal.texteColore(behaviorColor, Color.BLACK, "[PANIK OFF] Mode PANIK désactivé ! Ouf !"));
 		} else {
 			//Pas de panik en vue, rien à afficher
+			vendeur.wasPanik = false;
 		}
 	}
 	
