@@ -216,7 +216,7 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 	public void fairepâte() { 
 		
 		double proportion = 0.2;
-		double coût_par_tonne = 6000;
+		double coût_par_tonne = 500; //bien plus réaliste que 6000 balles par tonnes cf les prix irl
 		if (this.getStockPate().get(Pate.PATE_BASSE).getValeur() < proportion*(this.getStockFeve().get(Feve.FEVE_BASSE).getValeur()+this.getStockPate().get(Pate.PATE_BASSE).getValeur())) {
 			if (((this.getStockFeve().get(Feve.FEVE_BASSE).getValeur()+this.getStockPate().get(Pate.PATE_BASSE).getValeur())*proportion-this.getStockPate().get(Pate.PATE_BASSE).getValeur())*coût_par_tonne < Filiere.LA_FILIERE.getBanque().getSolde(this, this.getCrypto())) {
 				if (this.getmassedispofora() > (this.getStockFeve().get(Feve.FEVE_BASSE).getValeur()+this.getStockPate().get(Pate.PATE_BASSE).getValeur())*proportion-this.getStockPate().get(Pate.PATE_BASSE).getValeur()) {
