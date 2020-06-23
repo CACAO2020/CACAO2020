@@ -72,6 +72,8 @@ public class AbsVendeur {
 	
 	protected boolean wasKalm;
 	
+	protected double seuilKalm;
+	
 	// Couleurs d'arrière-plan pour les messages des journaux
 	public Color titleColor = Color.BLACK;
 	public Color metaColor = Color.CYAN;

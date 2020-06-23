@@ -24,10 +24,12 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 
 	public Vendeur(Distributeur2 ac) {
 		super(ac);
+		seuilKalm = 1000000;
 		
 	}
 	
 	public void initialiser() {
+		this.kalm = ac.getSolde() > this.seuilKalm;
 		this.coutUnitaire = new HashMap<ChocolatDeMarque, Double>();
 		quantiteAVendreParDefaut = ac.stockInitial-ac.getStock().stockLimite;
 		for (ChocolatDeMarque choco : ac.tousLesChocolatsDeMarquePossibles()) {
@@ -78,17 +80,19 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 			if (panik){
 				// on vend tout, et on n'achète rien en bourse !
 				quantitesEnVente.get(choco).setValeur(ac, stockActuel);
-				quantiteACommander = 0.;
+				quantiteACommander = 0.; //A voir quand même
 			} else if (kalm) {
 				surplus = stockLimite*0.5;
-				quantiteAVendre = stockActuel - stockLimite + surplus;
+				quantiteAVendre = stockActuel - stockLimite; //On diminue un peu les quantités mises en vente (par rapport au else ci-dessous) pour augmenter les stocks
 				quantitesEnVente.get(choco).setValeur(ac, quantiteAVendre);
-				quantiteACommander = Double.max(surplus*3, 0.); //On ne commande que le stock limite en fait
+				quantiteACommander = Double.max(40, 0.); //Arbitraire encore et toujours
 				}
 			else if (stockActuel <= stockLimite) {
 				surplus = stockLimite*0.5;
 //				quantitesEnVente.get(choco).setValeur(ac, surplus/2); // Si le stock est nul, on met en vente ce que l'on a pas
-				quantitesEnVente.get(choco).setValeur(ac, stockActuel/4);
+//				quantitesEnVente.get(choco).setValeur(ac, stockActuel/4)
+				//Je (Raphael C.) pense qu'il faut diminuer beaucoup la vente dans cette section histoire de laisser les stocks se refaire
+				quantitesEnVente.get(choco).setValeur(ac, stockActuel/8);
 				quantiteACommander = 2*stockLimite-stockActuel + surplus; //Il faut refaire les stocks !
 			} else {
 				surplus = stockLimite*0.5;
@@ -100,7 +104,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 			quantitesACommander.get(choco).setValeur(ac, quantiteACommander);
 		}
 	}
-	
+	/**
 	public void majAchatsEtVentesChoco() {
 		double quantiteAVendre;
 		double quantiteACommander;
@@ -136,7 +140,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 					}
 			quantitesACommanderChoco.get(choco).setValeur(ac, quantiteACommander);
 		}
-	}
+	}*/
 	
 	public void majPrixDeVente() {
 		// met à jour le prix de vente de chaque chocolat du catalogue selon la valeur du cours actuel
