@@ -220,7 +220,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	
 	public boolean estKalm() {
 		double soldeActuel = this.getSolde();
-		double soldeSeuil = 500000000;
+		double soldeSeuil = 1000000;
 		return soldeActuel >= soldeSeuil;
 		
 		
