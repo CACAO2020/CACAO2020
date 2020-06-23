@@ -95,6 +95,43 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 		}
 	}
 	
+	public void majAchatsEtVentesChoco() {
+		double quantiteAVendre;
+		double quantiteACommander;
+		double stockActuel;
+		double stockLimite = ac.getStock().stockLimite;
+		double surplus;
+		ArrayList<Chocolat> liste_nos_chocos = new ArrayList<Chocolat>();
+		
+		for (ChocolatDeMarque choco : produitsCatalogue) {
+			Chocolat ce_choco = choco.getChocolat();
+			if ( !liste_nos_chocos.contains(ce_choco)) {
+				liste_nos_chocos.add(ce_choco);
+			}
+			
+		}
+		for (Chocolat choco : liste_nos_chocos) {
+			stockActuel = ac.getStock().getStockChocolat(choco);
+			if (panik){
+				// on vend tout, et on n'achète rien en bourse !
+				quantitesEnVenteChoco.get(choco).setValeur(ac, stockActuel);
+				quantiteACommander = 0.;
+			} else if (stockActuel <= stockLimite) {
+				surplus = stockLimite*0.5;
+//				quantitesEnVente.get(choco).setValeur(ac, surplus/2); // Si le stock est nul, on met en vente ce que l'on a pas
+				quantitesEnVenteChoco.get(choco).setValeur(ac, stockActuel/4);
+				quantiteACommander = 2*stockLimite-stockActuel + surplus; //Il faut refaire les stocks !
+			} else {
+				surplus = stockLimite*0.5;
+				quantiteAVendre = stockActuel - stockLimite + surplus;
+				quantitesEnVenteChoco.get(choco).setValeur(ac, quantiteAVendre);
+				quantiteACommander = Double.max(surplus*2, 0.); //On ne commande que le stock limite 
+				
+					}
+			quantitesACommanderChoco.get(choco).setValeur(ac, quantiteACommander);
+		}
+	}
+	
 	public void majPrixDeVente() {
 		// met à jour le prix de vente de chaque chocolat du catalogue selon la valeur du cours actuel
 		// IA : prix vente = (1 + pourcentageMarge/100) * cours
