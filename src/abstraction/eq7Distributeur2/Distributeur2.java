@@ -99,6 +99,9 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		payerFrais();
 		if (Filiere.LA_FILIERE.getEtape() > 0) {
 			gestionPanik();
+			if (!vendeur.panik) {
+				gestionKalm();
+			}
 		}
 		stock.next();
 		vendeur.next();
@@ -191,7 +194,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		boolean estEnPanik = estEnPanik(); 
 		if (estEnPanik) {
 			if (!vendeur.wasPanik) {
-				//Mode panique vient de s'activer !
+				//Mode panik vient de s'activer !
 				vendeur.wasPanik = true;
 				vendeur.panik = true;
 				//Ajout au journal le début du mode panik
@@ -214,6 +217,44 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 			vendeur.wasPanik = false;
 		}
 	}
+	
+	public boolean estKalm() {
+		double soldeActuel = this.getSolde();
+		double soldeSeuil = 500000000;
+		return soldeActuel >= soldeSeuil;
+		
+		
+	}
+	// Gère la panik de l'acteur
+	public void gestionKalm() {
+		//Le mode kalm est-il actif ?
+		boolean estKalm = estKalm(); 
+		if (estKalm) {
+			if (!vendeur.wasKalm) {
+				//Mode Kalm vient de s'activer !
+				vendeur.wasKalm = true;
+				vendeur.kalm = true;
+				//Ajout au journal le début du mode Kalm
+				journal.ajouter(Journal.texteColore(behaviorColor, Color.BLACK, "[KALM ON] Mode KALM activé !"));
+			} else {
+				// Le mode Kalm est actif mais ce n'est pas le premier tour de Kalm
+				vendeur.wasKalm = true;
+				vendeur.kalm = true; // On sait jamais
+				// Ajout au journal la poursuite du Kalm
+				journal.ajouter(Journal.texteColore(behaviorColor, Color.BLACK, "[KALM] Mode KALM toujours actif !"));
+			}
+		} else if (!estKalm && vendeur.wasKalm) {
+			// Le Kalm vient de se terminer (aie)
+			vendeur.wasKalm = false;
+			vendeur.kalm = false;
+			//Ajouter au journal la fin du Kalm
+			journal.ajouter(Journal.texteColore(behaviorColor, Color.BLACK, "[KALM OFF] Mode KALM désactivé ! Aie !"));
+		} else {
+			//Pas de Kalm en vue, rien à afficher
+			vendeur.wasKalm = false;
+		}
+	}
+	
 	
 	// Renvoie la liste des filières proposées par l'acteur
 	public List<String> getNomsFilieresProposees() {

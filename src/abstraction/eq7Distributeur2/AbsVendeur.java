@@ -68,6 +68,10 @@ public class AbsVendeur {
 	//Le mode panik était actif au tour précédent !
 	protected boolean wasPanik;
 	
+	protected boolean kalm;
+	
+	protected boolean wasKalm;
+	
 	// Couleurs d'arrière-plan pour les messages des journaux
 	public Color titleColor = Color.BLACK;
 	public Color metaColor = Color.CYAN;

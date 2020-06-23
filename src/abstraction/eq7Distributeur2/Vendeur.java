@@ -79,7 +79,13 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 				// on vend tout, et on n'achète rien en bourse !
 				quantitesEnVente.get(choco).setValeur(ac, stockActuel);
 				quantiteACommander = 0.;
-			} else if (stockActuel <= stockLimite) {
+			} else if (kalm) {
+				surplus = stockLimite*0.5;
+				quantiteAVendre = stockActuel - stockLimite + surplus;
+				quantitesEnVente.get(choco).setValeur(ac, quantiteAVendre);
+				quantiteACommander = Double.max(surplus*3, 0.); //On ne commande que le stock limite en fait
+				}
+			else if (stockActuel <= stockLimite) {
 				surplus = stockLimite*0.5;
 //				quantitesEnVente.get(choco).setValeur(ac, surplus/2); // Si le stock est nul, on met en vente ce que l'on a pas
 				quantitesEnVente.get(choco).setValeur(ac, stockActuel/4);
@@ -88,7 +94,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 				surplus = stockLimite*0.5;
 				quantiteAVendre = stockActuel - stockLimite + surplus;
 				quantitesEnVente.get(choco).setValeur(ac, quantiteAVendre);
-				quantiteACommander = Double.max(surplus*2, 0.); //On ne commande que le stock limite 
+				quantiteACommander = Double.max(surplus*2, 0.); //On ne commande que le stock limite en fait
 				
 					}
 			quantitesACommander.get(choco).setValeur(ac, quantiteACommander);
@@ -154,6 +160,8 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 			if (panik) {
 				//On a besoin de plus d'argent !
 				prix *= 6;  //Valeur arbitraire, et un peu empirique surtout
+			} else if (kalm) {
+				prix *= 0.8; // Soyons attractifs !
 			}
 			prixChoco.get(choco).setValeur(ac, prix);
 		}
