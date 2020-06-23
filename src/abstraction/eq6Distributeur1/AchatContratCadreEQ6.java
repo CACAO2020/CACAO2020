@@ -76,7 +76,7 @@ public class AchatContratCadreEQ6 extends DistributeurClientFinal implements IAc
 		// Proposition d'un nouveau contrat a tous les vendeurs possibles
 		
 		for (IActeur acteur : Filiere.LA_FILIERE.getActeurs()) {
-			if (acteur!=this && acteur instanceof IVendeurContratCadre && ((IVendeurContratCadre)acteur).vend(this.choco)) {
+			if (acteur!=this && acteur instanceof IVendeurContratCadre && ((IVendeurContratCadre)acteur).vend(this.choco)) { //vérifier qu'il vend bien du chocolat
 				double valeurMin = 10E10;
 				for(int i=0 ; i<10; i++ ) {
 					double newValeur = this.VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()+1+i-24).get(this.choco);
@@ -85,7 +85,7 @@ public class AchatContratCadreEQ6 extends DistributeurClientFinal implements IAc
 						
 						
 					}
-				}
+				}//comment on fixe le prix??, comment on crée notre marque distributrice
 				Filiere.LA_FILIERE.getSuperviseurContratCadre().demande((IAcheteurContratCadre)this, ((IVendeurContratCadre)acteur), this.choco, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, valeurMin), cryptogramme);
 			}
 		}
