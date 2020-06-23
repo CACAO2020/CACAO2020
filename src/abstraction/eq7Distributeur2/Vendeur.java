@@ -78,7 +78,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 		for (ChocolatDeMarque choco : produitsCatalogue) {
 			stockActuel = ac.getStock().getStockChocolatDeMarque(choco);
 			if (panik){
-				// on vend tout, et on n'achète rien en bourse !
+				// on vend tout et on n'achète rien en bourse !
 				quantitesEnVente.get(choco).setValeur(ac, stockActuel);
 				quantiteACommander = 0.; //A voir quand même
 			} else if (kalm) {
