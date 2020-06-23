@@ -32,7 +32,7 @@ public class AbsVendeur {
 	// Enregistre les quantités de chaque chocolat de marque mis en vente
 	protected Map<ChocolatDeMarque, Variable> quantitesEnVente;
 	
-	protected Map<Chocolat, Variable> quantitesEnVenteChoco
+	protected Map<Chocolat, Variable> quantitesEnVenteChoco;
 	
 	// Enregistre les prix de vente de chaque chocolat de marque
 	protected Map<ChocolatDeMarque, Variable> prixChoco;
