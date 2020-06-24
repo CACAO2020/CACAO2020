@@ -38,8 +38,7 @@ public class Stock extends AbsStock implements IStock {
 	}
 	//ajoute les quantités necessaires de chocolat des stocks correspondant 
 	public void ajouterStockChocolat(ChocolatDeMarque chocoDeMarque, double quantite) {
-		if (!stocksChocolat.containsKey(chocoDeMarque.getChocolat())) {
-		}
+
 		stocksChocolatDeMarque.get(chocoDeMarque).setValeur(ac, stocksChocolatDeMarque.get(chocoDeMarque).getValeur() + quantite);
 		stocksChocolat.get(chocoDeMarque.getChocolat()).setValeur(ac, stocksChocolat.get(chocoDeMarque.getChocolat()).getValeur() + quantite);
 		journal.ajouter(Journal.texteColore(addStockColor, Color.BLACK, "[STOCK +] " + Journal.doubleSur(quantite,2) + " t de " + chocoDeMarque.name() + " (nouveau stock : " + Journal.doubleSur(stocksChocolatDeMarque.get(chocoDeMarque).getValeur(),2) + " t)."));

@@ -107,7 +107,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 					quantiteAVendre = stockQuiVaPerimer + stockQuiNeVaPasPerimer/3; //On diminue un peu les quantités mises en vente (par rapport au else ci-dessous) pour augmenter les stocks
 					quantiteACommander = stockQuiNeVaPasPerimer/4 ; //Arbitraire encore et toujours
 				} else {
-					quantiteAVendre = stockQuiVaPerimer + stockQuiNeVaPasPerimer/4;
+					quantiteAVendre = stockQuiVaPerimer + stockQuiNeVaPasPerimer/2;
 					quantiteACommander = stockActuel/5; //On ne commande que le stock limite en fait
 				}		
 				
@@ -221,6 +221,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 		if (Filiere.LA_FILIERE.getEtape() == 0) {
 			return quantiteAVendreParDefaut;
 		} else {
+			System.out.println(choco.name() + " " + quantitesEnVente.get(choco).getValeur());
 			return quantitesEnVente.get(choco).getValeur();
 		}
 	}
@@ -260,6 +261,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 			double stockActuel = ac.getStock().getStockChocolatDeMarque(produit);
 			double quantitesEnVentePrevue = quantitesEnVente.get(produit).getValeur();
 			quantitesEnVente.get(produit).setValeur(ac, Double.min(stockActuel, quantitesEnVentePrevue));
+			quantitesVendues = new ArrayList<Double>();
 		}
 		
 	}
@@ -271,7 +273,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 			ac.getStock().retirerStockChocolat(choco, quantite);
 			journal.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[VENTE] Vente de " + Journal.doubleSur(quantite,2) + " tonnes de " + choco.name() + " à " + client.getNom() + " pour " + Journal.doubleSur(montant,2) + " (" + Journal.doubleSur(montant/quantite,2) + "/tonne)."));
 			ventesEtapeActuelle.put(choco.getChocolat(), ventesEtapeActuelle.get(choco.getChocolat()) + quantite);
-			
+			quantitesVendues.add(quantite);
 		}
 	}
 

@@ -76,6 +76,8 @@ public class AbsVendeur {
 	
 	protected int compteurPub;
 	
+	protected List<Double> quantitesVendues;
+	
 	// Couleurs d'arrière-plan pour les messages des journaux
 	public Color titleColor = Color.BLACK;
 	public Color metaColor = Color.CYAN;
@@ -85,6 +87,7 @@ public class AbsVendeur {
 	public Color descriptionColor = Color.YELLOW;
 	
 	public AbsVendeur(Distributeur2 ac) {	
+		quantitesVendues = new ArrayList<Double>();
 		this.ac = ac;
 		this.coeffCoursMoyen = 100;
 		produitsCatalogue = new ArrayList<ChocolatDeMarque>();

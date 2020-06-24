@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import abstraction.eq8Romu.chocolatBourse.IAcheteurChocolatBourse;
 import abstraction.eq8Romu.chocolatBourse.IVendeurChocolatBourse;
@@ -90,8 +91,12 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		for (ChocolatDeMarque choco : tousLesChocolatsDeMarquePossibles()) {
 			stock.chocoEnStockParEtape.get(0).put(choco, 0.);
 			stock.stocksChocolatDeMarque.put(choco, new Variable(getNom() + " : STOCK " + choco.name(), this, 0.));
-			stock.journal.ajouter(Journal.texteColore(stock.metaColor, Color.BLACK,"[CRÉATION] Création d'un stock pour le " + choco.name() + "."));
-			stock.ajouterStockChocolat(choco, stockInitial);
+			stock.journal.ajouter(Journal.texteColore(stock.metaColor, Color.BLACK,"[CRÉATION] Création d'un stock pour le " + choco.name() + "."));	
+		}
+		for (Chocolat choco : Chocolat.values()) {
+			if (choco.getGamme() != Gamme.BASSE) {
+				stock.ajouterStockChocolat(new ChocolatDeMarque(choco, this.getNom()), stockInitial);
+			}
 		}
 	}
 	
@@ -116,9 +121,28 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	public void payerFrais() {
 		double coutMasseSalariale = this.coutMasseSalariale;
 		double fraisStockage = this.getStock().fraisStockage();
-		double fraisTotaux = coutMasseSalariale + fraisStockage;
-		journalTransactions.ajouter(Journal.texteColore(warningColor, Color.BLACK, "[PAIEMENT SALAIRES] Paiement de " + coutMasseSalariale + " de coût de masse salariale."));
-		journalTransactions.ajouter(Journal.texteColore(warningColor, Color.BLACK, "[FRAIS STOCKAGE] Paiement de " + fraisStockage + " de frais de stockage."));
+		double beneficesLivraisons = 0.;
+		double distanceMin = 5.;
+		double distanceMax = 20.;
+		double coutFixeLivraison = 5;
+		double coutLivraisonParTonne = 2;
+		double proportionDeLivraisons = 10; // pourcentage
+		for (Double quantite : vendeur.quantitesVendues) {
+			Random testLivraison = new Random();
+			boolean estUnelivraison = (testLivraison.nextInt(100) < proportionDeLivraisons); 
+			if (estUnelivraison) { // 20% des commandes sont livrées
+				Random distanceLivraison = new Random();
+				double distance = distanceMin + (distanceMax - distanceMin) * distanceLivraison.nextDouble();
+				beneficesLivraisons += coutFixeLivraison + coutLivraisonParTonne*distance*quantite;
+			}
+		}
+		if (coutMasseSalariale + fraisStockage < beneficesLivraisons) {
+			beneficesLivraisons = coutMasseSalariale + fraisStockage;
+		}
+		double fraisTotaux = coutMasseSalariale + fraisStockage - beneficesLivraisons;
+		journalTransactions.ajouter(Journal.texteColore(warningColor, Color.BLACK, "[PAIEMENT SALAIRES] Paiement de " + Journal.doubleSur(coutMasseSalariale,2) + " de coût de masse salariale."));
+		journalTransactions.ajouter(Journal.texteColore(warningColor, Color.BLACK, "[FRAIS STOCKAGE] Paiement de " + Journal.doubleSur(fraisStockage,2) + " de frais de stockage."));
+		journalTransactions.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[BENEFICES LIVRAISONS] Bénéfices de " + Journal.doubleSur(beneficesLivraisons,2) + " sur les livraisons."));
 		Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), fraisTotaux);
 		//il faudrait peut-être ajouter des frais quand on fait de la publicité ?
 	}
