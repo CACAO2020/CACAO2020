@@ -17,7 +17,8 @@ public class AchatContratCadreEQ6 extends DistributeurClientFinal implements IAc
 
 	protected ChocolatDeMarque choco;
 	protected List<ExemplaireContratCadre> mesContratEnTantQuAcheteur;
-
+	 
+	
 	
 	public AchatContratCadreEQ6(double capaciteDeVente, double marge, double capaciteStockmax, double pctageHGE,
 			double pctageMG, double pctageBG) {
@@ -45,9 +46,11 @@ public class AchatContratCadreEQ6 extends DistributeurClientFinal implements IAc
 
 	@Override
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
-		if (Math.random()<0.1) {
+		if (Math.random()<0.5) {
 			return contrat.getPrixALaTonne(); // on ne cherche pas a negocier dans 10% des cas
 		} else {//dans 90% des cas on fait une contreproposition differente
+			
+			
 			return contrat.getPrixALaTonne()*1.025;// 5% de moins., Il fau tmettre une limite pour pas être plus cher que la bourse
 		}
 	}
@@ -86,7 +89,7 @@ public class AchatContratCadreEQ6 extends DistributeurClientFinal implements IAc
 						
 						
 					}
-					moyennePrixBourse = this.historiqueBourse.get(Filiere.LA_FILIERE.getEtape()+1+i-24).get(this.choco.getChocolat());
+					moyennePrixBourse = this.evolutionCours.get(Filiere.LA_FILIERE.getEtape()+1+i-24).get(this.choco.getChocolat());
 				}//comment on fixe le prix??, comment on crée notre marque distributrice
 				moyennePrixBourse = moyennePrixBourse /10;
 				moyennePrixBourse = moyennePrixBourse*0.9; //car on veut un rabais
