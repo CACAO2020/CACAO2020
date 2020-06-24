@@ -94,7 +94,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 				// on vend tout et on n'achète rien en bourse !
 				quantiteAVendre = stockActuel;
 				quantiteACommander = 0.; //A voir quand même
-			} else if (stockActuel <= stockLimite) {
+			} else if (stockActuel <= stockLimite) { 
 				if (kalm) {
 					quantiteAVendre = stockQuiVaPerimer + stockQuiNeVaPasPerimer/3; //On diminue un peu les quantités mises en vente (par rapport au else ci-dessous) pour augmenter les stocks
 					quantiteACommander = 3*stockLimite ; //Arbitraire encore et toujours
