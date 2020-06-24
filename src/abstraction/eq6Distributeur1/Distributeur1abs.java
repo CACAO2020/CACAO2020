@@ -20,7 +20,7 @@ import abstraction.fourni.Variable;
 
 public class Distributeur1abs implements IActeur {
 
-	protected Integer cryptogramme;
+	protected Integer cryptogramme; 
 	protected Journal journalEq6, journalEq6Stock;
 	protected Variable stockHGE;
 	protected Variable stockMG;
@@ -31,15 +31,19 @@ public class Distributeur1abs implements IActeur {
 	protected Map<Integer,Map<ChocolatDeMarque,Double>> VenteSiPasRuptureDeStock;
 
 
-	
+
+
+
 	public Distributeur1abs() { 
 		this.stockHGE=new Variable(getNom()+" stock "+ Chocolat.CHOCOLAT_HAUTE_EQUITABLE.toString(), this, 0, 1000000000, 1000000);
 		this.stockMG=new Variable(getNom()+"stock"+ Chocolat.CHOCOLAT_MOYENNE.toString(), this, 0, 1000000000, 1000000);
 		this.stockBG=new Variable(getNom()+"stock"+ Chocolat.CHOCOLAT_BASSE.toString(), this, 0, 1000000000, 1000000);
 		this.journalEq6=new Journal(this.getNom()+" activites", this);
 		this.journalEq6Stock=new Journal(this.getNom()+" stock", this);
-		evolutionCours = new HashMap<Integer,Map<Chocolat,Double>>();
+		this.evolutionCours = new HashMap<Integer,Map<Chocolat,Double>>();
+		this.evolutionCours.put(0,new HashMap<Chocolat, Double>());
 		this.MapStock = new HashMap<Integer,Map<ChocolatDeMarque,Double>>();
+		this.MapStock.put(0,new HashMap<ChocolatDeMarque, Double>());
 		this.evolutionVentes = new HashMap<Integer, Map<ChocolatDeMarque,Double>>();
 		this.evolutionVentes.put(0,new HashMap<ChocolatDeMarque,Double>());
 		this.VenteSiPasRuptureDeStock = new HashMap<Integer,Map<ChocolatDeMarque,Double>>();
@@ -57,9 +61,9 @@ public class Distributeur1abs implements IActeur {
 	public Color getColor() {
 		return new Color(230, 126, 34);
 	}
-	
+
 	public void stocker(ChocolatDeMarque choco, double quantite) {
-		
+
 	}
 	public void initialiser() {
 		for (ChocolatDeMarque choco : ClientFinal.tousLesChocolatsDeMarquePossibles()) {
@@ -67,7 +71,7 @@ public class Distributeur1abs implements IActeur {
 				journalEq6Stock.ajouter("2345");
 				stocker(choco, 2345);
 			}
-				
+
 		}
 	}
 
@@ -78,15 +82,16 @@ public class Distributeur1abs implements IActeur {
 	public double quantiteEnStockTypeChoco(Chocolat choco) {
 		return 0;
 	}
-	
+
 	public double quantiteEnStockTotale() {
 		return 0;
 	}
-	
+
 	/** @author Luca Pinguet & Mélissa Tamine & Thibault Avril */
 	public void next() {
 		journalEq6.ajouter("Etape="+Filiere.LA_FILIERE.getEtape());
 		this.evolutionCours.put(Filiere.LA_FILIERE.getEtape(),new HashMap<Chocolat,Double>());
+		this.evolutionCours.put(Filiere.LA_FILIERE.getEtape()+1,new HashMap<Chocolat,Double>());
 		this.evolutionVentes.put(Filiere.LA_FILIERE.getEtape()+1,new HashMap<ChocolatDeMarque,Double>());
 		this.MapStock.put(Filiere.LA_FILIERE.getEtape(),new HashMap<ChocolatDeMarque,Double>());
 		if (Filiere.LA_FILIERE.getEtape()>=1) {
@@ -108,9 +113,11 @@ public class Distributeur1abs implements IActeur {
 		this.stockMG.setValeur(this, quantiteEnStockTypeChoco(Chocolat.CHOCOLAT_MOYENNE));
 		this.stockBG.setValeur(this, quantiteEnStockTypeChoco(Chocolat.CHOCOLAT_BASSE));
 		this.stockHGE.setValeur(this, quantiteEnStockTypeChoco(Chocolat.CHOCOLAT_HAUTE_EQUITABLE));
-		Filiere.LA_FILIERE.getBanque().virer(this, cryptogramme, Filiere.LA_FILIERE.getActeur("BourseChoco"), this.quantiteEnStockTotale()*720);
-		Filiere.LA_FILIERE.getBanque().virer(this, cryptogramme, Filiere.LA_FILIERE.getActeur("BourseChoco"), 800*20);
-		
+		if (this.quantiteEnStockTotale()!=0) {
+			Filiere.LA_FILIERE.getBanque().virer(this, cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), this.quantiteEnStockTotale()*720);
+		}
+		Filiere.LA_FILIERE.getBanque().virer(this, cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), 800*20);
+
 	}
 
 	public List<String> getNomsFilieresProposees() {
@@ -139,6 +146,7 @@ public class Distributeur1abs implements IActeur {
 
 		return res;
 	}
+
 
 	public List<Variable> getParametres() {
 		List<Variable> res=new ArrayList<Variable>();

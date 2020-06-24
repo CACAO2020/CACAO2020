@@ -8,6 +8,11 @@ import abstraction.eq8Romu.produits.Feve;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
 
+/**
+ * @author Nicolas PIERRE
+ * Filière de teste uniquement pour le haut de gamme, labélisé ou pas.
+ * Permet de tester le comportement de AchatFeve et VenteChocolat principalement
+ */
 public class FiliereTestAchatVente extends Filiere {
 	
 	public FiliereTestAchatVente() {

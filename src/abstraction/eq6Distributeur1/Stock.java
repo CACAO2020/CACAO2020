@@ -78,6 +78,16 @@ public class Stock  extends Distributeur1abs implements IStock { /** @author Avr
 	@Override
 	public void destocker(ChocolatDeMarque choco, double quantite) {
 		Double quanti = quantite;
+		ArrayList<Integer> listeAEnlever = new ArrayList<Integer>();
+		for (Integer etape : this.MapStock.keySet()) {
+			if (etape<Filiere.LA_FILIERE.getEtape()-11) {
+				listeAEnlever.add(etape);
+			}
+		}
+		for (Integer etape : listeAEnlever) {
+			MapStock.remove(etape);
+		}
+		
 		ArrayList<Integer> listeEtape = new ArrayList<Integer>();
 		for (Integer etape : this.MapStock.keySet()) {
 			if (MapStock.get(etape).containsKey(choco)) {
@@ -87,21 +97,16 @@ public class Stock  extends Distributeur1abs implements IStock { /** @author Avr
 		Collections.sort(listeEtape);
 		for (int i=0 ; i<listeEtape.size() ; i++) {
 			if (quanti!=0) {
-				if (MapStock.get(i).get(choco)<=quanti) {
-					quanti = quanti - MapStock.get(i).get(choco);
-					MapStock.get(i).remove(choco);
+				if (MapStock.get(listeEtape.get(i)).get(choco)<=quanti) {
+					quanti = quanti - MapStock.get(listeEtape.get(i)).get(choco);
+					MapStock.get(listeEtape.get(i)).remove(choco);
 				}
 				else {
-					MapStock.get(i).replace(choco, MapStock.get(i).get(choco)-quanti);
+					MapStock.get(listeEtape.get(i)).replace(choco, MapStock.get(listeEtape.get(i)).get(choco)-quanti);
 				}
 			}
 		}
-				
-		for (Integer etape : this.MapStock.keySet()) {
-			if (etape<Filiere.LA_FILIERE.getEtape()-11) {
-				MapStock.remove(etape);
-			}
-		}
+		
 	}
 
 	@Override

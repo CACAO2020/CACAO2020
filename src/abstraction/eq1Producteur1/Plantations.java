@@ -86,8 +86,8 @@ public class Plantations {
 	public Plantations() {
 		this.arbresF = new ArrayList<Double>();
 		this.arbresT = new ArrayList<Double>();
-		this.derniereRecolteF = 0.0;
-		this.derniereRecolteT = 0.0;
+		this.derniereRecolteF = 5.0;
+		this.derniereRecolteT = 2.0;
 		this.nombreRecolteurs = 0;
 		this.nouveauxF = 0;
 		this.nouveauxT = 0;
