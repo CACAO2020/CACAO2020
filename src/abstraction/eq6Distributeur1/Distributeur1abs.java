@@ -28,10 +28,10 @@ public class Distributeur1abs implements IActeur {
 	protected Map<Integer,Map<Chocolat,Double>> evolutionCours;
 	protected Map<Integer,Map<ChocolatDeMarque,Double>> MapStock;
 	protected Map<Integer,Map<ChocolatDeMarque,Double>> evolutionVentes;
-	
-	
 
-	
+
+
+
 	public Distributeur1abs() { 
 		this.stockHGE=new Variable(getNom()+" stock "+ Chocolat.CHOCOLAT_HAUTE_EQUITABLE.toString(), this, 0, 1000000000, 1000000);
 		this.stockMG=new Variable(getNom()+"stock"+ Chocolat.CHOCOLAT_MOYENNE.toString(), this, 0, 1000000000, 1000000);
@@ -57,9 +57,9 @@ public class Distributeur1abs implements IActeur {
 	public Color getColor() {
 		return new Color(230, 126, 34);
 	}
-	
+
 	public void stocker(ChocolatDeMarque choco, double quantite) {
-		
+
 	}
 	public void initialiser() {
 		for (ChocolatDeMarque choco : ClientFinal.tousLesChocolatsDeMarquePossibles()) {
@@ -67,7 +67,7 @@ public class Distributeur1abs implements IActeur {
 				journalEq6Stock.ajouter("2345");
 				stocker(choco, 2345);
 			}
-				
+
 		}
 	}
 
@@ -78,11 +78,11 @@ public class Distributeur1abs implements IActeur {
 	public double quantiteEnStockTypeChoco(Chocolat choco) {
 		return 0;
 	}
-	
+
 	public double quantiteEnStockTotale() {
 		return 0;
 	}
-	
+
 	/** @author Luca Pinguet & Mélissa Tamine & Thibault Avril */
 	public void next() {
 		journalEq6.ajouter("Etape="+Filiere.LA_FILIERE.getEtape());
@@ -113,7 +113,7 @@ public class Distributeur1abs implements IActeur {
 			Filiere.LA_FILIERE.getBanque().virer(this, cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), this.quantiteEnStockTotale()*720);
 		}
 		Filiere.LA_FILIERE.getBanque().virer(this, cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), 800*20);
-		
+
 	}
 
 	public List<String> getNomsFilieresProposees() {
@@ -143,7 +143,7 @@ public class Distributeur1abs implements IActeur {
 		return res;
 	}
 
-	
+
 	public List<Variable> getParametres() {
 		List<Variable> res=new ArrayList<Variable>();
 		return res;

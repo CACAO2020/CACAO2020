@@ -58,14 +58,12 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 	/** @author Luca Pinguet & Mélissa Tamine */
 
 	public double prix(ChocolatDeMarque choco) {
-		System.out.println(Filiere.LA_FILIERE.getEtape()+"filiere"+this.evolutionCours+"test"+this.evolutionCours.get(Filiere.LA_FILIERE.getEtape()));
 		double cours = this.evolutionCours.get(Filiere.LA_FILIERE.getEtape()).keySet().contains(choco.getChocolat()) ? this.evolutionCours.get(Filiere.LA_FILIERE.getEtape()).get(choco.getChocolat()) : 22000;
 		this.evolutionMarge(choco);
 		if (Filiere.LA_FILIERE.getEtape()==0) {
 			return 22000;
 		}
 		if (this.quantiteEnVente(choco)>0) {
-			System.out.println(choco.getMarque()+""+choco.getChocolat());
 			if (choco.getChocolat()==Chocolat.CHOCOLAT_HAUTE_EQUITABLE) {
 				return cours*this.margeChocolat.get(choco);}
 			else if (choco.getChocolat()==Chocolat.CHOCOLAT_MOYENNE) {

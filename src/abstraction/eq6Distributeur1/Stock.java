@@ -95,7 +95,6 @@ public class Stock  extends Distributeur1abs implements IStock { /** @author Avr
 			}
 		}
 		Collections.sort(listeEtape);
-		System.out.println(listeEtape+"liste");
 		for (int i=0 ; i<listeEtape.size() ; i++) {
 			if (quanti!=0) {
 				if (MapStock.get(listeEtape.get(i)).get(choco)<=quanti) {
