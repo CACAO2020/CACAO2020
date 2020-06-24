@@ -159,7 +159,6 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 		}
 		else {
 			this.margeChocolat.put(choco, marge);
-			System.out.println("on vend pas de"+choco + "" + this.quantiteEnVente(choco));
 		}
 
 	}
