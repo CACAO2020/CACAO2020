@@ -62,9 +62,13 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 	public void majPublicites() {
 		//cette fonction actualise la liste des chocolats (selon gamme) dont le distributeur fait la publicité
 		// IA : publicités sur les chocolats équitables uniquement
-		for (ChocolatDeMarque choco : produitsCatalogue) {
-			if (choco.getChocolat().isEquitable()) {
-				publicites.add(choco);
+		int etape = Filiere.LA_FILIERE.getEtape();
+		if (etape % 22 == 0 || etape % 7 == 0 || (panik && compteurPub < 3)) {
+			// On est à la période de Noël, Paques ou en panik en ayant fait peu de pubs ! Pub sur tous nos chocolats !
+			for (ChocolatDeMarque choco : produitsCatalogue) {
+				if (choco.getChocolat().isEquitable()) {
+					publicites.add(choco);
+				}
 			}
 		}
 	}

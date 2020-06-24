@@ -116,6 +116,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		journalTransactions.ajouter(Journal.texteColore(warningColor, Color.BLACK, "[PAIEMENT SALAIRES] Paiement de " + coutMasseSalariale + " de coût de masse salariale."));
 		journalTransactions.ajouter(Journal.texteColore(warningColor, Color.BLACK, "[FRAIS STOCKAGE] Paiement de " + fraisStockage + " de frais de stockage."));
 		Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), fraisTotaux);
+		//il faudrait peut-être ajouter des frais quand on fait de la publicité ?
 	}
 	
 	public String getNom() {
