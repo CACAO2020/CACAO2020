@@ -35,8 +35,10 @@ public class Distributeur1abs implements IActeur {
 		this.stockBG=new Variable(getNom()+"stock"+ Chocolat.CHOCOLAT_BASSE.toString(), this, 0, 1000000000, 1000000);
 		this.journalEq6=new Journal(this.getNom()+" activites", this);
 		this.journalEq6Stock=new Journal(this.getNom()+" stock", this);
-		evolutionCours = new HashMap<Integer,Map<Chocolat,Double>>();
+		this.evolutionCours = new HashMap<Integer,Map<Chocolat,Double>>();
+		this.evolutionCours.put(0,new HashMap<Chocolat, Double>());
 		this.MapStock = new HashMap<Integer,Map<ChocolatDeMarque,Double>>();
+		this.MapStock.put(0,new HashMap<ChocolatDeMarque, Double>());
 		this.evolutionVentes = new HashMap<Integer, Map<ChocolatDeMarque,Double>>();
 		this.evolutionVentes.put(0,new HashMap<ChocolatDeMarque,Double>());
 	}
@@ -82,6 +84,7 @@ public class Distributeur1abs implements IActeur {
 	public void next() {
 		journalEq6.ajouter("Etape="+Filiere.LA_FILIERE.getEtape());
 		this.evolutionCours.put(Filiere.LA_FILIERE.getEtape(),new HashMap<Chocolat,Double>());
+		this.evolutionCours.put(Filiere.LA_FILIERE.getEtape()+1,new HashMap<Chocolat,Double>());
 		this.evolutionVentes.put(Filiere.LA_FILIERE.getEtape()+1,new HashMap<ChocolatDeMarque,Double>());
 		this.MapStock.put(Filiere.LA_FILIERE.getEtape(),new HashMap<ChocolatDeMarque,Double>());
 		if (Filiere.LA_FILIERE.getEtape()>=1) {
@@ -103,8 +106,10 @@ public class Distributeur1abs implements IActeur {
 		this.stockMG.setValeur(this, quantiteEnStockTypeChoco(Chocolat.CHOCOLAT_MOYENNE));
 		this.stockBG.setValeur(this, quantiteEnStockTypeChoco(Chocolat.CHOCOLAT_BASSE));
 		this.stockHGE.setValeur(this, quantiteEnStockTypeChoco(Chocolat.CHOCOLAT_HAUTE_EQUITABLE));
-		Filiere.LA_FILIERE.getBanque().virer(this, cryptogramme, Filiere.LA_FILIERE.getActeur("BourseChoco"), this.quantiteEnStockTotale()*720);
-		Filiere.LA_FILIERE.getBanque().virer(this, cryptogramme, Filiere.LA_FILIERE.getActeur("BourseChoco"), 800*20);
+		if (this.quantiteEnStockTotale()!=0) {
+			Filiere.LA_FILIERE.getBanque().virer(this, cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), this.quantiteEnStockTotale()*720);
+		}
+		Filiere.LA_FILIERE.getBanque().virer(this, cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), 800*20);
 		
 	}
 
