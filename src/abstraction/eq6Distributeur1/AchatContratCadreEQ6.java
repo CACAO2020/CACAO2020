@@ -91,7 +91,7 @@ public class AchatContratCadreEQ6 extends DistributeurClientFinal implements IAc
 		for (IActeur acteur : Filiere.LA_FILIERE.getActeurs()) {
 			if (acteur!=this && acteur instanceof IVendeurContratCadre && ((IVendeurContratCadre)acteur).vend(this.choco)) { //vérifier qu'il vend bien du chocolat
 				double valeurMin = 10E10;
-				for(int i=0 ; i<10; i++ ) {
+				for(int i=0 ; i<duréeContrat; i++ ) {
 					double newValeur = this.VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()+1+i-24).get(this.choco);
 					if(newValeur<valeurMin) {
 						valeurMin=newValeur;
@@ -100,9 +100,9 @@ public class AchatContratCadreEQ6 extends DistributeurClientFinal implements IAc
 					}
 					moyennePrixBourse = this.evolutionCours.get(Filiere.LA_FILIERE.getEtape()+1+i-24).get(this.choco.getChocolat());
 				}//comment on fixe le prix??, comment on crée notre marque distributrice
-				moyennePrixBourse = moyennePrixBourse /10;
+				moyennePrixBourse = moyennePrixBourse /duréeContrat;
 				moyennePrixBourse = moyennePrixBourse*0.9; //car on veut un rabais
-				Filiere.LA_FILIERE.getSuperviseurContratCadre().demande((IAcheteurContratCadre)this, ((IVendeurContratCadre)acteur), this.choco, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, valeurMin), cryptogramme);
+				Filiere.LA_FILIERE.getSuperviseurContratCadre().demande((IAcheteurContratCadre)this, ((IVendeurContratCadre)acteur), this.choco, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, duréeContrat, valeurMin), cryptogramme);
 			}
 		}
 		}

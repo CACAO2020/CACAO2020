@@ -5,6 +5,7 @@ import java.util.Map;
 
 import abstraction.eq8Romu.chocolatBourse.IAcheteurChocolatBourse;
 import abstraction.eq8Romu.chocolatBourse.SuperviseurChocolatBourse;
+import abstraction.eq8Romu.clients.ClientFinal;
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.ChocolatDeMarque;
 import abstraction.fourni.Filiere;
@@ -30,13 +31,15 @@ public class AchatBourseEQ6 extends Stock implements IAcheteurChocolatBourse{
 	//mettre à jour EvolutionDemandeChocolat avec VenteSiPasRuptureDeStock à la place de Filiere.LA_FILIERE.getVentes
 	public double EvolutionDemandeChocolat(Chocolat chocolat){ // il faut prendre en compte les ruptures de stocks, il faut prendre en compte les contrats cadre
 		//avoir acces à cette hash map, puis calculer la demande Chocolat et pas chocolatDE Marque
-		double anneeYa1AN = this.VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()-24+1).get(chocolat);
+		double anneeYa1AN = quantiteVenduTypeChoco(chocolat,24);
 		
 		journalEq6.ajouter("il y a 1 an" + anneeYa1AN);
 		
 		
 		if (Filiere.LA_FILIERE.getEtape()>24) {
-			double anneeYa2AN = Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-48+1, chocolat );//pareil que l'autre, mais pour le chocolat en question, en pourcentage
+			double anneeYa2AN = quantiteVenduTypeChoco(chocolat,48);//pareil que l'autre, mais pour le chocolat en question, en pourcentage
+
+			//double anneeYa2AN = Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-48+1, chocolat );//pareil que l'autre, mais pour le chocolat en question, en pourcentage
 			
 		    
 			return anneeYa1AN + (anneeYa1AN-anneeYa2AN)/2;
@@ -55,12 +58,11 @@ public class AchatBourseEQ6 extends Stock implements IAcheteurChocolatBourse{
 	
 	public double quantiteVenduTypeChoco(Chocolat choco,int CombienDeTour) { //pas fonctionelle, coder pour avoir touts les chocolats vendus
 		double quantite = 0;
-		for (Integer etape : this.MapStock.keySet()) {
-			for (ChocolatDeMarque chocos : this.MapStock.get(etape).keySet()) {
-				if (chocos.getChocolat()==choco) {
-				quantite = quantite + MapStock.get(etape).get(chocos);
+			for (ChocolatDeMarque chocos :ClientFinal.tousLesChocolatsDeMarquePossibles()) {
+				if (chocos.getChocolat()==choco) { // faire une fonction pour 
+				quantite = quantite + VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()- CombienDeTour+2).get(chocos);
 				}
-			}
+			
 		}
 		return quantite;
 	}
