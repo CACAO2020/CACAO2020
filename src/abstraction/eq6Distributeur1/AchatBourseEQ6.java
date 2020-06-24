@@ -18,7 +18,7 @@ public class AchatBourseEQ6 extends Stock implements IAcheteurChocolatBourse{
 
 
 	
-	public HashMap<Integer, HashMap<Chocolat, Double>> historiqueBourse;
+	protected HashMap<Integer, HashMap<Chocolat, Double>> historiqueBourse;
 	
 	public double DemandeTotal(){
 		//double consomationAnnuel = Filiere.LA_FILIERE.getIndicateur("CLIENTFINAL consommation annuelle").getValeur();
@@ -26,9 +26,12 @@ public class AchatBourseEQ6 extends Stock implements IAcheteurChocolatBourse{
 		return 0.0;
 	}
 	
+	
+	//mettre à jour EvolutionDemandeChocolat avec VenteSiPasRuptureDeStock à la place de Filiere.LA_FILIERE.getVentes
 	public double EvolutionDemandeChocolat(Chocolat chocolat){ // il faut prendre en compte les ruptures de stocks, il faut prendre en compte les contrats cadre
 		//avoir acces à cette hash map, puis calculer la demande Chocolat et pas chocolatDE Marque
-		double anneeYa1AN = Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-24+1, chocolat );
+		double anneeYa1AN = this.VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()-24+1).get(chocolat);
+		
 		journalEq6.ajouter("il y a 1 an" + anneeYa1AN);
 		
 		
@@ -48,10 +51,19 @@ public class AchatBourseEQ6 extends Stock implements IAcheteurChocolatBourse{
 		
 		
 		
-		
-		
 	}
 	
+	public double quantiteVenduTypeChoco(Chocolat choco,int CombienDeTour) { //pas fonctionelle, coder pour avoir touts les chocolats vendus
+		double quantite = 0;
+		for (Integer etape : this.MapStock.keySet()) {
+			for (ChocolatDeMarque chocos : this.MapStock.get(etape).keySet()) {
+				if (chocos.getChocolat()==choco) {
+				quantite = quantite + MapStock.get(etape).get(chocos);
+				}
+			}
+		}
+		return quantite;
+	}
 	
 	
 	

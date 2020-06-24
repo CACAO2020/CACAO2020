@@ -79,6 +79,15 @@ public class AchatContratCadreEQ6 extends DistributeurClientFinal implements IAc
 		// Proposition d'un nouveau contrat a tous les vendeurs possibles
 		double moyennePrixBourse = 0;
 		
+		
+		//for (ChocolatDeMarque chocolat : listeChocolat ) {
+		//if ()
+			
+	//	this.choco = chocolat;
+		//si il n'y a pas de contrat cadre en cours
+		//pour la durer du contrat, faire en fonction de la quantité écoulé
+		int duréeContrat = 10;
+		
 		for (IActeur acteur : Filiere.LA_FILIERE.getActeurs()) {
 			if (acteur!=this && acteur instanceof IVendeurContratCadre && ((IVendeurContratCadre)acteur).vend(this.choco)) { //vérifier qu'il vend bien du chocolat
 				double valeurMin = 10E10;
@@ -96,9 +105,11 @@ public class AchatContratCadreEQ6 extends DistributeurClientFinal implements IAc
 				Filiere.LA_FILIERE.getSuperviseurContratCadre().demande((IAcheteurContratCadre)this, ((IVendeurContratCadre)acteur), this.choco, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, 10, valeurMin), cryptogramme);
 			}
 		}
+		}
 		
 		
-	}
+	
+		
    
 
 }

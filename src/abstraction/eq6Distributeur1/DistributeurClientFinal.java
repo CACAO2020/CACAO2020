@@ -20,7 +20,6 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 	private double pctageHGE;
 	private double pctageBG;
 	private double pctageMG;
-	public Map<Integer,Map<ChocolatDeMarque,Double>> VenteSiPasRuptureDeStock;
 	
 	public DistributeurClientFinal(double capaciteDeVente, double marge, double capaciteStockmax, double pctageHGE, double pctageMG, double pctageBG) {
 		super(capaciteStockmax);
@@ -31,7 +30,6 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 		this.pctageBG=pctageBG;
 		this.pctageHGE=pctageHGE;
 		this.pctageMG=pctageMG;
-		this.VenteSiPasRuptureDeStock = new HashMap<Integer,Map<ChocolatDeMarque,Double>>();
 		
 	}
 

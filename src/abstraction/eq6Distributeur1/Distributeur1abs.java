@@ -28,6 +28,8 @@ public class Distributeur1abs implements IActeur {
 	protected Map<Integer,Map<Chocolat,Double>> evolutionCours;
 	protected Map<Integer,Map<ChocolatDeMarque,Double>> MapStock;
 	protected Map<Integer,Map<ChocolatDeMarque,Double>> evolutionVentes;
+	protected Map<Integer,Map<ChocolatDeMarque,Double>> VenteSiPasRuptureDeStock;
+
 
 	
 	public Distributeur1abs() { 
@@ -40,6 +42,8 @@ public class Distributeur1abs implements IActeur {
 		this.MapStock = new HashMap<Integer,Map<ChocolatDeMarque,Double>>();
 		this.evolutionVentes = new HashMap<Integer, Map<ChocolatDeMarque,Double>>();
 		this.evolutionVentes.put(0,new HashMap<ChocolatDeMarque,Double>());
+		this.VenteSiPasRuptureDeStock = new HashMap<Integer,Map<ChocolatDeMarque,Double>>();
+
 	}
 
 	public String getNom() {
