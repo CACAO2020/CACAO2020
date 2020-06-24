@@ -31,6 +31,7 @@ public class Distributeur1abs implements IActeur {
 	
 	
 
+	
 	public Distributeur1abs() { 
 		this.stockHGE=new Variable(getNom()+" stock "+ Chocolat.CHOCOLAT_HAUTE_EQUITABLE.toString(), this, 0, 1000000000, 1000000);
 		this.stockMG=new Variable(getNom()+"stock"+ Chocolat.CHOCOLAT_MOYENNE.toString(), this, 0, 1000000000, 1000000);
