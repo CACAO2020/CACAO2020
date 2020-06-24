@@ -3,6 +3,7 @@ package abstraction.eq6Distributeur1;
 import java.util.LinkedList;
 import java.util.List;
 
+import abstraction.eq8Romu.clients.ClientFinal;
 import abstraction.eq8Romu.contratsCadres.Echeancier;
 import abstraction.eq8Romu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eq8Romu.contratsCadres.IAcheteurContratCadre;
@@ -80,10 +81,9 @@ public class AchatContratCadreEQ6 extends DistributeurClientFinal implements IAc
 		double moyennePrixBourse = 0;
 		
 		
-		//for (ChocolatDeMarque chocolat : listeChocolat ) {
-		//if ()
-			
-	//	this.choco = chocolat;
+		for (ChocolatDeMarque chocolat : ClientFinal.tousLesChocolatsDeMarquePossibles() ) {
+				
+		this.choco = chocolat;
 		//si il n'y a pas de contrat cadre en cours
 		//pour la durer du contrat, faire en fonction de la quantité écoulé
 		int duréeContrat = 10;
@@ -108,7 +108,7 @@ public class AchatContratCadreEQ6 extends DistributeurClientFinal implements IAc
 		}
 		
 		
-	
+	}
 		
    
 
