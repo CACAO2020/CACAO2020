@@ -34,7 +34,10 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	
 	protected int cryptogramme;
 	
-	protected double soldeCritique;
+	protected double soldeCritique = 2.;
+	
+	protected double soldeMini = 1000000.;
+	protected double soldeMaxi = 10000000.;
 	
 	//Les sous-acteurs
 	private AcheteurBourse acheteurBourse;
@@ -54,7 +57,6 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		super();
 		NB_INSTANCES++;
 		numero = NB_INSTANCES;
-		soldeCritique = 2.;
 		acheteurBourse = new AcheteurBourse(this);
 		acheteurContratCadre = new AcheteurContratCadre(this);
 		vendeur = new Vendeur(this);
@@ -86,7 +88,9 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		// Ajout d'un stock initial
 		stock.chocoEnStockParEtape.put(0, new HashMap<ChocolatDeMarque, Double>());
 		for (ChocolatDeMarque choco : tousLesChocolatsDeMarquePossibles()) {
-			getStock().chocoEnStockParEtape.get(0).put(choco, 0.);
+			stock.chocoEnStockParEtape.get(0).put(choco, 0.);
+			stock.stocksChocolatDeMarque.put(choco, new Variable(getNom() + " : STOCK " + choco.name(), this, 0.));
+			stock.journal.ajouter(Journal.texteColore(stock.metaColor, Color.BLACK,"[CRÉATION] Création d'un stock pour le " + choco.name() + "."));
 			stock.ajouterStockChocolat(choco, stockInitial);
 		}
 	}
@@ -175,20 +179,17 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 
 	public boolean estEnPanik() {
 		double soldeActuel = this.getSolde();
-		double soldeMini = 0;
-		if (soldeActuel <= soldeMini) {
-			return true;
-		} else {
-			double res = 0.;
-			for (ChocolatDeMarque choco : this.tousLesChocolatsDeMarquePossibles()) {
-				double cours = Filiere.LA_FILIERE.getIndicateur("BourseChoco cours " + choco.getChocolat().name()).getHistorique().get(Filiere.LA_FILIERE.getEtape()-1).getValeur();
-				res += Double.max(0., (this.stock.getStockChocolatDeMarque(choco)-this.stock.stockLimite)*cours);
-			}
-			return (res > soldeActuel - soldeMini);
-		}
-		
-		
+		double soldeMini = this.soldeMini;
+		return (soldeActuel <= soldeMini);
+
+			//double res = 0.;
+			//for (ChocolatDeMarque choco : this.tousLesChocolatsDeMarquePossibles()) {
+			//	double cours = Filiere.LA_FILIERE.getIndicateur("BourseChoco cours " + choco.getChocolat().name()).getHistorique().get(Filiere.LA_FILIERE.getEtape()-1).getValeur();
+			//	res += Double.max(0., (this.stock.getStockChocolatDeMarque(choco)-this.stock.stockLimite)*cours);
+			//}
+			//return (res > soldeActuel - soldeMini);
 	}
+		
 	// Gère la panik de l'acteur
 	public void gestionPanik() {
 		//Le mode panique est-il actif ?
@@ -205,7 +206,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 				vendeur.wasPanik = true;
 				vendeur.panik = true; // On sait jamais
 				// Ajout au journal la poursuite de la panik
-				journal.ajouter(Journal.texteColore(behaviorColor, Color.BLACK, "[PANIK] Mode PANIK toujours actif !"));
+				//journal.ajouter(Journal.texteColore(behaviorColor, Color.BLACK, "[PANIK] Mode PANIK toujours actif !"));
 			}
 		} else if (!estEnPanik && vendeur.wasPanik) {
 			// La panik vient de se terminer (et nous sommes toujours là)
@@ -221,12 +222,9 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	
 	public boolean estKalm() {
 		double soldeActuel = this.getSolde();
-		double soldeSeuil = 1000000;
-		return soldeActuel >= soldeSeuil;
-		
-		
+		return soldeActuel > this.soldeMaxi;		
 	}
-	// Gère la panik de l'acteur
+	// Gère le kalm de l'acteur
 	public void gestionKalm() {
 		//Le mode kalm est-il actif ?
 		boolean estKalm = estKalm(); 
@@ -242,7 +240,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 				vendeur.wasKalm = true;
 				vendeur.kalm = true; // On sait jamais
 				// Ajout au journal la poursuite du Kalm
-				journal.ajouter(Journal.texteColore(behaviorColor, Color.BLACK, "[KALM] Mode KALM toujours actif !"));
+				//journal.ajouter(Journal.texteColore(behaviorColor, Color.BLACK, "[KALM] Mode KALM toujours actif !"));
 			}
 		} else if (!estKalm && vendeur.wasKalm) {
 			// Le Kalm vient de se terminer (aie)

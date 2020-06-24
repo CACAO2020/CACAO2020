@@ -58,7 +58,7 @@ public class AcheteurContratCadre extends AbsAcheteurContratCadre implements IAc
 			List<IVendeurContratCadre> vendeurs = superviseur.getVendeurs(choco);
 			ExemplaireContratCadre contrat;
 			for (IVendeurContratCadre vendeur : vendeurs) {
-				contrat = superviseur.demande(ac, vendeur, choco, new Echeancier(etape, 10, 1.0), ac.cryptogramme);
+				contrat = superviseur.demande(ac, vendeur, choco, new Echeancier(etape+1, 10, 10.), ac.cryptogramme);
 				if (contrat != null) {
 					nosContrats.add(contrat);
 					notifierNouveauContrat(contrat);
@@ -77,7 +77,7 @@ public class AcheteurContratCadre extends AbsAcheteurContratCadre implements IAc
 			List<IVendeurContratCadre> vendeurs = superviseur.getVendeurs(choco);
 			ExemplaireContratCadre contrat;
 			for (IVendeurContratCadre vendeur : vendeurs) {
-				contrat = superviseur.demande(ac, vendeur, choco, new Echeancier(etape+1, 10, 1.0), ac.cryptogramme);
+				contrat = superviseur.demande(ac, vendeur, choco, new Echeancier(etape+1, 10, 10.), ac.cryptogramme);
 				if (contrat != null) {
 					nosContrats.add(contrat);
 					notifierNouveauContrat(contrat);  
