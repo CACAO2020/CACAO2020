@@ -21,6 +21,9 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 	private double pctageBG;
 	private double pctageMG;
 
+	public Map<Integer,Map<ChocolatDeMarque,Double>> VenteSiPasRuptureDeStock;
+	
+
 	public DistributeurClientFinal(double capaciteDeVente, double marge, double capaciteStockmax, double pctageHGE, double pctageMG, double pctageBG) {
 		super(capaciteStockmax);
 		this.catalogueVente = new HashMap<ChocolatDeMarque,Double>();
@@ -30,6 +33,10 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 		this.pctageBG=pctageBG;
 		this.pctageHGE=pctageHGE;
 		this.pctageMG=pctageMG;
+
+		this.VenteSiPasRuptureDeStock = new HashMap<Integer,Map<ChocolatDeMarque,Double>>();
+		
+		
 
 	}
 
@@ -45,6 +52,7 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 			}
 		}
 		return produits;
+		
 	}
 
 	/** @author Luca Pinguet & Mélissa Tamine */
@@ -114,16 +122,24 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 		if (client!=null) { 
 			destocker(choco,quantite);
 			this.evolutionVentes.get(Filiere.LA_FILIERE.getEtape()).put(choco, quantite);
+
+			this.VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()).put(choco, quantite);
+
+			
+			}
 		}
-	}
 
 
 	/** @author Luca Pinguet & Mélissa Tamine */
 	public void notificationRayonVide(ChocolatDeMarque choco) {
 		journalEq6.ajouter(" Aie... j'aurais du mettre davantage de "+choco.name()+" en vente");
 
+		double quantité = this.VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()).get(choco);
+		this.VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()).replace(choco, quantité*1.1) ; // on augmente de 10%, valeur à modifier
+
 	}
 
+	
 	@Override
 	public List<ChocolatDeMarque> pubSouhaitee() {
 		// TODO Auto-generated method stub
