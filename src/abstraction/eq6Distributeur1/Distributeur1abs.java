@@ -140,6 +140,7 @@ public class Distributeur1abs implements IActeur {
 		return res;
 	}
 
+	
 	public List<Variable> getParametres() {
 		List<Variable> res=new ArrayList<Variable>();
 		return res;

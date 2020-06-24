@@ -66,7 +66,6 @@ public class Stock  extends Distributeur1abs implements IStock { /** @author Avr
 	@Override
 	public void stocker(ChocolatDeMarque choco, double quantite) {
 		journalEq6Stock.ajouter("stocker");
-		System.out.println(Filiere.LA_FILIERE.getEtape()+""+MapStock.get(Filiere.LA_FILIERE.getEtape()));
 		if (MapStock.get(Filiere.LA_FILIERE.getEtape()).keySet().contains(choco)) {
 			this.MapStock.get(Filiere.LA_FILIERE.getEtape()).put(choco, this.MapStock.get(Filiere.LA_FILIERE.getEtape()).get(choco)+quantite);
 		}
