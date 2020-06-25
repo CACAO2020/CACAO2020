@@ -74,7 +74,7 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 		{
 			return this.stockFevesForastero.getValeur();
 		}
-		if(typeFeve == Feve.FEVE_BASSE)
+		if(typeFeve == Feve.FEVE_MOYENNE)
 		{
 			return this.stockFevesTrinitario.getValeur();
 		}
