@@ -74,7 +74,7 @@
     </target>
     <target name="FenetrePrincipaleTest">
         <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr" haltonfailure="true">
+        <junit fork="yes" haltonfailure="true">
             <formatter type="plain" usefile="false" />
             <test name="presentation.FenetrePrincipaleTest" todir="${junit.output.dir}"/>
             <jvmarg line="-ea"/>
@@ -83,7 +83,7 @@
     </target>
     <target name="FiliereParDefaultTest">
         <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr" haltonfailure="true">
+        <junit fork="yes" haltonfailure="true">
             <formatter type="plain" usefile="false" />
             <test name="abstraction.FiliereParDefaultTest" todir="${junit.output.dir}"/>
             <jvmarg line="-ea"/>
