@@ -61,7 +61,7 @@ public class AchatBourseEQ6 extends Stock implements IAcheteurChocolatBourse{
 
 
 
-			return anneeYa1AN/2;
+			return 2500;
 
 
 
