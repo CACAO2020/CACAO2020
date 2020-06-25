@@ -64,10 +64,6 @@ public class Distributeur1abs implements IActeur {
 		return "IMTermarché";
 	}
 
-	private void nextContrat() {
-		// TODO Auto-generated method stub
-		
-	}
 	public String getDescription() {
 		return "Distributeur bla bla bla";
 	}
@@ -110,6 +106,7 @@ public class Distributeur1abs implements IActeur {
 		this.evolutionVentes.put(Filiere.LA_FILIERE.getEtape(),new HashMap<ChocolatDeMarque,Double>());
 		this.evolutionVentes.put(Filiere.LA_FILIERE.getEtape()+1,new HashMap<ChocolatDeMarque,Double>());
 		this.VenteSiPasRuptureDeStock.put(Filiere.LA_FILIERE.getEtape()+1,new HashMap<ChocolatDeMarque,Double>());
+		this.evolutionVentes.put(Filiere.LA_FILIERE.getEtape()+1,new HashMap<ChocolatDeMarque,Double>());
 
 		this.MapStock.put(Filiere.LA_FILIERE.getEtape(),new HashMap<ChocolatDeMarque,Double>());
 
@@ -123,9 +120,6 @@ public class Distributeur1abs implements IActeur {
 
 			}
 		}
-		
-		nextContrat();
-		
 		double somme = 0;
 		journalEq6Stock.ajouter("" + this.MapStock.get(Filiere.LA_FILIERE.getEtape()).keySet().size());
 		for (ChocolatDeMarque chocos : this.MapStock.get(Filiere.LA_FILIERE.getEtape()).keySet()) {
@@ -142,8 +136,6 @@ public class Distributeur1abs implements IActeur {
 		Filiere.LA_FILIERE.getBanque().virer(this, cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), 800*100);
 		
 	}
-
-	
 
 	public List<String> getNomsFilieresProposees() {
 		ArrayList<String> filieres = new ArrayList<String>();
