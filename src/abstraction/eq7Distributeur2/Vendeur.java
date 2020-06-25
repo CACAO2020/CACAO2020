@@ -30,11 +30,10 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 	public void initialiser() {
 		this.coutUnitaire = new HashMap<ChocolatDeMarque, Double>();
 		quantiteAVendreParDefaut = ac.stockInitial-ac.getStock().stockLimite;
+		
 		for (ChocolatDeMarque choco : ac.tousLesChocolatsDeMarquePossibles()) {
 			ajouterProduitAuCatalogue(choco);
-			prixChoco.put(choco, new Variable("Prix du " + choco.name(), ac, prixParDefaut.get(choco.getChocolat())));
 			quantitesEnVente.put(choco, new Variable("Quantité en vente de " + choco.name(), ac, 0.));  //!!!!!!!!!!! Forcément 0 en stock initial ?
-			quantitesACommander.put(choco, new Variable(getNom() + " : " + choco.name() + " [Commande Contrat-Cadre i-1]", ac, 0.));	
 		}
 	}
 	
@@ -44,7 +43,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 		// Le vendeur détermine les quantités à vendre et à commander
 		majAchatsEtVentes();
 		// Le vendeur met à jour les prix de vente de chaque chocolat de marque
-		majPrixDeVente();
+		//majPrixDeVente();
 		// Le vendeur choisit les campagnes de pub à mener lors de l'étape courante
 		majPublicites();
 	}
@@ -75,6 +74,113 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 	}
 	
 	public void majAchatsEtVentes() {
+		int etapeActuelle = Filiere.LA_FILIERE.getEtape();
+		double quantiteAVendre = 0.;
+		double quantiteACommanderEnBourse = 0.;
+		double quantiteACommanderParContrats = 0.;
+		double stockActuel;
+		double stockQuiVaPerimer;
+		double stockQuiNeVaPasPerimer;
+		double cours;
+		double pourcentageMarge;
+		double beneficePartiel;
+		double beneficeTotal = 0.;
+		double prixDeVente = 0.;
+		double margeSolde = 80.;
+		double soldeAlloueAuxAchats;
+		double soldeActuel = Filiere.LA_FILIERE.getBanque().getSolde(ac, ac.cryptogramme);
+		double coutContratsEtape = ac.getAcheteurContratCadre().coutContratsActuels();
+		double soldeDisponible = soldeActuel - coutContratsEtape;
+		if (etapeActuelle == 0) {
+			
+		} else {
+			beneficeTotal = 0;
+			for (Chocolat choco : Chocolat.values()) {
+				if (choco.getGamme() != Gamme.BASSE) {
+					
+					stockActuel = ac.getStock().getStockChocolat(choco);
+					stockQuiVaPerimer = ac.getStock().stockQuiVaPerimer(choco);
+					stockQuiNeVaPasPerimer = stockActuel - stockQuiVaPerimer;
+					pourcentageMarge = this.pourcentagesMarge.get(this.modeActuel).get(choco);
+					cours = Filiere.LA_FILIERE.getIndicateur("BourseChoco cours " + choco.name()).getHistorique().get(Filiere.LA_FILIERE.getEtape()-1).getValeur();
+					prixDeVente = cours*(1+pourcentageMarge/100);
+					this.prixChoco.get(choco).setValeur(ac, prixDeVente);
+					
+					if (panik) {
+						quantiteAVendre = stockActuel;							
+					} else if (kalm) {
+						quantiteAVendre = stockQuiVaPerimer + stockQuiNeVaPasPerimer*0.2;		
+					} else {
+						quantiteAVendre = stockQuiVaPerimer + stockQuiNeVaPasPerimer*0.5;					
+					}
+				
+					beneficePartiel = quantiteAVendre*prixDeVente;
+					beneficeTotal += beneficePartiel;
+
+					for (ChocolatDeMarque chocoDeMarque : ac.tousLesChocolatsDeMarquePossibles()) {
+						if (chocoDeMarque.getChocolat() == choco) {
+							stockActuel = ac.getStock().getStockChocolatDeMarque(chocoDeMarque);
+							stockQuiVaPerimer = ac.getStock().stockQuiVaPerimer(chocoDeMarque);
+							if (panik) {
+								quantiteAVendre = stockActuel;							
+							} else if (kalm) {
+								quantiteAVendre = stockQuiVaPerimer + stockQuiNeVaPasPerimer*0.2;		
+							} else {
+								quantiteAVendre = stockQuiVaPerimer + stockQuiNeVaPasPerimer*0.5;					
+							}
+							this.quantitesEnVente.get(chocoDeMarque).setValeur(ac, quantiteAVendre);
+						}
+					}
+				}
+			}
+			double sommeCours = sommeCours();
+			soldeAlloueAuxAchats = (soldeDisponible + beneficeTotal - ac.soldeMini - ac.getFrais())*(1-margeSolde/100);
+			for (Chocolat choco : Chocolat.values()) {
+				if (choco.getGamme() != Gamme.BASSE) {
+					if (panik) {
+						quantiteACommanderEnBourse = soldeAlloueAuxAchats/sommeCours;
+					} else if (kalm) {
+						quantiteACommanderEnBourse = soldeAlloueAuxAchats/sommeCours*0.6;
+					} else {
+						quantiteACommanderEnBourse = soldeAlloueAuxAchats/sommeCours*0.8;
+					}
+				this.quantitesACommanderEnBourse.get(choco).setValeur(ac, quantiteACommanderEnBourse);
+				}
+			}
+			
+			for (ChocolatDeMarque choco : ac.tousLesChocolatsDeMarquePossibles()) {
+				double nombreProduitsChoco = 0;
+				for (ChocolatDeMarque chocoDeMarque : ac.tousLesChocolatsDeMarquePossibles()) {
+					if (chocoDeMarque.getChocolat() == choco.getChocolat()) {
+						nombreProduitsChoco += 1;
+					}
+				}
+				if (panik) {
+					quantiteACommanderEnBourse = 0.;
+				} else if (kalm) {
+					quantiteACommanderEnBourse = soldeAlloueAuxAchats/sommeCours*0.4/nombreProduitsChoco;
+				} else {
+					quantiteACommanderEnBourse = soldeAlloueAuxAchats/sommeCours*0.2/nombreProduitsChoco;
+				}
+				this.quantitesACommanderParContrats.get(choco).setValeur(ac, quantiteACommanderParContrats);
+			}
+			
+			
+		}
+	}
+	
+	public double sommeCours() {
+		double res = 0;
+		for (Chocolat choco : Chocolat.values()) {
+			if (choco.getGamme() != Gamme.BASSE) {
+				res += Filiere.LA_FILIERE.getIndicateur("BourseChoco cours " + choco.name()).getHistorique().get(Filiere.LA_FILIERE.getEtape()-1).getValeur();
+			}
+		}
+		return res;
+	}
+	
+	/*
+	  public void majAchatsEtVentes() {
 		int etapeActuelle = Filiere.LA_FILIERE.getEtape();
 		double quantiteAVendre;
 		double quantiteACommander;
@@ -115,8 +221,9 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 			quantitesEnVente.get(choco).setValeur(ac, quantiteAVendre);
 			quantitesACommander.get(choco).setValeur(ac, quantiteACommander);
 		}
-	}
-	/**
+	}*/
+	
+	/*
 	public void majAchatsEtVentesChoco() {
 		double quantiteAVendre;
 		double quantiteACommander;
@@ -153,7 +260,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 			quantitesACommanderChoco.get(choco).setValeur(ac, quantiteACommander);
 		}
 	}*/
-	
+	/*
 	public void majPrixDeVente() {
 		// met à jour le prix de vente de chaque chocolat du catalogue selon la valeur du cours actuel
 		// IA : prix vente = (1 + pourcentageMarge/100) * cours
@@ -190,22 +297,16 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 			}
 			prixChoco.get(choco).setValeur(ac, prix);
 		}
-	}
+	}*/
 	
-	public double getQuantiteACommander(ChocolatDeMarque choco) {
+	public double getQuantiteACommanderParContrats(ChocolatDeMarque choco) {
 		//donne la valeur des quantités à commander pour tel chocolat de marque
-		return quantitesACommander.get(choco).getValeur();
+		return quantitesACommanderParContrats.get(choco).getValeur();
 	}
 	
-	public double getQuantiteACommander(Chocolat choco) {
-		//donne la quantité à commander de chocolat d'une gamme
-		double res = 0.;
-		for (ChocolatDeMarque produit : produitsCatalogue) {
-			if (produit.getChocolat() == choco) {
-				res += quantitesACommander.get(produit).getValeur();
-			}
-		}
-		return res;
+	public double getQuantiteACommanderEnBourse(Chocolat choco) {
+		//donne la valeur des quantités à commander pour tel chocolat de marque
+		return quantitesACommanderEnBourse.get(choco).getValeur();
 	}
 	
 	public double quantiteEnVente(Chocolat choco) {
@@ -230,7 +331,6 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 		if (Filiere.LA_FILIERE.getEtape() == 0) {
 			return quantiteAVendreParDefaut;
 		} else {
-			System.out.println(choco.name() + " " + quantitesEnVente.get(choco).getValeur());
 			return quantitesEnVente.get(choco).getValeur();
 		}
 	}
@@ -239,7 +339,6 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 		//ajoute au catalogue un chocolat (selon sa marque) en indiquant son prix et sa quantité en vente
 		if (!produitsCatalogue.contains(choco)) {
 			produitsCatalogue.add(choco);
-			prixChoco.put(choco, new Variable("Prix du " + choco.name(), ac, prixParDefaut.get(choco.getChocolat())));
 			quantitesEnVente.put(choco, new Variable("Quantité de " + choco.name() + " en vente", ac, 0.));
 			journalCatalogue.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[AJOUT] Le chocolat " + choco.name() + " a été ajouté au catalogue."));
 		}
@@ -249,7 +348,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 		journalCatalogue.ajouter(Journal.texteColore(metaColor, Color.BLACK, "[ETAPE " + Filiere.LA_FILIERE.getEtape() + "] Catalogue du distributeur"));
 		journalCatalogue.ajouter(Journal.texteSurUneLargeurDe("Chocolat", 40) + Journal.texteSurUneLargeurDe("Quantité (tonnes)", 20) + Journal.texteSurUneLargeurDe("Prix", 20) + Journal.texteSurUneLargeurDe("", 30));
 		for (ChocolatDeMarque choco : produitsCatalogue) {
-			journalCatalogue.ajouter(Journal.texteSurUneLargeurDe(choco.name(), 40) + Journal.texteSurUneLargeurDe("" + Journal.doubleSur(quantitesEnVente.get(choco).getValeur(),2), 20) + Journal.texteSurUneLargeurDe("" + Journal.doubleSur(prixChoco.get(choco).getValeur(),2), 20) + Journal.texteSurUneLargeurDe("", 30));
+			journalCatalogue.ajouter(Journal.texteSurUneLargeurDe(choco.name(), 40) + Journal.texteSurUneLargeurDe("" + Journal.doubleSur(quantitesEnVente.get(choco).getValeur(),2), 20) + Journal.texteSurUneLargeurDe("" + Journal.doubleSur(prixChoco.get(choco.getChocolat()).getValeur(),2), 20) + Journal.texteSurUneLargeurDe("", 30));
 		}
 	}
 	
@@ -260,7 +359,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 
 	public double prix(ChocolatDeMarque choco) {
 		//renvoie le prix d'un chocolat (selon sa marque) 
-		return prixChoco.get(choco).getValeur();
+		return prixChoco.get(choco.getChocolat()).getValeur();
 	}
 
 	public void adapterQuantitesEnVente() {

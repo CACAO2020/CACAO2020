@@ -86,13 +86,9 @@ public class AcheteurBourse extends AbsAcheteurBourse implements IAcheteurChocol
 	// Méthode qui calcule la quantité qui doit être achetée en bourse, en tenant compte des contrats, pour chaque gamme de chocolat. La table des demandes est tenue à jour.
 	public void majAchatsBourse() {
 		// IA : quantité à commander = quantité demandée par le vendeur MOINS quantité reçue à l'étape suivante grâce aux contrats en cours
-		double quantiteTotaleACommander;
 		double quantiteACommander;
-		double quantiteARecevoirParContrats;
 		for (Chocolat choco : ac.nosChoco) {
-			quantiteARecevoirParContrats = ac.getAcheteurContratCadre().quantitesARecevoirParContrats.get(choco);
-			quantiteTotaleACommander = ac.getVendeur().getQuantiteACommander(choco);
-			quantiteACommander = Double.max(0., quantiteTotaleACommander - quantiteARecevoirParContrats); 
+			quantiteACommander = ac.getVendeur().getQuantiteACommanderEnBourse(choco); 
 			quantitesACommander.get(choco).setValeur(ac, quantiteACommander);
 		}
 	}

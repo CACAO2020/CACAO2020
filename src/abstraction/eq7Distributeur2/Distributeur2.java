@@ -89,13 +89,16 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		// Ajout d'un stock initial
 		stock.chocoEnStockParEtape.put(0, new HashMap<ChocolatDeMarque, Double>());
 		for (ChocolatDeMarque choco : tousLesChocolatsDeMarquePossibles()) {
+			vendeur.quantitesACommanderParContrats.put(choco, new Variable(getNom() + " : " + choco.name() + " [CONTRATS]", this, 0.));
 			stock.chocoEnStockParEtape.get(0).put(choco, 0.);
 			stock.stocksChocolatDeMarque.put(choco, new Variable(getNom() + " : STOCK " + choco.name(), this, 0.));
 			stock.journal.ajouter(Journal.texteColore(stock.metaColor, Color.BLACK,"[CRÉATION] Création d'un stock pour le " + choco.name() + "."));	
 		}
 		for (Chocolat choco : Chocolat.values()) {
 			if (choco.getGamme() != Gamme.BASSE) {
+				vendeur.quantitesACommanderEnBourse.put(choco, new Variable(getNom() + " : " + choco.name() + " [BOURSES]", this, 0.));
 				stock.ajouterStockChocolat(new ChocolatDeMarque(choco, this.getNom()), stockInitial);
+				vendeur.prixChoco.put(choco, new Variable("Prix du " + choco.name(), this, vendeur.prixParDefaut.get(choco)));
 			}
 		}
 	}
@@ -118,33 +121,34 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		acheteurBourse.next();
 	}
 	
-	public void payerFrais() {
+	public double getFrais() {
 		double coutMasseSalariale = this.coutMasseSalariale;
 		double fraisStockage = this.getStock().fraisStockage();
 		double beneficesLivraisons = 0.;
 		double distanceMin = 5.;
 		double distanceMax = 20.;
 		double coutFixeLivraison = 5;
-		double coutLivraisonParTonne = 2;
-		double proportionDeLivraisons = 10; // pourcentage
+		double coutLivraisonVariable = 2;
+		double proportionDeLivraisons = 10; // pourcentage de livraisons
 		for (Double quantite : vendeur.quantitesVendues) {
 			Random testLivraison = new Random();
 			boolean estUnelivraison = (testLivraison.nextInt(100) < proportionDeLivraisons); 
-			if (estUnelivraison) { // 20% des commandes sont livrées
+			if (estUnelivraison) {
 				Random distanceLivraison = new Random();
 				double distance = distanceMin + (distanceMax - distanceMin) * distanceLivraison.nextDouble();
-				beneficesLivraisons += coutFixeLivraison + coutLivraisonParTonne*distance*quantite;
+				beneficesLivraisons += coutFixeLivraison + coutLivraisonVariable*distance*quantite;
 			}
 		}
 		if (coutMasseSalariale + fraisStockage < beneficesLivraisons) {
-			beneficesLivraisons = coutMasseSalariale + fraisStockage;
+			beneficesLivraisons = coutMasseSalariale + fraisStockage + 0.001;
 		}
 		double fraisTotaux = coutMasseSalariale + fraisStockage - beneficesLivraisons;
-		journalTransactions.ajouter(Journal.texteColore(warningColor, Color.BLACK, "[PAIEMENT SALAIRES] Paiement de " + Journal.doubleSur(coutMasseSalariale,2) + " de coût de masse salariale."));
-		journalTransactions.ajouter(Journal.texteColore(warningColor, Color.BLACK, "[FRAIS STOCKAGE] Paiement de " + Journal.doubleSur(fraisStockage,2) + " de frais de stockage."));
-		journalTransactions.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[BENEFICES LIVRAISONS] Bénéfices de " + Journal.doubleSur(beneficesLivraisons,2) + " sur les livraisons."));
+		return fraisTotaux;
+	}
+	public void payerFrais() {
+		double fraisTotaux = this.getFrais();
+		journalTransactions.ajouter(Journal.texteColore(warningColor, Color.BLACK, "[FRAIS] Paiement de " + Journal.doubleSur(fraisTotaux,2) + " de frais."));
 		Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), fraisTotaux);
-		//il faudrait peut-être ajouter des frais quand on fait de la publicité ?
 	}
 	
 	public String getNom() {
@@ -223,6 +227,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 				//Mode panik vient de s'activer !
 				vendeur.wasPanik = true;
 				vendeur.panik = true;
+				vendeur.modeActuel = "panik";
 				//Ajout au journal le début du mode panik
 				journal.ajouter(Journal.texteColore(behaviorColor, Color.BLACK, "[PANIK ON] Mode PANIK activé !"));
 			} else {
@@ -236,6 +241,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 			// La panik vient de se terminer (et nous sommes toujours là)
 			vendeur.wasPanik = false;
 			vendeur.panik = false;
+			vendeur.modeActuel = "normal";
 			//Ajouter au journal la fin de la panik
 			journal.ajouter(Journal.texteColore(behaviorColor, Color.BLACK, "[PANIK OFF] Mode PANIK désactivé ! Ouf !"));
 		} else {
@@ -257,6 +263,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 				//Mode Kalm vient de s'activer !
 				vendeur.wasKalm = true;
 				vendeur.kalm = true;
+				vendeur.modeActuel = "kalm";
 				//Ajout au journal le début du mode Kalm
 				journal.ajouter(Journal.texteColore(behaviorColor, Color.BLACK, "[KALM ON] Mode KALM activé !"));
 			} else {
@@ -270,6 +277,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 			// Le Kalm vient de se terminer (aie)
 			vendeur.wasKalm = false;
 			vendeur.kalm = false;
+			vendeur.modeActuel = "normal";
 			//Ajouter au journal la fin du Kalm
 			journal.ajouter(Journal.texteColore(behaviorColor, Color.BLACK, "[KALM OFF] Mode KALM désactivé ! Aie !"));
 		} else {

@@ -133,6 +133,25 @@ public class Stock extends AbsStock implements IStock {
 		}
 	}
 	
+	public double stockQuiVaPerimer(ChocolatDeMarque choco) {
+		int etape = Filiere.LA_FILIERE.getEtape();
+		if (etape > datePeremption) {
+			return this.chocoEnStockParEtape.get(etape-(this.datePeremption+1)).get(choco);
+		} else {
+			return 0;
+		}
+	}
+	
+	public double stockQuiVaPerimer(Chocolat choco) {
+		double res = 0;
+		for (ChocolatDeMarque chocoDeMarque : ac.tousLesChocolatsDeMarquePossibles()) {
+			if (chocoDeMarque.getChocolat() == choco) {
+				res += this.stockQuiVaPerimer(chocoDeMarque);
+			}
+		}
+		return res;
+	}
+	
 	//retire les quantités necessaires de chocolat des stocks correspondant (avec la prise en compte des potentiels echecs de mouvements)
 	public void retirerStockChocolat(ChocolatDeMarque chocoDeMarque, double quantite) {
 
