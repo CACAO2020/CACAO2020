@@ -24,6 +24,8 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 	private Variable prixTTE;
 	private Variable prixTC;
 	private Variable prixTCE;
+	private Variable prixTPF;
+	private Variable prixTPT;
 	private double prixvente;
 	private Variable propalsnonvendues;
 	private Journal journal_des_ventes;
@@ -51,6 +53,8 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 		this.prixTTE = new Variable("prixTTE",this,60);
 		this.prixTC = new Variable("prixTC",this,58);
 		this.prixTCE = new Variable("prixTCE",this,75);
+		this.prixTPF = new Variable("prixTPF", this, 6050);
+		this.prixTPT = new Variable("prixTPT", this, 6052);
 		this.prixvente = 0;
 		this.propalsnonvendues = new Variable("propalsnonvendues",this,999999999);//première valeur super haute pour permettre ventes
 		this.journal_des_ventes = new Journal("Journal des ventes", this);
@@ -493,6 +497,12 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 	public void setPrixTCE(double prixTCE) {
 		this.prixTCE.setValeur(this, prixTCE);
 	}
+	public Variable getPrixTPF() {
+		return this.prixTPF;
+	}
+	public Variable getPrixTPT() {
+		return this.prixTPT;
+	}
 	
 	public List<Journal> getJournaux() {
 		List<Journal> res=new ArrayList<Journal>();
@@ -547,6 +557,21 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 	}
 	public boolean getcrioevendu() {
 		return this.crioevendu;
+	}
+	public void incrementercompteurfora() {
+		this.compteurfora++;
+	}
+	public void incrementercompteurtrini() {
+		this.compteurtrini++;
+	}
+	public void incrementercompteurtrinie() {
+		this.compteurtrinie++;
+	}
+	public void incrementercompteurcrio() {
+		this.compteurcrio++;
+	}
+	public void incrementercompteurcrioe() {
+		this.compteurcrioe++;
 	}
 }
 
