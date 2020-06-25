@@ -28,6 +28,8 @@ public class eq2Stock extends eq2Acteur{
 	private HashMap<Feve,Variable> StockFeveTourPrecedent;
 	private HashMap<Feve,Variable> StockFeveTourPrecedent2;
 	private HashMap<Pate,Variable> StockPate;
+	private HashMap<Pate,Variable> StockPateTourPrecedent;
+	private HashMap<Pate,Variable> StockPateTourPrecedent2;
 	private double nbemployees;
 	private Variable cout_total_Stock;
 	
@@ -39,15 +41,19 @@ public class eq2Stock extends eq2Acteur{
 		this.coutStock = new Variable ("cout",this,1);
 		this.StockFeve = new HashMap<Feve,Variable>();
 		this.StockPate = new HashMap<Pate,Variable>();
+		this.StockPate.put(Pate.PATE_BASSE, new Variable("EQ2Pate.PATE_BASSE",this,50));
+		this.StockPate.put(Pate.PATE_MOYENNE, new Variable("EQ2Pate.PATE_MOYENNE",this,50));
+		
 		this.cout_total_Stock= new Variable("cout_total_stock",this,0);
-		this.StockFeve.put(Feve.FEVE_BASSE, new Variable("EQ2Feve.FEVE_BASSE",this, 30.0));
+		this.StockFeve.put(Feve.FEVE_BASSE, new Variable("EQ2Feve.FEVE_BASSE",this, 100.0));
 		this.StockFeve.put(Feve.FEVE_MOYENNE, new Variable("EQ2Feve.FEVE_MOYENNE",this, 30.0));
 		this.StockFeve.put(Feve.FEVE_HAUTE, new Variable("EQ2Feve.FEVE_HAUTE",this, 30.0));
 		this.StockFeve.put(Feve.FEVE_MOYENNE_EQUITABLE, new Variable("EQ2Feve.FEVE_MOYENNE_EQUITABLE",this, 30.0));
 		this.StockFeve.put(Feve.FEVE_HAUTE_EQUITABLE, new Variable("EQ2Feve.FEVE_HAUTE_EQUITABLE",this, 30.0));
 		this.StockFeveTourPrecedent = new HashMap<Feve,Variable>();
 		this.StockFeveTourPrecedent2 = new HashMap<Feve,Variable>();
-		
+		this.StockPateTourPrecedent = new HashMap<Pate,Variable>();
+		this.StockPateTourPrecedent2 = new HashMap<Pate,Variable>();
 		
 	}
 	
@@ -66,12 +72,21 @@ public class eq2Stock extends eq2Acteur{
 		for (Feve feve: stockFeveTourPrecedent2.keySet()) {
 			this.StockFeveTourPrecedent2.put(feve, new Variable(stockFeveTourPrecedent2.get(feve).getNom(),this,stockFeveTourPrecedent2.get(feve).getValeur()*this.getCoutStock().getValeur()));
 	}}
+	
+	public void setStockPateTourPrecedent2(HashMap<Pate, Variable> stockPateTourPrecedent2) {
+		this.StockPateTourPrecedent2 =new HashMap<Pate,Variable>();
+		for (Pate pate: stockPateTourPrecedent2.keySet()) {
+			this.StockPateTourPrecedent2.put(pate, new Variable(stockPateTourPrecedent2.get(pate).getNom(),this,stockPateTourPrecedent2.get(pate).getValeur()*this.getCoutStock().getValeur()));
+	}}
 
 /**
 	 * @return the stockFeveTourPrecedent
 	 */
 	public HashMap<Feve, Variable> getStockFeveTourPrecedent() {
 		return StockFeveTourPrecedent;
+	}
+	public HashMap<Pate, Variable> getStockPateTourPrecedent() {
+		return StockPateTourPrecedent;
 	}
 
 	/**
@@ -84,6 +99,12 @@ public class eq2Stock extends eq2Acteur{
 	}
 	}
 
+	public void setStockPateTourPrecedent(HashMap<Pate, Variable> stockPateTourPrecedent) {
+		this.StockPateTourPrecedent =new HashMap<Pate,Variable>();
+		for (Pate pate: stockPateTourPrecedent.keySet()) {
+			this.StockPateTourPrecedent.put(pate, new Variable(stockPateTourPrecedent.get(pate).getNom(),this,stockPateTourPrecedent.get(pate).getValeur()*this.getCoutStock().getValeur()));
+	}
+	}
 public void addStockFeve(Feve feve, double quantité) {
 	String type = "EQ2Feve."+feve;
 	this.StockFeve.put(feve,new Variable(type,this,quantité));
@@ -182,9 +203,15 @@ public HashMap<Feve,Variable> VariationStock(HashMap<Feve,Variable> Stock1, Hash
 	HashMap<Feve,Variable> Variation =new HashMap<Feve,Variable>();
 	for (Feve feve1 :Stock1.keySet()) {
 		for (Feve feve2 :Stock2.keySet()) {
-			if(feve1.equals(feve2)&& Stock2.get(feve2).getValeur()-Stock1.get(feve1).getValeur()!=0) {
+			if(feve1.name().equals(feve2.name())&& Stock2.get(feve2).getValeur()-Stock1.get(feve1).getValeur()!=0) {
 				Variation.put(feve1, new Variable(Stock1.get(feve1).getNom(),this,Stock2.get(feve2).getValeur()-Stock1.get(feve1).getValeur()));
 			}
+			if( !Stock1.containsKey(feve2)) {
+				Variation.put(feve2,new Variable(Stock2.get(feve2).getNom(),this,Stock2.get(feve2).getValeur()) );
+			}
+		}
+		if(!Stock2.containsKey(feve1)) {
+			Variation.put(feve1, new Variable(Stock1.get(feve1).getNom(),this,-Stock1.get(feve1).getValeur()));
 		}
 	}
 	return Variation;

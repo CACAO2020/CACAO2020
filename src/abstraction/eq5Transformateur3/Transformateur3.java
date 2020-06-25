@@ -35,14 +35,16 @@ public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurCh
 	private VenteChocolat vendeurChocolat;
 	private Tresorerie tresorier;
 	private Stock stock;
+	private SuiviDesCoursDeVente infoCoursVente;
 
 	public Transformateur3() {
 		this.journalEq5 = new Journal("Eq5 activites", this);
 		this.acheteurCacao = new AchatCacao(this); // needs to be filled with parameters this will work for now
-		this.acheteurPate = new AchatPate(this);
+		this.acheteurPate = new AchatPate(this,20);
 		this.vendeurChocolat = new VenteChocolat(this);
 		this.tresorier = new Tresorerie(this);
 		this.stock = new Stock(this);
+		this.infoCoursVente = new SuiviDesCoursDeVente(this);
 	}
 
 	public String getNom() {
@@ -66,10 +68,13 @@ public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurCh
 
 	public void next() {
 		stock.next();
+		tresorier.next();
+		acheteurPate.commencerNegociations();
 	}
 
 	public List<String> getNomsFilieresProposees() {
 		List<String> filieresPossibles = new ArrayList<String>();
+		//Filière de test pour notre marché haut de gamme
 		filieresPossibles.add("AchatVente");
 		return filieresPossibles;
 	}
@@ -89,12 +94,12 @@ public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurCh
 	}
 
 	public List<Variable> getParametres() {
-		// TODO ici devront être mis les paramètres dont je parlais (finalement ce
-		// seront des variables qu'il faudra penser à ajouter ici)
-		List<Variable> res = new ArrayList<Variable>();
-		res.add(this.stock.getTransformationCostFeve());
-		res.add(this.stock.getTransformationCostPate());
-		return res;
+		List<Variable> parametersList = new ArrayList<Variable>();
+		parametersList.add(this.stock.getTransformationCostFeve());
+		parametersList.add(this.stock.getTransformationCostPate());
+		parametersList.add(this.stock.getStockCostFixe());
+		parametersList.add(this.stock.getStockCostVar());
+		return parametersList;
 	}
 
 	public List<Journal> getJournaux() {
@@ -105,9 +110,9 @@ public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurCh
 
 	public void notificationFaillite(IActeur acteur) {
 		if (this == acteur) {
-			System.out.println("RIP in pieces" + this.getNom());
+			System.out.println("\"Even the best can die.\n -" + this.getNom());
 		} else {
-			System.out.println("Poor " + acteur.getNom() + "... We will miss you. " + this.getNom());
+			System.out.println("\"Nice! " + acteur.getNom() + " is dead now.\" -" + this.getNom());
 		}
 	}
 
@@ -167,27 +172,29 @@ public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurCh
 		return stock;
 	}
 
+	public SuiviDesCoursDeVente getInfoCoursVente() {
+		return infoCoursVente;
+	}
+
 	protected int getCryptogramme() {
 		return this.cryptogramme;
 	}
 
 	
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
-		//errorless commit
-		//return this.acheteurPate.contrePropositionDeLAcheteur(contrat);
-		return null;
+		return this.acheteurPate.contrePropositionDeLAcheteur(contrat);
 	}
 
 	
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
-		//errorless commit
-		//return this.acheteurPate.contrePropositionPrixAcheteur(contrat);
-		return 0;
+		return this.acheteurPate.contrePropositionPrixAcheteur(contrat);
 	}
 
 	
 	public void receptionner(Object produit, double quantite, ExemplaireContratCadre contrat) {
-		//errorless commit
-		//this.acheteurPate.receptionner(produit, quantite, contrat);
+		this.acheteurPate.receptionner(produit, quantite, contrat);
 	}
+
+
+
 }
