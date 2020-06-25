@@ -22,27 +22,27 @@ public abstract class VendeurChocolat extends AcheteurCacao implements IVendeurC
                 return 0.0;
             }
             if(cours<1.02*this.getCoutChocolat(chocolat)) {
-            	this.journalVente.ajouter("On essaye de vendre 20% de chocolat "+chocolat+" alors qu'en stock on a "+this.getStockChocolat(chocolat));
-                this.journalVente.ajouter("Ce chocolat nous a coûté "+this.getCoutChocolat(chocolat)+" et le cour est à "+cours);
+            	this.journalVente.ajouter("On essaye de vendre 20% de "+chocolat+" alors qu'en stock on a "+this.getStockChocolat(chocolat));
+                this.journalVente.ajouter("Ce chocolat nous a coûté "+this.getCoutChocolat(chocolat)+" et le cours est à "+cours);
             	return 0.2*this.getStockChocolat(chocolat);
             }
             if(cours<1.04*this.getCoutChocolat(chocolat)) {
-            	this.journalVente.ajouter("On essaye de vendre 40% de chocolat "+chocolat+" alors que en stock on a"+this.getStockChocolat(chocolat));
-                this.journalVente.ajouter("Ce chocolate nous a coûté "+this.getCoutChocolat(chocolat)+" et le cour est à "+cours);
+            	this.journalVente.ajouter("On essaye de vendre 40% de "+chocolat+" alors que en stock on a"+this.getStockChocolat(chocolat));
+                this.journalVente.ajouter("Ce chocolate nous a coûté "+this.getCoutChocolat(chocolat)+" et le cours est à "+cours);
             	return 0.4*this.getStockChocolat(chocolat);
             }
             if(cours<1.06*this.getCoutChocolat(chocolat)) {
-            	this.journalVente.ajouter("On essaye de vendre 60% de chocolat "+chocolat+" alors que en stock on a"+this.getStockChocolat(chocolat));
-                this.journalVente.ajouter("Ce chocolate nous a coûté "+this.getCoutChocolat(chocolat)+" et le cour est à "+cours);
+            	this.journalVente.ajouter("On essaye de vendre 60% de "+chocolat+" alors que en stock on a"+this.getStockChocolat(chocolat));
+                this.journalVente.ajouter("Ce chocolate nous a coûté "+this.getCoutChocolat(chocolat)+" et le cours est à "+cours);
             	return 0.6*this.getStockChocolat(chocolat);
             }
             if(cours<1.08*this.getCoutChocolat(chocolat)) {
-            	this.journalVente.ajouter("On essaye de vendre 80% de chocolat "+chocolat+" alors que en stock on a"+this.getStockChocolat(chocolat));
-                this.journalVente.ajouter("Ce chocolat nous a coûté "+this.getCoutChocolat(chocolat)+" et le cour est à "+cours);
+            	this.journalVente.ajouter("On essaye de vendre 80% de "+chocolat+" alors que en stock on a"+this.getStockChocolat(chocolat));
+                this.journalVente.ajouter("Ce chocolat nous a coûté "+this.getCoutChocolat(chocolat)+" et le cours est à "+cours);
             	return 0.8*this.getStockChocolat(chocolat);
             }
-        	this.journalVente.ajouter("On essaye de vendre 100% de chocolat"+chocolat+"alors que en stock on a"+this.getStockChocolat(chocolat));
-            this.journalVente.ajouter("Ce chocolat nous a coûté "+this.getCoutChocolat(chocolat)+" et le cour est à "+cours);
+        	this.journalVente.ajouter("On essaye de vendre 100% de "+chocolat+" alors que en stock on a"+this.getStockChocolat(chocolat));
+            this.journalVente.ajouter("Ce chocolat nous a coûté "+this.getCoutChocolat(chocolat)+" et le cours est à "+cours);
         	return this.getStockChocolat(chocolat);
         }
         return 0.0;
@@ -50,7 +50,7 @@ public abstract class VendeurChocolat extends AcheteurCacao implements IVendeurC
 	
 	/** @author K. GUTIERREZ  */
 	public void livrer(Chocolat chocolat, double quantite) {
-    	this.journalVente.ajouter("On a vendu "+quantite+" T de chocolat"+chocolat);
+    	this.journalVente.ajouter("On a vendu "+quantite+" T de "+chocolat);
 		this.setStockChocolat(chocolat,-quantite);
 	}
 
