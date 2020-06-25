@@ -244,7 +244,14 @@ class GestionCriee //implements IVendeurCacaoCriee
 		int n = this.venduLog.size();
 		if(n == 0)
 		{
-			return 0;
+			if(typeFeve == Feve.FEVE_MOYENNE)
+			{
+				return this.v1PrixMoyenne;
+			}
+			if(typeFeve == Feve.FEVE_BASSE)
+			{
+				return this.v1PrixBasse;
+			}
 		}
 
 	    int i = 0;
@@ -259,7 +266,7 @@ class GestionCriee //implements IVendeurCacaoCriee
 	    }
 
 
-	    return sum/(double)i;
+	    return sum/(double)(n);
 	}
 	
 	public double getPrixVente(Feve typeFeve)
@@ -268,7 +275,7 @@ class GestionCriee //implements IVendeurCacaoCriee
 	    double prixVar = 0;
 	    
 	    double prixVenteEq2 = 0;
-	    for (PropositionCriee proposition:SuperviseurCacaoCriee.getHistorique(Filiere.LA_FILIERE.getEtape())) {
+	    for (PropositionCriee proposition:SuperviseurCacaoCriee.getHistorique(Filiere.LA_FILIERE.getEtape()-1)) {
 	    	if ((proposition.getVendeur().getNom() == "Return of the Stonks") && (proposition.getLot().getFeve() == typeFeve)) {
 	    		prixVenteEq2 = proposition.getPrixPourUneTonne();
 	    	}
