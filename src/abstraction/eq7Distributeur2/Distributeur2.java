@@ -2,8 +2,10 @@ package abstraction.eq7Distributeur2;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import abstraction.eq8Romu.chocolatBourse.IAcheteurChocolatBourse;
 import abstraction.eq8Romu.chocolatBourse.IVendeurChocolatBourse;
@@ -33,13 +35,20 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	
 	protected int cryptogramme;
 	
-	protected double soldeCritique;
+	protected double soldeCritique = 2.;
+	
+	protected double soldeMini = 1000000.;
+	protected double soldeMaxi = 10000000.;
 	
 	//Les sous-acteurs
 	private AcheteurBourse acheteurBourse;
 	private AcheteurContratCadre acheteurContratCadre;
 	private Vendeur vendeur;
 	private Stock stock;
+	
+	protected double coutMasseSalariale = 80000;
+	protected double stockInitial = 100;
+	protected double coutPub = 1000;
 	
 	private Journal journal;
 	private Journal journalTransactions;
@@ -50,7 +59,6 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		super();
 		NB_INSTANCES++;
 		numero = NB_INSTANCES;
-		soldeCritique = 2.;
 		acheteurBourse = new AcheteurBourse(this);
 		acheteurContratCadre = new AcheteurContratCadre(this);
 		vendeur = new Vendeur(this);
@@ -73,23 +81,81 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	public int getNumero() {
 		return this.numero; 
 	}
+	
 	// Lance les procédures d'initialisation des acteurs
 	public void initialiser() {
 		vendeur.initialiser();
 		acheteurBourse.initialiser();
 		stock.initialiser();
-		// AJOUT D'UN STOCK INITIAL POUR OBSERVER LES VENTES
-		for (ChocolatDeMarque choco : vendeur.getCatalogue()) {
-			stock.ajouterStockChocolat(choco, vendeur.quantiteAVendreParDefaut);
+		// Ajout d'un stock initial
+		stock.chocoEnStockParEtape.put(0, new HashMap<ChocolatDeMarque, Double>());
+		for (ChocolatDeMarque choco : tousLesChocolatsDeMarquePossibles()) {
+			vendeur.quantitesACommanderParContrats.put(choco, new Variable(getNom() + " : " + choco.name() + " [CONTRATS]", this, 0.));
+			stock.chocoEnStockParEtape.get(0).put(choco, 0.);
+			stock.stocksChocolatDeMarque.put(choco, new Variable(getNom() + " : STOCK " + choco.name(), this, 0.));
+			stock.journal.ajouter(Journal.texteColore(stock.metaColor, Color.BLACK,"[CRÉATION] Création d'un stock pour le " + choco.name() + "."));	
+		}
+		for (Chocolat choco : Chocolat.values()) {
+			if (choco.getGamme() != Gamme.BASSE) {
+				vendeur.quantitesACommanderEnBourse.put(choco, new Variable(getNom() + " : " + choco.name() + " [BOURSES]", this, 0.));
+				stock.ajouterStockChocolat(new ChocolatDeMarque(choco, this.getNom()), stockInitial);
+				vendeur.prixChoco.put(choco, new Variable("Prix du " + choco.name(), this, vendeur.prixParDefaut.get(choco)));
+			}
 		}
 	}
+	
 	// La méthode next, qui lance les appels des fonctions next de chaque sous-acteur
 	// Le vendeur est appelé en premier pour évaluer la quantité de chocolat que les acheteurs doivent commander
 	public void next() {
 		this.debutEtape = false; 
+		// Paiement des frais (masse salariale et coûts de stockage)
+		payerFrais();
+		if (Filiere.LA_FILIERE.getEtape() > 0) {
+			gestionPanik();
+			if (!vendeur.panik) {
+				gestionKalm();
+			}
+		}
+		stock.next();
 		vendeur.next();
 		acheteurContratCadre.next();
 		acheteurBourse.next();
+	}
+	
+	public double getFrais() {
+		double coutMasseSalariale = this.coutMasseSalariale;
+		double fraisStockage = this.getStock().fraisStockage();
+		double beneficesLivraisons = 0.;
+		double distanceMin = 5.;
+		double distanceMax = 20.;
+		double fraisTotaux = 0.;
+		double coutFixeLivraison = 5;
+		double coutLivraisonVariable = 2;
+		double proportionDeLivraisons = 10; // pourcentage de livraisons
+		for (Double quantite : vendeur.quantitesVendues) {
+			Random testLivraison = new Random();
+			boolean estUnelivraison = (testLivraison.nextInt(100) < proportionDeLivraisons); 
+			if (estUnelivraison) {
+				Random distanceLivraison = new Random();
+				double distance = distanceMin + (distanceMax - distanceMin) * distanceLivraison.nextDouble();
+				beneficesLivraisons += coutFixeLivraison + coutLivraisonVariable*distance*quantite;
+			}
+		}
+		if (vendeur.pubLastStep) {
+			fraisTotaux += coutPub;
+			vendeur.pubLastStep = false;
+		}
+		if (coutMasseSalariale + fraisStockage < beneficesLivraisons) {
+			beneficesLivraisons = coutMasseSalariale + fraisStockage + 0.001;
+		}
+		fraisTotaux = coutMasseSalariale + fraisStockage - beneficesLivraisons;
+		return fraisTotaux;
+	}
+	
+	public void payerFrais() {
+		double fraisTotaux = this.getFrais();
+		journalTransactions.ajouter(Journal.texteColore(warningColor, Color.BLACK, "[FRAIS] Paiement de " + Journal.doubleSur(fraisTotaux,2) + " de frais."));
+		Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), fraisTotaux);
 	}
 	
 	public String getNom() {
@@ -114,6 +180,9 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		if (this==acteur) {
 			System.out.println("I'll be back... or not... "+this.getNom());
 			journal.ajouter(Journal.texteColore(alertColor, Color.BLACK, "[FAILLITE] Cet acteur a fait faillite !"));
+			for (ChocolatDeMarque choco : this.tousLesChocolatsDeMarquePossibles()) {
+				this.vendeur.quantitesEnVente.get(choco).setValeur(this, 0.);;
+			}
 		} else {
 			System.out.println("Poor "+acteur.getNom()+"... We will miss you. "+this.getNom());
 			journal.ajouter(Journal.texteColore(alertColor, Color.BLACK, "[FAILLITE] " + acteur.getNom() + " a fait faillite !"));
@@ -143,6 +212,88 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		}
 	}
 
+	public boolean estEnPanik() {
+		double soldeActuel = this.getSolde();
+		double soldeMini = this.soldeMini;
+		return (soldeActuel <= soldeMini);
+
+			//double res = 0.;
+			//for (ChocolatDeMarque choco : this.tousLesChocolatsDeMarquePossibles()) {
+			//	double cours = Filiere.LA_FILIERE.getIndicateur("BourseChoco cours " + choco.getChocolat().name()).getHistorique().get(Filiere.LA_FILIERE.getEtape()-1).getValeur();
+			//	res += Double.max(0., (this.stock.getStockChocolatDeMarque(choco)-this.stock.stockLimite)*cours);
+			//}
+			//return (res > soldeActuel - soldeMini);
+	}
+		
+	// Gère la panik de l'acteur
+	public void gestionPanik() {
+		//Le mode panique est-il actif ?
+		boolean estEnPanik = estEnPanik(); 
+		if (estEnPanik) {
+			if (!vendeur.wasPanik) {
+				//Mode panik vient de s'activer !
+				vendeur.wasPanik = true;
+				vendeur.panik = true;
+				vendeur.modeActuel = "panik";
+				//Ajout au journal le début du mode panik
+				journal.ajouter(Journal.texteColore(behaviorColor, Color.BLACK, "[PANIK ON] Mode PANIK activé !"));
+			} else {
+				// Le mode panik est actif mais ce n'est pas le premier tour de panik
+				vendeur.wasPanik = true;
+				vendeur.panik = true; // On sait jamais
+				// Ajout au journal la poursuite de la panik
+				//journal.ajouter(Journal.texteColore(behaviorColor, Color.BLACK, "[PANIK] Mode PANIK toujours actif !"));
+			}
+		} else if (!estEnPanik && vendeur.wasPanik) {
+			// La panik vient de se terminer (et nous sommes toujours là)
+			vendeur.wasPanik = false;
+			vendeur.panik = false;
+			vendeur.modeActuel = "normal";
+			//Ajouter au journal la fin de la panik
+			journal.ajouter(Journal.texteColore(behaviorColor, Color.BLACK, "[PANIK OFF] Mode PANIK désactivé ! Ouf !"));
+		} else {
+			//Pas de panik en vue, rien à afficher
+			vendeur.wasPanik = false;
+		}
+	}
+	
+	public boolean estKalm() {
+		double soldeActuel = this.getSolde();
+		return soldeActuel > this.soldeMaxi;		
+	}
+	// Gère le kalm de l'acteur
+	public void gestionKalm() {
+		//Le mode kalm est-il actif ?
+		boolean estKalm = estKalm(); 
+		if (estKalm) {
+			if (!vendeur.wasKalm) {
+				//Mode Kalm vient de s'activer !
+				vendeur.wasKalm = true;
+				vendeur.kalm = true;
+				vendeur.modeActuel = "kalm";
+				//Ajout au journal le début du mode Kalm
+				journal.ajouter(Journal.texteColore(behaviorColor, Color.BLACK, "[KALM ON] Mode KALM activé !"));
+			} else {
+				// Le mode Kalm est actif mais ce n'est pas le premier tour de Kalm
+				vendeur.wasKalm = true;
+				vendeur.kalm = true; // On sait jamais
+				// Ajout au journal la poursuite du Kalm
+				//journal.ajouter(Journal.texteColore(behaviorColor, Color.BLACK, "[KALM] Mode KALM toujours actif !"));
+			}
+		} else if (!estKalm && vendeur.wasKalm) {
+			// Le Kalm vient de se terminer (aie)
+			vendeur.wasKalm = false;
+			vendeur.kalm = false;
+			vendeur.modeActuel = "normal";
+			//Ajouter au journal la fin du Kalm
+			journal.ajouter(Journal.texteColore(behaviorColor, Color.BLACK, "[KALM OFF] Mode KALM désactivé ! Aie !"));
+		} else {
+			//Pas de Kalm en vue, rien à afficher
+			vendeur.wasKalm = false;
+		}
+	}
+	
+	
 	// Renvoie la liste des filières proposées par l'acteur
 	public List<String> getNomsFilieresProposees() {
 		ArrayList<String> filieres = new ArrayList<String>();

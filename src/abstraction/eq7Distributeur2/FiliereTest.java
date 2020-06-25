@@ -38,10 +38,10 @@ public class FiliereTest extends Filiere {
 		this.ajouterActeur(cf);
 		
 		// PRODUCTEURS
-		this.ajouterActeur(new Producteur(Feve.FEVE_MOYENNE));
-		this.ajouterActeur(new Producteur(Feve.FEVE_MOYENNE_EQUITABLE));
-		this.ajouterActeur(new Producteur(Feve.FEVE_HAUTE));
-		this.ajouterActeur(new Producteur(Feve.FEVE_HAUTE_EQUITABLE));
+	//	this.ajouterActeur(new Producteur(Feve.FEVE_MOYENNE));
+	//	this.ajouterActeur(new Producteur(Feve.FEVE_MOYENNE_EQUITABLE));
+	//	this.ajouterActeur(new Producteur(Feve.FEVE_HAUTE));
+	//	this.ajouterActeur(new Producteur(Feve.FEVE_HAUTE_EQUITABLE));
 		
 		// TRANSFORMATEURS BOURSE
 		this.ajouterActeur(new Transformateur(Chocolat.CHOCOLAT_MOYENNE));
