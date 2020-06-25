@@ -164,8 +164,17 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 			if (this.coutUnitaire.containsKey(choco)) {
 				double prixLastStep = this.coutUnitaire.get(choco);
 			}
+			pourcentageMarge = 0;
+			if (choco.getChocolat().getGamme() == Gamme.HAUTE && !choco.getChocolat().isEquitable()) {
+				pourcentageMarge = 20.;
+			} else if (choco.getChocolat().getGamme() == Gamme.HAUTE && choco.getChocolat().isEquitable()) {
+				pourcentageMarge = 15.;
+			} else if (choco.getChocolat().getGamme() == Gamme.MOYENNE && !choco.getChocolat().isEquitable()) {
+				pourcentageMarge = 10.;
+			} else if (choco.getChocolat().getGamme() == Gamme.HAUTE && !choco.getChocolat().isEquitable()) {
+				pourcentageMarge = 5.;
+			}
 			
-			pourcentageMarge = 10.;
 			if (Filiere.LA_FILIERE.getEtape() > 1) {
 	            cours = Filiere.LA_FILIERE.getIndicateur("BourseChoco cours " + choco.getChocolat().name()).getHistorique().get(Filiere.LA_FILIERE.getEtape()-1).getValeur();
 	        } else {
