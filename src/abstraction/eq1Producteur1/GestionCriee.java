@@ -286,13 +286,16 @@ class GestionCriee //implements IVendeurCacaoCriee
 	    double prixCentral = moyenneDerniersTours(typeFeve);
 	    double prixVar = 0;
 	    
-	    double prixVenteEq2 = 0;
-	    for (PropositionCriee proposition:SuperviseurCacaoCriee.getHistorique(Filiere.LA_FILIERE.getEtape()-1)) {
-	    	if ((proposition.getVendeur().getNom() == "Return of the Stonks") && (proposition.getLot().getFeve() == typeFeve)) {
-	    		prixVenteEq2 = proposition.getPrixPourUneTonne();
-	    	}
-	    }
-	    
+		double prixVenteEq2 = 0;
+		if(Filiere.LA_FILIERE.getEtape() >= 3)
+		{
+			for (PropositionCriee proposition:SuperviseurCacaoCriee.getHistorique(Filiere.LA_FILIERE.getEtape()-1)) {
+				if ((proposition.getVendeur().getNom() == "Return of the Stonks") && (proposition.getLot().getFeve() == typeFeve)) {
+					prixVenteEq2 = proposition.getPrixPourLeLot()/proposition.getQuantiteEnTonnes();
+				}
+			}
+		}
+
 	    if (this.producteur1.getStock(Feve.FEVE_BASSE) > 1000 && prixVenteEq2 >= 20) {
 			prixVar = prixCentral - (prixVenteEq2 + 20);
 		}
