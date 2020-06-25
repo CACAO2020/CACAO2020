@@ -46,7 +46,7 @@ class GestionCriee //implements IVendeurCacaoCriee
 	private int compteurMoyen;
 	private double tailleLotBas;
 	private double tailleLotMoyen;
-	public static final int tailleLot = 20;
+	public static final int tailleLot = 1;
 
 
 	public GestionCriee(Producteur1 sup) //Clément
@@ -106,26 +106,33 @@ class GestionCriee //implements IVendeurCacaoCriee
 		{
 			return null;
 		}
-		LotCacaoCriee lot = new LotCacaoCriee(this.producteur1, typeFeve, quantiteAVendre/4, prixVente);
+		LotCacaoCriee lot = new LotCacaoCriee(this.producteur1, typeFeve, quantiteAVendre, prixVente);
 		this.miseEnVenteLog.add(lot);
 		return lot;
 	}
 
 	//Clément 
 	public LotCacaoCriee getLotEnVente() {
+		boolean bool = Math.random() < 0.5;
+		if(bool)
+		{
+			if(this.compteurBas > 0)
+			{
+				this.compteurBas -= 1;
+				return makeLot(Feve.FEVE_BASSE, this.tailleLot);
+				//min(producteur1.getStock(Feve.FEVE_BASSE), (double) this.tailleLot));
+			}
+		}
+		else
+		{
+			if(this.compteurMoyen > 0)
+			{
+				this.compteurMoyen -= 1;
+				return makeLot(Feve.FEVE_MOYENNE, this.tailleLot);
+				//min(producteur1.getStock(Feve.FEVE_MOYENNE), (double) this.tailleLot));
+			}
+		}
 
-		if(this.compteurBas > 0)
-		{
-			this.compteurBas -= 1;
-			return makeLot(Feve.FEVE_BASSE, this.tailleLot);
-			//min(producteur1.getStock(Feve.FEVE_BASSE), (double) this.tailleLot));
-		}
-		if(this.compteurMoyen > 0)
-		{
-			this.compteurMoyen -= 1;
-			return makeLot(Feve.FEVE_MOYENNE, this.tailleLot);
-			//min(producteur1.getStock(Feve.FEVE_MOYENNE), (double) this.tailleLot));
-		}
 		return makeLot(Feve.FEVE_BASSE, 0);
 
 		/*
@@ -201,7 +208,12 @@ class GestionCriee //implements IVendeurCacaoCriee
 	//Clément
 	public void notifierVente(PropositionCriee proposition) {
 		Feve typeFeve = proposition.getFeve();
-		this.producteur1.ajouterJournaux(Color.GREEN, "[GestionCriee] - Vente de : " + proposition.getQuantiteEnTonnes() + " de type : " + typeFeve);
+		this.producteur1.ajouterJournaux(Color.GREEN, "[GestionCriee] - Vente de : " + 
+			proposition.getQuantiteEnTonnes() + 
+			" de type : " + typeFeve + 
+			" au prix de :" + proposition.getPrixPourUneTonne() + 
+			" a l'équipe :" + proposition.getAcheteur().getNom());
+
 		this.producteur1.removeStock(proposition.getQuantiteEnTonnes(), typeFeve);
 		this.venduLog.add(proposition);
 	}
