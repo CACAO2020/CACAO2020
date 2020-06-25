@@ -39,16 +39,8 @@ public class VenteChocolat {
             case CHOCOLAT_HAUTE_EQUITABLE:
                 return this.offreStandard(cours, chocolat);
             default:
-                return this.offreMonopole(chocolat, cours);
+                return 0;
         }
-    }
-
-    /**
-     * Cette décision d'offre est pour les marchés qui ne nous concerne pas normalement
-     * On ne retourne pas 0 seulement si le marché de ce type de chocolat est anormalement haut
-     */
-    private double offreMonopole(Chocolat chocolat, double cours) {
-        return 0;
     }
 
     private double offreStandard(double cours, Chocolat choco) {
@@ -73,15 +65,13 @@ public class VenteChocolat {
      *  false sinon
      */
     private boolean necessiteDeVendre(Chocolat choco) {
-        if (this.acteur.getTresorier().getMontantCompte() + this.valeurDuStockAVendreChoco(choco) < 10000) {
+        if (this.acteur.getTresorier().getMontantCompte() < -10000) {
             return true;
         } else {
             return false;
         }
     }
-    private double valeurDuStockAVendreChoco(Chocolat choco){
-        return this.tentativeDeVente.get(choco).stream().mapToDouble(couple -> couple.get1().getValeur()*couple.get2().getValeur()).sum();
-    }
+
     /**
      * 
      * @param profitPrevu 

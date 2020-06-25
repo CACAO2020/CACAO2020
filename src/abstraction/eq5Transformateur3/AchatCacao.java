@@ -43,7 +43,7 @@ public class AchatCacao {
 		}
 		//On verifie si le lot est du bon type de chocolat et si on en a pas déjà trop en stock
 		if (lot.getFeve().isEquitable() && lot.getFeve().getGamme()== Gamme.HAUTE && 
-				lot.getQuantiteEnTonnes() + this.acteur.getStock().getQuantiteChocolat(lot.getFeve()) <= 1000) {
+				lot.getQuantiteEnTonnes() + this.acteur.getStock().getQuantiteChocolat(lot.getFeve()) <= 200) {
 
 			prix = lot.getPrixMinPourUneTonne();
 			if (NB_propositions_refusees == NB_precedent && acteur.getTresorier()

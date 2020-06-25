@@ -363,6 +363,7 @@ public class Stock {
 		this.getIndicateurs().get(6).setValeur(acteur, this.getQuantiteChocolat(Chocolat.CHOCOLAT_MOYENNE));
 		this.getIndicateurs().get(7).setValeur(acteur, this.getQuantiteChocolat(Chocolat.CHOCOLAT_HAUTE));
 		this.getIndicateurs().get(8).setValeur(acteur, this.getQuantiteChocolat(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE));
+		this.getIndicateurs().get(9).setValeur(acteur, this.getQuantiteChocolat(Chocolat.CHOCOLAT_HAUTE_EQUITABLE));
 		this.getIndicateurs().get(10).setValeur(acteur, this.getQuantitePate(Pate.PATE_BASSE));
 		this.getIndicateurs().get(11).setValeur(acteur, this.getQuantitePate(Pate.PATE_MOYENNE));
 		

@@ -195,7 +195,7 @@ public class Tresorerie {
 			}
 		}
 	}
-	
+	// Se calcule sur un tour, ce qui n'est pas suffisant si les achats/vente ne se font pas sur le même tour
 	public double calculRentabiliteBas() {
 		if (this.getVenteBasACeTour() == 0) {
 			return 1;
@@ -204,7 +204,7 @@ public class Tresorerie {
 		}
 		
 	}
-	
+	// Se calcule sur un tour, ce qui n'est pas suffisant si les achats/vente ne se font pas sur le même tour
 	public double calculRentabiliteSecondaire() {
 		if (this.getVenteSecondaireACeTour() == 0) {
 			return 1;

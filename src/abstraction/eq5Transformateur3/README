@@ -13,6 +13,7 @@ Nous avons mis en place une lecture des prix du marché pour donner un bon prix 
 Pour ce qui est des fonctionnalités "bancales", qui n'ont pas entièrement testé et sont bugué:
 La gestion des investissements dans les deux branches (achat fève haute gamme / achat pate basse gamme) en fonction des revenus produits
     Le facteur ne se comporte pas bien quand l'on ne fait rien pendant un tour dans une branche.
+    Il est calculé tour par tour ce qui restreint trop
 Les indicateurs affichés ne sont actualisé qu'une fois par tour, ce qui implique que si nous achetons et vendons dans le même tour, cela n'est pas marqué dans l'historique de la variable
 
 Des possibilités de progressions sont d'utiliser la lecture des prix du marché dans toutes les opérations d'achat et de vente.
