@@ -36,11 +36,11 @@ public abstract class AcheteurCacao extends AchatPateCC implements abstraction.e
 	
 	/** fonction qui retourne le prix de vente du lot en bourse après les coûts de transformation, prend en compte le cours en bourse du tour actuel**/
 	public double getPrixBourse(LotCacaoCriee lot) {
-		return Filiere.LA_FILIERE.getIndicateur("BourseChoco cours "+equivalentChocoFeve(lot.getFeve())).getValeur()-10000;
+		return Filiere.LA_FILIERE.getIndicateur("BourseChoco cours "+equivalentChocoFeve(lot.getFeve())).getValeur()-5000;
 	}
 	
 	public double proposerPrix(LotCacaoCriee lot, double nb_proposition) { /* fonction mathématique qui s'adapte à notre stratégie */
-		return (1.97 + (nb_proposition/10000)- 1 /(Math.pow(nb_proposition, 1/3)))*lot.getPrixMinPourUneTonne();
+		return (1.95 + (nb_proposition/10000)- 1 /(Math.pow(nb_proposition, 1/3)))*lot.getPrixMinPourUneTonne();
 		}
 	
 	
@@ -57,7 +57,7 @@ public abstract class AcheteurCacao extends AchatPateCC implements abstraction.e
 			}
 		}
 			else {
-				if((this.getStockFeves().containsKey((lot.getFeve()))==false)||	(this.getStockFeves((lot.getFeve()))==0)||
+				if((Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape(),this.equivalentChocoFeve(lot.getFeve()))<(this.getStockFeves(lot.getFeve()) + this.getStockChocolat(this.equivalentChocoFeve(lot.getFeve()))))&&(this.getStockFeves().containsKey((lot.getFeve()))==false)||(this.getStockFeves((lot.getFeve()))==0)||
 					((this.getStockPate().containsKey(this.equivalentChocoFeve(lot.getFeve()))==false)&& /* On achète pas de fèves sauf si on en a pas en stock où qu'on en a moins que le stock de pate de cette fève*/
 					(this.getStockFeves(lot.getFeve())<=this.getStockPate(this.equivalentChocoFeve(lot.getFeve()))))){ /*c'est du au fait que la transformation se fasse avant l'achat à la criée donc si il nous reste des fèves c'est que nous n'avions pas l'argent pour les trasnformer*/
 						if (this.proposerPrix(lot, nb_proposition.get(lot.getFeve())) < this.MontantCompte) {
