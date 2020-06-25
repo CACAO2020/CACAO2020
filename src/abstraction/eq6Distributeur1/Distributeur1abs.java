@@ -104,9 +104,9 @@ public class Distributeur1abs implements IActeur {
 		journalEq6.ajouter("Etape="+Filiere.LA_FILIERE.getEtape());
 		this.evolutionCours.put(Filiere.LA_FILIERE.getEtape(),new HashMap<Chocolat,Double>());
 		this.evolutionCours.put(Filiere.LA_FILIERE.getEtape()+1,new HashMap<Chocolat,Double>());
+		this.evolutionVentes.put(Filiere.LA_FILIERE.getEtape(),new HashMap<ChocolatDeMarque,Double>());
+		this.evolutionVentes.put(Filiere.LA_FILIERE.getEtape()+1,new HashMap<ChocolatDeMarque,Double>());
 		this.VenteSiPasRuptureDeStock.put(Filiere.LA_FILIERE.getEtape()+1,new HashMap<ChocolatDeMarque,Double>());
-
-		this.MapStock.put(Filiere.LA_FILIERE.getEtape(),new HashMap<ChocolatDeMarque,Double>());
 		this.MapStock.put(Filiere.LA_FILIERE.getEtape(),new HashMap<ChocolatDeMarque,Double>());
 
 		if (Filiere.LA_FILIERE.getEtape()>=1) {

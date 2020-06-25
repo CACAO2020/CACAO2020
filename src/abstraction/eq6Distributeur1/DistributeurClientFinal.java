@@ -175,6 +175,7 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 	//Début V2
 
 	public void evolutionMarge(ChocolatDeMarque choco) {
+		System.out.println(this.evolutionVentes+  "marge" + this.evolutionVentes.get(Filiere.LA_FILIERE.getEtape()-1));
 		if (this.quantiteEnVente(choco)>0 && Filiere.LA_FILIERE.getEtape()>2 && this.evolutionVentes.get(Filiere.LA_FILIERE.getEtape()-2).size()>0 && this.evolutionVentes.get(Filiere.LA_FILIERE.getEtape()-1).size()>0) {
 			double vente2 = Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-2, choco)>0 ? this.evolutionVentes.get(Filiere.LA_FILIERE.getEtape()-2).get(choco)/Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-2, choco):0;
 			double vente1 = Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-2, choco)>0 && Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-1, choco)>0 ? this.evolutionVentes.get(Filiere.LA_FILIERE.getEtape()-1).get(choco)/Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-1, choco):0;
