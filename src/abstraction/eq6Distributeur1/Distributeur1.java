@@ -4,7 +4,7 @@ import java.util.Map;
 
 import abstraction.eq8Romu.produits.ChocolatDeMarque;
 
-public class Distributeur1 extends DistributeurClientFinal {
+public class Distributeur1 extends AchatContratCadreEQ6 {
 
 	public Distributeur1(double capaciteDeVente, double marge, double capaciteStockmax, double pctageHGE, double pctageMG, double pctageBG) {
 		super(capaciteDeVente, marge, capaciteStockmax, pctageHGE, pctageMG, pctageBG);
