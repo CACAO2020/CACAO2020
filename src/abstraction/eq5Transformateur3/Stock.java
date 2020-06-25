@@ -35,7 +35,7 @@ public class Stock {
 		this.stockPate = new HashMap<Pate, List<Couple<Variable>>>();
 		this.stockFeves.put(Feve.FEVE_BASSE, new ArrayList<Couple<Variable>>());
 		this.stockFeves.get(Feve.FEVE_BASSE)
-				.add(new Couple<Variable>(new Variable(acteur.getNom() + "Stock", acteur, 50),
+				.add(new Couple<Variable>(new Variable(acteur.getNom() + "Stock", acteur, 10),
 						new Variable(acteur.getNom() + "Prix", acteur, 0)));
 		this.stockFeves.put(Feve.FEVE_MOYENNE, new ArrayList<Couple<Variable>>());
 		this.stockFeves.put(Feve.FEVE_HAUTE, new ArrayList<Couple<Variable>>());
@@ -43,7 +43,7 @@ public class Stock {
 		this.stockFeves.put(Feve.FEVE_HAUTE_EQUITABLE, new ArrayList<Couple<Variable>>());
 		this.stockChocolat.put(Chocolat.CHOCOLAT_BASSE, new ArrayList<Couple<Variable>>());
 		this.stockChocolat.get(Chocolat.CHOCOLAT_BASSE)
-				.add(new Couple<Variable>(new Variable(acteur.getNom() + "Stock", acteur, 50),
+				.add(new Couple<Variable>(new Variable(acteur.getNom() + "Stock", acteur, 100),
 						new Variable(acteur.getNom() + "Prix", acteur, 0)));
 		this.stockChocolat.put(Chocolat.CHOCOLAT_MOYENNE, new ArrayList<Couple<Variable>>());
 		this.stockChocolat.put(Chocolat.CHOCOLAT_HAUTE, new ArrayList<Couple<Variable>>());
@@ -51,24 +51,24 @@ public class Stock {
 		this.stockChocolat.put(Chocolat.CHOCOLAT_HAUTE_EQUITABLE, new ArrayList<Couple<Variable>>());
 		this.stockPate.put(Pate.PATE_BASSE, new ArrayList<Couple<Variable>>());
 		this.stockPate.put(Pate.PATE_MOYENNE, new ArrayList<Couple<Variable>>());
-		this.transformationCostFeve = new Variable(acteur.getNom() + "Cout transformation feve à chocolat", acteur, 10000);
-		this.transformationCostPate = new Variable(acteur.getNom() + "Cout transformation pate à chocolat", acteur, 4000);
-		this.stockCostFixe = new Variable(acteur.getNom() + "Cout fixe du stockage", acteur, 1000);
-		this.stockCostVar = new Variable(acteur.getNom() + "Cout Variable du stockage", acteur, 100);
+		this.transformationCostFeve = new Variable(acteur.getNom() + " Cout transformation feve à chocolat", acteur, 5000);
+		this.transformationCostPate = new Variable(acteur.getNom() + " Cout transformation pate à chocolat", acteur, 2000);
+		this.stockCostFixe = new Variable(acteur.getNom() + " Cout fixe du stockage", acteur, 1000);
+		this.stockCostVar = new Variable(acteur.getNom() + " Cout Variable du stockage", acteur, 100);
 		this.indicateurs = new ArrayList<Variable>();
 		
-		this.indicateurs.add(0,new Variable(acteur.getNom() + "Stock fève basse qualité", acteur, 50));
-		this.indicateurs.add(1,new Variable(acteur.getNom() + "Stock fève moyenne qualité", acteur, 0));
-		this.indicateurs.add(2,new Variable(acteur.getNom() + "Stock fève haute qualité", acteur, 0));
-		this.indicateurs.add(3,new Variable(acteur.getNom() + "Stock fève moyenne qualité equitable", acteur, 0));
-		this.indicateurs.add(4,new Variable(acteur.getNom() + "Stock fève haute qualité équitable", acteur, 0));
-		this.indicateurs.add(5,new Variable(acteur.getNom() + "Stock chocolat basse qualité", acteur, 50));
-		this.indicateurs.add(6,new Variable(acteur.getNom() + "Stock chocolat moyenne qualité", acteur, 0));
-		this.indicateurs.add(7,new Variable(acteur.getNom() + "Stock chocolat haute qualité", acteur, 0));
-		this.indicateurs.add(8,new Variable(acteur.getNom() + "Stock chocolat moyenne qualité equitable", acteur, 0));
-		this.indicateurs.add(9,new Variable(acteur.getNom() + "Stock chocolat haute qualité équitable", acteur, 0));
-		this.indicateurs.add(10,new Variable(acteur.getNom() + "Stock pate basse qualité", acteur, 0));
-		this.indicateurs.add(11,new Variable(acteur.getNom() + "Stock pate moyenne qualité", acteur, 0));
+		this.indicateurs.add(0,new Variable(acteur.getNom() + " Stock fève basse qualité", acteur, 50));
+		this.indicateurs.add(1,new Variable(acteur.getNom() + " Stock fève moyenne qualité", acteur, 0));
+		this.indicateurs.add(2,new Variable(acteur.getNom() + " Stock fève haute qualité", acteur, 0));
+		this.indicateurs.add(3,new Variable(acteur.getNom() + " Stock fève moyenne qualité equitable", acteur, 0));
+		this.indicateurs.add(4,new Variable(acteur.getNom() + " Stock fève haute qualité équitable", acteur, 0));
+		this.indicateurs.add(5,new Variable(acteur.getNom() + " Stock chocolat basse qualité", acteur, 50));
+		this.indicateurs.add(6,new Variable(acteur.getNom() + " Stock chocolat moyenne qualité", acteur, 0));
+		this.indicateurs.add(7,new Variable(acteur.getNom() + " Stock chocolat haute qualité", acteur, 0));
+		this.indicateurs.add(8,new Variable(acteur.getNom() + " Stock chocolat moyenne qualité equitable", acteur, 0));
+		this.indicateurs.add(9,new Variable(acteur.getNom() + " Stock chocolat haute qualité équitable", acteur, 0));
+		this.indicateurs.add(10,new Variable(acteur.getNom() + " Stock pate basse qualité", acteur, 0));
+		this.indicateurs.add(11,new Variable(acteur.getNom() + " Stock pate moyenne qualité", acteur, 0));
 
 
 	}
@@ -363,6 +363,7 @@ public class Stock {
 		this.getIndicateurs().get(6).setValeur(acteur, this.getQuantiteChocolat(Chocolat.CHOCOLAT_MOYENNE));
 		this.getIndicateurs().get(7).setValeur(acteur, this.getQuantiteChocolat(Chocolat.CHOCOLAT_HAUTE));
 		this.getIndicateurs().get(8).setValeur(acteur, this.getQuantiteChocolat(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE));
+		this.getIndicateurs().get(9).setValeur(acteur, this.getQuantiteChocolat(Chocolat.CHOCOLAT_HAUTE_EQUITABLE));
 		this.getIndicateurs().get(10).setValeur(acteur, this.getQuantitePate(Pate.PATE_BASSE));
 		this.getIndicateurs().get(11).setValeur(acteur, this.getQuantitePate(Pate.PATE_MOYENNE));
 		
