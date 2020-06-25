@@ -25,13 +25,17 @@ public class AbsVendeur {
 	protected Journal journalCatalogue;
 	
 	// Enregistre les quantités de chaque chocolat de marque à commander
-	protected Map<ChocolatDeMarque, Variable> quantitesACommander;
+	protected Map<ChocolatDeMarque, Variable> quantitesACommanderParContrats;
+	protected Map<Chocolat, Variable> quantitesACommanderEnBourse;	
+	protected Map<Chocolat, Variable> quantitesACommanderChoco;
 	
 	// Enregistre les quantités de chaque chocolat de marque mis en vente
 	protected Map<ChocolatDeMarque, Variable> quantitesEnVente;
 	
+	protected Map<Chocolat, Variable> quantitesEnVenteChoco;
+	
 	// Enregistre les prix de vente de chaque chocolat de marque
-	protected Map<ChocolatDeMarque, Variable> prixChoco;
+	protected Map<Chocolat, Variable> prixChoco;
 	
 	// Enregistre les quantités de chaque type de chocolat vendues
 	protected Map<Chocolat, Variable> chocoVendu;
@@ -51,6 +55,35 @@ public class AbsVendeur {
 	// Liste des chocolats de marque pour lesquels on souhaite réaliser une campagne de publicité
 	protected List<ChocolatDeMarque> publicites;
 	
+	// Liste des prix de ventes unitaires pour chaque marque, à chaque tours
+	protected Map<ChocolatDeMarque, Double> coutUnitaire;
+	
+	// Coefficient déterminant le solde minimal que doit avoir l'acteur avant de commencer à "paniquer". C'est un coefficient
+	// multiplicateur du cours moyen de la bourse
+	protected double coeffCoursMoyen;
+	
+	//Marqueur de la panique, lorsqu'il est activé le vendeur panique et essaie d'engranger de l'argent le plus possible
+	protected boolean panik;
+	
+	//Le mode panik était actif au tour précédent !
+	protected boolean wasPanik;
+	
+	protected boolean kalm;
+	
+	protected boolean wasKalm;
+	
+	protected double seuilKalm;
+	
+	protected int compteurPub;
+	
+	protected boolean pubLastStep;
+	
+	protected List<Double> quantitesVendues;
+	
+	protected String modeActuel = "normal";
+	
+	protected Map<String, Map<Chocolat, Double>> pourcentagesMarge; 
+		
 	// Couleurs d'arrière-plan pour les messages des journaux
 	public Color titleColor = Color.BLACK;
 	public Color metaColor = Color.CYAN;
@@ -60,13 +93,39 @@ public class AbsVendeur {
 	public Color descriptionColor = Color.YELLOW;
 	
 	public AbsVendeur(Distributeur2 ac) {	
+		pourcentagesMarge = new HashMap<String, Map<Chocolat, Double>>();
+		Map<Chocolat, Double> pourcentagesMargeKalm = new HashMap<Chocolat, Double>();
+		Map<Chocolat, Double> pourcentagesMargeNormal = new HashMap<Chocolat, Double>();
+		Map<Chocolat, Double> pourcentagesMargePanik = new HashMap<Chocolat, Double>();
+		
+		pourcentagesMargeKalm.put(Chocolat.CHOCOLAT_MOYENNE, 2.);
+		pourcentagesMargeKalm.put(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE, 1.);
+		pourcentagesMargeKalm.put(Chocolat.CHOCOLAT_HAUTE, 4.);
+		pourcentagesMargeKalm.put(Chocolat.CHOCOLAT_HAUTE_EQUITABLE, 3.);
+		
+		pourcentagesMargeNormal.put(Chocolat.CHOCOLAT_MOYENNE, 10.);
+		pourcentagesMargeNormal.put(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE, 5.);
+		pourcentagesMargeNormal.put(Chocolat.CHOCOLAT_HAUTE, 20.);
+		pourcentagesMargeNormal.put(Chocolat.CHOCOLAT_HAUTE_EQUITABLE, 15.);
+		
+		pourcentagesMargePanik.put(Chocolat.CHOCOLAT_MOYENNE, 200.);
+		pourcentagesMargePanik.put(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE, 100.);
+		pourcentagesMargePanik.put(Chocolat.CHOCOLAT_HAUTE, 400.);
+		pourcentagesMargePanik.put(Chocolat.CHOCOLAT_HAUTE_EQUITABLE, 300.);
+		
+		pourcentagesMarge.put("panik", pourcentagesMargePanik);
+		pourcentagesMarge.put("kalm", pourcentagesMargeKalm);
+		pourcentagesMarge.put("normal", pourcentagesMargeNormal);
+		
+		quantitesVendues = new ArrayList<Double>();
 		this.ac = ac;
-		quantiteAVendreParDefaut = 100.;
+		this.coeffCoursMoyen = 100;
 		produitsCatalogue = new ArrayList<ChocolatDeMarque>();
 		publicites = new ArrayList<ChocolatDeMarque>();
 		quantitesEnVente = new HashMap<ChocolatDeMarque, Variable>();
-		prixChoco = new HashMap<ChocolatDeMarque, Variable>();
-		quantitesACommander = new HashMap<ChocolatDeMarque, Variable>();
+		prixChoco = new HashMap<Chocolat, Variable>();
+		quantitesACommanderParContrats = new HashMap<ChocolatDeMarque, Variable>();
+		quantitesACommanderEnBourse = new HashMap<Chocolat, Variable>();
 		ventesEtapeActuelle = new HashMap<Chocolat, Double>();
 		prixParDefaut = new HashMap<Chocolat, Double>();
 		prixParDefaut.put(Chocolat.CHOCOLAT_MOYENNE, 10000.);
@@ -75,9 +134,12 @@ public class AbsVendeur {
 		prixParDefaut.put(Chocolat.CHOCOLAT_HAUTE_EQUITABLE, 20000.);
 		chocoVendu = new HashMap<Chocolat, Variable>();
 		for (Chocolat choco : ac.nosChoco) {
+			
 			ventesEtapeActuelle.put(choco, 0.);
 			chocoVendu.put(choco, new Variable(getNom() + " : " + choco.name() + " [Ventes i-1]", ac, 0.));	
 		}
+		
+
 		initJournaux();
 	}
 	

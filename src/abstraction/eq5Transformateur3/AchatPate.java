@@ -5,6 +5,7 @@ import java.util.List;
 
 import abstraction.eq4Transformateur2.Transformateur2;
 import abstraction.eq4Transformateur2.Transformateur2_contratCadre;
+import abstraction.eq8Romu.contratsCadres.ContratCadre;
 import abstraction.eq8Romu.contratsCadres.Echeancier;
 import abstraction.eq8Romu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eq8Romu.contratsCadres.IVendeurContratCadre;
@@ -19,21 +20,20 @@ import abstraction.fourni.Filiere;
 */
 public class AchatPate {
 	
-	private double prixMax;
     private Transformateur3 acteur;
 	private double quantiteParTourMax;
-	private int stepSinceLastContract;
+	private ExemplaireContratCadre contractActuel;
 	private int defaultContractTime;
 		
     public AchatPate(Transformateur3 acteur, int defaultContractTime) {
 		this.acteur = acteur;
-		this.quantiteParTourMax = 200;
-		this.stepSinceLastContract = 0;
+		this.quantiteParTourMax = 100;
+		this.contractActuel = null;
 		this.defaultContractTime = defaultContractTime;
     }
-    public boolean valideOffre(ExemplaireContratCadre contrat, double quantiteParTourMax, int stepFin ) {
+    public boolean valideOffre(ExemplaireContratCadre contrat, int stepFin ) {
     	boolean flag = true;
-    	for (int i = 0; i< 1+ stepFin; i++) {
+    	for (int i = contrat.getEcheancier().getStepDebut(); i< 1+ stepFin; i++) {
     		if (contrat.getEcheancier().getQuantite(i) > quantiteParTourMax ) {
     			flag = false;
     		}
@@ -41,9 +41,9 @@ public class AchatPate {
     	return flag;
     }
     
-    public List<Double> offreAdaptee (ExemplaireContratCadre contrat, double quantiteParTourMax, int stepFin){
+    public List<Double> offreAdaptee (ExemplaireContratCadre contrat, int stepFin){
     	List<Double> offreAdaptee = new ArrayList<>(contrat.getEcheancier().getNbEcheances());
-    	for (int i = 0; i< stepFin; i++) {
+    	for (int i = contrat.getEcheancier().getStepDebut(); i< stepFin; i++) {
     		if (contrat.getEcheancier().getQuantite(i) > quantiteParTourMax ) {
     			offreAdaptee.add(quantiteParTourMax);
     		}
@@ -64,31 +64,31 @@ public class AchatPate {
 		int stepDeb0 = contrat.getEcheancier().getStepDebut();
 		
 		//si on est d'accord avec la proposition:
-		if(stepDeb == stepDeb0 && stepFin < 10 && valideOffre(contrat, quantiteParTourMax, stepFin)) {
+		if (stepDeb == stepDeb0 && stepFin < 10 && valideOffre(contrat, stepFin)) {
 			return contrat.getEcheancier();
 		}
 		//sinon, on peut soit arreter les negociations, soit reproproposer
 
 		//StepFin pas OK; Quantitées OK
-		else if(stepFin>= 10 && valideOffre(contrat, quantiteParTourMax, 10)) {
+		else if(stepFin >= 10 && valideOffre(contrat, 10)) {
 			List<Double> quantites = new ArrayList<>();
-			for (int i = 0; i<10; i++) {
+			for (int i = stepDeb; i < stepDeb + 10; i++) {
 				quantites.add(contrat.getEcheancier().getQuantite(i));
 				}
-			return new Echeancier(stepDeb0, quantites ) ;
+			return new Echeancier(stepDeb0, quantites);
 			}
 		//StepFin OK mais pas quantitées
-		else if (stepFin< 10 && valideOffre(contrat, quantiteParTourMax, stepFin)==false) {
-			return new Echeancier (stepDeb0, offreAdaptee (contrat, quantiteParTourMax, stepFin));
+		else if (stepFin< 10 && !valideOffre(contrat, stepFin)) {
+			return new Echeancier (stepDeb0, offreAdaptee (contrat, stepFin));
 		}
 		//StepFin pas OK et quantitées pas OK
-		else if (stepFin >= 10 && valideOffre(contrat, quantiteParTourMax, 10)==false) {
-			return new Echeancier (stepDeb0, offreAdaptee (contrat, quantiteParTourMax, 10));
+		else if (stepFin >= 10 && !valideOffre(contrat, 10)) {
+			return new Echeancier (stepDeb0, offreAdaptee (contrat, 10));
 		}
 		// il reste juste le cas où step0 pas OK mais les deux autres OK
 		else {
 			List<Double> quantites = new ArrayList<>();
-			for (int i = 0; i<stepFin; i++) {
+			for (int i = stepDeb; i< stepFin; i++) {
 				quantites.add(contrat.getEcheancier().getQuantite(i));
 			}
 			return new Echeancier(stepDeb0, quantites);
@@ -97,9 +97,20 @@ public class AchatPate {
 
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 		//le prix max est celui qui nous permet de faire 40% de marge
+		System.out.println();
 		Pate pate =  (Pate)(contrat.getProduit());
-		prixMax = 0.6*this.acteur.getInfoCoursVente().getMoy(Stock.getProduct(pate)) - 
-				this.acteur.getStock().getTransformationCostPate().getValeur(); 
+		double prix1 = 0.6*this.acteur.getInfoCoursVente().getMoy(Stock.getProduct(pate)) - 
+				this.acteur.getStock().getTransformationCostPate().getValeur();
+		double prix2 = 0.9*this.acteur.getInfoCoursVente().getMoy(Stock.getProduct(pate)) - 
+				this.acteur.getStock().getTransformationCostPate().getValeur();
+		double prixMax = 0;
+		if (prix1 > 0) {
+			prixMax = prix1;
+		}
+		else if (prix2 > 0) {
+			prixMax = prix2;
+		}
+		
 		if(contrat.getPrixALaTonne() <= prixMax) {
 			return contrat.getPrixALaTonne();
 		}
@@ -118,8 +129,7 @@ public class AchatPate {
 			this.acteur.getStock().ajoutFeves(feve, quantite, contrat.getPrixALaTonne());
 		}
 		this.acteur.getTresorier().jaiAchetePrincipale(quantite * contrat.getPrixALaTonne());
-		this.stepSinceLastContract = Math.min(stepSinceLastContract,
-				contrat.getEcheancier().getStepFin() - Filiere.LA_FILIERE.getEtape());
+		this.contractActuel = contrat;
 	}
 
 	/**
@@ -127,7 +137,8 @@ public class AchatPate {
 	 * Est appellé par next() de l'acteur Transformateur3
 	 */
 	public void commencerNegociations() {
-		if(this.stepSinceLastContract <= 0 ){
+		//On attends avant d'initier des contrats cadres car les cours moyens calculés sont trop haut au début.
+		if((contractActuel != null && contractActuel.getEcheancier().getStepFin() == Filiere.LA_FILIERE.getEtape() + 1) || Filiere.LA_FILIERE.getEtape() == 5){
 			IVendeurContratCadre vendeur = (Transformateur2) Filiere.LA_FILIERE.getActeur("EQ4");
 			Filiere.LA_FILIERE.getSuperviseurContratCadre().demande(acteur, vendeur, Pate.PATE_BASSE,
 				new Echeancier(Filiere.LA_FILIERE.getEtape() + 1, Filiere.LA_FILIERE.getEtape() + this.defaultContractTime, quantiteParTourMax),

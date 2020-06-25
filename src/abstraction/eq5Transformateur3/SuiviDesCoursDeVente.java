@@ -19,7 +19,6 @@ public class SuiviDesCoursDeVente {
 	
 	private Transformateur3 acteur;
 	private Map<Chocolat, List<Double>> prixStat;
-	private Integer tour;
 	
 	/* prixStat : pour chaque type de chocolat, on garde le prix min, max et moyen.
 	 */
@@ -28,7 +27,6 @@ public class SuiviDesCoursDeVente {
 	public SuiviDesCoursDeVente(Transformateur3 acteur) {
 		this.acteur = acteur;
 		this.prixStat = new HashMap<Chocolat, List<Double>>();
-		this.tour = 0;
 		this.prixStat.put(Chocolat.CHOCOLAT_BASSE, new ArrayList<Double>(3));
 		this.prixStat.put(Chocolat.CHOCOLAT_MOYENNE, new ArrayList<Double>(3));
 		this.prixStat.put(Chocolat.CHOCOLAT_HAUTE, new ArrayList<Double>(3));
@@ -42,7 +40,6 @@ public class SuiviDesCoursDeVente {
 		}
 	}
 	public HashMap<Chocolat, Integer> next() {
-		this.tour = this.tour + 1;
 		HashMap<Chocolat, Integer> map = this.avisAchat();
 		this.updatePrixStat();
 		return map;
@@ -73,8 +70,9 @@ public class SuiviDesCoursDeVente {
 		if (cours >= this.getMax(choco) ) {
 			this.prixStat.get(choco).set(1, cours);
 		}
-		double moyenne = this.getMoy(choco);		
-		double nouvelleMoyenne = moyenne*(this.tour/(this.tour+1)) + cours/(this.tour+1);
+		double moyenne = this.getMoy(choco);
+		int tour = Filiere.LA_FILIERE.getEtape() ;
+		double nouvelleMoyenne = moyenne*(tour/(tour+1.)) + cours/(tour+1.);
 		this.prixStat.get(choco).set(2, nouvelleMoyenne);
 	}
 	/**
