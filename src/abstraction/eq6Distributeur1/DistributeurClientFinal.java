@@ -117,15 +117,15 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 	/** @author Luca Pinguet & Mélissa Tamine */
 
 	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant) {
-		if (client!=null) { 
+		//if (client!=null) { 
+		System.out.println("nouvelle       dans la fonction vendre  "+ quantite);
+
 			destocker(choco,quantite);
 			this.evolutionVentes.get(Filiere.LA_FILIERE.getEtape()).put(choco, quantite);
 
-			System.out.println(VenteSiPasRuptureDeStock);
 			this.VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()).put(choco, quantite);
 
-
-		}
+		//}
 	}
 
 
@@ -141,6 +141,7 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 		else {
 			this.VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()).put(choco, Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-1, choco.getChocolat())*0.02 ) ; // on le prend en compte dans notre liste
 		}
+		
 	}
 
 
@@ -175,7 +176,6 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 	//Début V2
 
 	public void evolutionMarge(ChocolatDeMarque choco) {
-		System.out.println(this.evolutionVentes+  "marge" + this.evolutionVentes.get(Filiere.LA_FILIERE.getEtape()-1));
 		if (this.quantiteEnVente(choco)>0 && Filiere.LA_FILIERE.getEtape()>2 && this.evolutionVentes.get(Filiere.LA_FILIERE.getEtape()-2).size()>0 && this.evolutionVentes.get(Filiere.LA_FILIERE.getEtape()-1).size()>0) {
 			double vente2 = Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-2, choco)>0 ? this.evolutionVentes.get(Filiere.LA_FILIERE.getEtape()-2).get(choco)/Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-2, choco):0;
 			double vente1 = Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-2, choco)>0 && Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-1, choco)>0 ? this.evolutionVentes.get(Filiere.LA_FILIERE.getEtape()-1).get(choco)/Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-1, choco):0;

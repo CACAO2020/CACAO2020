@@ -90,7 +90,7 @@ public class Distributeur1abs implements IActeur {
 	}
 
 	public double quantiteEnStockTypeChoco(Chocolat choco) {
-		return 0;
+		return 0; 
 	}
 
 	public double quantiteEnStockTotale() {
@@ -99,12 +99,16 @@ public class Distributeur1abs implements IActeur {
 
 	/** @author Luca Pinguet & Mélissa Tamine & Thibault Avril */
 	public void next() {
+		System.out.println(Filiere.LA_FILIERE.getEtape());
+
 		journalEq6.ajouter("Etape="+Filiere.LA_FILIERE.getEtape());
 		this.evolutionCours.put(Filiere.LA_FILIERE.getEtape(),new HashMap<Chocolat,Double>());
 		this.evolutionCours.put(Filiere.LA_FILIERE.getEtape()+1,new HashMap<Chocolat,Double>());
 		this.evolutionVentes.put(Filiere.LA_FILIERE.getEtape(),new HashMap<ChocolatDeMarque,Double>());
 		this.evolutionVentes.put(Filiere.LA_FILIERE.getEtape()+1,new HashMap<ChocolatDeMarque,Double>());
 		this.VenteSiPasRuptureDeStock.put(Filiere.LA_FILIERE.getEtape()+1,new HashMap<ChocolatDeMarque,Double>());
+		this.evolutionVentes.put(Filiere.LA_FILIERE.getEtape()+1,new HashMap<ChocolatDeMarque,Double>());
+
 		this.MapStock.put(Filiere.LA_FILIERE.getEtape(),new HashMap<ChocolatDeMarque,Double>());
 
 		if (Filiere.LA_FILIERE.getEtape()>=1) {
@@ -126,11 +130,12 @@ public class Distributeur1abs implements IActeur {
 		this.stockMG.setValeur(this, quantiteEnStockTypeChoco(Chocolat.CHOCOLAT_MOYENNE));
 		this.stockBG.setValeur(this, quantiteEnStockTypeChoco(Chocolat.CHOCOLAT_BASSE));
 		this.stockHGE.setValeur(this, quantiteEnStockTypeChoco(Chocolat.CHOCOLAT_HAUTE_EQUITABLE));
+
 		if (this.quantiteEnStockTotale()!=0) {
 			Filiere.LA_FILIERE.getBanque().virer(this, cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), this.quantiteEnStockTotale()*720);
 		}
-		Filiere.LA_FILIERE.getBanque().virer(this, cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), 800*20);
-
+		Filiere.LA_FILIERE.getBanque().virer(this, cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), 800*100);
+		
 	}
 
 	public List<String> getNomsFilieresProposees() {

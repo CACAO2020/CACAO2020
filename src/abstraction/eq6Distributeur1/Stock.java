@@ -11,13 +11,14 @@ import abstraction.fourni.Filiere;
 
 public class Stock  extends Distributeur1abs implements IStock { /** @author Avril Thibault et Tamine Mélissa et Luca Pinguet*/
 	protected double capaciteStockmax;
-	
+	protected double  volumeGlobal;
+
 		
 	
 	
 	public Stock(double capaciteStockmax) {
 		this.capaciteStockmax = capaciteStockmax;
-
+		volumeGlobal = 0;
 		
 	}
 	
@@ -30,8 +31,13 @@ public class Stock  extends Distributeur1abs implements IStock { /** @author Avr
 				if (chocos.getChocolat()==choco) {
 				quantite = quantite + MapStock.get(etape).get(chocos);
 				}
+				//else {
+					//System.out.println(chocos);
+
+				//}
 			}
 		}
+		
 		return quantite;
 	}
 
@@ -43,6 +49,7 @@ public class Stock  extends Distributeur1abs implements IStock { /** @author Avr
 				quantite = quantite + MapStock.get(etape).get(chocos);
 			}
 		}
+		//System.out.println(quantite+"classe    "+ this.MapStock.keySet().size()+" ");
 		return quantite;
 	}
 
@@ -66,7 +73,11 @@ public class Stock  extends Distributeur1abs implements IStock { /** @author Avr
 	@Override
 	public void stocker(ChocolatDeMarque choco, double quantite) {
 		journalEq6Stock.ajouter("stocker");
+		volumeGlobal += quantite; 
+		//System.out.println(volumeGlobal);
+
 		if (MapStock.get(Filiere.LA_FILIERE.getEtape()).keySet().contains(choco)) {
+			
 			this.MapStock.get(Filiere.LA_FILIERE.getEtape()).put(choco, this.MapStock.get(Filiere.LA_FILIERE.getEtape()).get(choco)+quantite);
 		}
 		else {
@@ -77,6 +88,9 @@ public class Stock  extends Distributeur1abs implements IStock { /** @author Avr
 
 	@Override
 	public void destocker(ChocolatDeMarque choco, double quantite) {
+		volumeGlobal -= quantite; 
+		System.out.println(Filiere.LA_FILIERE.getEtape());
+
 		Double quanti = quantite;
 		ArrayList<Integer> listeAEnlever = new ArrayList<Integer>();
 		for (Integer etape : this.MapStock.keySet()) {
