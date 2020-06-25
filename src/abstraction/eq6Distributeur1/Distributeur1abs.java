@@ -172,7 +172,8 @@ public class Distributeur1abs implements IActeur {
 	public void notificationFaillite(IActeur acteur) {
 		if (this==acteur) {
 			System.out.println("I'll be back... or not... "+this.getNom());
-		} else {
+		} 
+		else {
 			System.out.println("Poor "+acteur.getNom()+"... We will miss you. "+this.getNom());
 		}
 	}
