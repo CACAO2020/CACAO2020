@@ -118,13 +118,11 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 
 	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant) {
 		//if (client!=null) { 
-		System.out.println("nouvelle 11      dans la fonction vendre  "+ VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()));
 
 		destocker(choco,quantite);
 		this.evolutionVentes.get(Filiere.LA_FILIERE.getEtape()).put(choco, quantite);
 
 		this.VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()).put(choco, quantite);
-		System.out.println("nouvelle 22      dans la fonction vendre  "+ VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()));
 
 		//}
 	}

@@ -89,7 +89,6 @@ public class Stock  extends Distributeur1abs implements IStock { /** @author Avr
 	@Override
 	public void destocker(ChocolatDeMarque choco, double quantite) {
 		volumeGlobal -= quantite; 
-		System.out.println(Filiere.LA_FILIERE.getEtape());
 
 		Double quanti = quantite;
 		ArrayList<Integer> listeAEnlever = new ArrayList<Integer>();

@@ -98,8 +98,8 @@ public class AchatBourseEQ6 extends Stock implements IAcheteurChocolatBourse{
 		double DeamndeChoco = this.EvolutionDemandeChocolat(chocolat);
 		evolutionCours.get(Filiere.LA_FILIERE.getEtape()).put(chocolat, cours);
 		double quantiteLivreParContratCadre = 0 ;
-		return 10000;
-/*	for (ExemplaireContratCadre contratDemande : this.mesContratEnTantQuAcheteur) {
+		
+	for (ExemplaireContratCadre contratDemande : this.mesContratEnTantQuAcheteur) {
 			Object produit = contratDemande.getProduit();
 			if (produit instanceof ChocolatDeMarque) {
 				ChocolatDeMarque cdmobj = (ChocolatDeMarque) produit;
@@ -127,7 +127,7 @@ public class AchatBourseEQ6 extends Stock implements IAcheteurChocolatBourse{
 		}
 		journalEq6.ajouter("Demande =" + DeamndeChoco + "stock =" + stockChoco + "return 0 fin");
 		return 0;
-		*/
+		
 	}
 
 
@@ -139,7 +139,6 @@ public class AchatBourseEQ6 extends Stock implements IAcheteurChocolatBourse{
 				this.historiqueBourse.put(Filiere.LA_FILIERE.getEtape(),a );     
 			}*/
 		/** getChocolat.name().getHistorique().get(int i)*/
-		System.out.println("on a recu"+ quantiteObtenue);
 
 	}
 

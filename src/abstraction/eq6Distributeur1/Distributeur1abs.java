@@ -99,7 +99,6 @@ public class Distributeur1abs implements IActeur {
 
 	/** @author Luca Pinguet & Mélissa Tamine & Thibault Avril */
 	public void next() {
-		System.out.println(Filiere.LA_FILIERE.getEtape());
 
 		journalEq6.ajouter("Etape="+Filiere.LA_FILIERE.getEtape());
 		this.evolutionCours.put(Filiere.LA_FILIERE.getEtape(),new HashMap<Chocolat,Double>());
