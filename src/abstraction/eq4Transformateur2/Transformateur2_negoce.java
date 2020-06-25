@@ -21,8 +21,8 @@ public class Transformateur2_negoce extends Transformateur2_gestion_stocks imple
 	protected Map<Chocolat, Variable> MARGE_VISEE_CHOCOLAT;
 
 	
-	public Transformateur2_negoce() {
-		super();
+	public Transformateur2_negoce() { 
+		super();   
 		
 		this.MARGE_VISEE_PATE = new HashMap<PateInterne, Variable>() ;
 		this.MARGE_VISEE_PATE.put(PateInterne.PATE_BASSE, new Variable(getNom()+" marge visee pate basse", this, 0.30)) ;
