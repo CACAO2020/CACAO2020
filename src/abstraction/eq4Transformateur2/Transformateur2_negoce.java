@@ -25,8 +25,8 @@ public class Transformateur2_negoce extends Transformateur2_gestion_stocks imple
 		super();
 		
 		this.MARGE_VISEE_PATE = new HashMap<PateInterne, Variable>() ;
-		this.MARGE_VISEE_PATE.put(PateInterne.PATE_BASSE, new Variable(getNom()+" marge visee pate basse", this, 0.20)) ;
-		this.MARGE_VISEE_PATE.put(PateInterne.PATE_MOYENNE, new Variable(getNom()+" marge visee pate moyenne", this, 0.20)) ;
+		this.MARGE_VISEE_PATE.put(PateInterne.PATE_BASSE, new Variable(getNom()+" marge visee pate basse", this, 0.30)) ;
+		this.MARGE_VISEE_PATE.put(PateInterne.PATE_MOYENNE, new Variable(getNom()+" marge visee pate moyenne", this, 0.30)) ;
 		this.MARGE_VISEE_PATE.put(PateInterne.PATE_MOYENNE_EQUITABLE, new Variable(getNom()+" marge visee pate moyenne equitable", this, 1)) ;
 		this.MARGE_VISEE_PATE.put(PateInterne.PATE_HAUTE_EQUITABLE,new Variable(getNom()+" marge visee pate haute equitable", this, 1)) ;
 		this.MARGE_VISEE_PATE.put(PateInterne.PATE_HAUTE, new Variable(getNom()+" marge visee pate haute", this, 1)) ;

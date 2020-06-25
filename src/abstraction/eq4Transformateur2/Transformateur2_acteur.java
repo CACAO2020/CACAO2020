@@ -21,7 +21,7 @@ public class Transformateur2_acteur implements IActeur {
 	private static final int NOMBRE_DE_TOUR_DAUTO_MAX = 10;
 	private static final int NOMBRE_DE_TOUR_DAUTO_MIN = 2;
 	protected double INVESTI_MOYPROD = 0.01;
-	protected final double PRIX_MOYEN_SUPPOSE_PATE = 1000;
+	protected final double PRIX_MOYEN_SUPPOSE_PATE = 110;
 
 	
 	
@@ -55,7 +55,7 @@ public class Transformateur2_acteur implements IActeur {
 	
 	public Transformateur2_acteur() {
 		
-		double memeValeur = 1000 ;
+		double memeValeur = 150 ;
 		
 		this.stockFeves = new HashMap<Feve, Variable>() ;
 		this.stockFeves.put(Feve.FEVE_BASSE, new Variable(getNom()+" stock feves basses", this, memeValeur*2)) ;
@@ -80,7 +80,13 @@ public class Transformateur2_acteur implements IActeur {
 		
 		this.journalEq4 = new Journal("Eq4 activites", this);
 		
-		this.coutFixe = new Variable(getNom()+" cout fixe (marketing, R&D, fonctionnement...)", this, 1000) ;
+		this.coutFixe = new Variable(getNom()+" cout fixe (marketing, R&D, fonctionnement...)", this, 200) ;
+	}
+	
+	//
+
+	public void initialiser() {
+		
 	}
 	
 	public String getNom() {
@@ -164,11 +170,6 @@ public class Transformateur2_acteur implements IActeur {
 				}
 			}}
 		else {throw new IllegalArgumentException("produit null") ;}
-	}
-	
-	//
-
-	public void initialiser() {
 	}
 
 	public void setCryptogramme(Integer crypto) {
