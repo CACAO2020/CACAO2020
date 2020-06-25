@@ -230,6 +230,8 @@ public class Transformateur2_contratCadre extends Transformateur2_stocks_et_tran
 		Echeancier echeancier = contrat.getEcheancier() ;
 		List<Echeancier> liste = contrat.getEcheanciers() ;
 		
+		if (contrat.getQuantiteTotale() == 0) { return null ;}
+		
 		if (!this.vend(contrat.getProduit())) { return null ; } // on ne vend pas cette pâte 
 		
 		if (liste.size()<2) { //aucune proposition n'a été faite, on envoie notre échéancier idéal
@@ -269,9 +271,8 @@ public class Transformateur2_contratCadre extends Transformateur2_stocks_et_tran
 	
 	public double propositionPrix(ExemplaireContratCadre contrat) {
 		PateInterne pate = this.conversionPate(contrat.getProduit()) ;
-		if (contrat.getQuantiteTotale() == 0) { throw new IllegalArgumentException("quantité totale du contrat nulle") ;}
-		else { 
-			return this.getMargePate()*super.getCoutMoyenPateValeur(pate) ;} 
+		this.journalEq4.ajouter(""+(this.getMargePate()*super.getCoutMoyenPateValeur(pate)));
+		return this.getMargePate()*super.getCoutMoyenPateValeur(pate) ;
 			
 				//5000.0 + (1000.0/contrat.getQuantiteTotale());}// plus la quantite est elevee, plus le prix est interessant
 	}
@@ -285,7 +286,10 @@ public class Transformateur2_contratCadre extends Transformateur2_stocks_et_tran
 		List<Double> liste = contrat.getListePrixALaTonne() ;
 		int n = liste.size() ;
 		
-		if (contrat.getPrixALaTonne() >= propositionPrix(contrat)) { // si le contrat est plus intéressant que notre contrat maximal, on accepte
+		this.journalEq4.ajouter("prix courant "+contrat.getPrixALaTonne());
+		this.journalEq4.ajouter("prix voulu "+ this.propositionPrix(contrat));
+		
+		if (contrat.getPrixALaTonne() >= this.propositionPrix(contrat)) { // si le contrat est plus intéressant que notre contrat maximal, on accepte
 			return contrat.getPrixALaTonne() ;
 		}
 		
