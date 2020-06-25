@@ -19,6 +19,8 @@ public class TesteurVenteContratsCadre extends Filiere {
 		this.ajouterActeur(new ExempleTransformateurContratCadreVendeurAcheteur(Feve.FEVE_MOYENNE_EQUITABLE));
 		this.ajouterActeur(new ExempleTransformateurContratCadreVendeurAcheteur(Feve.FEVE_HAUTE));
 		this.ajouterActeur(new ExempleTransformateurContratCadreVendeurAcheteur(Feve.FEVE_HAUTE_EQUITABLE));
+		this.ajouterActeur(new ExempleTransformateurContratCadreVendeurAcheteur(Pate.PATE_BASSE));
+		this.ajouterActeur(new ExempleTransformateurContratCadreVendeurAcheteur(Pate.PATE_MOYENNE));
 		this.ajouterActeur(new VenteContratCadre());
 		this.superviseurCC=new SuperviseurVentesContratCadre();
 		this.ajouterActeur(this.superviseurCC);

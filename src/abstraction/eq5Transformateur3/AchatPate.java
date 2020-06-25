@@ -99,7 +99,15 @@ public class AchatPate {
 		//le prix max est celui qui nous permet de faire 40% de marge
 		Pate pate =  (Pate)(contrat.getProduit());
 		prixMax = 0.6*this.acteur.getInfoCoursVente().getMoy(Stock.getProduct(pate)) - 
-				this.acteur.getStock().getTransformationCostPate().getValeur(); 
+				this.acteur.getStock().getTransformationCostPate().getValeur();
+		if (0.6*this.acteur.getInfoCoursVente().getMoy(Stock.getProduct(pate)) - 
+				this.acteur.getStock().getTransformationCostPate().getValeur() < 0) {
+				prixMax = 0.9*this.acteur.getInfoCoursVente().getMoy(Stock.getProduct(pate)) - 
+					this.acteur.getStock().getTransformationCostPate().getValeur();
+			} else if( 0.9*this.acteur.getInfoCoursVente().getMoy(Stock.getProduct(pate)) - 
+			this.acteur.getStock().getTransformationCostPate().getValeur() < 0 ){
+				return 0;
+		}
 		if(contrat.getPrixALaTonne() <= prixMax) {
 			return contrat.getPrixALaTonne();
 		}
