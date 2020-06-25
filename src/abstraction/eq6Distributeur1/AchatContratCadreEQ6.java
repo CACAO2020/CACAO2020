@@ -8,6 +8,7 @@ import abstraction.eq8Romu.contratsCadres.Echeancier;
 import abstraction.eq8Romu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eq8Romu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eq8Romu.contratsCadres.IVendeurContratCadre;
+import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.ChocolatDeMarque;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
@@ -84,7 +85,17 @@ public class AchatContratCadreEQ6 extends DistributeurClientFinal implements IAc
 		for (ChocolatDeMarque chocolat : ClientFinal.tousLesChocolatsDeMarquePossibles() ) {
 				
 		this.choco = chocolat;
-		//si il n'y a pas de contrat cadre en cours
+		boolean OnFaitUnCOntratCadre = true;
+		for (ExemplaireContratCadre contrat : this.mesContratEnTantQuAcheteur) { 		//si il n'y a pas de contrat cadre en cours
+
+			
+				if (contrat.getProduit().equals(choco)) {
+					OnFaitUnCOntratCadre = false;
+			}
+		}
+		
+		
+		
 		//pour la durer du contrat, faire en fonction de la quantité écoulé
 		int duréeContrat = 10;
 		
@@ -100,6 +111,7 @@ public class AchatContratCadreEQ6 extends DistributeurClientFinal implements IAc
 					}
 					moyennePrixBourse = this.evolutionCours.get(Filiere.LA_FILIERE.getEtape()+1+i-24).get(this.choco.getChocolat());
 				}//comment on fixe le prix??, comment on crée notre marque distributrice
+				if (this.choco.getChocolat() == Chocolat.CHOCOLAT_BASSE) //
 				moyennePrixBourse = moyennePrixBourse /duréeContrat;
 				moyennePrixBourse = moyennePrixBourse*0.9; //car on veut un rabais
 				Filiere.LA_FILIERE.getSuperviseurContratCadre().demande((IAcheteurContratCadre)this, ((IVendeurContratCadre)acteur), this.choco, new Echeancier(Filiere.LA_FILIERE.getEtape()+1, duréeContrat, valeurMin), cryptogramme);

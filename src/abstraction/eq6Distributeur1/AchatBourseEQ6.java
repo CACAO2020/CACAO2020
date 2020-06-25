@@ -60,7 +60,10 @@ public class AchatBourseEQ6 extends Stock implements IAcheteurChocolatBourse{
 		double quantite = 0;
 			for (ChocolatDeMarque chocos :ClientFinal.tousLesChocolatsDeMarquePossibles()) {
 				if (chocos.getChocolat()==choco) { // faire une fonction pour 
-				quantite = quantite + VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()- CombienDeTour+2).get(chocos);
+				if(VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()- CombienDeTour+2).keySet().contains(chocos)) {
+					quantite = quantite + VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()- CombienDeTour+2).get(chocos);
+
+				}
 				}
 			
 		}
