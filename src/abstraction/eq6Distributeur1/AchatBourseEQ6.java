@@ -31,7 +31,7 @@ public class AchatBourseEQ6 extends Stock implements IAcheteurChocolatBourse{
 		
 		
 		if (Filiere.LA_FILIERE.getEtape()>24) {
-		double anneeYa1AN = quantiteVenduTypeChoco(chocolat,24);
+		double anneeYa1AN = quantiteVenduTypeChoco(chocolat,24) *1.1; //*1.1 pour avoir un peu de stock
 		
 		
 		
@@ -41,7 +41,7 @@ public class AchatBourseEQ6 extends Stock implements IAcheteurChocolatBourse{
 			//double anneeYa2AN = Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-48+1, chocolat );//pareil que l'autre, mais pour le chocolat en question, en pourcentage
 			
 		    
-			return anneeYa1AN + (anneeYa1AN-anneeYa2AN)/2;
+			return (anneeYa1AN + (anneeYa1AN-anneeYa2AN)/2)*1.1;//*1.1 pour avoir un peu de stock
 			
 		}
 
@@ -58,7 +58,7 @@ public class AchatBourseEQ6 extends Stock implements IAcheteurChocolatBourse{
 			
 
 		
-				return anneeYa1AN;
+				return anneeYa1AN/2;
 				
 			
 			
@@ -91,30 +91,32 @@ public class AchatBourseEQ6 extends Stock implements IAcheteurChocolatBourse{
 			double stockChoco = this.quantiteEnStockTypeChoco( chocolat);
 			double DeamndeChoco = this.EvolutionDemandeChocolat(chocolat);
 			evolutionCours.get(Filiere.LA_FILIERE.getEtape()).put(chocolat, cours);
-			double quantitéLivréParContratCadre = 0 ;
-			for (ExemplaireContratCadre contrat : this.mesContratEnTantQuAcheteur) {
+			double quantiteLivreParContratCadre = 0 ;
+			for (ExemplaireContratCadre contratDemande : this.mesContratEnTantQuAcheteur) {
+				Object produit = contratDemande.getProduit();
+				if (produit instanceof ChocolatDeMarque) {
+					ChocolatDeMarque cdmobj = (ChocolatDeMarque) produit;
+					if (cdmobj.getChocolat() == chocolat) {
+						quantiteLivreParContratCadre = quantiteLivreParContratCadre + contratDemande.getQuantiteALivrerAuStep();
+					}
+				}
 				
-				//if (contrat==0.0 && contrat.getMontantRestantARegler()==0.0) {
-				//}
 			}
 			
-			if (DeamndeChoco<stockChoco) {
+			if (DeamndeChoco - quantiteLivreParContratCadre<stockChoco) {
 				journalEq6.ajouter("Demande =" + DeamndeChoco + "stock =" + stockChoco + "return 0");
 				return 0;
 				
 			}
-			if (DeamndeChoco>=stockChoco) {
+			if (DeamndeChoco - quantiteLivreParContratCadre>=stockChoco) {
 				
-				double quantitéSouhaité =(DeamndeChoco/2 - stockChoco); //on fait l'hypothèse qu'on a la moitié du marché
+				double quantitéSouhaité =(DeamndeChoco - quantiteLivreParContratCadre- stockChoco); //on fait l'hypothèse qu'on a la moitié du marché
 				if (quantitéSouhaité*cours <solde) {
 					journalEq6.ajouter("Demande =" + DeamndeChoco + "stock =" + stockChoco + "return quantiteSouhaite" + quantitéSouhaité);
 					return quantitéSouhaité;
 					
 				}
-				else {
-					journalEq6.ajouter("Demande =" + DeamndeChoco + "stock =" + stockChoco + "return max");
-					return max;
-				}
+				
 			}
 			journalEq6.ajouter("Demande =" + DeamndeChoco + "stock =" + stockChoco + "return 0 fin");
 			return 0;
