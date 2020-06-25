@@ -24,6 +24,7 @@ public class AbsDistributeur2 {
 	public Color descriptionColor = Color.YELLOW;
 	public Color positiveColor = Color.GREEN;
 	public Color warningColor = Color.ORANGE;
+	public Color behaviorColor = Color.BLUE;
 	
 	//Les chocos que nous vendons
 	public AbsDistributeur2() {
