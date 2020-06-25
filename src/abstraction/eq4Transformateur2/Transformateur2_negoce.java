@@ -21,7 +21,7 @@ public class Transformateur2_negoce extends Transformateur2_gestion_stocks imple
 	protected Map<Chocolat, Variable> MARGE_VISEE_CHOCOLAT;
 
 	
-	public Transformateur2_negoce() {
+	public Transformateur2_negoce() { 
 		super();   
 		
 		this.MARGE_VISEE_PATE = new HashMap<PateInterne, Variable>() ;
