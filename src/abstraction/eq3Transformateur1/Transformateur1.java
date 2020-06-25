@@ -9,6 +9,8 @@ import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 import abstraction.eq8Romu.cacaoCriee.ExempleVendeurCacaoCriee;
 import abstraction.eq8Romu.cacaoCriee.LotCacaoCriee;
+import abstraction.eq8Romu.contratsCadres.Echeancier;
+import abstraction.eq8Romu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.Feve;
 import abstraction.fourni.Filiere;
@@ -96,7 +98,12 @@ public class Transformateur1 extends VendeurChocolat {
 	}
 	public void next() {
 		this.decisionTransformation();
-
+		this.quantiteFeveAcheteTour.add(0.0);
+		this.cATour.add(0.0);
+		if(this.finCC>0) {
+			this.finCC=this.finCC-1;
+		}
+		this.descisionCCFeve();
 	}
 	/** @author KARL GUTIERREZ*/
 	public List<Variable> getIndicateurs() {
@@ -121,6 +128,7 @@ public class Transformateur1 extends VendeurChocolat {
 
 		return res;
 	}
+
 
 
 
