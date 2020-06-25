@@ -98,17 +98,9 @@ class GestionCriee //implements IVendeurCacaoCriee
 
 	private LotCacaoCriee makeLot(Feve typeFeve, double quantiteAVendre)
 	{
-		double PrixMoy = this.prixMoyenDernierreVentes(typeFeve);
 		double prixVente = 0; //quantiteAVendre * (PrixMoy+0.004);
 		
-		if(typeFeve == Feve.FEVE_BASSE)
-		{
-			prixVente = this.v1PrixBasse;
-		}
-		else
-		{
-			prixVente = this.v1PrixMoyenne;
-		}
+		prixVente = this.getPrixVente(typeFeve);
 		this.producteur1.ajouterJournaux(Color.CYAN, "[GestionCriee] - Mise en vente de : " + typeFeve + " en quantité "+ quantiteAVendre + " au prix minimum de " + prixVente);
 		if(quantiteAVendre == 0)
 		{
