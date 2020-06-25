@@ -47,7 +47,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	private Stock stock;
 	
 	protected double coutMasseSalariale = 80000;
-	protected double stockInitial = 100;
+	protected double stockInitial = 10000;
 	protected double coutPub = 1000;
 	
 	private Journal journal;
