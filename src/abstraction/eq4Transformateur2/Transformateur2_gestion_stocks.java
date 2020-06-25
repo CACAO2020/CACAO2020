@@ -38,9 +38,9 @@ public class Transformateur2_gestion_stocks extends Transformateur2_contratCadre
 		this.seuilInfTPEC=new Variable (getNom()+" seuil pour diminuer capacité MAX Pate -> Choco", this, 0);
 		this.seuilSupTPEC=new Variable (getNom()+" seuil pour augmenter capacité MAX Pate -> Choco", this, 1);
 		
-		this.coutUnitaireStockFeves = new Variable(getNom()+" cout unitaire dû à l'entretien des stocks de feves", this, 1) ;
-		this.coutUnitaireStockPate = new Variable(getNom()+" cout unitaire dû à l'entretien des stocks de pate", this, 1) ;
-		this.coutUnitaireStockChocolat = new Variable(getNom()+" cout unitaire dû à l'entretien des stocks de chocolat", this, 1) ;
+		this.coutUnitaireStockFeves = new Variable(getNom()+" cout unitaire dû à l'entretien des stocks de feves", this, 0.1) ;
+		this.coutUnitaireStockPate = new Variable(getNom()+" cout unitaire dû à l'entretien des stocks de pate", this, 0.1) ;
+		this.coutUnitaireStockChocolat = new Variable(getNom()+" cout unitaire dû à l'entretien des stocks de chocolat", this, 0.1) ;
 		
 	}
 	

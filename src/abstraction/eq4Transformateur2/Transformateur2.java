@@ -1,11 +1,13 @@
 package abstraction.eq4Transformateur2;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import abstraction.eq8Romu.contratsCadres.ExemplaireContratCadre;
+import abstraction.eq8Romu.contratsCadres.FiliereTestContratCadre;
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.Feve;
 import abstraction.fourni.Filiere;
@@ -26,6 +28,19 @@ public class Transformateur2 extends Transformateur2_negoce {
 	public void setTourAvecCapaEnTrop(int tourAvecCapaEnTrop) {
 		this.tourAvecCapaEnTrop = tourAvecCapaEnTrop;
 	}
+	
+	public List<String> getNomsFilieresProposees() {
+		ArrayList<String> liste = new ArrayList<String>();
+		liste.add("TestFiliereTransformateur2") ;
+		return liste ;
+	}
+
+	public Filiere getFiliere(String nom) {
+		switch (nom) { 
+		case "TestFiliereTransformateur2" : return new TestFiliereTransformateur2() ;
+	    default : return null;
+		}
+	}
 
 	public void next() {
 		List<ExemplaireContratCadre> contratsObsoletes = new LinkedList<ExemplaireContratCadre>();
@@ -35,8 +50,7 @@ public class Transformateur2 extends Transformateur2_negoce {
 			}
 		}
 		this.mesContratEnTantQueVendeur.removeAll(contratsObsoletes);
-
-		/*super.majQuantitePateCC();
+		super.majQuantitePateCC();
 		
 		double montant = super.coutStocks() ; //coût des stocks de l'année précédente
 
@@ -46,12 +60,11 @@ public class Transformateur2 extends Transformateur2_negoce {
 		// Gestion des priorites de prod
 		
 		// Coûts de gestion
-		Filiere filiere = super.getFiliere(super.getNomsFilieresProposees().get(0)) ;
 		montant += super.getCoutFixeValeur() ;
-		filiere.getBanque().virer(this, super.cryptogramme, filiere.getBanque(), montant) ;
+		Filiere.LA_FILIERE.getBanque().virer(this, super.cryptogramme, Filiere.LA_FILIERE.getBanque(), montant) ;
 		
 		// Investissements
-		double solde = super.getSolde();
+		/*double solde = super.getSolde();
 		if (solde >= 0) {
 			double investTFEP = solde * INVESTI_MOYPROD;
 			super.investirCapaTFEP(investTFEP);
@@ -60,7 +73,6 @@ public class Transformateur2 extends Transformateur2_negoce {
 	}
 
 	public double transformerSelonPriorites() {
-		double cout = 0 ;
 		
 		Map<Feve, Double> FevesATransfo = new HashMap<Feve, Double>();
 		// PATE POUR CC EN PREMIER
@@ -87,7 +99,7 @@ public class Transformateur2 extends Transformateur2_negoce {
 					super.getNombreDeTourDautoMin()) - -super.getStockPateValeur(PateInterne.PATE_MOYENNE);
 			FevesATransfo.put(Feve.FEVE_MOYENNE, pateMoyManquante / super.getCoeffTFEP());
 		}
-		// TRANSFO CHOCO
+		// LISTE DE PATE POUR CHOCO
 		Map<PateInterne, Double> PateATransfo = new HashMap<PateInterne, Double>();
 		List<Chocolat> chocos = new LinkedList<Chocolat>();
 		chocos.add(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE);
@@ -96,9 +108,9 @@ public class Transformateur2 extends Transformateur2_negoce {
 		for (Chocolat choco : chocos) {
 			PateInterne pate = super.creerPateAPartirDeChocolat(choco);
 			PateATransfo.put(pate, super.getStockPateValeur(pate));
-			cout += super.transformationPate(PateATransfo);
+		
 		}
-		// PATE POUR CHOCO
+		// FEVE POUR CHOCO
 		List<PateInterne> patesRestantes = new LinkedList<PateInterne>();
 		patesRestantes.add(PateInterne.PATE_MOYENNE_EQUITABLE);
 		patesRestantes.add(PateInterne.PATE_HAUTE_EQUITABLE);
@@ -108,7 +120,11 @@ public class Transformateur2 extends Transformateur2_negoce {
 			FevesATransfo.put(feve, super.getStockFevesValeur(feve));
 		}
 
-		// TRANSFO FEVES
+		// TRANSFORMATION EFFECTIVE
+		double cout = 0 ;
+		this.correctionQuantitesTFEP(FevesATransfo) ; // limite avec les stocks disponibles
+		this.correctionQuantitesTPEC(PateATransfo) ;
+		cout += super.transformationPate(PateATransfo);
 		cout += super.transformationFeves(FevesATransfo);
 		return cout ;
 	}
@@ -138,6 +154,22 @@ public class Transformateur2 extends Transformateur2_negoce {
 				} else {
 					super.investirCapaTPEC(qteAInvest);
 				}
+			}
+		}
+	}
+	
+	public void correctionTFP (HashMap<Feve,Double> quantitesFeves) {
+		for (Feve feve : Feve.values()) {
+			if (quantitesFeves.get(feve) > super.getStockFevesValeur(feve)) {
+				quantitesFeves.replace(feve, super.getStockFevesValeur(feve)) ;
+			}
+		}
+	}
+	
+	public void correctionTPEC (HashMap<PateInterne,Double> quantitesPates) {
+		for (PateInterne pate : PateInterne.values()) {
+			if (quantitesPates.get(pate) > super.getStockPateValeur(pate)) {
+				quantitesPates.replace(pate, super.getStockPateValeur(pate)) ;
 			}
 		}
 	}

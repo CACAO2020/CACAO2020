@@ -252,6 +252,8 @@ public class ClientFinal implements IActeur {
 		} else {
 			//throw new IllegalArgumentException(" Appel de ClientFinal.getVentes avec etape=="+etape+" alors que les etapes valides sont "+this.historiqueVentes.keySet());
 		return 0;
+			return 0;
+			//throw new IllegalArgumentException(" Appel de ClientFinal.getVentes avec etape=="+etape+" alors que les etapes valides sont "+this.historiqueVentes.keySet());
 		}
 	}
 

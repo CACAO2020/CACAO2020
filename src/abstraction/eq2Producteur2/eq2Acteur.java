@@ -63,6 +63,20 @@ public class eq2Acteur implements IActeur {
 		}
 		return TotalArbre;
 	}
+
+	public double NbTotalArbresEquitables() {
+		double TotalEquitable = 0;
+		for (int i=0; i<this.getPaquetsArbres().size(); i++) {
+			if (this.getPaquetsArbres().get(i).getType().isEquitable()){
+				TotalEquitable += this.getPaquetsArbres().get(i).getNbreArbres();
+			}
+		} 
+		return TotalEquitable;
+	}
+	
+	public double NbTotalArbresNonEquitable() {
+		return this.NbTotalArbres() - this.NbTotalArbresEquitables();
+	}
 	
 	public double NbTotalMachines() {
 		double TotalMachine =0; 
