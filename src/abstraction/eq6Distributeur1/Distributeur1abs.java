@@ -98,6 +98,10 @@ public class Distributeur1abs implements IActeur {
 	public double quantiteEnStockTotale() {
 		return 0;
 	}
+	
+	public void nextContrat() {
+		
+	}
 
 	/** @author Luca Pinguet & Mélissa Tamine & Thibault Avril */
 	public void next() {
