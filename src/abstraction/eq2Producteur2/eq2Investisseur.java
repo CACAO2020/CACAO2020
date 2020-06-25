@@ -72,7 +72,7 @@ public class eq2Investisseur extends VenteContratCadre {
 			this.AchatArbres((int)Math.floor(ecart*proportioncrioe), Feve.FEVE_HAUTE_EQUITABLE);
 			this.journal_achats.ajouter("on a acheté des arbres car trop peu d'arbres");
 		}
-		else if ((Filiere.LA_FILIERE.getBanque().getSolde(this,this.getCrypto())) > (this.NbTotalArbres()*0.05)*this.getConstante_achat_arbre() + +this.getCoutTotalStock().getValeur()*this.getConstante_achat_arbre()) {
+		else if ((Filiere.LA_FILIERE.getBanque().getSolde(this,this.getCrypto())) > (this.NbTotalArbres()*0.05)*this.getConstante_achat_arbre().getValeur() + +this.getCoutTotalStock().getValeur()*this.getConstante_achat_arbre().getValeur()) {
 			if (this.getcompteurinvendus()<75) {
 				double investissement_max = Filiere.LA_FILIERE.getBanque().getSolde(this,this.getCrypto())*0.005;
 				double nbre_arbresmax = Math.floor(investissement_max/this.getprixArbre());
