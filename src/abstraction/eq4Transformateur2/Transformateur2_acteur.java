@@ -19,9 +19,8 @@ import abstraction.eq1Producteur1.*;
 public class Transformateur2_acteur implements IActeur {
 	
 	private static final int NOMBRE_DE_TOUR_DAUTO_MAX = 10;
-	private static final int NOMBRE_DE_TOUR_DAUTO_MIN = 2;
-	protected double INVESTI_MOYPROD = 0.01;
-	protected final double PRIX_MOYEN_SUPPOSE_PATE = 110;
+	private static final int NOMBRE_DE_TOUR_DAUTO_MIN = 3;
+	protected final double PRIX_MOYEN_SUPPOSE_PATE = 225;
 
 	
 	

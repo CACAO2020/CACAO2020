@@ -125,17 +125,19 @@ public class Transformateur2_contratCadre extends Transformateur2_stocks_et_tran
 		}
 		else {
 		double resu = 0;
+		double quantite = 0;
 		for (ExemplaireContratCadre exemplaireContratCadre : mesContratEnTantQueVendeur) {
 			if ((Pate)exemplaireContratCadre.getProduit() == pate.conversionPateInterne()) {
 				resu += exemplaireContratCadre.getMontantRestantARegler();
+				quantite += exemplaireContratCadre.getQuantiteRestantALivrer();
 			}
 		}
-		if (resu == 0) {
+		if (resu == 0||quantite == 0) {
 			return PRIX_MOYEN_SUPPOSE_PATE;									//UNE CONSTANTE IMPORTANTE -> AU DEBUT DE LA SIMUL ON SUPPORT LE PRIX DE REVENTE DE LA PATE DE 1000
 																					//CA PERMET DE LANCER LES NEGO
 		}
 		else {
-			return resu/this.getQuantitePateCCValeur(pate);
+			return resu/quantite;
 		}
 		}
 	}
@@ -195,8 +197,8 @@ public class Transformateur2_contratCadre extends Transformateur2_stocks_et_tran
 	// on prend une marge sur la première quantité, histoire d'assurer le coup
 	
 	public void echeancierLimite (Echeancier e, PateInterne pate, boolean parfait) {
-		if (this.nbToursAutonomiePateEtFeves(pate) <= super.getNombreDeTourDautoMax()) {
-		double quantiteLimite = this.getFacteurQuantiteLimite()*super.getCapaciteMaxTFEP() ;
+//		if (this.nbToursAutonomiePateEtFeves(pate) <= super.getNombreDeTourDautoMax()) {
+		double quantiteLimite = 50;//this.getFacteurQuantiteLimite()*super.getCapaciteMaxTFEP() ;	//On suppose qu'il n'y aura pas plus de 50 feves de ce type dispo par contrat, c'est empirique
 		quantiteLimite -= this.getQuantitePateCCTotaleValeur() ;
 		if (quantiteLimite < 0) {
 			this.journalEq4.ajouter("quantite limite" + quantiteLimite);
@@ -211,7 +213,7 @@ public class Transformateur2_contratCadre extends Transformateur2_stocks_et_tran
 		if (super.getStockPateValeur(pate) - e.getQuantite(e.getStepDebut()) < this.getStockPateMin()) {
 			e.set(e.getStepDebut(), super.getStockPateValeur(pate) - this.getStockPateMin()) ;
 		}
-		}
+//		}
 	}
 	
 	// renvoie un échéancier dont les quantités sont la moyenne des quantités des deux échéanciers en argument

@@ -59,6 +59,9 @@ public class Transformateur2 extends Transformateur2_negoce {
 				contratsObsoletes.add(contrat);
 			}
 		}
+		for (PateInterne pate : PateInterne.values()) {
+			super.setMargeVisee(pate);
+		}
 		this.mesContratEnTantQueVendeur.removeAll(contratsObsoletes);
 		super.majQuantitePateCC();
 		
@@ -136,7 +139,7 @@ public class Transformateur2 extends Transformateur2_negoce {
 	}
 	
 	
-	// On augmente la capacit
+	// On augmente la capacité si c'est nécessaire pour subvenir aux contrats cadres ou pour pouvoir transformer nos stocks, sinon elle diminue au bout de 3 tours
 	public void investissementPate() {
 		double stock_feve = 0;
 		stock_feve += super.getStockFevesValeur(Feve.FEVE_MOYENNE_EQUITABLE);
@@ -174,36 +177,8 @@ public class Transformateur2 extends Transformateur2_negoce {
 		}
 	}
 	
-//	public void investissementChoco() {
-//		double capaPateEnPlus = super.getCapaciteMaxTFEP() - super.getQuantitePateCCTotaleValeur();
-//		if (capaPateEnPlus > 0) {
-//			double capaNecessaire = capaPateEnPlus - super.getCapaciteMaxTPEC();
-//			double rapport = capaNecessaire / capaPateEnPlus;
-//			if (rapport < 0) {
-//				double stock_pate = super.getStockPateValeur(PateInterne.PATE_MOYENNE_EQUITABLE)
-//						+ super.getStockPateValeur(PateInterne.PATE_HAUTE_EQUITABLE)
-//						+ super.getStockPateValeur(PateInterne.PATE_HAUTE);
-//				if (stock_pate <= 0) {
-//					this.setTourAvecCapaChocEnTrop(this.getTourAvecCapaChocEnTrop() + 1);
-//
-//					if (this.getTourAvecCapaChocEnTrop() > 2) {
-//						super.setCapaciteMaxTPEC(capaPateEnPlus);
-//						this.setTourAvecCapaChocEnTrop(0);
-//					}
-//				}
-//			}
-//			else if (rapport > 0.1) {
-//				double solde = super.getSolde();
-//				double qteAInvest = super.getCoutPourAugmenterCapaTPEC() * capaNecessaire;
-//				if (qteAInvest > 0.05 * solde) {
-//					super.investirCapaTPEC(0.05 * solde);
-//				} else {
-//					super.investirCapaTPEC(qteAInvest);
-//				}
-//			}
-//		}
-//	}
-	
+
+	//On augmente la capacité pour pourvoir transformer nos stocks, si il n'y en a pas, elle diminue au bout de 3 tours
 	public void investissementChoco() {
 		double stock_pate = super.getStockPateValeur(PateInterne.PATE_MOYENNE_EQUITABLE)
 				+ super.getStockPateValeur(PateInterne.PATE_HAUTE_EQUITABLE)
@@ -212,8 +187,11 @@ public class Transformateur2 extends Transformateur2_negoce {
 			double new_capa = stock_pate/3;
 			double qteAInvest = super.getCoutPourAugmenterCapaTPEC() * new_capa;
 			double solde = super.getSolde();
-			if (qteAInvest > 0.05 * solde) {
-				super.investirCapaTPEC(0.05 * solde);
+			if (qteAInvest > 0.5 * solde) {
+				super.investirCapaTPEC(0.5 * solde);
+			}
+			else {
+				super.investirCapaTPEC(qteAInvest);
 			}
 		}
 		else {

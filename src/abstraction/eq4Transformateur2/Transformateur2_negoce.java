@@ -136,7 +136,6 @@ public class Transformateur2_negoce extends Transformateur2_gestion_stocks imple
 			return 0;
 		}
 		double prix_bourse_choco = Filiere.LA_FILIERE.getIndicateur(indicateur).getHistorique().get(Filiere.LA_FILIERE.getEtape()-1).getValeur();
-		//System.out.println(indicateur + " = " + prix_bourse_choco);
 		return prix_bourse_choco/(1+MARGE_VISEE_CHOCOLAT.get(super.creerChocolat(super.creerPateAPartirDeFeve(feve))).getValeur()) - cout_process_product;
 	}
 		else {
@@ -197,7 +196,7 @@ public class Transformateur2_negoce extends Transformateur2_gestion_stocks imple
 		public void setMargeVisee(PateInterne pate) {
 			int nbTourAuto = super.nbToursAutonomiePateEtFeves(pate);
 			if (nbTourAuto != 1000) {
-				double marge = Math.max(Math.min(nbTourAuto-1-super.getNombreDeTourDautoMin()/super.getNombreDeTourDautoMax(), 2), -0.1);
+				double marge = Math.max(Math.min(nbTourAuto-1-super.getNombreDeTourDautoMin()/super.getNombreDeTourDautoMax(), 2), 0.1);
 				MARGE_VISEE_PATE.get(pate).setValeur(this, marge);
 			}
 		}
@@ -206,7 +205,7 @@ public class Transformateur2_negoce extends Transformateur2_gestion_stocks imple
 			double rapport = super.coutStocksChoc()/super.getSolde();
 			double visee = 0.01/rapport;								//Stock coute 2% de notre solde par tour -> marge esperee de 50%, 1% -> 100%, 5% -> 20%, 10% -> 10%
 			if (rapport < 0.005) { 								//visee capee a 200%
-				visee = 2;
+				visee = 1;
 			}
 			return visee;
 		}

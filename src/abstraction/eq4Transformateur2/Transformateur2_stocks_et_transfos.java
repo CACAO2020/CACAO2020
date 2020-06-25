@@ -61,8 +61,8 @@ public class Transformateur2_stocks_et_transfos extends Transformateur2_acteur {
 		super () ; 
 				
 
-		this.capaciteMaxTFEP = new Variable(getNom()+" limite transformation feve en pate", this, 2000) ;
-		this.capaciteMaxTPEC = new Variable(getNom()+" limite transformation pate en chocolat", this, 2000) ;
+		this.capaciteMaxTFEP = new Variable(getNom()+" limite transformation feve en pate", this, 500) ;
+		this.capaciteMaxTPEC = new Variable(getNom()+" limite transformation pate en chocolat", this, 500) ;
 		this.coeffTFEP = new Variable(getNom()+" équivalent en pâte d'une unité de fèves", this, 1) ;
 		this.coeffTPEC = new Variable(getNom()+" équivalent en chocolat d'une unité de chocolat", this, 1) ;
 				
@@ -76,8 +76,8 @@ public class Transformateur2_stocks_et_transfos extends Transformateur2_acteur {
 		this.coutsUnitairesTPEC.put(Gamme.MOYENNE, new Variable(getNom()+" cout unitaire de transformation de moyenne qualité pâte vers chocolat)", this, 12)) ;
 		this.coutsUnitairesTPEC.put(Gamme.HAUTE, new Variable(getNom()+" cout unitaire de transformation de haute qualité pâte vers chocolat)", this, 15)) ;
 		
-		this.coutUnitaireEntretienTFEP  = new Variable(getNom()+" cout unitaire d'entretien de la capacité de transformation de fève en pâte", this, 0) ;
-		this.coutUnitaireEntretienTPEC  = new Variable(getNom()+" cout unitaire d'entretien de la capacité de transformation de pâte en chocolat", this, 0) ;
+		this.coutUnitaireEntretienTFEP  = new Variable(getNom()+" cout unitaire d'entretien de la capacité de transformation de fève en pâte", this, 1) ;
+		this.coutUnitaireEntretienTPEC  = new Variable(getNom()+" cout unitaire d'entretien de la capacité de transformation de pâte en chocolat", this, 1) ;
 		
 		this.coutMoyenFeves = new HashMap<Feve, Variable>() ;
 
