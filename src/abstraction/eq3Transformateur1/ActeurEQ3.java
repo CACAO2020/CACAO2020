@@ -5,6 +5,7 @@ import java.util.List;
 
 import abstraction.eq8Romu.cacaoCriee.FiliereTestVentesCacaoCriee;
 import abstraction.eq8Romu.chocolatBourse.FiliereTestVentesChocolatBourse;
+import abstraction.eq8Romu.contratsCadres.IAcheteurContratCadre;
 import abstraction.eq8Romu.ventesCacaoAleatoires.FiliereVentesCacaoAleatoires;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
@@ -19,6 +20,7 @@ public abstract class ActeurEQ3 implements IActeur{
 	protected Journal journalVente;
 	protected Journal journalTest;
 	protected Journal journalTransformation;
+	protected Journal journalCC;
 
 	public ActeurEQ3() {
 		this.stockFeves=new Variable(getNom()+" stock feves", this, 50);
@@ -27,6 +29,7 @@ public abstract class ActeurEQ3 implements IActeur{
 		this.journalVente =new Journal("Eq3 ventes", this);
 		this.journalTransformation =new Journal("Eq3 transformations", this);
 		this.journalTest =new Journal("Eq3 test", this);
+		this.journalCC =new Journal("Eq3 CC", this);
 	}
 	
 	public String getNom() {
@@ -78,6 +81,7 @@ public abstract class ActeurEQ3 implements IActeur{
 		res.add(this.journalVente);
 		res.add(this.journalTransformation);
 		res.add(this.journalTest);
+		res.add(this.journalCC);
 		return res;
 	}
 
