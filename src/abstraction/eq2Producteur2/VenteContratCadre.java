@@ -41,7 +41,7 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 	
 	public void RefreshContrats() {
 		int i = 0;
-		while ( i < this.getContratsencours().size();) {
+		while ( i < this.getContratsencours().size()) {
 			ExemplaireContratCadre contrat = (ExemplaireContratCadre)this.getContratsencours().get(i);
 			if (Filiere.LA_FILIERE.getEtape() > contrat.getEcheancier().getStepFin()) {
 				this.PrixMoyen = (this.PrixMoyen +this.contratsencours.get(i).getPrixALaTonne())/2;
