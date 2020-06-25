@@ -37,7 +37,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	
 	protected double soldeCritique = 2.;
 	
-	protected double soldeMini = 1000000.;
+	protected double soldeMini = 100000.;
 	protected double soldeMaxi = 10000000.;
 	
 	//Les sous-acteurs

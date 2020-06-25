@@ -88,14 +88,13 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 		double beneficePartiel;
 		double beneficeTotal = 0.;
 		double prixDeVente = 0.;
-		double margeSolde = 10.;
+		double margeSolde = 90.;
 		double soldeAlloueAuxAchats;
 		double soldeActuel = Filiere.LA_FILIERE.getBanque().getSolde(ac, ac.cryptogramme);
 		double coutContratsEtape = ac.getAcheteurContratCadre().coutContratsActuels();
 		double soldeDisponible = soldeActuel - coutContratsEtape;
-		if (etapeActuelle == 0) {
-			 
-		} else {
+		
+		if (etapeActuelle != 0) {
 			beneficeTotal = 0;
 			for (Chocolat choco : Chocolat.values()) {
 				if (choco.getGamme() != Gamme.BASSE) {
@@ -111,9 +110,9 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 					if (panik) {
 						quantiteAVendre = stockActuel;							
 					} else if (kalm) {
-						quantiteAVendre = stockQuiVaPerimer + stockQuiNeVaPasPerimer*0.3;		
+						quantiteAVendre = stockQuiVaPerimer + stockQuiNeVaPasPerimer*0.7;		
 					} else {
-						quantiteAVendre = stockQuiVaPerimer + stockQuiNeVaPasPerimer*0.4;					
+						quantiteAVendre = stockQuiVaPerimer + stockQuiNeVaPasPerimer*0.6;					
 					}
 				
 					beneficePartiel = quantiteAVendre*prixDeVente;
@@ -127,26 +126,37 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 							if (panik) {
 								quantiteAVendre = stockActuel;							
 							} else if (kalm) {
-								quantiteAVendre = stockQuiVaPerimer + stockQuiNeVaPasPerimer*0.3;		
+								quantiteAVendre = stockQuiVaPerimer + stockQuiNeVaPasPerimer*0.7;		
 							} else {
-								quantiteAVendre = stockQuiVaPerimer + stockQuiNeVaPasPerimer*0.4;					
+								quantiteAVendre = stockQuiVaPerimer + stockQuiNeVaPasPerimer*0.6;					
 							}
 							this.quantitesEnVente.get(chocoDeMarque).setValeur(ac, quantiteAVendre);
 						}
 					}
 				}
 			}
-			double sommeCours = sommeCours();
-			soldeAlloueAuxAchats = (soldeDisponible + beneficeTotal - ac.soldeMini - ac.getFrais())*(1-margeSolde/100);
+			soldeAlloueAuxAchats = Double.max(0., (soldeDisponible + 1.2*beneficeTotal)*(1-margeSolde/100));
+			double soldeRestant = soldeAlloueAuxAchats;
+			int nombreTypesChoco = 0;
 			for (Chocolat choco : Chocolat.values()) {
 				if (choco.getGamme() != Gamme.BASSE) {
+					nombreTypesChoco += 1;
+				}
+			}
+			System.out.println(soldeAlloueAuxAchats);
+			for (Chocolat choco : Chocolat.values()) {
+				if (choco.getGamme() != Gamme.BASSE) {
+					cours = Filiere.LA_FILIERE.getIndicateur("BourseChoco cours " + choco.name()).getHistorique().get(Filiere.LA_FILIERE.getEtape()-1).getValeur();
+					double quantite = soldeAlloueAuxAchats/(nombreTypesChoco*cours);
 					if (panik) {
-						quantiteACommanderEnBourse = soldeAlloueAuxAchats/sommeCours;
+						quantiteACommanderEnBourse = quantite;
 					} else if (kalm) {
-						quantiteACommanderEnBourse = soldeAlloueAuxAchats/sommeCours*0.7;
+						quantiteACommanderEnBourse = quantite*0.8;
 					} else {
-						quantiteACommanderEnBourse = soldeAlloueAuxAchats/sommeCours*0.8;
+						quantiteACommanderEnBourse = quantite*0.9;
 					}
+				soldeRestant -= quantiteACommanderEnBourse;
+				System.out.println("q : " + quantiteACommanderEnBourse);
 				this.quantitesACommanderEnBourse.get(choco).setValeur(ac, quantiteACommanderEnBourse);
 				}
 			}
@@ -158,12 +168,13 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 						nombreProduitsChoco += 1;
 					}
 				}
+				cours = Filiere.LA_FILIERE.getIndicateur("BourseChoco cours " + choco.getChocolat().name()).getHistorique().get(Filiere.LA_FILIERE.getEtape()-1).getValeur();
 				if (panik) {
 					quantiteACommanderParContrats = 0.;
 				} else if (kalm) {
-					quantiteACommanderParContrats = soldeAlloueAuxAchats/sommeCours*0.3/nombreProduitsChoco;
+					quantiteACommanderParContrats = soldeRestant/(nombreProduitsChoco*cours);
 				} else {
-					quantiteACommanderParContrats = soldeAlloueAuxAchats/sommeCours*0.2/nombreProduitsChoco;
+					quantiteACommanderParContrats = soldeRestant/(nombreProduitsChoco*cours);
 				}
 				this.quantitesACommanderParContrats.get(choco).setValeur(ac, quantiteACommanderParContrats);
 			}
