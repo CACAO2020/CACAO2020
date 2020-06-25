@@ -40,7 +40,7 @@ public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurCh
 	public Transformateur3() {
 		this.journalEq5 = new Journal("Eq5 activites", this);
 		this.acheteurCacao = new AchatCacao(this); // needs to be filled with parameters this will work for now
-		this.acheteurPate = new AchatPate(this);
+		this.acheteurPate = new AchatPate(this,20);
 		this.vendeurChocolat = new VenteChocolat(this);
 		this.tresorier = new Tresorerie(this);
 		this.stock = new Stock(this);
@@ -68,6 +68,7 @@ public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurCh
 
 	public void next() {
 		stock.next();
+		tresorier.next();
 		acheteurPate.commencerNegociations();
 	}
 
@@ -181,22 +182,17 @@ public class Transformateur3 implements IActeur, IAcheteurCacaoCriee, IVendeurCh
 
 	
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
-		//errorless commit
-		//return this.acheteurPate.contrePropositionDeLAcheteur(contrat);
-		return null;
+		return this.acheteurPate.contrePropositionDeLAcheteur(contrat);
 	}
 
 	
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
-		//errorless commit
-		//return this.acheteurPate.contrePropositionPrixAcheteur(contrat);
-		return 0;
+		return this.acheteurPate.contrePropositionPrixAcheteur(contrat);
 	}
 
 	
 	public void receptionner(Object produit, double quantite, ExemplaireContratCadre contrat) {
-		//errorless commit
-		//this.acheteurPate.receptionner(produit, quantite, contrat);
+		this.acheteurPate.receptionner(produit, quantite, contrat);
 	}
 
 

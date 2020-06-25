@@ -1,6 +1,5 @@
 package abstraction.eq5Transformateur3;
 
-import abstraction.fourni.Banque;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.Variable;
 
@@ -198,11 +197,20 @@ public class Tresorerie {
 	}
 	
 	public double calculRentabiliteBas() {
-		return (this.getInvestissementBasACeTour())/(this.getVenteBasACeTour());
+		if (this.getVenteBasACeTour() == 0) {
+			return 1;
+		} else {
+			return (this.getInvestissementBasACeTour()) / (this.getVenteBasACeTour());
+		}
+		
 	}
 	
 	public double calculRentabiliteSecondaire() {
-		return (this.getInvestissementSecondaireACeTour())/(this.getVenteSecondaireACeTour());
+		if (this.getVenteSecondaireACeTour() == 0) {
+			return 1;
+		} else {
+			return (this.getInvestissementSecondaireACeTour())/(this.getVenteSecondaireACeTour());
+		}
 	}
 
 	public void next() {

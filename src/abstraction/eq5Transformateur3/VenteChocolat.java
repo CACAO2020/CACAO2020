@@ -112,7 +112,7 @@ public class VenteChocolat {
             }
         }
 
-        if (chocolat == Chocolat.CHOCOLAT_BASSE) {
+        if (chocolat == Chocolat.CHOCOLAT_BASSE ) {
             this.acteur.getTresorier().jaiVenduPrincipale(resteALivrer);
         } else {
             this.acteur.getTresorier().jaiVenduSecondaire(resteALivrer);
