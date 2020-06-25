@@ -22,7 +22,6 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 	private double pctageMG;
 	private Integer campagnePub;
 
-	public Map<Integer,Map<ChocolatDeMarque,Double>> VenteSiPasRuptureDeStock;
 
 
 	public DistributeurClientFinal(double capaciteDeVente, double marge, double capaciteStockmax, double pctageHGE, double pctageMG, double pctageBG) {
@@ -36,7 +35,6 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 		this.pctageMG=pctageMG;
 		this.campagnePub = 0;
 
-		this.VenteSiPasRuptureDeStock = new HashMap<Integer,Map<ChocolatDeMarque,Double>>();
 
 
 
@@ -123,6 +121,7 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 			destocker(choco,quantite);
 			this.evolutionVentes.get(Filiere.LA_FILIERE.getEtape()).put(choco, quantite);
 
+			System.out.println(VenteSiPasRuptureDeStock);
 			this.VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()).put(choco, quantite);
 
 

@@ -52,6 +52,12 @@ public class Distributeur1abs implements IActeur {
 		this.evolutionVentes = new HashMap<Integer, Map<ChocolatDeMarque,Double>>();
 		this.evolutionVentes.put(0,new HashMap<ChocolatDeMarque,Double>());
 		this.VenteSiPasRuptureDeStock = new HashMap<Integer,Map<ChocolatDeMarque,Double>>();
+		System.out.println(VenteSiPasRuptureDeStock);
+
+		this.VenteSiPasRuptureDeStock.put(0,new HashMap<ChocolatDeMarque,Double>());
+		System.out.println(VenteSiPasRuptureDeStock);
+
+        
 		this.mesContratEnTantQuAcheteur=new LinkedList<ExemplaireContratCadre>();
 
 	}
@@ -99,6 +105,7 @@ public class Distributeur1abs implements IActeur {
 		this.evolutionCours.put(Filiere.LA_FILIERE.getEtape(),new HashMap<Chocolat,Double>());
 		this.evolutionCours.put(Filiere.LA_FILIERE.getEtape()+1,new HashMap<Chocolat,Double>());
 		this.VenteSiPasRuptureDeStock.put(Filiere.LA_FILIERE.getEtape()+1,new HashMap<ChocolatDeMarque,Double>());
+
 		this.MapStock.put(Filiere.LA_FILIERE.getEtape(),new HashMap<ChocolatDeMarque,Double>());
 		this.MapStock.put(Filiere.LA_FILIERE.getEtape(),new HashMap<ChocolatDeMarque,Double>());
 
