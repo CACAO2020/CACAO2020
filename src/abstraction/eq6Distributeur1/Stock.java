@@ -15,7 +15,6 @@ public class Stock  extends Distributeur1abs implements IStock { /** @author Avr
 
 		
 	
-	
 	public Stock(double capaciteStockmax) {
 		this.capaciteStockmax = capaciteStockmax;
 		volumeGlobal = 0;
