@@ -215,7 +215,14 @@ class GestionCriee //implements IVendeurCacaoCriee
 		int n = this.venduLog.size();
 		if(n == 0)
 		{
-			return 0;
+	        if(typeFeve == Feve.FEVE_BASSE)
+	        {
+	            return this.v1PrixBasse;
+	        }
+	        if(typeFeve == Feve.FEVE_MOYENNE)
+	        {
+	            return this.v1PrixMoyenne;
+	        }
 		}
 		int i = 0;
 		int j = 0;
@@ -234,29 +241,21 @@ class GestionCriee //implements IVendeurCacaoCriee
 	
 	public double moyenneDerniersTours(Feve typeFeve)
 	{
-	    int n = this.venduLog.size();
+		int n = this.venduLog.size();
+		if(n == 0)
+		{
+			return 0;
+		}
+
 	    int i = 0;
 	    double sum = 0;
-	    while(n-i >= 0 && i <= 10)
+	    while(n-i-1 >= 0 && i <= 10)
 	    {
-	        if(this.venduLog.get(n-i).getFeve() == typeFeve)
+	        if(this.venduLog.get(n-i-1).getFeve() == typeFeve)
 	        {
-	            sum += this.venduLog.get(n-i).getPrixPourUneTonne();
+	            sum += this.venduLog.get(n-i-1).getPrixPourUneTonne();
 	        }
 	        i += 1;
-	    }
-
-	    //
-	    if(sum == 0 || i == 0)
-	    {
-	        if(typeFeve == Feve.FEVE_BASSE)
-	        {
-	            return this.v1PrixBasse;
-	        }
-	        if(typeFeve == Feve.FEVE_MOYENNE)
-	        {
-	            return this.v1PrixMoyenne;
-	        }
 	    }
 
 
@@ -275,8 +274,12 @@ class GestionCriee //implements IVendeurCacaoCriee
 	    	}
 	    }
 	    
-	    if (this.producteur1.getStock(Feve.FEVE_BASSE) > 1000) {
-			prixVar = prixCentral - prixVenteEq2 +20;
+	    if (this.producteur1.getStock(Feve.FEVE_BASSE) > 1000 && prixVenteEq2 >= 20) {
+			prixVar = prixCentral - (prixVenteEq2 + 20);
+		}
+		if(prixVenteEq2 <= 20)
+		{
+			prixVar = prixCentral - 20;
 		}
 
 	    return prixCentral - prixVar;
