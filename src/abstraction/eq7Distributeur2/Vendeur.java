@@ -325,7 +325,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 	
 	public double quantiteEnVente(ChocolatDeMarque choco) {
 		//donne quantité en vente de chocolat selon la marque
-		if (!ac.debutEtape) {
+		if (!ac.debutEtape) { 
 			ac.debutEtape = true;
 			ac.getStock().initialiserStocksEtape();
 			adapterQuantitesEnVente();  // Appelée une seule fois à l'initialisation ?
