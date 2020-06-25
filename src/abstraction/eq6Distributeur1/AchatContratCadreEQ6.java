@@ -35,6 +35,7 @@ public class AchatContratCadreEQ6 extends DistributeurClientFinal implements IAc
 
 	@Override
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
+		/*
 		if (Math.random()<0.5) {
 			return contrat.getEcheancier(); // on ne cherche pas a negocier sur le previsionnel de livraison
 		} else {
@@ -44,6 +45,11 @@ public class AchatContratCadreEQ6 extends DistributeurClientFinal implements IAc
 		
 			return nouveau;
 		}
+		*/
+		return null;
+
+		
+		
 	}
 
 	@Override
