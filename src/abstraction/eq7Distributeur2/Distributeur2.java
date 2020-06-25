@@ -48,6 +48,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	
 	protected double coutMasseSalariale = 80000;
 	protected double stockInitial = 100;
+	protected double coutPub = 1000;
 	
 	private Journal journal;
 	private Journal journalTransactions;
@@ -127,6 +128,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		double beneficesLivraisons = 0.;
 		double distanceMin = 5.;
 		double distanceMax = 20.;
+		double fraisTotaux = 0.;
 		double coutFixeLivraison = 5;
 		double coutLivraisonVariable = 2;
 		double proportionDeLivraisons = 10; // pourcentage de livraisons
@@ -139,12 +141,17 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 				beneficesLivraisons += coutFixeLivraison + coutLivraisonVariable*distance*quantite;
 			}
 		}
+		if (vendeur.pubLastStep) {
+			fraisTotaux += coutPub;
+			vendeur.pubLastStep = false;
+		}
 		if (coutMasseSalariale + fraisStockage < beneficesLivraisons) {
 			beneficesLivraisons = coutMasseSalariale + fraisStockage + 0.001;
 		}
-		double fraisTotaux = coutMasseSalariale + fraisStockage - beneficesLivraisons;
+		fraisTotaux = coutMasseSalariale + fraisStockage - beneficesLivraisons;
 		return fraisTotaux;
 	}
+	
 	public void payerFrais() {
 		double fraisTotaux = this.getFrais();
 		journalTransactions.ajouter(Journal.texteColore(warningColor, Color.BLACK, "[FRAIS] Paiement de " + Journal.doubleSur(fraisTotaux,2) + " de frais."));

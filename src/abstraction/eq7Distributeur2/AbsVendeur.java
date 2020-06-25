@@ -76,6 +76,8 @@ public class AbsVendeur {
 	
 	protected int compteurPub;
 	
+	protected boolean pubLastStep;
+	
 	protected List<Double> quantitesVendues;
 	
 	protected String modeActuel = "normal";
