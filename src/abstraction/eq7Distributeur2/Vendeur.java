@@ -29,7 +29,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 	
 	public void initialiser() {
 		this.coutUnitaire = new HashMap<ChocolatDeMarque, Double>();
-		quantiteAVendreParDefaut = ac.stockInitial-ac.getStock().stockLimite;
+		quantiteAVendreParDefaut = 0.;
 		
 		for (ChocolatDeMarque choco : ac.tousLesChocolatsDeMarquePossibles()) {
 			ajouterProduitAuCatalogue(choco);
@@ -88,7 +88,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 		double beneficePartiel;
 		double beneficeTotal = 0.;
 		double prixDeVente = 0.;
-		double margeSolde = 80.;
+		double margeSolde = 10.;
 		double soldeAlloueAuxAchats;
 		double soldeActuel = Filiere.LA_FILIERE.getBanque().getSolde(ac, ac.cryptogramme);
 		double coutContratsEtape = ac.getAcheteurContratCadre().coutContratsActuels();
@@ -111,9 +111,9 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 					if (panik) {
 						quantiteAVendre = stockActuel;							
 					} else if (kalm) {
-						quantiteAVendre = stockQuiVaPerimer + stockQuiNeVaPasPerimer*0.2;		
+						quantiteAVendre = stockQuiVaPerimer + stockQuiNeVaPasPerimer*0.3;		
 					} else {
-						quantiteAVendre = stockQuiVaPerimer + stockQuiNeVaPasPerimer*0.5;					
+						quantiteAVendre = stockQuiVaPerimer + stockQuiNeVaPasPerimer*0.4;					
 					}
 				
 					beneficePartiel = quantiteAVendre*prixDeVente;
@@ -123,12 +123,13 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 						if (chocoDeMarque.getChocolat() == choco) {
 							stockActuel = ac.getStock().getStockChocolatDeMarque(chocoDeMarque);
 							stockQuiVaPerimer = ac.getStock().stockQuiVaPerimer(chocoDeMarque);
+							stockQuiNeVaPasPerimer = stockActuel - stockQuiVaPerimer;
 							if (panik) {
 								quantiteAVendre = stockActuel;							
 							} else if (kalm) {
-								quantiteAVendre = stockQuiVaPerimer + stockQuiNeVaPasPerimer*0.2;		
+								quantiteAVendre = stockQuiVaPerimer + stockQuiNeVaPasPerimer*0.3;		
 							} else {
-								quantiteAVendre = stockQuiVaPerimer + stockQuiNeVaPasPerimer*0.5;					
+								quantiteAVendre = stockQuiVaPerimer + stockQuiNeVaPasPerimer*0.4;					
 							}
 							this.quantitesEnVente.get(chocoDeMarque).setValeur(ac, quantiteAVendre);
 						}
@@ -142,7 +143,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 					if (panik) {
 						quantiteACommanderEnBourse = soldeAlloueAuxAchats/sommeCours;
 					} else if (kalm) {
-						quantiteACommanderEnBourse = soldeAlloueAuxAchats/sommeCours*0.6;
+						quantiteACommanderEnBourse = soldeAlloueAuxAchats/sommeCours*0.7;
 					} else {
 						quantiteACommanderEnBourse = soldeAlloueAuxAchats/sommeCours*0.8;
 					}
@@ -158,11 +159,11 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 					}
 				}
 				if (panik) {
-					quantiteACommanderEnBourse = 0.;
+					quantiteACommanderParContrats = 0.;
 				} else if (kalm) {
-					quantiteACommanderEnBourse = soldeAlloueAuxAchats/sommeCours*0.4/nombreProduitsChoco;
+					quantiteACommanderParContrats = soldeAlloueAuxAchats/sommeCours*0.3/nombreProduitsChoco;
 				} else {
-					quantiteACommanderEnBourse = soldeAlloueAuxAchats/sommeCours*0.2/nombreProduitsChoco;
+					quantiteACommanderParContrats = soldeAlloueAuxAchats/sommeCours*0.2/nombreProduitsChoco;
 				}
 				this.quantitesACommanderParContrats.get(choco).setValeur(ac, quantiteACommanderParContrats);
 			}
@@ -396,18 +397,5 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 		return publicites;
 	}
 	
-	public double calculSoldeMini() {
-		double coursActuel;
-		double moyenneCours = 0;
-		double soldeMini;
-		
-		// On calcule d'abord le cours moyen de la bourse pour nos chocolats
-		for (ChocolatDeMarque choco : produitsCatalogue) {
-			coursActuel = Filiere.LA_FILIERE.getIndicateur("BourseChoco cours " + choco.getChocolat().name()).getHistorique().get(Filiere.LA_FILIERE.getEtape()).getValeur();
-			moyenneCours += coursActuel;
-		}
-		moyenneCours /= produitsCatalogue.size();
-		soldeMini = coeffCoursMoyen*moyenneCours; //Valeur complètement arbitraire
-		return soldeMini;
-	}
+
 }

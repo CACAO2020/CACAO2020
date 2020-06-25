@@ -59,23 +59,25 @@ public class AcheteurContratCadre extends AbsAcheteurContratCadre implements IAc
 			double quantiteACommander = ac.getVendeur().getQuantiteACommanderParContrats(choco);
 			if (quantiteACommander > 0) {
 				List<IVendeurContratCadre> vendeurs = superviseur.getVendeurs(choco);
-				Random rand = new Random();
-				IVendeurContratCadre vendeur = vendeurs.get(rand.nextInt(vendeurs.size()));
-				ExemplaireContratCadre contrat;
-				List<Double> quantites = new ArrayList<Double>();
-				while (quantiteACommander > 0) {
-					if (quantiteACommander >= seuil) {
-						quantiteACommander -= seuil;
-						quantites.add(seuil);
-					} else {
-						quantites.add(quantiteACommander);
-						quantiteACommander = 0;
+				if (vendeurs.size() > 0) {
+					Random rand = new Random();
+					IVendeurContratCadre vendeur = vendeurs.get(rand.nextInt(vendeurs.size()));
+					ExemplaireContratCadre contrat;
+					List<Double> quantites = new ArrayList<Double>();
+					while (quantiteACommander > 0) {
+						if (quantiteACommander >= seuil) {
+							quantiteACommander -= seuil;
+							quantites.add(seuil);
+						} else {
+							quantites.add(quantiteACommander);
+							quantiteACommander = 0;
+						}
 					}
-				}
-				contrat = superviseur.demande(ac, vendeur, choco, new Echeancier(etape+1, quantites), ac.cryptogramme);
-				if (contrat != null) {
-					nosContrats.add(contrat);
-					notifierNouveauContrat(contrat);
+					contrat = superviseur.demande(ac, vendeur, choco, new Echeancier(etape+1, quantites), ac.cryptogramme);
+					if (contrat != null) {
+						nosContrats.add(contrat);
+						notifierNouveauContrat(contrat);
+					}
 				}
 			}
 		}	
