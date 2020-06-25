@@ -88,7 +88,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 		double beneficePartiel;
 		double beneficeTotal = 0.;
 		double prixDeVente = 0.;
-		double margeSolde = 80.;
+		double margeSolde = 90.;
 		double soldeAlloueAuxAchats;
 		double soldeActuel = Filiere.LA_FILIERE.getBanque().getSolde(ac, ac.cryptogramme);
 		double coutContratsEtape = ac.getAcheteurContratCadre().coutContratsActuels();
