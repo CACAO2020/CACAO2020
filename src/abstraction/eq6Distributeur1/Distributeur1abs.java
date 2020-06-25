@@ -23,7 +23,7 @@ import abstraction.fourni.Variable;
 public class Distributeur1abs implements IActeur {
 
 	protected Integer cryptogramme; 
-	protected Journal journalEq6, journalEq6Stock, journalEq6Pub;
+	protected Journal journalEq6, journalEq6Stock, journalEq6Pub, journalEq6Bourse, journalEq6CCadre;
 	protected Variable stockHGE;
 	protected Variable stockMG;
 	protected Variable stockBG;
@@ -45,6 +45,8 @@ public class Distributeur1abs implements IActeur {
 		this.journalEq6=new Journal(this.getNom()+" activites", this);
 		this.journalEq6Stock=new Journal(this.getNom()+" stock", this);
 		this.journalEq6Pub=new Journal(this.getNom()+" pub", this);
+		this.journalEq6Bourse=new Journal(this.getNom()+" achatBourse", this);
+		this.journalEq6CCadre=new Journal(this.getNom()+" contratCadre", this);
 		this.evolutionCours = new HashMap<Integer,Map<Chocolat,Double>>();
 		this.evolutionCours.put(0,new HashMap<Chocolat, Double>());
 		this.MapStock = new HashMap<Integer,Map<ChocolatDeMarque,Double>>();
@@ -107,7 +109,7 @@ public class Distributeur1abs implements IActeur {
 		journalEq6.ajouter("Etape="+Filiere.LA_FILIERE.getEtape());
 		this.evolutionCours.put(Filiere.LA_FILIERE.getEtape(),new HashMap<Chocolat,Double>());
 		this.evolutionCours.put(Filiere.LA_FILIERE.getEtape()+1,new HashMap<Chocolat,Double>());
-		this.evolutionVentes.put(Filiere.LA_FILIERE.getEtape(),new HashMap<ChocolatDeMarque,Double>());
+		//this.evolutionVentes.put(Filiere.LA_FILIERE.getEtape(),new HashMap<ChocolatDeMarque,Double>());
 		this.evolutionVentes.put(Filiere.LA_FILIERE.getEtape()+1,new HashMap<ChocolatDeMarque,Double>());
 		this.VenteSiPasRuptureDeStock.put(Filiere.LA_FILIERE.getEtape()+1,new HashMap<ChocolatDeMarque,Double>());
 
@@ -183,6 +185,8 @@ public class Distributeur1abs implements IActeur {
 		res.add(this.journalEq6);
 		res.add(this.journalEq6Stock);
 		res.add(this.journalEq6Pub);
+		res.add(this.journalEq6Bourse);
+		res.add(this.journalEq6CCadre);
 		return res;
 	}
 
