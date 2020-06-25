@@ -117,30 +117,30 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 	/** @author Luca Pinguet & Mélissa Tamine */
 
 	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant) {
-		if (client!=null) { 
-			destocker(choco,quantite);
-			this.evolutionVentes.get(Filiere.LA_FILIERE.getEtape()).put(choco, quantite);
+		//if (client!=null) { 
 
-			System.out.println(VenteSiPasRuptureDeStock);
-			this.VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()).put(choco, quantite);
+		destocker(choco,quantite);
+		this.evolutionVentes.get(Filiere.LA_FILIERE.getEtape()).put(choco, quantite);
 
+		this.VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()).put(choco, quantite);
 
-		}
+		//}
 	}
 
 
 	/** @author Luca Pinguet & Mélissa Tamine */
 	public void notificationRayonVide(ChocolatDeMarque choco) { //vérifier que ce soit apres la foncion vendre
 		journalEq6.ajouter(" Aie... j'aurais du mettre davantage de "+choco.name()+" en vente");
-		
+
 		if(VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()).keySet().contains(choco)) {
 
-		double quantité = this.VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()).get(choco);
-		this.VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()).replace(choco, quantité*1.1) ; // on augmente de 10%, valeur à modifier
+			double quantité = this.VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()).get(choco);
+			this.VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()).replace(choco, quantité*1.1) ; // on augmente de 10%, valeur à modifier
 		}
 		else {
 			this.VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()).put(choco, Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-1, choco.getChocolat())*0.02 ) ; // on le prend en compte dans notre liste
 		}
+
 	}
 
 
@@ -175,7 +175,6 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 	//Début V2
 
 	public void evolutionMarge(ChocolatDeMarque choco) {
-		System.out.println(this.evolutionVentes+  "marge" + this.evolutionVentes.get(Filiere.LA_FILIERE.getEtape()-1));
 		if (this.quantiteEnVente(choco)>0 && Filiere.LA_FILIERE.getEtape()>2 && this.evolutionVentes.get(Filiere.LA_FILIERE.getEtape()-2).size()>0 && this.evolutionVentes.get(Filiere.LA_FILIERE.getEtape()-1).size()>0) {
 			double vente2 = Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-2, choco)>0 ? this.evolutionVentes.get(Filiere.LA_FILIERE.getEtape()-2).get(choco)/Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-2, choco):0;
 			double vente1 = Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-2, choco)>0 && Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-1, choco)>0 ? this.evolutionVentes.get(Filiere.LA_FILIERE.getEtape()-1).get(choco)/Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-1, choco):0;
