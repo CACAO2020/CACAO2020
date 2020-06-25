@@ -148,8 +148,15 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 				if (choco.getGamme() != Gamme.BASSE) {
 					cours = Filiere.LA_FILIERE.getIndicateur("BourseChoco cours " + choco.name()).getHistorique().get(Filiere.LA_FILIERE.getEtape()-1).getValeur();
 					double quantite = soldeAlloueAuxAchats/(nombreTypesChoco*cours);
+					System.out.println("Quantité");
+					System.out.println(quantite);
+					System.out.println("Solde alloué aux achats");
+					System.out.println(soldeAlloueAuxAchats);
+					System.out.println("Cours");
+					System.out.println(cours);
+					
 					if (panik) {
-						quantiteACommanderEnBourse = quantite*0.5;
+						quantiteACommanderEnBourse = quantite*0.6;
 					} else if (kalm) {
 						quantiteACommanderEnBourse = quantite*0.3;
 					} else {

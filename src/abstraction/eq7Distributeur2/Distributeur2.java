@@ -234,7 +234,9 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		//Le mode panique est-il actif ?
 		boolean estEnPanik = estEnPanik(); 
 		if (estEnPanik) {
+			System.out.println("ici\n\n");
 			if (!vendeur.wasPanik) {
+				System.out.println("là\n\n");
 				//Mode panik vient de s'activer !
 				vendeur.wasPanik = true;
 				vendeur.panik = true;
@@ -242,11 +244,12 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 				//Ajout au journal le début du mode panik
 				journal.ajouter(Journal.texteColore(behaviorColor, Color.BLACK, "[PANIK ON] Mode PANIK activé !"));
 			} else {
+				
 				// Le mode panik est actif mais ce n'est pas le premier tour de panik
 				vendeur.wasPanik = true;
 				vendeur.panik = true; // On sait jamais
 				// Ajout au journal la poursuite de la panik
-				//journal.ajouter(Journal.texteColore(behaviorColor, Color.BLACK, "[PANIK] Mode PANIK toujours actif !"));
+				journal.ajouter(Journal.texteColore(behaviorColor, Color.BLACK, "[PANIK] Mode PANIK toujours actif !"));
 			}
 		} else if (!estEnPanik && vendeur.wasPanik) {
 			// La panik vient de se terminer (et nous sommes toujours là)

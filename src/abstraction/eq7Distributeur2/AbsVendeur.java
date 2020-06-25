@@ -93,6 +93,8 @@ public class AbsVendeur {
 	public Color descriptionColor = Color.YELLOW;
 	
 	public AbsVendeur(Distributeur2 ac) {	
+		this.wasPanik = false;
+		this.panik = false;
 		pourcentagesMarge = new HashMap<String, Map<Chocolat, Double>>();
 		Map<Chocolat, Double> pourcentagesMargeKalm = new HashMap<Chocolat, Double>();
 		Map<Chocolat, Double> pourcentagesMargeNormal = new HashMap<Chocolat, Double>();
