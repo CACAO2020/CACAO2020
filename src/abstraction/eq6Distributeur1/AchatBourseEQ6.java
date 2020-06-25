@@ -98,8 +98,8 @@ public class AchatBourseEQ6 extends Stock implements IAcheteurChocolatBourse{
 		double DeamndeChoco = this.EvolutionDemandeChocolat(chocolat);
 		evolutionCours.get(Filiere.LA_FILIERE.getEtape()).put(chocolat, cours);
 		double quantiteLivreParContratCadre = 0 ;
-		return 1000;
-/*		for (ExemplaireContratCadre contratDemande : this.mesContratEnTantQuAcheteur) {
+		return 10000;
+/*	for (ExemplaireContratCadre contratDemande : this.mesContratEnTantQuAcheteur) {
 			Object produit = contratDemande.getProduit();
 			if (produit instanceof ChocolatDeMarque) {
 				ChocolatDeMarque cdmobj = (ChocolatDeMarque) produit;
