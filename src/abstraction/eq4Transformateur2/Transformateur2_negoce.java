@@ -43,6 +43,12 @@ public class Transformateur2_negoce extends Transformateur2_gestion_stocks imple
 
 	public List<Variable> getIndicateurs() { 
 		List<Variable> res=super.getIndicateurs();
+		for (PateInterne pate : PateInterne.values()) {
+			res.add(MARGE_VISEE_PATE.get(pate));
+		}		
+		for (Chocolat choc : Chocolat.values()) {
+			res.add(MARGE_VISEE_CHOCOLAT.get(choc));
+		}
 		return res;
 	}
 
@@ -59,7 +65,9 @@ public class Transformateur2_negoce extends Transformateur2_gestion_stocks imple
 	//pour l'instant il essaie d'acheter tout ce qui passe mais à l'avenir on aura un if lot.quantiteentonne <= quantité_dont_on_a_besoin  
 	public double proposerAchat(LotCacaoCriee lot) {
 		double prix = this.prixRentableAchatFeve(lot.getFeve());
-		if (super.getSolde()*0.5>lot.getQuantiteEnTonnes()*prix) { // ON ACHETE QUE SI LE VALEUR DU LOT EST < 50% DE NOTRE SOLDE (PEUT ETRE MODIFIE
+		double total = lot.getQuantiteEnTonnes()*prix;
+		this.journalEq4.ajouter("Propose" + prix + "pour un lot de" + lot.getFeve().name() + "pour un total de" + total);
+		if (super.getSolde()*0.5>total) { // ON ACHETE QUE SI LE VALEUR DU LOT EST < 50% DE NOTRE SOLDE (PEUT ETRE MODIFIE
 			return prix;
 		}
 		else {
@@ -138,9 +146,14 @@ public class Transformateur2_negoce extends Transformateur2_gestion_stocks imple
 	
 	//AU DEBUT DE LA SIMUL CEST NEGATIF ->> A EVITER
 	public double prixRentablePourReventePate(Feve feve) {
+		if (super.nbToursAutonomiePateEtFeves(super.creerPateAPartirDeFeve(feve)) >= super.getNombreDeTourDautoMax()) {
+			return 0;
+		}
+		else {
 		double cout_process_product = this.getCoutMoyenPateValeur(super.creerPateAPartirDeFeve(feve)) - this.getCoutMoyenFeveValeur(feve)*super.getCoeffTFEP();
 		double prix_moy_revente_pate = super.getPrixMoyReventePate(super.creerPateAPartirDeFeve(feve));
 		return prix_moy_revente_pate*(1-MARGE_VISEE_PATE.get(super.creerPateAPartirDeFeve(feve)).getValeur()) - cout_process_product;
+		}
 	}
 	
 	public double prixRentableAchatFeve(Feve feve ) {

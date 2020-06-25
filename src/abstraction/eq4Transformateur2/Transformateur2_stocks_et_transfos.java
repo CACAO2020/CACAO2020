@@ -60,8 +60,8 @@ public class Transformateur2_stocks_et_transfos extends Transformateur2_acteur {
 		
 		super () ; 
 				
-		this.capaciteMaxTFEP = new Variable(getNom()+" limite transformation feve en pate", this, 3000000) ;
-		this.capaciteMaxTPEC = new Variable(getNom()+" limite transformation pate en chocolat", this, 2000000) ;
+		this.capaciteMaxTFEP = new Variable(getNom()+" limite transformation feve en pate", this, 3000) ;
+		this.capaciteMaxTPEC = new Variable(getNom()+" limite transformation pate en chocolat", this, 2000) ;
 		this.coeffTFEP = new Variable(getNom()+" équivalent en pâte d'une unité de fèves", this, 1) ;
 		this.coeffTPEC = new Variable(getNom()+" équivalent en chocolat d'une unité de chocolat", this, 1) ;
 				
@@ -75,11 +75,11 @@ public class Transformateur2_stocks_et_transfos extends Transformateur2_acteur {
 		this.coutsUnitairesTPEC.put(Gamme.MOYENNE, new Variable(getNom()+" cout unitaire de transformation de moyenne qualité pâte vers chocolat)", this, 1700)) ;
 		this.coutsUnitairesTPEC.put(Gamme.HAUTE, new Variable(getNom()+" cout unitaire de transformation de haute qualité pâte vers chocolat)", this, 2000)) ;
 		
-		this.coutUnitaireEntretienTFEP  = new Variable(getNom()+" cout unitaire d'entretien de la capacité de transformation de fève en pâte", this, 500) ;
-		this.coutUnitaireEntretienTPEC  = new Variable(getNom()+" cout unitaire d'entretien de la capacité de transformation de pâte en chocolat", this, 300) ;
+		this.coutUnitaireEntretienTFEP  = new Variable(getNom()+" cout unitaire d'entretien de la capacité de transformation de fève en pâte", this, 0) ;
+		this.coutUnitaireEntretienTPEC  = new Variable(getNom()+" cout unitaire d'entretien de la capacité de transformation de pâte en chocolat", this, 0) ;
 		
 		this.coutMoyenFeves = new HashMap<Feve, Variable>() ;
-		this.coutMoyenFeves.put(Feve.FEVE_BASSE, new Variable(getNom()+" cout unitaire moyen à l'achat des feves basses", this, 2000)) ;
+		this.coutMoyenFeves.put(Feve.FEVE_BASSE, new Variable(getNom()+" cout unitaire moyen à l'achat des feves basses", this, 200)) ;
 		this.coutMoyenFeves.put(Feve.FEVE_MOYENNE, new Variable(getNom()+" cout unitaire moyen à l'achat des feves moyennes", this, 200)) ;
 		this.coutMoyenFeves.put(Feve.FEVE_HAUTE, new Variable(getNom()+" cout unitaire moyen à l'achat des feves hautes", this, 300)) ;
 		this.coutMoyenFeves.put(Feve.FEVE_MOYENNE_EQUITABLE,new Variable(getNom()+" cout unitaire moyen à l'achat des feves moyennes equitables", this, 300)) ;

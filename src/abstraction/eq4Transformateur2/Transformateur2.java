@@ -182,7 +182,7 @@ public class Transformateur2 extends Transformateur2_negoce {
 			if (rapport < 0) {
 				boolean noStockPateEnPlus = super.getStockPateValeur(PateInterne.PATE_MOYENNE_EQUITABLE)
 						+ super.getStockPateValeur(PateInterne.PATE_HAUTE_EQUITABLE)
-						+ super.getStockPateValeur(PateInterne.PATE_HAUTE) == 0;
+						+ super.getStockPateValeur(PateInterne.PATE_HAUTE) <= 100;
 				if (noStockPateEnPlus) {
 					this.setTourAvecCapaChocEnTrop(this.getTourAvecCapaChocEnTrop() + 1);
 

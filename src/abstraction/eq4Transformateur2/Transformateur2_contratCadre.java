@@ -8,6 +8,7 @@ import java.util.Map;
 import abstraction.eq8Romu.contratsCadres.Echeancier;
 import abstraction.eq8Romu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eq8Romu.contratsCadres.IVendeurContratCadre;
+import abstraction.eq8Romu.produits.Feve;
 import abstraction.eq8Romu.produits.Pate;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.Variable;
@@ -194,7 +195,7 @@ public class Transformateur2_contratCadre extends Transformateur2_stocks_et_tran
 	// on prend une marge sur la première quantité, histoire d'assurer le coup
 	
 	public void echeancierLimite (Echeancier e, PateInterne pate, boolean parfait) {
-		
+		if (this.nbToursAutonomiePateEtFeves(pate) <= super.getNombreDeTourDautoMax()) {
 		double quantiteLimite = this.getFacteurQuantiteLimite()*super.getCapaciteMaxTFEP() ;
 		quantiteLimite -= this.getQuantitePateCCTotaleValeur() ;
 		if (quantiteLimite < 0) {
@@ -209,6 +210,7 @@ public class Transformateur2_contratCadre extends Transformateur2_stocks_et_tran
 		}
 		if (super.getStockPateValeur(pate) - e.getQuantite(e.getStepDebut()) < this.getStockPateMin()) {
 			e.set(e.getStepDebut(), super.getStockPateValeur(pate) - this.getStockPateMin()) ;
+		}
 		}
 	}
 	
@@ -352,5 +354,64 @@ public class Transformateur2_contratCadre extends Transformateur2_stocks_et_tran
 		}
 		return livre;
 	}
+	
+//  Nombre de tours d'autonmies restants pour couvrir les echeanciers de nos contrats cadres	
+		public int nbToursAutonomiePate(PateInterne pate) {
+			int resu = -1;
+			double pate_echeancier = 0;
+			int step = Filiere.LA_FILIERE.getEtape();
+			List<ExemplaireContratCadre> contratsDeCeType = this.getContratDeCeType(pate);
+			while (pate_echeancier < super.getStockPateValeur(pate)) {
+				resu++;
+				double qte_tour = 0;
+				for (ExemplaireContratCadre ex : contratsDeCeType) {
+					qte_tour += this.getQuantiteALivrerAuStep(ex, step + resu);
+				}
+				if (qte_tour == 0) {
+					return 1000;			// On a assez pour subvenir à toutes le echeances
+				}
+				else {
+					pate_echeancier += qte_tour;
+				}
+			}
+			return resu;
+		}
+		
+		public int nbToursAutonomiePateEtFeves(PateInterne pate) {
+			int resu = -1;
+			double pate_echeancier = 0;
+			int step = Filiere.LA_FILIERE.getEtape(); //RETIRE POUR TEST
+			//int step = 1; //pour test
+			List<ExemplaireContratCadre> contratsDeCeType = this.getContratDeCeType(pate);
+			while (pate_echeancier < super.getStockPateValeur(pate)) {
+				resu++;
+				double qte_tour = 0;
+				for (ExemplaireContratCadre ex : contratsDeCeType) {
+					qte_tour += this.getQuantiteALivrerAuStep(ex, step + resu);
+				}
+				if (qte_tour == 0) {
+					return 1000;			// On a assez pour subvenir à toutes le echeances
+				}
+				else {
+					pate_echeancier += qte_tour;
+				}
+			}
+			double equivalent_feves = (pate_echeancier - super.getStockPateValeur(pate))/super.getCoeffTFEP();
+			Feve feve = super.creerFeve(pate);
+			while (equivalent_feves < super.getStockFevesValeur(feve)) {
+				resu++;
+				double qte_tour = 0;
+				for (ExemplaireContratCadre ex : contratsDeCeType) {
+					qte_tour += this.getQuantiteALivrerAuStep(ex, step + resu);
+				}
+				if (qte_tour == 0) {
+					return 1000;			// On a assez pour subvenir à toutes le echeances
+				}
+				else {
+					equivalent_feves += qte_tour/super.getCoeffTFEP();
+				}
+			}
+			return resu;
+		}
 
 }
