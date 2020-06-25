@@ -68,6 +68,8 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 					publicites.add(choco);
 				}
 			}
+			pubLastStep = true;
+			
 		} else if (etape % 24 == 0) {
 			//Remise à 0 du compteur
 			compteurPub = 0;

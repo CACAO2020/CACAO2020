@@ -48,6 +48,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	
 	protected double coutMasseSalariale = 80000;
 	protected double stockInitial = 100;
+	protected double coutPub = 1000;
 	
 	private Journal journal;
 	private Journal journalTransactions;
@@ -140,6 +141,10 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 			beneficesLivraisons = coutMasseSalariale + fraisStockage;
 		}
 		double fraisTotaux = coutMasseSalariale + fraisStockage - beneficesLivraisons;
+		if (vendeur.pubLastStep) {
+			fraisTotaux += coutPub;
+			vendeur.pubLastStep = false;
+		}
 		journalTransactions.ajouter(Journal.texteColore(warningColor, Color.BLACK, "[PAIEMENT SALAIRES] Paiement de " + Journal.doubleSur(coutMasseSalariale,2) + " de coût de masse salariale."));
 		journalTransactions.ajouter(Journal.texteColore(warningColor, Color.BLACK, "[FRAIS STOCKAGE] Paiement de " + Journal.doubleSur(fraisStockage,2) + " de frais de stockage."));
 		journalTransactions.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[BENEFICES LIVRAISONS] Bénéfices de " + Journal.doubleSur(beneficesLivraisons,2) + " sur les livraisons."));
