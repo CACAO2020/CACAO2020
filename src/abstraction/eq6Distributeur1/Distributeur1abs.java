@@ -106,7 +106,6 @@ public class Distributeur1abs implements IActeur {
 		this.evolutionVentes.put(Filiere.LA_FILIERE.getEtape()+1,new HashMap<ChocolatDeMarque,Double>());
 		this.VenteSiPasRuptureDeStock.put(Filiere.LA_FILIERE.getEtape()+1,new HashMap<ChocolatDeMarque,Double>());
 		this.MapStock.put(Filiere.LA_FILIERE.getEtape(),new HashMap<ChocolatDeMarque,Double>());
-		this.MapStock.put(Filiere.LA_FILIERE.getEtape(),new HashMap<ChocolatDeMarque,Double>());
 
 		if (Filiere.LA_FILIERE.getEtape()>=1) {
 			for (ChocolatDeMarque chocos : this.MapStock.get(Filiere.LA_FILIERE.getEtape()).keySet()) {
