@@ -47,7 +47,7 @@ public class AchatBourseEQ6 extends Stock implements IAcheteurChocolatBourse{
 			}
 
 			if (Filiere.LA_FILIERE.getEtape()<=48) {
-				return anneeYa1AN;
+				return anneeYa1AN +1000;
 
 			}
 
