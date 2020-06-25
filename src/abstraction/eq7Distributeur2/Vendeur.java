@@ -88,7 +88,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 		double beneficePartiel;
 		double beneficeTotal = 0.;
 		double prixDeVente = 0.;
-		double margeSolde = 90.;
+		double margeSolde = 10.;
 		double soldeAlloueAuxAchats;
 		double soldeActuel = Filiere.LA_FILIERE.getBanque().getSolde(ac, ac.cryptogramme);
 		double coutContratsEtape = ac.getAcheteurContratCadre().coutContratsActuels();
@@ -111,9 +111,9 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 					if (panik) {
 						quantiteAVendre = stockActuel;							
 					} else if (kalm) {
-						quantiteAVendre = stockQuiVaPerimer + stockQuiNeVaPasPerimer*0.2;		
+						quantiteAVendre = stockQuiVaPerimer + stockQuiNeVaPasPerimer*0.3;		
 					} else {
-						quantiteAVendre = stockQuiVaPerimer + stockQuiNeVaPasPerimer*0.5;					
+						quantiteAVendre = stockQuiVaPerimer + stockQuiNeVaPasPerimer*0.4;					
 					}
 				
 					beneficePartiel = quantiteAVendre*prixDeVente;
@@ -127,9 +127,9 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 							if (panik) {
 								quantiteAVendre = stockActuel;							
 							} else if (kalm) {
-								quantiteAVendre = stockQuiVaPerimer + stockQuiNeVaPasPerimer*0.2;		
+								quantiteAVendre = stockQuiVaPerimer + stockQuiNeVaPasPerimer*0.3;		
 							} else {
-								quantiteAVendre = stockQuiVaPerimer + stockQuiNeVaPasPerimer*0.5;					
+								quantiteAVendre = stockQuiVaPerimer + stockQuiNeVaPasPerimer*0.4;					
 							}
 							this.quantitesEnVente.get(chocoDeMarque).setValeur(ac, quantiteAVendre);
 						}

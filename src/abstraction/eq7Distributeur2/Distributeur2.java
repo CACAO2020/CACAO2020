@@ -116,6 +116,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 				gestionKalm();
 			}
 		}
+		
 		stock.next();
 		vendeur.next();
 		acheteurContratCadre.next();

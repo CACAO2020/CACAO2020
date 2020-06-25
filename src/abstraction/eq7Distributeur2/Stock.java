@@ -61,7 +61,7 @@ public class Stock extends AbsStock implements IStock {
 			ac.getStock().chocoEnStockParEtape.put(etape, new HashMap<ChocolatDeMarque, Double>());
 			for (ChocolatDeMarque chocoDeMarque : ac.tousLesChocolatsDeMarquePossibles()) {
 				chocoEnStockParEtape.get(etape).put(chocoDeMarque, 0.);
-				ac.getStock().chocoEnStockParEtape.get(etape).put(chocoDeMarque, 0.);
+				
 				chocoReceptionne.get(chocoDeMarque.getChocolat()).setValeur(ac, 0.);
 			}
 		}
