@@ -1,21 +1,24 @@
 package abstraction.eq6Distributeur1;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.ChocolatDeMarque;
+import abstraction.fourni.Filiere;
 
-public class Stock  extends Distributeur1abs implements IStock { /** @author Avril Thibault et Tamine Mélissa*/
+public class Stock  extends Distributeur1abs implements IStock { /** @author Avril Thibault et Tamine Mélissa et Luca Pinguet*/
 	protected double capaciteStockmax;
-	//protected Map<ChocolatDeMarque,Double> MapStock;//
-	
+	protected double  volumeGlobal;
+
 		
 	
 	
 	public Stock(double capaciteStockmax) {
 		this.capaciteStockmax = capaciteStockmax;
-		//this.MapStock = new HashMap<ChocolatDeMarque,Double>();//
+		volumeGlobal = 0;
 		
 	}
 	
@@ -23,20 +26,30 @@ public class Stock  extends Distributeur1abs implements IStock { /** @author Avr
 	@Override
 	public double quantiteEnStockTypeChoco(Chocolat choco) {
 		double quantite = 0;
-		for (ChocolatDeMarque chocos : this.MapStock.keySet()) {
-			if (chocos.getChocolat()==choco) {
-				quantite = quantite + MapStock.get(chocos);
+		for (Integer etape : this.MapStock.keySet()) {
+			for (ChocolatDeMarque chocos : this.MapStock.get(etape).keySet()) {
+				if (chocos.getChocolat()==choco) {
+				quantite = quantite + MapStock.get(etape).get(chocos);
+				}
+				//else {
+					//System.out.println(chocos);
+
+				//}
 			}
 		}
+		
 		return quantite;
 	}
 
 	@Override
 	public double quantiteEnStockTotale() {
 		double quantite = 0;
-		for (ChocolatDeMarque chocos : this.MapStock.keySet()) {
-			quantite = quantite + MapStock.get(chocos);
+		for (Integer etape : this.MapStock.keySet()) {
+			for (ChocolatDeMarque chocos : this.MapStock.get(etape).keySet()) {
+				quantite = quantite + MapStock.get(etape).get(chocos);
+			}
 		}
+		//System.out.println(quantite+"classe    "+ this.MapStock.keySet().size()+" ");
 		return quantite;
 	}
 
@@ -60,25 +73,64 @@ public class Stock  extends Distributeur1abs implements IStock { /** @author Avr
 	@Override
 	public void stocker(ChocolatDeMarque choco, double quantite) {
 		journalEq6Stock.ajouter("stocker");
-		if (MapStock.keySet().contains(choco)) {
-			this.MapStock.put(choco, this.MapStock.get(choco)+quantite);
+		volumeGlobal += quantite; 
+		//System.out.println(volumeGlobal);
+
+		if (MapStock.get(Filiere.LA_FILIERE.getEtape()).keySet().contains(choco)) {
+			
+			this.MapStock.get(Filiere.LA_FILIERE.getEtape()).put(choco, this.MapStock.get(Filiere.LA_FILIERE.getEtape()).get(choco)+quantite);
 		}
 		else {
-			this.MapStock.put(choco, quantite);
+			this.MapStock.get(Filiere.LA_FILIERE.getEtape()).put(choco, quantite);
 		}
-		journalEq6Stock.ajouter("" + this.MapStock.keySet());
+		journalEq6Stock.ajouter("" + this.MapStock.get(Filiere.LA_FILIERE.getEtape()).keySet());
 	}
 
 	@Override
 	public void destocker(ChocolatDeMarque choco, double quantite) {
-		if (MapStock.keySet().contains(choco)) {
-			this.MapStock.replace(choco, this.MapStock.get(choco)-quantite);
+		volumeGlobal -= quantite; 
+
+		Double quanti = quantite;
+		ArrayList<Integer> listeAEnlever = new ArrayList<Integer>();
+		for (Integer etape : this.MapStock.keySet()) {
+			if (etape<Filiere.LA_FILIERE.getEtape()-11) {
+				listeAEnlever.add(etape);
+			}
 		}
+		for (Integer etape : listeAEnlever) {
+			MapStock.remove(etape);
+		}
+		
+		ArrayList<Integer> listeEtape = new ArrayList<Integer>();
+		for (Integer etape : this.MapStock.keySet()) {
+			if (MapStock.get(etape).containsKey(choco)) {
+				listeEtape.add(etape);
+			}
+		}
+		Collections.sort(listeEtape);
+		for (int i=0 ; i<listeEtape.size() ; i++) {
+			if (quanti!=0) {
+				if (MapStock.get(listeEtape.get(i)).get(choco)<=quanti) {
+					quanti = quanti - MapStock.get(listeEtape.get(i)).get(choco);
+					MapStock.get(listeEtape.get(i)).remove(choco);
+				}
+				else {
+					MapStock.get(listeEtape.get(i)).replace(choco, MapStock.get(listeEtape.get(i)).get(choco)-quanti);
+				}
+			}
+		}
+		
 	}
 
 	@Override
 	public double quantiteEnStockMarqueChoco(ChocolatDeMarque choco) {
-		return this.MapStock.get(choco);
+		Double quantite = 0.0;
+		for (Integer etape : this.MapStock.keySet()) {
+			if (MapStock.get(etape).containsKey(choco)) {
+				quantite = quantite + MapStock.get(etape).get(choco);
+			}
+		}
+		return quantite;
 	}
 
 }
