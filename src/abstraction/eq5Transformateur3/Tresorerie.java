@@ -1,6 +1,5 @@
 package abstraction.eq5Transformateur3;
 
-import abstraction.fourni.Banque;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.Variable;
 
@@ -196,13 +195,22 @@ public class Tresorerie {
 			}
 		}
 	}
-	
+	// Se calcule sur un tour, ce qui n'est pas suffisant si les achats/vente ne se font pas sur le même tour
 	public double calculRentabiliteBas() {
-		return (this.getInvestissementBasACeTour())/(this.getVenteBasACeTour());
+		if (this.getVenteBasACeTour() == 0) {
+			return 1;
+		} else {
+			return (this.getInvestissementBasACeTour()) / (this.getVenteBasACeTour());
+		}
+		
 	}
-	
+	// Se calcule sur un tour, ce qui n'est pas suffisant si les achats/vente ne se font pas sur le même tour
 	public double calculRentabiliteSecondaire() {
-		return (this.getInvestissementSecondaireACeTour())/(this.getVenteSecondaireACeTour());
+		if (this.getVenteSecondaireACeTour() == 0) {
+			return 1;
+		} else {
+			return (this.getInvestissementSecondaireACeTour())/(this.getVenteSecondaireACeTour());
+		}
 	}
 
 	public void next() {
