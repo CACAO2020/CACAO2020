@@ -54,7 +54,8 @@ public class AchatContratCadreEQ6 extends DistributeurClientFinal implements IAc
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 		if (Math.random()<0.5) {
 			return contrat.getPrixALaTonne(); // on ne cherche pas a negocier dans 10% des cas
-		} else {//dans 90% des cas on fait une contreproposition differente
+		}
+		else {//dans 90% des cas on fait une contreproposition differente
 
 
 			return contrat.getPrixALaTonne()*1.025;// 5% de moins., Il fau tmettre une limite pour pas être plus cher que la bourse
