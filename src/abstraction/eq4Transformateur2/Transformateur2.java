@@ -174,31 +174,53 @@ public class Transformateur2 extends Transformateur2_negoce {
 		}
 	}
 	
+//	public void investissementChoco() {
+//		double capaPateEnPlus = super.getCapaciteMaxTFEP() - super.getQuantitePateCCTotaleValeur();
+//		if (capaPateEnPlus > 0) {
+//			double capaNecessaire = capaPateEnPlus - super.getCapaciteMaxTPEC();
+//			double rapport = capaNecessaire / capaPateEnPlus;
+//			if (rapport < 0) {
+//				double stock_pate = super.getStockPateValeur(PateInterne.PATE_MOYENNE_EQUITABLE)
+//						+ super.getStockPateValeur(PateInterne.PATE_HAUTE_EQUITABLE)
+//						+ super.getStockPateValeur(PateInterne.PATE_HAUTE);
+//				if (stock_pate <= 0) {
+//					this.setTourAvecCapaChocEnTrop(this.getTourAvecCapaChocEnTrop() + 1);
+//
+//					if (this.getTourAvecCapaChocEnTrop() > 2) {
+//						super.setCapaciteMaxTPEC(capaPateEnPlus);
+//						this.setTourAvecCapaChocEnTrop(0);
+//					}
+//				}
+//			}
+//			else if (rapport > 0.1) {
+//				double solde = super.getSolde();
+//				double qteAInvest = super.getCoutPourAugmenterCapaTPEC() * capaNecessaire;
+//				if (qteAInvest > 0.05 * solde) {
+//					super.investirCapaTPEC(0.05 * solde);
+//				} else {
+//					super.investirCapaTPEC(qteAInvest);
+//				}
+//			}
+//		}
+//	}
+	
 	public void investissementChoco() {
-		double capaPateEnPlus = super.getCapaciteMaxTFEP() - super.getQuantitePateCCTotaleValeur();
-		if (capaPateEnPlus > 0) {
-			double capaNecessaire = capaPateEnPlus - super.getCapaciteMaxTPEC();
-			double rapport = capaNecessaire / capaPateEnPlus;
-			if (rapport < 0) {
-				boolean noStockPateEnPlus = super.getStockPateValeur(PateInterne.PATE_MOYENNE_EQUITABLE)
-						+ super.getStockPateValeur(PateInterne.PATE_HAUTE_EQUITABLE)
-						+ super.getStockPateValeur(PateInterne.PATE_HAUTE) <= 100;
-				if (noStockPateEnPlus) {
-					this.setTourAvecCapaChocEnTrop(this.getTourAvecCapaChocEnTrop() + 1);
-
-					if (this.getTourAvecCapaChocEnTrop() > 2) {
-						super.setCapaciteMaxTPEC(capaPateEnPlus);
-						this.setTourAvecCapaChocEnTrop(0);
-					}
-				}
-			} else if (rapport > 0.1) {
-				double solde = super.getSolde();
-				double qteAInvest = super.getCoutPourAugmenterCapaTPEC() * capaNecessaire;
-				if (qteAInvest > 0.05 * solde) {
-					super.investirCapaTPEC(0.05 * solde);
-				} else {
-					super.investirCapaTPEC(qteAInvest);
-				}
+		double stock_pate = super.getStockPateValeur(PateInterne.PATE_MOYENNE_EQUITABLE)
+				+ super.getStockPateValeur(PateInterne.PATE_HAUTE_EQUITABLE)
+				+ super.getStockPateValeur(PateInterne.PATE_HAUTE);
+		if (stock_pate > 3*super.getCapaciteMaxTPEC()) {
+			double new_capa = stock_pate/3;
+			double qteAInvest = super.getCoutPourAugmenterCapaTPEC() * new_capa;
+			double solde = super.getSolde();
+			if (qteAInvest > 0.05 * solde) {
+				super.investirCapaTPEC(0.05 * solde);
+			}
+		}
+		else {
+			this.setTourAvecCapaChocEnTrop(this.getTourAvecCapaChocEnTrop() + 1);
+			if (this.getTourAvecCapaChocEnTrop() > 3) {
+				super.setCapaciteMaxTPEC(super.getCapaciteMaxTPEC()/3);
+				this.setTourAvecCapaChocEnTrop(0);
 			}
 		}
 	}

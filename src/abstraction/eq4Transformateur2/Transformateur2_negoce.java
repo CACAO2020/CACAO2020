@@ -25,8 +25,8 @@ public class Transformateur2_negoce extends Transformateur2_gestion_stocks imple
 		super();
 		
 		this.MARGE_VISEE_PATE = new HashMap<PateInterne, Variable>() ;
-		this.MARGE_VISEE_PATE.put(PateInterne.PATE_BASSE, new Variable(getNom()+" marge visee pate basse", this, 0.20)) ;
-		this.MARGE_VISEE_PATE.put(PateInterne.PATE_MOYENNE, new Variable(getNom()+" marge visee pate moyenne", this, 0.20)) ;
+		this.MARGE_VISEE_PATE.put(PateInterne.PATE_BASSE, new Variable(getNom()+" marge visee pate basse", this, 0.30)) ;
+		this.MARGE_VISEE_PATE.put(PateInterne.PATE_MOYENNE, new Variable(getNom()+" marge visee pate moyenne", this, 0.30)) ;
 		this.MARGE_VISEE_PATE.put(PateInterne.PATE_MOYENNE_EQUITABLE, new Variable(getNom()+" marge visee pate moyenne equitable", this, 1)) ;
 		this.MARGE_VISEE_PATE.put(PateInterne.PATE_HAUTE_EQUITABLE,new Variable(getNom()+" marge visee pate haute equitable", this, 1)) ;
 		this.MARGE_VISEE_PATE.put(PateInterne.PATE_HAUTE, new Variable(getNom()+" marge visee pate haute", this, 1)) ;
@@ -90,7 +90,7 @@ public class Transformateur2_negoce extends Transformateur2_gestion_stocks imple
 	// une fois que l'offre est acceptée, notifie la vente, met à jour les stocks et leur valeur
 	public void notifierVente(PropositionCriee proposition) {
 		Feve feve = proposition.getFeve() ;
-		super.modifierCoutMoyenFeves(feve, proposition.getQuantiteEnTonnes(), proposition.getPrixPourLeLot());
+		super.modifierCoutMoyenFeves(feve, proposition.getQuantiteEnTonnes(), proposition.getPrixPourUneTonne());
 		super.setStockFevesValeur(feve, proposition.getQuantiteEnTonnes()+super.getStockFevesValeur(feve));
 		this.setMargeVisee(super.creerPateAPartirDeFeve(proposition.getFeve()));
 		this.journalEq4.ajouter("Apprend que sa proposition de "+Journal.doubleSur(proposition.getPrixPourUneTonne(), 4)+" pour "+Journal.texteColore(proposition.getVendeur(), Journal.doubleSur(proposition.getQuantiteEnTonnes(), 2)+" tonnes de "+proposition.getFeve().name())+Journal.texteColore(Color.green, Color.black," a ete acceptee"));
