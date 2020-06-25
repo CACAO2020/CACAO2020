@@ -12,7 +12,7 @@ public class Distributeur1 extends AchatContratCadreEQ6 {
 	}
 	
 	public Distributeur1() {
-		super(100000, 1.3, 10000000, 0.15, 0.35, 0.50);
+		super(200000, 1.3, 10000000, 0.15, 0.35, 0.50);
 	}
 
 }
