@@ -40,7 +40,21 @@ public abstract class AcheteurCacao extends AchatPateCC implements abstraction.e
 	}
 	
 	public double proposerPrix(LotCacaoCriee lot, double nb_proposition) { /* fonction mathématique qui s'adapte à notre stratégie */
-		return (1.95 + (nb_proposition/10000)- 1 /(Math.pow(nb_proposition, 1/3)))*lot.getPrixMinPourUneTonne();
+		if (lot.getFeve()==Feve.FEVE_BASSE) {
+			return (1.85 - 1 /(Math.pow(nb_proposition, 1/3)))*lot.getPrixMinPourUneTonne();
+		}
+		if (lot.getFeve()==Feve.FEVE_MOYENNE) {
+			return (1.90 - 1 /(Math.pow(nb_proposition, 1/3)))*lot.getPrixMinPourUneTonne();
+		}
+		if (lot.getFeve()==Feve.FEVE_MOYENNE_EQUITABLE) {
+			return (1.95 + (nb_proposition/10000)- 1 /(Math.pow(nb_proposition, 1/3)))*lot.getPrixMinPourUneTonne();
+		}
+		if (lot.getFeve()==Feve.FEVE_HAUTE) {
+			return (2.0 + (nb_proposition/10000)- 1 /(Math.pow(nb_proposition, 1/3)))*lot.getPrixMinPourUneTonne();
+		}
+		else  { /*Fèves Haute Qualité et équitables*/
+			return (2.05 + (nb_proposition/10000)- 1 /(Math.pow(nb_proposition, 1/3)))*lot.getPrixMinPourUneTonne();
+		}
 		}
 	
 	
@@ -50,26 +64,38 @@ public abstract class AcheteurCacao extends AchatPateCC implements abstraction.e
 	 * */
 	
 	public double proposerAchat(LotCacaoCriee lot) {
-		if (this.getPrixBourse(lot) < lot.getPrixMinPourUneTonne()) { /* C'est le cas où notre lot vaut moins cher en bourse que le prix auquel on l'achète */
-			this.journalAchat.ajouter("Le lot" + lot.toString() +"au prix " + Journal.doubleSur(lot.getPrixMinPourUneTonne(), 4) + "ne permet pas de faire des bénéfices, on fait donc une proposition à un dixième du prix");
-			if ((lot.getPrixMinPourUneTonne()*lot.getQuantiteEnTonnes() < this.MontantCompte*10)&&(nb_proposition.get(lot.getFeve())<=2)) {
-				return lot.getPrixMinPourUneTonne()/10;
+		if (this.getPrixBourse(lot) < lot.getPrixMinPourUneTonne()/2) 
+		{ /* C'est le cas où notre lot vaut moins cher en bourse que le prix auquel on l'achète */
+			this.journalAchat.ajouter("Le lot" + lot.toString() +"au prix " + Journal.doubleSur(lot.getPrixMinPourUneTonne(), 4) + "ne permet pas de faire des bénéfices");
+			/* Achat vraiment pas cher si le client vend son lot trop cher*/
+			if ((lot.getPrixMinPourUneTonne()*lot.getQuantiteEnTonnes() < this.MontantCompte*10)&&(Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape(),this.equivalentChocoFeve(lot.getFeve()))
+					>(this.getStockFeves(lot.getFeve()) + this.getStockChocolat(this.equivalentChocoFeve(lot.getFeve()))) + lot.getQuantiteEnTonnes())
+				&&(nb_proposition.get(lot.getFeve())<=2)) 
+			{
+				return this.getPrixBourse(lot)/10;
+
 			}
 		}
-			else {
-				if((Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape(),this.equivalentChocoFeve(lot.getFeve()))<(this.getStockFeves(lot.getFeve()) + this.getStockChocolat(this.equivalentChocoFeve(lot.getFeve()))))&&(this.getStockFeves().containsKey((lot.getFeve()))==false)||(this.getStockFeves((lot.getFeve()))==0)||
-					((this.getStockPate().containsKey(this.equivalentChocoFeve(lot.getFeve()))==false)&& /* On achète pas de fèves sauf si on en a pas en stock où qu'on en a moins que le stock de pate de cette fève*/
-					(this.getStockFeves(lot.getFeve())<=this.getStockPate(this.equivalentChocoFeve(lot.getFeve()))))){ /*c'est du au fait que la transformation se fasse avant l'achat à la criée donc si il nous reste des fèves c'est que nous n'avions pas l'argent pour les trasnformer*/
-						if (this.proposerPrix(lot, nb_proposition.get(lot.getFeve())) < this.MontantCompte) {
-								this.journalAchat.ajouter("Proposition d'achat du lot" + lot.toString() + ", Nombre de propositions = " + nb_proposition.get(lot.getFeve()) + ", au prix :" + Journal.doubleSur(this.proposerPrix(lot, nb_proposition.get(lot.getFeve())),4));
-								return this.proposerPrix(lot, nb_proposition.get(lot.getFeve())) ; 
-							}
+
+		else {
+			if((Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape(),this.equivalentChocoFeve(lot.getFeve())) + 15
+				>(this.getStockFeves(lot.getFeve()) + this.getStockChocolat(this.equivalentChocoFeve(lot.getFeve()))) + lot.getQuantiteEnTonnes())
+				&&((this.getStockFeves((lot.getFeve()))==0) || (this.getStockFeves(lot.getFeve())<=this.getStockPate(this.equivalentChocoFeve(lot.getFeve())) + 15)) /* On achète pas de fèves sauf si on en a pas en stock où qu'on en a moins que le stock de pate de cette fève*/
+				 /*c'est du au fait que la transformation se fasse avant l'achat à la criée donc si il nous reste des fèves c'est que nous n'avions pas l'argent pour les transformer*/ 
+				&&(this.proposerPrix(lot, nb_proposition.get(lot.getFeve())) < this.MontantCompte)/* on vérifie qu'on ne fait pas faillite*/
+				&& (this.proposerPrix(lot, nb_proposition.get(lot.getFeve())) < this.getPrixBourse(lot)))
+				{
+					this.journalAchat.ajouter("Proposition d'achat du lot" + lot.toString() + ", Nombre de propositions = " + nb_proposition.get(lot.getFeve()) + ", au prix :" + Journal.doubleSur(this.proposerPrix(lot, nb_proposition.get(lot.getFeve())),4));
+					return this.proposerPrix(lot, nb_proposition.get(lot.getFeve())) ; 			
+
 				}
-					else {this.journalAchat.ajouter("Impossible d'acheter le lot" + lot.toString() + ", Nombre de propositions = " + nb_proposition.get(lot.getFeve()) + ", au prix" + Journal.doubleSur(this.proposerPrix(lot, nb_proposition.get(lot.getFeve())),4));
-					return 0.0;
+				else {	
+						this.journalAchat.ajouter("Impossible d'acheter le lot" + lot.toString() + ", Nombre de propositions = " + nb_proposition.get(lot.getFeve()) + ", au prix" + Journal.doubleSur(this.proposerPrix(lot, nb_proposition.get(lot.getFeve())),4));
+						return 0.0;
+
 					}
 			}
-		this.journalAchat.ajouter("Pas de proposition d'achat pour le lot" + lot.toString() + ", Nombre de propositions = " + nb_proposition.get(lot.getFeve()));
+		this.journalAchat.ajouter("Pas de proposition d'achat pour le lot " + lot.toString() + ", Nombre de propositions = " + nb_proposition.get(lot.getFeve()));
 		return 0.0;
 		
 	}
@@ -86,7 +112,7 @@ public abstract class AcheteurCacao extends AchatPateCC implements abstraction.e
 	 * On fait un simple print de la notification de vente ou de refus de vente, on pourra ajouter cette notification au journal quand l'attribut journal sera mis en protected et qu'on y aura accès dans cette classe
 	 */
 	public void notifierPropositionRefusee(PropositionCriee proposition) {
-		this.journalAchat.ajouter("La proposition " + proposition.getLot().toString() + ", de " + proposition.getVendeur().toString() + ", au prix" + Journal.doubleSur(proposition.getPrixPourLeLot(),4)
+		this.journalAchat.ajouter("La proposition " + proposition.getLot().toString() + ", de " + proposition.getVendeur().toString() + ", au prix " + Journal.doubleSur(proposition.getPrixPourLeLot(),4)
 		+ "a été refusée");
 		nb_proposition.put(proposition.getFeve(),nb_proposition.get(proposition.getFeve())+1);
 		
@@ -96,7 +122,7 @@ public abstract class AcheteurCacao extends AchatPateCC implements abstraction.e
 		//this.reset_propositions();
 		this.setCoutFeves(proposition.getLot().getFeve(), this.calculCoutFeve(proposition.getLot().getFeve(), proposition.getQuantiteEnTonnes(), proposition.getPrixPourUneTonne()));
 		this.setStockFeves(proposition.getLot().getFeve(), proposition.getQuantiteEnTonnes());
-		this.journalAchat.ajouter("Lot " + proposition.getLot().toString() + ", de " + proposition.getVendeur().toString() + ", au prix" + Journal.doubleSur(proposition.getPrixPourLeLot(),4) + " a été effectué");
+		this.journalAchat.ajouter("Lot " + proposition.getLot().toString() + ", de " + proposition.getVendeur().toString() + ", au prix " + Journal.doubleSur(proposition.getPrixPourLeLot(),4) + " a été effectué");
 		nb_proposition.put(proposition.getFeve(), 0.0);
 
 	}
