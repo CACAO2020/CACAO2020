@@ -40,16 +40,13 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 	}
 	
 	public void RefreshContrats() {
-		int i = 0;
-		while  (i < this.getContratsencours().size()) {
+		for (int i = 0; i < this.getContratsencours().size(); i++) {
 			ExemplaireContratCadre contrat = (ExemplaireContratCadre)this.getContratsencours().get(i);
 			if (Filiere.LA_FILIERE.getEtape() > contrat.getEcheancier().getStepFin()) {
-				this.PrixMoyen = (this.PrixMoyen +this.contratsencours.get(i).getPrixALaTonne())/2;
 				this.contratsencours.remove(i);
-				--i;
+				this.PrixMoyen = (this.PrixMoyen +this.contratsencours.get(i).getPrixALaTonne())/2;
 				this.journal_contrats.ajouter("Le contrat n°"+contrat.getNumero()+" est arrivé à terme. Merci pour la moula");
 			}
-			++i;
 		}
 	}
 	@Override

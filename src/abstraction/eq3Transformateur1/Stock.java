@@ -51,7 +51,7 @@ public abstract class  Stock extends Tresorerie {
 		this.coutChocolat=new HashMap<Chocolat,Double>();;
 		this.coutPate=new HashMap<Chocolat,Double>();;
 		this.coutFeves=new HashMap<Feve,Double>();
-		this.quantiteFeveAchete= new Variable("Quantité de fèves achetées en moyenne ", this);
+		this.quantiteFeveAchete= new Variable("quantite de feves achuetés en moyenne", this);
 		this.quantiteFeveAchete.setValeur(this,0);
 		this.quantiteFeveAcheteTour=new ArrayList<Double>();
 		/*
