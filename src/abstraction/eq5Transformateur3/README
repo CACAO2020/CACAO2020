@@ -2,3 +2,19 @@ Francois Goujon : Francoisgoujon
 Simon Moro: SimonWishoco
 Eva DUPUY : Eva-DUPUY
 Nicolas PIERRE : PoltyPoltou
+
+Cet transformateur a atteind sa deuxième version (V2). Cet acteur n'est pas fini, car certaines fonctionnalités manquent encore de robustesse.
+Tout d'abord, nous avons une gestion des stocks par prix d'achat, nous vendons lorsque le bénéfice est suffisant.
+Les fonctions d'achat et de vente (hors AchatPAte) se modulent en fonction des précédents refus.
+Nous faisons attention à l'achat si nous avons trop de stocks.
+Nous avons implémenté des coûts de transformation, des coûts variables de stockage et des coûts fixes.
+Nous avons mis en place une lecture des prix du marché pour donner un bon prix dans les contrats cadres
+
+Pour ce qui est des fonctionnalités "bancales", qui n'ont pas entièrement testé et sont bugué:
+La gestion des investissements dans les deux branches (achat fève haute gamme / achat pate basse gamme) en fonction des revenus produits
+    Le facteur ne se comporte pas bien quand l'on ne fait rien pendant un tour dans une branche.
+    Il est calculé tour par tour ce qui restreint trop
+Les indicateurs affichés ne sont actualisé qu'une fois par tour, ce qui implique que si nous achetons et vendons dans le même tour, cela n'est pas marqué dans l'historique de la variable
+
+Des possibilités de progressions sont d'utiliser la lecture des prix du marché dans toutes les opérations d'achat et de vente.
+Et mettre en place une attaque sur les monopoles (où le prix de vente est bien plus haut que le prix de production)
