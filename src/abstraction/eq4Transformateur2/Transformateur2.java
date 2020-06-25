@@ -14,19 +14,29 @@ import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
 
 public class Transformateur2 extends Transformateur2_negoce {
-	private int tourAvecCapaEnTrop;
+	private int tourAvecCapaPateEnTrop;
+	private int tourAvecCapaChocEnTrop;
 
 	public Transformateur2 () {
 		super();
-		this.tourAvecCapaEnTrop = 0;
+		this.tourAvecCapaPateEnTrop = 0;
+		this.tourAvecCapaChocEnTrop = 0;
 	}
 
-	public int getTourAvecCapaEnTrop() {
-		return tourAvecCapaEnTrop;
+	public int getTourAvecCapaChocEnTrop() {
+		return tourAvecCapaChocEnTrop;
 	}
 
-	public void setTourAvecCapaEnTrop(int tourAvecCapaEnTrop) {
-		this.tourAvecCapaEnTrop = tourAvecCapaEnTrop;
+	public int getTourAvecCapaPateEnTrop() {
+		return tourAvecCapaPateEnTrop;
+	}
+
+	public void setTourAvecCapaPateEnTrop(int tourAvecCapaPateEnTrop) {
+		this.tourAvecCapaPateEnTrop = tourAvecCapaPateEnTrop;
+	}
+
+	public void setTourAvecCapaChocEnTrop(int tourAvecCapaEnTrop) {
+		this.tourAvecCapaChocEnTrop = tourAvecCapaEnTrop;
 	}
 	
 	public List<String> getNomsFilieresProposees() {
@@ -64,12 +74,8 @@ public class Transformateur2 extends Transformateur2_negoce {
 		Filiere.LA_FILIERE.getBanque().virer(this, super.cryptogramme, Filiere.LA_FILIERE.getBanque(), montant) ;
 		
 		// Investissements
-		/*double solde = super.getSolde();
-		if (solde >= 0) {
-			double investTFEP = solde * INVESTI_MOYPROD;
-			super.investirCapaTFEP(investTFEP);
-			this.investissementChoco();
-		}*/
+		this.investissementPate();
+		this.investissementChoco();
 	}
 
 	public double transformerSelonPriorites() {
@@ -96,7 +102,7 @@ public class Transformateur2 extends Transformateur2_negoce {
 			}
 		} else if (tourAutoMoy < super.getNombreDeTourDautoMin()) {
 			Double pateMoyManquante = super.getQuantiteALivrerPourITour(PateInterne.PATE_MOYENNE,
-					super.getNombreDeTourDautoMin()) - -super.getStockPateValeur(PateInterne.PATE_MOYENNE);
+					super.getNombreDeTourDautoMin()) -super.getStockPateValeur(PateInterne.PATE_MOYENNE);
 			FevesATransfo.put(Feve.FEVE_MOYENNE, pateMoyManquante / super.getCoeffTFEP());
 		}
 		// LISTE DE PATE POUR CHOCO
@@ -128,7 +134,46 @@ public class Transformateur2 extends Transformateur2_negoce {
 		cout += super.transformationFeves(FevesATransfo);
 		return cout ;
 	}
-
+	
+	
+	// On augmente la capacit
+	public void investissementPate() {
+		double stock_feve = 0;
+		stock_feve += super.getStockFevesValeur(Feve.FEVE_MOYENNE_EQUITABLE);
+		stock_feve += super.getStockFevesValeur(Feve.FEVE_HAUTE_EQUITABLE);
+		stock_feve += super.getStockFevesValeur(Feve.FEVE_HAUTE);
+		double capaMinNec = (super.getQuantiteALivrerPourITour(PateInterne.PATE_BASSE, super.getNombreDeTourDautoMin()))/(super.getNombreDeTourDautoMin()-1);
+		capaMinNec += (super.getQuantiteALivrerPourITour(PateInterne.PATE_MOYENNE, super.getNombreDeTourDautoMin()))/(super.getNombreDeTourDautoMin()-1);
+//capaMinNec est la capacité nécessaire pour transformer la pate nécessaire pour les contrats cadres pour i tour en i-1 tours avec i le nombre min de tours d'auto
+		double capapate = super.getCapaciteMaxTFEP();
+		double solde = super.getSolde();
+		if (capapate - capaMinNec < 0) {
+			double qteAInv = (capaMinNec - capapate)*super.getCoutPourAugmenterCapaTFEP();
+			if (qteAInv < solde) {
+				super.investirCapaTFEP(qteAInv);
+			}
+			else if (solde*0.1 > 0) {
+				super.investirCapaTFEP(solde*0.1);
+			}
+		}
+		else if (capapate - capaMinNec - stock_feve < 0) {
+			double qteAInv = (capaMinNec + stock_feve - capapate)*super.getCoutPourAugmenterCapaTFEP();
+			if (qteAInv < solde*0.1) {
+				super.investirCapaTFEP(qteAInv);
+			}
+			else if (solde*0.1 > 0) {
+				super.investirCapaTFEP(solde*0.1);
+			}
+		}
+		else {
+			this.setTourAvecCapaPateEnTrop(this.getTourAvecCapaPateEnTrop()+1);
+			if (this.getTourAvecCapaPateEnTrop() > 2) {
+				super.setCapaciteMaxTFEP(capaMinNec + stock_feve);
+				this.setTourAvecCapaPateEnTrop(0);
+			}
+		}
+	}
+	
 	public void investissementChoco() {
 		double capaPateEnPlus = super.getCapaciteMaxTFEP() - super.getQuantitePateCCTotaleValeur();
 		if (capaPateEnPlus > 0) {
@@ -139,18 +184,18 @@ public class Transformateur2 extends Transformateur2_negoce {
 						+ super.getStockPateValeur(PateInterne.PATE_HAUTE_EQUITABLE)
 						+ super.getStockPateValeur(PateInterne.PATE_HAUTE) == 0;
 				if (noStockPateEnPlus) {
-					this.setTourAvecCapaEnTrop(this.getTourAvecCapaEnTrop() + 1);
+					this.setTourAvecCapaChocEnTrop(this.getTourAvecCapaChocEnTrop() + 1);
 
-					if (this.getTourAvecCapaEnTrop() > 3) {
+					if (this.getTourAvecCapaChocEnTrop() > 2) {
 						super.setCapaciteMaxTPEC(capaPateEnPlus);
-						this.setTourAvecCapaEnTrop(0);
+						this.setTourAvecCapaChocEnTrop(0);
 					}
 				}
 			} else if (rapport > 0.1) {
 				double solde = super.getSolde();
 				double qteAInvest = super.getCoutPourAugmenterCapaTPEC() * capaNecessaire;
-				if (qteAInvest > 0.1 * solde) {
-					super.investirCapaTPEC(0.1 * solde);
+				if (qteAInvest > 0.05 * solde) {
+					super.investirCapaTPEC(0.05 * solde);
 				} else {
 					super.investirCapaTPEC(qteAInvest);
 				}

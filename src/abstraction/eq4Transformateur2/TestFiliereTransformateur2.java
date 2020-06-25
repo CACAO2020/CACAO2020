@@ -46,9 +46,9 @@ public class TestFiliereTransformateur2 extends Filiere {
 		this.ajouterActeur(this.superviseurChocolatBourse);
 		this.ajouterActeur(new ExempleAcheteurChocolatBourse());
 		this.ajouterActeur(new ExempleAcheteurChocolatBourse());
-		for (Chocolat chocolat : Chocolat.values()) {
-			this.ajouterActeur(new ExempleVendeurChocolatBourse(chocolat)) ;
-		}
+//		for (Chocolat chocolat : Chocolat.values()) {
+//			this.ajouterActeur(new ExempleVendeurChocolatBourse(chocolat)) ;
+//		}
 	}
 	
 	
