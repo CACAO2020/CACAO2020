@@ -30,8 +30,8 @@ public abstract class Tresorerie extends ActeurEQ3 {
 	}
 	public void notificationOperationBancaire(double montant) {
 		if(Filiere.LA_FILIERE.getBanque().getSolde(this, cryptogramme)<0) {
-			this.journalTest.ajouter("L'operation d'un montant "+montant+" fait qu'on est dans le rouge" );
-			this.journalTest.ajouter("On est à " +Filiere.LA_FILIERE.getBanque().getSolde(this, cryptogramme));
+			this.journalTest.ajouter("l'operation d'un montant"+montant+"fait qu'on est dans le rouge" );
+			this.journalTest.ajouter("on est a" +Filiere.LA_FILIERE.getBanque().getSolde(this, cryptogramme));
 		}
 		if(montant>0) {
 			cATotal.setValeur(this, cATotal.getValeur()+montant);
