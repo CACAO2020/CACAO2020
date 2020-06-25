@@ -14,6 +14,8 @@ import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.Feve;
 import abstraction.fourni.Filiere;
 
+import abstraction.eq1Producteur1.*;
+
 public class Transformateur2_acteur implements IActeur {
 	
 	private static final int NOMBRE_DE_TOUR_DAUTO_MAX = 10;
@@ -53,30 +55,32 @@ public class Transformateur2_acteur implements IActeur {
 	
 	public Transformateur2_acteur() {
 		
+		double memeValeur = 1000 ;
+		
 		this.stockFeves = new HashMap<Feve, Variable>() ;
-		this.stockFeves.put(Feve.FEVE_BASSE, new Variable(getNom()+" stock feves basses", this, 1000)) ;
-		this.stockFeves.put(Feve.FEVE_MOYENNE, new Variable(getNom()+" stock feves moyennes", this, 1000)) ;
-		this.stockFeves.put(Feve.FEVE_HAUTE, new Variable(getNom()+" stock feves hautes", this, 1000)) ;
-		this.stockFeves.put(Feve.FEVE_MOYENNE_EQUITABLE,new Variable(getNom()+" stock feves moyennes equitables", this, 1000)) ;
-		this.stockFeves.put(Feve.FEVE_HAUTE_EQUITABLE, new Variable(getNom()+" stock feves hautes equitables", this, (1000))) ;
+		this.stockFeves.put(Feve.FEVE_BASSE, new Variable(getNom()+" stock feves basses", this, memeValeur*2)) ;
+		this.stockFeves.put(Feve.FEVE_MOYENNE, new Variable(getNom()+" stock feves moyennes", this, memeValeur*2)) ;
+		this.stockFeves.put(Feve.FEVE_HAUTE, new Variable(getNom()+" stock feves hautes", this, memeValeur)) ;
+		this.stockFeves.put(Feve.FEVE_MOYENNE_EQUITABLE,new Variable(getNom()+" stock feves moyennes equitables", this, memeValeur)) ;
+		this.stockFeves.put(Feve.FEVE_HAUTE_EQUITABLE, new Variable(getNom()+" stock feves hautes equitables", this, (memeValeur))) ;
 		
 		this.stockPate = new HashMap<PateInterne, Variable>() ;
-		this.stockPate.put(PateInterne.PATE_BASSE, new Variable(getNom()+" stock pate basse", this, 1000)) ;
-		this.stockPate.put(PateInterne.PATE_MOYENNE, new Variable(getNom()+" stock pate moyenne", this, 1000)) ;
-		this.stockPate.put(PateInterne.PATE_HAUTE, new Variable(getNom()+" stock pate haute", this, 1000)) ;
-		this.stockPate.put(PateInterne.PATE_MOYENNE_EQUITABLE, new Variable(getNom()+" stock pate moyenne equitable", this, 1000));
-		this.stockPate.put(PateInterne.PATE_HAUTE_EQUITABLE, new Variable(getNom()+" stock pate haute equitable", this, 1000));
+		this.stockPate.put(PateInterne.PATE_BASSE, new Variable(getNom()+" stock pate basse", this, memeValeur*2)) ;
+		this.stockPate.put(PateInterne.PATE_MOYENNE, new Variable(getNom()+" stock pate moyenne", this, memeValeur*2)) ;
+		this.stockPate.put(PateInterne.PATE_HAUTE, new Variable(getNom()+" stock pate haute", this, memeValeur)) ;
+		this.stockPate.put(PateInterne.PATE_MOYENNE_EQUITABLE, new Variable(getNom()+" stock pate moyenne equitable", this, memeValeur));
+		this.stockPate.put(PateInterne.PATE_HAUTE_EQUITABLE, new Variable(getNom()+" stock pate haute equitable", this, memeValeur));
 		
 		this.stockChocolat = new HashMap<Chocolat, Variable>() ;
-		this.stockChocolat.put(Chocolat.CHOCOLAT_BASSE, new Variable(getNom()+" stock chocolat basse", this, 2000)) ;
-		this.stockChocolat.put(Chocolat.CHOCOLAT_MOYENNE, new Variable(getNom()+" stock chocolat moyenne", this, 2000)) ;
-		this.stockChocolat.put(Chocolat.CHOCOLAT_HAUTE, new Variable(getNom()+" stock chocolat haute", this, 2000)) ;
-		this.stockChocolat.put(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE, new Variable(getNom()+" stock chocolat moyenne equitable", this, 2000)) ;
-		this.stockChocolat.put(Chocolat.CHOCOLAT_HAUTE_EQUITABLE, new Variable(getNom()+" stock chocolat haute equitable", this, 2000)) ;
+		this.stockChocolat.put(Chocolat.CHOCOLAT_BASSE, new Variable(getNom()+" stock chocolat basse", this, 0)) ;
+		this.stockChocolat.put(Chocolat.CHOCOLAT_MOYENNE, new Variable(getNom()+" stock chocolat moyenne", this, 0)) ;
+		this.stockChocolat.put(Chocolat.CHOCOLAT_HAUTE, new Variable(getNom()+" stock chocolat haute", this, memeValeur)) ;
+		this.stockChocolat.put(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE, new Variable(getNom()+" stock chocolat moyenne equitable", this, memeValeur)) ;
+		this.stockChocolat.put(Chocolat.CHOCOLAT_HAUTE_EQUITABLE, new Variable(getNom()+" stock chocolat haute equitable", this, memeValeur)) ;
 		
 		this.journalEq4 = new Journal("Eq4 activites", this);
 		
-		this.coutFixe = new Variable(getNom()+" cout fixe (marketing, R&D, fonctionnement...)", this, 200) ;
+		this.coutFixe = new Variable(getNom()+" cout fixe (marketing, R&D, fonctionnement...)", this, 1000) ;
 	}
 	
 	public String getNom() {

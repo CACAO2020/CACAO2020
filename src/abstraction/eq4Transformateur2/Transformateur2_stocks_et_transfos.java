@@ -59,27 +59,27 @@ public class Transformateur2_stocks_et_transfos extends Transformateur2_acteur {
 	public Transformateur2_stocks_et_transfos() {
 		
 		super () ; 
-		
-		this.capaciteMaxTFEP = new Variable(getNom()+" limite transformation feve en pate", this, 500) ;
-		this.capaciteMaxTPEC = new Variable(getNom()+" limite transformation pate en chocolat", this, 500) ;
+				
+		this.capaciteMaxTFEP = new Variable(getNom()+" limite transformation feve en pate", this, 3000000) ;
+		this.capaciteMaxTPEC = new Variable(getNom()+" limite transformation pate en chocolat", this, 2000000) ;
 		this.coeffTFEP = new Variable(getNom()+" équivalent en pâte d'une unité de fèves", this, 1) ;
 		this.coeffTPEC = new Variable(getNom()+" équivalent en chocolat d'une unité de chocolat", this, 1) ;
 				
 		this.coutsUnitairesTFEP = new HashMap<Gamme, Variable>() ;
-		this.coutsUnitairesTFEP.put(Gamme.BASSE, new Variable(getNom()+" cout unitaire de transformation de basse qualité fèves vers pâte)", this, 1)) ;
-		this.coutsUnitairesTFEP.put(Gamme.MOYENNE, new Variable(getNom()+" cout unitaire de transformation de moyenne qualité fèves vers pâte)", this, 1)) ;
-		this.coutsUnitairesTFEP.put(Gamme.HAUTE, new Variable(getNom()+" cout unitaire de transformation de haute qualité fèves vers pâte)", this, 1)) ;
+		this.coutsUnitairesTFEP.put(Gamme.BASSE, new Variable(getNom()+" cout unitaire de transformation de basse qualité fèves vers pâte)", this, 2000)) ;
+		this.coutsUnitairesTFEP.put(Gamme.MOYENNE, new Variable(getNom()+" cout unitaire de transformation de moyenne qualité fèves vers pâte)", this, 2500)) ;
+		this.coutsUnitairesTFEP.put(Gamme.HAUTE, new Variable(getNom()+" cout unitaire de transformation de haute qualité fèves vers pâte)", this, 3000)) ;
 		
 		this.coutsUnitairesTPEC = new HashMap<Gamme, Variable>() ;
-		this.coutsUnitairesTPEC.put(Gamme.BASSE, new Variable(getNom()+" cout unitaire de transformation de basse qualité pâte vers chocolat)", this, 1)) ;
-		this.coutsUnitairesTPEC.put(Gamme.MOYENNE, new Variable(getNom()+" cout unitaire de transformation de moyenne qualité pâte vers chocolat)", this, 1)) ;
-		this.coutsUnitairesTPEC.put(Gamme.HAUTE, new Variable(getNom()+" cout unitaire de transformation de haute qualité pâte vers chocolat)", this, 1)) ;
+		this.coutsUnitairesTPEC.put(Gamme.BASSE, new Variable(getNom()+" cout unitaire de transformation de basse qualité pâte vers chocolat)", this, 1500)) ;
+		this.coutsUnitairesTPEC.put(Gamme.MOYENNE, new Variable(getNom()+" cout unitaire de transformation de moyenne qualité pâte vers chocolat)", this, 1700)) ;
+		this.coutsUnitairesTPEC.put(Gamme.HAUTE, new Variable(getNom()+" cout unitaire de transformation de haute qualité pâte vers chocolat)", this, 2000)) ;
 		
-		this.coutUnitaireEntretienTFEP  = new Variable(getNom()+" cout unitaire d'entretien de la capacité de transformation de fève en pâte", this, 0.5) ;
-		this.coutUnitaireEntretienTPEC  = new Variable(getNom()+" cout unitaire d'entretien de la capacité de transformation de pâte en chocolat", this, 0.5) ;
+		this.coutUnitaireEntretienTFEP  = new Variable(getNom()+" cout unitaire d'entretien de la capacité de transformation de fève en pâte", this, 500) ;
+		this.coutUnitaireEntretienTPEC  = new Variable(getNom()+" cout unitaire d'entretien de la capacité de transformation de pâte en chocolat", this, 300) ;
 		
 		this.coutMoyenFeves = new HashMap<Feve, Variable>() ;
-		this.coutMoyenFeves.put(Feve.FEVE_BASSE, new Variable(getNom()+" cout unitaire moyen à l'achat des feves basses", this, 100)) ;
+		this.coutMoyenFeves.put(Feve.FEVE_BASSE, new Variable(getNom()+" cout unitaire moyen à l'achat des feves basses", this, 2000)) ;
 		this.coutMoyenFeves.put(Feve.FEVE_MOYENNE, new Variable(getNom()+" cout unitaire moyen à l'achat des feves moyennes", this, 200)) ;
 		this.coutMoyenFeves.put(Feve.FEVE_HAUTE, new Variable(getNom()+" cout unitaire moyen à l'achat des feves hautes", this, 300)) ;
 		this.coutMoyenFeves.put(Feve.FEVE_MOYENNE_EQUITABLE,new Variable(getNom()+" cout unitaire moyen à l'achat des feves moyennes equitables", this, 300)) ;
@@ -90,14 +90,14 @@ public class Transformateur2_stocks_et_transfos extends Transformateur2_acteur {
 		this.coutMoyenPate.put(PateInterne.PATE_MOYENNE, new Variable(getNom()+" cout unitaire moyen à l'achat de pate moyenne", this, 400)) ;
 		this.coutMoyenPate.put(PateInterne.PATE_HAUTE, new Variable(getNom()+" cout unitaire moyen à l'achat de pate haute", this, 600)) ;
 		this.coutMoyenPate.put(PateInterne.PATE_MOYENNE_EQUITABLE, new Variable(getNom()+" cout unitaire moyen à l'achat de pate moyenne equitable", this, 600));
-		this.coutMoyenPate.put(PateInterne.PATE_HAUTE_EQUITABLE, new Variable(getNom()+" cout unitaire moyen à l'achat de pate haute equitable", this, 800));
+		this.coutMoyenPate.put(PateInterne.PATE_HAUTE_EQUITABLE, new Variable(getNom()+" cout unitaire moyen à l'achat de pate haute equitable", this, 290));
 		
 		this.coutMoyenChocolat = new HashMap<Chocolat, Variable>() ;
-		this.coutMoyenChocolat.put(Chocolat.CHOCOLAT_BASSE, new Variable(getNom()+" cout unitaire moyen à l'achat de chocolat basse", this, 400)) ;
-		this.coutMoyenChocolat.put(Chocolat.CHOCOLAT_MOYENNE, new Variable(getNom()+" cout unitaire moyen à l'achat de chocolat moyenne", this, 800)) ;
-		this.coutMoyenChocolat.put(Chocolat.CHOCOLAT_HAUTE, new Variable(getNom()+" cout unitaire moyen à l'achat de chocolat haute", this, 1200)) ;
-		this.coutMoyenChocolat.put(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE, new Variable(getNom()+" cout unitaire moyen à l'achat de chocolat moyenne equitable", this, 1200)) ;
-		this.coutMoyenChocolat.put(Chocolat.CHOCOLAT_HAUTE_EQUITABLE, new Variable(getNom()+" cout unitaire moyen à l'achat de chocolat haute equitable", this, 1600)) ;
+		this.coutMoyenChocolat.put(Chocolat.CHOCOLAT_BASSE, new Variable(getNom()+" cout unitaire moyen à l'achat de chocolat basse", this, 150)) ;
+		this.coutMoyenChocolat.put(Chocolat.CHOCOLAT_MOYENNE, new Variable(getNom()+" cout unitaire moyen à l'achat de chocolat moyenne", this, 200)) ;
+		this.coutMoyenChocolat.put(Chocolat.CHOCOLAT_HAUTE, new Variable(getNom()+" cout unitaire moyen à l'achat de chocolat haute", this, 300)) ;
+		this.coutMoyenChocolat.put(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE, new Variable(getNom()+" cout unitaire moyen à l'achat de chocolat moyenne equitable", this, 300)) ;
+		this.coutMoyenChocolat.put(Chocolat.CHOCOLAT_HAUTE_EQUITABLE, new Variable(getNom()+" cout unitaire moyen à l'achat de chocolat haute equitable", this, 400)) ;
 	
 	}
 	

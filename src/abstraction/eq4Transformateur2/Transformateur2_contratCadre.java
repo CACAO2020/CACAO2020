@@ -35,7 +35,7 @@ public class Transformateur2_contratCadre extends Transformateur2_stocks_et_tran
 		this.quantitePateCC.put(PateInterne.PATE_HAUTE_EQUITABLE, new Variable(getNom()+" quantité totale de pate haute équitable à fournir pour les contrats cadres", this, 0)) ;
 		
 		this.margePate = new Variable(getNom()+" marge sur le prix de revente de la pâte", this, 1.3) ; 
-		this.facteurQuantiteLimite = new Variable(getNom()+" pourcentage de la capacité de production à utiliser sur les contrats cadres", this, 0.8) ;
+		this.facteurQuantiteLimite = new Variable(getNom()+" pourcentage de la capacité de production à utiliser sur les contrats cadres", this, 0.9) ;
 		this.stockPateMin = new Variable(getNom()+" quantité de stock minimale pour pouvoir envisager de vendre la pâte", this, 0) ; 
 	}
 	
