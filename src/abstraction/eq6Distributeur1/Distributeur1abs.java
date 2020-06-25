@@ -55,7 +55,6 @@ public class Distributeur1abs implements IActeur {
 		System.out.println(VenteSiPasRuptureDeStock);
 
 		this.VenteSiPasRuptureDeStock.put(0,new HashMap<ChocolatDeMarque,Double>());
-		System.out.println(VenteSiPasRuptureDeStock);
 
         
 		this.mesContratEnTantQuAcheteur=new LinkedList<ExemplaireContratCadre>();
