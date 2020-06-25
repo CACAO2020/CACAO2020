@@ -37,6 +37,7 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 		this.setPropal(99999999);
 		this.decideAchatArbres();
 		this.Maintenance();
+		//this.fairepâte();
 		this.BrûlerStock();
 	}
 	/**
@@ -58,7 +59,7 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 		
 		for (int i = 0; i < this.getUsines().size(); i++) {
 			this.getUsines().get(i).setAge(this.getUsines().get(i).getAge() + 1);
-			if (this.getPaquetsArbres().get(i).getAge() >= 50*24) {
+			if (this.getPaquetsArbres().get(i).getAge() >= 30*24) {
 				terminator.add(i);
 			}
 		}
@@ -75,7 +76,9 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 	 */
 	public void RefreshStocks() {
 		this.setStockFeveTourPrecedent2(this.getStockFeveTourPrecedent());
+		this.setStockPateTourPrecedent2(this.getStockPateTourPrecedent());
 		this.setStockFeveTourPrecedent(this.getStockFeve());
+		this.setStockPateTourPrecedent(this.getStockPate());
 		float facteur_maladies;
 		if(this.apparitionMaladies()) {
 			facteur_maladies = this.graviteMaladies();
@@ -86,14 +89,19 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 		}
 		
 		for (int i = 0; i < this.getPaquetsArbres().size(); i++) {
-			this.addQtFeve(this.getPaquetsArbres().get(i).getType(),this.getPaquetsArbres().get(i).production()*facteur_maladies);
+			if (facteur_maladies !=1 && (this.getPaquetsArbres().get(i).getType()==Feve.FEVE_HAUTE_EQUITABLE || this.getPaquetsArbres().get(i).getType()==Feve.FEVE_HAUTE)) {
+				
+				this.journal_de_production.ajouter("Perte de " + this.getPaquetsArbres().get(i).production()*facteur_maladies + "tonnes de fèves de type: " + this.getPaquetsArbres().get(i).getType() +"à cause de la maladie");
+			}
+			else {this.addQtFeve(this.getPaquetsArbres().get(i).getType(),this.getPaquetsArbres().get(i).production()*facteur_maladies);
 			this.journal_de_production.ajouter("Production de " + this.getPaquetsArbres().get(i).production()*facteur_maladies + "tonnes de fèves de type: " + this.getPaquetsArbres().get(i).getType() );
 		}
-		for (int i = 0; i < this.getUsines().size(); i++) {
+		}	
+		/*for (int i = 0; i < this.getUsines().size(); i++) {
 			
-			this.addQtPate(this.getUsines().get(i).getPate(),this.getUsines().get(i).Production()*facteur_maladies);
-			this.journal_de_production.ajouter("Production de " + this.getUsines().get(i).Production()*facteur_maladies + "tonnes de pates de type: " + this.getUsines().get(i).getPate() );
-		}
+			this.addQtPate(this.getUsines().get(i).getPate(),this.getUsines().get(i).Production());
+			this.journal_de_production.ajouter("Production de " + this.getUsines().get(i).Production() + "tonnes de pates de type: " + this.getUsines().get(i).getPate() );
+		}*/
 	}
 	//cette fonction va essayer de calculer la valeur de notre stock a partir des prix de la criée precedente (pour le moment), il pourra etre amelioré.(lucas p)
 	public double EstimationVenteStock() {
@@ -143,7 +151,7 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 	
 	/*
 	 * Cette méthode calcule la gravité de la maladie si une maladie est apparue
-	 * Pour l'instant le facteur d'atténuation varie entre 0.9 et 0.3
+	 * Pour l'instant le facteur d'atténuation varie entre 0.9 et 0.3 (pour le criollo la production est complétement supprimée)
 	 */
 	public float graviteMaladies() {
 		Random rand2 = new Random();
@@ -189,8 +197,7 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 					System.out.println("valeur"+VariationVente.get(feve).getValeur()/(0.0001+Variation.get(feve).getValeur()));//VariationVente.get(feve) n'existe pas
 					if(Variation.get(feve).getValeur()>VariationVente.get(feve).getValeur()&&VariationVente.get(feve).getValeur()>0) {
 						
-						//pour le moment en test 
-						//attention ici si on en vends pas on ne detruit pas les stocks... pas ouf faudra changer ça
+						
 						System.out.println("on a brulé" +VariationVente.get(feve).getValeur()/Variation.get(feve).getValeur()*0.1+"kg de "+feve);
 						this.getStockFeve().get(feve).retirer(this, 0.1*Variation.get(feve).getValeur()/VariationVente.get(feve).getValeur());
 				}
@@ -204,6 +211,33 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 				this.setVenteTourPrecedent2(this.getVenteTourPrecedent());
 				this.setVenteTourPrecedent(this.getVenteVariation());
 				this.resetDecisionVariable();
+		}
+	}
+	public void fairepâte() { 
+		
+		double proportion = 0.2;
+		double coût_par_tonne = 500; //bien plus réaliste que 6000 balles par tonnes cf les prix irl
+		if (this.getStockPate().get(Pate.PATE_BASSE).getValeur() < proportion*(this.getStockFeve().get(Feve.FEVE_BASSE).getValeur()+this.getStockPate().get(Pate.PATE_BASSE).getValeur())) {
+			if (((this.getStockFeve().get(Feve.FEVE_BASSE).getValeur()+this.getStockPate().get(Pate.PATE_BASSE).getValeur())*proportion-this.getStockPate().get(Pate.PATE_BASSE).getValeur())*coût_par_tonne < Filiere.LA_FILIERE.getBanque().getSolde(this, this.getCrypto())) {
+				if (this.getmassedispofora() > (this.getStockFeve().get(Feve.FEVE_BASSE).getValeur()+this.getStockPate().get(Pate.PATE_BASSE).getValeur())*proportion-this.getStockPate().get(Pate.PATE_BASSE).getValeur()) {
+					double quantité = (this.getStockFeve().get(Feve.FEVE_BASSE).getValeur()+this.getStockPate().get(Pate.PATE_BASSE).getValeur())*proportion-this.getStockPate().get(Pate.PATE_BASSE).getValeur();
+					this.removeQtFeve(Feve.FEVE_BASSE, quantité);
+					this.addQtPate(Pate.PATE_BASSE, quantité);
+					this.journal_de_production.ajouter("on a transformé "+quantité+ "tonnes de" +Feve.FEVE_BASSE+ "pour un coût total de" +quantité*coût_par_tonne);
+					Filiere.LA_FILIERE.getBanque().virer(this, this.getCrypto(), Filiere.LA_FILIERE.getBanque(), coût_par_tonne*quantité);
+				}
+			}
+		}
+		if (this.getStockPate().get(Pate.PATE_MOYENNE).getValeur() < proportion*(this.getStockFeve().get(Feve.FEVE_MOYENNE).getValeur()+this.getStockPate().get(Pate.PATE_MOYENNE).getValeur())) {
+			if (((this.getStockFeve().get(Feve.FEVE_MOYENNE).getValeur()+this.getStockPate().get(Pate.PATE_MOYENNE).getValeur())*proportion-this.getStockPate().get(Pate.PATE_BASSE).getValeur())*coût_par_tonne < Filiere.LA_FILIERE.getBanque().getSolde(this, this.getCrypto())) {
+				if (this.getmassedispofora() > (this.getStockFeve().get(Feve.FEVE_MOYENNE).getValeur()+this.getStockPate().get(Pate.PATE_MOYENNE).getValeur())*proportion-this.getStockPate().get(Pate.PATE_MOYENNE).getValeur()) {
+					double quantité =(this.getStockFeve().get(Feve.FEVE_MOYENNE).getValeur()+this.getStockPate().get(Pate.PATE_MOYENNE).getValeur())*proportion-this.getStockPate().get(Pate.PATE_MOYENNE).getValeur();
+					this.removeQtFeve(Feve.FEVE_MOYENNE,quantité);
+					this.addQtPate(Pate.PATE_MOYENNE, quantité);
+					this.journal_de_production.ajouter("on a transformé "+quantité+ "tonnes de" +Feve.FEVE_MOYENNE+ "pour un coût total de" +quantité*coût_par_tonne);
+					Filiere.LA_FILIERE.getBanque().virer(this, this.getCrypto(), Filiere.LA_FILIERE.getBanque(), coût_par_tonne*quantité);
+				}
+			}
 		}
 	}
 
