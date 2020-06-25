@@ -10,8 +10,10 @@ import abstraction.fourni.Variable;
 import abstraction.eq8Romu.cacaoCriee.IVendeurCacaoCriee;
 import abstraction.eq8Romu.cacaoCriee.LotCacaoCriee;
 import abstraction.eq8Romu.cacaoCriee.PropositionCriee;
+import abstraction.eq8Romu.cacaoCriee.SuperviseurCacaoCriee;
 import abstraction.eq8Romu.produits.Feve;
 import abstraction.fourni.Filiere;
+import abstraction.eq2Producteur2.eq2Vendeur;
 
 
 
@@ -44,7 +46,7 @@ class GestionCriee //implements IVendeurCacaoCriee
 	private int compteurMoyen;
 	private double tailleLotBas;
 	private double tailleLotMoyen;
-	public static final int tailleLot = 20;
+	public static final int tailleLot = 1;
 
 
 	public GestionCriee(Producteur1 sup) //Clément
@@ -96,41 +98,41 @@ class GestionCriee //implements IVendeurCacaoCriee
 
 	private LotCacaoCriee makeLot(Feve typeFeve, double quantiteAVendre)
 	{
-		double PrixMoy = this.prixMoyenDernierreVentes(typeFeve);
 		double prixVente = 0; //quantiteAVendre * (PrixMoy+0.004);
-		if(typeFeve == Feve.FEVE_BASSE)
-		{
-			prixVente = this.v1PrixBasse;
-		}
-		else
-		{
-			prixVente = this.v1PrixMoyenne;
-		}
+		
+		prixVente = this.getPrixVente(typeFeve);
 		this.producteur1.ajouterJournaux(Color.CYAN, "[GestionCriee] - Mise en vente de : " + typeFeve + " en quantité "+ quantiteAVendre + " au prix minimum de " + prixVente);
 		if(quantiteAVendre == 0)
 		{
 			return null;
 		}
-		LotCacaoCriee lot = new LotCacaoCriee(this.producteur1, typeFeve, quantiteAVendre/4, prixVente);
+		LotCacaoCriee lot = new LotCacaoCriee(this.producteur1, typeFeve, quantiteAVendre, prixVente);
 		this.miseEnVenteLog.add(lot);
 		return lot;
 	}
 
 	//Clément 
 	public LotCacaoCriee getLotEnVente() {
+		boolean bool = Math.random() < 0.5;
+		if(bool)
+		{
+			if(this.compteurBas > 0)
+			{
+				this.compteurBas -= 1;
+				return makeLot(Feve.FEVE_BASSE, this.tailleLot);
+				//min(producteur1.getStock(Feve.FEVE_BASSE), (double) this.tailleLot));
+			}
+		}
+		else
+		{
+			if(this.compteurMoyen > 0)
+			{
+				this.compteurMoyen -= 1;
+				return makeLot(Feve.FEVE_MOYENNE, this.tailleLot);
+				//min(producteur1.getStock(Feve.FEVE_MOYENNE), (double) this.tailleLot));
+			}
+		}
 
-		if(this.compteurBas > 0)
-		{
-			this.compteurBas -= 1;
-			return makeLot(Feve.FEVE_BASSE, this.tailleLot);
-			//min(producteur1.getStock(Feve.FEVE_BASSE), (double) this.tailleLot));
-		}
-		if(this.compteurMoyen > 0)
-		{
-			this.compteurMoyen -= 1;
-			return makeLot(Feve.FEVE_MOYENNE, this.tailleLot);
-			//min(producteur1.getStock(Feve.FEVE_MOYENNE), (double) this.tailleLot));
-		}
 		return makeLot(Feve.FEVE_BASSE, 0);
 
 		/*
@@ -206,7 +208,12 @@ class GestionCriee //implements IVendeurCacaoCriee
 	//Clément
 	public void notifierVente(PropositionCriee proposition) {
 		Feve typeFeve = proposition.getFeve();
-		this.producteur1.ajouterJournaux(Color.GREEN, "[GestionCriee] - Vente de : " + proposition.getQuantiteEnTonnes() + " de type : " + typeFeve);
+		this.producteur1.ajouterJournaux(Color.GREEN, "[GestionCriee] - Vente de : " + 
+			proposition.getQuantiteEnTonnes() + 
+			" de type : " + typeFeve + 
+			" au prix de :" + proposition.getPrixPourUneTonne() + 
+			" a l'équipe :" + proposition.getAcheteur().getNom());
+
 		this.producteur1.removeStock(proposition.getQuantiteEnTonnes(), typeFeve);
 		this.venduLog.add(proposition);
 	}
@@ -220,7 +227,14 @@ class GestionCriee //implements IVendeurCacaoCriee
 		int n = this.venduLog.size();
 		if(n == 0)
 		{
-			return 0;
+	        if(typeFeve == Feve.FEVE_BASSE)
+	        {
+	            return this.v1PrixBasse;
+	        }
+	        if(typeFeve == Feve.FEVE_MOYENNE)
+	        {
+	            return this.v1PrixMoyenne;
+	        }
 		}
 		int i = 0;
 		int j = 0;
@@ -235,5 +249,61 @@ class GestionCriee //implements IVendeurCacaoCriee
 			i++;
 		}
 		return moyenne / (double) j;
+	}
+	
+	public double moyenneDerniersTours(Feve typeFeve)
+	{
+		int n = this.venduLog.size();
+		if(n == 0)
+		{
+			if(typeFeve == Feve.FEVE_MOYENNE)
+			{
+				return this.v1PrixMoyenne;
+			}
+			if(typeFeve == Feve.FEVE_BASSE)
+			{
+				return this.v1PrixBasse;
+			}
+		}
+
+	    int i = 0;
+	    double sum = 0;
+	    while(n-i-1 >= 0 && i <= 10)
+	    {
+	        if(this.venduLog.get(n-i-1).getFeve() == typeFeve)
+	        {
+	            sum += this.venduLog.get(n-i-1).getPrixPourUneTonne();
+	        }
+	        i += 1;
+	    }
+
+
+	    return sum/(double)(n);
+	}
+	
+	public double getPrixVente(Feve typeFeve)
+	{
+	    double prixCentral = moyenneDerniersTours(typeFeve);
+	    double prixVar = 0;
+	    
+		double prixVenteEq2 = 0;
+		if(Filiere.LA_FILIERE.getEtape() >= 3)
+		{
+			for (PropositionCriee proposition:SuperviseurCacaoCriee.getHistorique(Filiere.LA_FILIERE.getEtape()-1)) {
+				if ((proposition.getVendeur().getNom() == "Return of the Stonks") && (proposition.getLot().getFeve() == typeFeve)) {
+					prixVenteEq2 = proposition.getPrixPourLeLot()/proposition.getQuantiteEnTonnes();
+				}
+			}
+		}
+
+	    if (this.producteur1.getStock(Feve.FEVE_BASSE) > 1000 && prixVenteEq2 >= 20) {
+			prixVar = prixCentral - (prixVenteEq2 + 20);
+		}
+		if(prixVenteEq2 <= 20)
+		{
+			prixVar = prixCentral - 20;
+		}
+
+	    return prixCentral - prixVar;
 	}
 }

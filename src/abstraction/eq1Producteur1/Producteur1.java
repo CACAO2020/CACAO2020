@@ -112,7 +112,7 @@ public class Producteur1 implements IActeur, IVendeurCacaoCriee {
 		 * Actualisation des fonds/employés/décisions pour le prochain cycle
 		 */
 		double fonds = Filiere.LA_FILIERE.getBanque().getSolde(this, this.getCryptogramme());
-		nouveautes = this.budget.budget_cyclique(Filiere.LA_FILIERE.getBanque().getSolde(Filiere.LA_FILIERE.getActeur(this.getNom()), this.getCryptogramme()), fevesVendues, coutStockage);
+		nouveautes = this.budget.budget_cyclique(Filiere.LA_FILIERE.getBanque().getSolde(Filiere.LA_FILIERE.getActeur(this.getNom()), this.getCryptogramme()), fevesVendues, coutStockage, (this.plantation.getArbresF().size()+this.plantation.getArbresT().size()));
 		Filiere.LA_FILIERE.getBanque().virer(Filiere.LA_FILIERE.getActeur(this.getNom()), this.getCryptogramme(), Filiere.LA_FILIERE.getBanque(),(double) nouveautes.get(3)/100);
 
 		System.out.println(nouveautes.get(3));
