@@ -128,7 +128,6 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 
 		this.VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()).put(choco, quantite);
 
-		System.out.println(VenteSiPasRuptureDeStock);
 		//}
 	}
 
