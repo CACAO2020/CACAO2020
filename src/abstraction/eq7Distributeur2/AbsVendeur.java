@@ -98,20 +98,20 @@ public class AbsVendeur {
 		Map<Chocolat, Double> pourcentagesMargeNormal = new HashMap<Chocolat, Double>();
 		Map<Chocolat, Double> pourcentagesMargePanik = new HashMap<Chocolat, Double>();
 		
-		pourcentagesMargeKalm.put(Chocolat.CHOCOLAT_MOYENNE, 2.);
-		pourcentagesMargeKalm.put(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE, 1.);
-		pourcentagesMargeKalm.put(Chocolat.CHOCOLAT_HAUTE, 4.);
-		pourcentagesMargeKalm.put(Chocolat.CHOCOLAT_HAUTE_EQUITABLE, 3.);
+		pourcentagesMargeKalm.put(Chocolat.CHOCOLAT_MOYENNE, 10.);
+		pourcentagesMargeKalm.put(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE, 5.);
+		pourcentagesMargeKalm.put(Chocolat.CHOCOLAT_HAUTE, 20.);
+		pourcentagesMargeKalm.put(Chocolat.CHOCOLAT_HAUTE_EQUITABLE, 15.);
 		
-		pourcentagesMargeNormal.put(Chocolat.CHOCOLAT_MOYENNE, 10.);
-		pourcentagesMargeNormal.put(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE, 5.);
-		pourcentagesMargeNormal.put(Chocolat.CHOCOLAT_HAUTE, 20.);
-		pourcentagesMargeNormal.put(Chocolat.CHOCOLAT_HAUTE_EQUITABLE, 15.);
+		pourcentagesMargeNormal.put(Chocolat.CHOCOLAT_MOYENNE, 20.);
+		pourcentagesMargeNormal.put(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE, 10.);
+		pourcentagesMargeNormal.put(Chocolat.CHOCOLAT_HAUTE, 40.);
+		pourcentagesMargeNormal.put(Chocolat.CHOCOLAT_HAUTE_EQUITABLE, 30.);
 		
-		pourcentagesMargePanik.put(Chocolat.CHOCOLAT_MOYENNE, 200.);
-		pourcentagesMargePanik.put(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE, 100.);
-		pourcentagesMargePanik.put(Chocolat.CHOCOLAT_HAUTE, 400.);
-		pourcentagesMargePanik.put(Chocolat.CHOCOLAT_HAUTE_EQUITABLE, 300.);
+		pourcentagesMargePanik.put(Chocolat.CHOCOLAT_MOYENNE, 5.);
+		pourcentagesMargePanik.put(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE, 3.);
+		pourcentagesMargePanik.put(Chocolat.CHOCOLAT_HAUTE, 10.);
+		pourcentagesMargePanik.put(Chocolat.CHOCOLAT_HAUTE_EQUITABLE, 7.);
 		
 		pourcentagesMarge.put("panik", pourcentagesMargePanik);
 		pourcentagesMarge.put("kalm", pourcentagesMargeKalm);

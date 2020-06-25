@@ -110,9 +110,9 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 					if (panik) {
 						quantiteAVendre = stockActuel;							
 					} else if (kalm) {
-						quantiteAVendre = stockQuiVaPerimer + stockQuiNeVaPasPerimer*0.7;		
+						quantiteAVendre = stockQuiVaPerimer + stockQuiNeVaPasPerimer*0.4;		
 					} else {
-						quantiteAVendre = stockQuiVaPerimer + stockQuiNeVaPasPerimer*0.6;					
+						quantiteAVendre = stockQuiVaPerimer + stockQuiNeVaPasPerimer*0.5;					
 					}
 				
 					beneficePartiel = quantiteAVendre*prixDeVente;
@@ -126,16 +126,17 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 							if (panik) {
 								quantiteAVendre = stockActuel;							
 							} else if (kalm) {
-								quantiteAVendre = stockQuiVaPerimer + stockQuiNeVaPasPerimer*0.7;		
+								quantiteAVendre = stockQuiVaPerimer + stockQuiNeVaPasPerimer*0.4;		
 							} else {
-								quantiteAVendre = stockQuiVaPerimer + stockQuiNeVaPasPerimer*0.6;					
+								quantiteAVendre = stockQuiVaPerimer + stockQuiNeVaPasPerimer*0.5;					
 							}
 							this.quantitesEnVente.get(chocoDeMarque).setValeur(ac, quantiteAVendre);
 						}
 					}
 				}
 			}
-			soldeAlloueAuxAchats = Double.max(0., (soldeDisponible + 1.2*beneficeTotal)*(1-margeSolde/100));
+			soldeAlloueAuxAchats = Double.max(0., (soldeDisponible + beneficeTotal)*(1-margeSolde/100));
+			
 			double soldeRestant = soldeAlloueAuxAchats;
 			int nombreTypesChoco = 0;
 			for (Chocolat choco : Chocolat.values()) {
@@ -143,20 +144,18 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 					nombreTypesChoco += 1;
 				}
 			}
-			System.out.println(soldeAlloueAuxAchats);
 			for (Chocolat choco : Chocolat.values()) {
 				if (choco.getGamme() != Gamme.BASSE) {
 					cours = Filiere.LA_FILIERE.getIndicateur("BourseChoco cours " + choco.name()).getHistorique().get(Filiere.LA_FILIERE.getEtape()-1).getValeur();
 					double quantite = soldeAlloueAuxAchats/(nombreTypesChoco*cours);
 					if (panik) {
-						quantiteACommanderEnBourse = quantite;
+						quantiteACommanderEnBourse = quantite*0.5;
 					} else if (kalm) {
-						quantiteACommanderEnBourse = quantite*0.8;
+						quantiteACommanderEnBourse = quantite*0.3;
 					} else {
-						quantiteACommanderEnBourse = quantite*0.9;
+						quantiteACommanderEnBourse = quantite*0.4;
 					}
 				soldeRestant -= quantiteACommanderEnBourse;
-				System.out.println("q : " + quantiteACommanderEnBourse);
 				this.quantitesACommanderEnBourse.get(choco).setValeur(ac, quantiteACommanderEnBourse);
 				}
 			}
@@ -339,12 +338,13 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 		if (!ac.debutEtape) { 
 			ac.debutEtape = true;
 			ac.getStock().initialiserStocksEtape();
-			adapterQuantitesEnVente();  // Appelée une seule fois à l'initialisation ?
+			adapterQuantitesEnVente();
 			dessinerCatalogue();
 		}
 		if (Filiere.LA_FILIERE.getEtape() == 0) {
 			return quantiteAVendreParDefaut;
 		} else {
+			System.out.println(quantitesEnVente.get(choco).getValeur());
 			return quantitesEnVente.get(choco).getValeur();
 		}
 	}

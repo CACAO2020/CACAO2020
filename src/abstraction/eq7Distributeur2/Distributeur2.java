@@ -147,16 +147,19 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 			vendeur.pubLastStep = false;
 		}
 		if (coutMasseSalariale + fraisStockage < beneficesLivraisons) {
-			beneficesLivraisons = coutMasseSalariale + fraisStockage + 0.001;
+			fraisTotaux = 0;
+		} else {
+			fraisTotaux = coutMasseSalariale + fraisStockage - beneficesLivraisons;
 		}
-		fraisTotaux = coutMasseSalariale + fraisStockage - beneficesLivraisons;
 		return fraisTotaux;
 	}
 	
 	public void payerFrais() {
 		double fraisTotaux = this.getFrais();
-		journalTransactions.ajouter(Journal.texteColore(warningColor, Color.BLACK, "[FRAIS] Paiement de " + Journal.doubleSur(fraisTotaux,2) + " de frais."));
-		Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), fraisTotaux);
+		if (fraisTotaux > 0) {
+			journalTransactions.ajouter(Journal.texteColore(warningColor, Color.BLACK, "[FRAIS] Paiement de " + Journal.doubleSur(fraisTotaux,2) + " de frais."));
+			Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), fraisTotaux);
+		}
 	}
 	
 	public String getNom() {
