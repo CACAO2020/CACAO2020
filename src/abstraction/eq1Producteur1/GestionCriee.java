@@ -37,10 +37,16 @@ class GestionCriee //implements IVendeurCacaoCriee
 	
 	private Producteur1 producteur1;
 	private List<LotCacaoCriee> miseEnVenteLog;
-	private List<PropositionCriee> venduLog;
+	private ArrayList<PropositionCriee> venduLog;
 	private double v1PrixBasse;
 	private double v1PrixMoyenne;
-	
+	private int compteurBas;
+	private int compteurMoyen;
+	private double tailleLotBas;
+	private double tailleLotMoyen;
+	public static final int tailleLot = 20;
+
+
 	public GestionCriee(Producteur1 sup) //Clément
 	{
 		//Prix par unité
@@ -59,6 +65,34 @@ class GestionCriee //implements IVendeurCacaoCriee
 		this.lastPrixVenteFeveBasse = lastPrixVenteInit;
 	}
 
+	public void next()
+	{
+		boolean bas = true;
+		boolean moy = true;
+		if(this.producteur1.getStock(Feve.FEVE_BASSE) <= 0)
+		{
+			this.compteurBas = -1;
+			bas = false;
+		}
+		if(this.producteur1.getStock(Feve.FEVE_MOYENNE) <= 0)
+		{
+			this.compteurMoyen = -1;
+			moy = false;
+		}
+
+		double stock = 0;
+		if(bas)
+		{
+			stock = this.producteur1.getStock(Feve.FEVE_BASSE);
+			this.compteurBas = (int) stock/this.tailleLot;
+		}
+		if(moy)
+		{
+			stock = this.producteur1.getStock(Feve.FEVE_MOYENNE);
+			this.compteurMoyen = (int) stock/this.tailleLot;
+		}
+
+	}
 
 	private LotCacaoCriee makeLot(Feve typeFeve, double quantiteAVendre)
 	{
@@ -66,24 +100,40 @@ class GestionCriee //implements IVendeurCacaoCriee
 		double prixVente = 0; //quantiteAVendre * (PrixMoy+0.004);
 		if(typeFeve == Feve.FEVE_BASSE)
 		{
-			prixVente = this.v1PrixBasse*quantiteAVendre;
+			prixVente = this.v1PrixBasse;
 		}
 		else
 		{
-			prixVente = this.v1PrixMoyenne*quantiteAVendre;
+			prixVente = this.v1PrixMoyenne;
 		}
-		this.producteur1.ajouterJournaux("[GestionCriee] - Mise en vente de : " + typeFeve + " en quantité "+ quantiteAVendre + " au prix minimum de" + prixVente);
+		this.producteur1.ajouterJournaux(Color.CYAN, "[GestionCriee] - Mise en vente de : " + typeFeve + " en quantité "+ quantiteAVendre + " au prix minimum de " + prixVente);
 		if(quantiteAVendre == 0)
 		{
 			return null;
 		}
-		LotCacaoCriee lot = new LotCacaoCriee(this.producteur1, typeFeve, quantiteAVendre, prixVente);
+		LotCacaoCriee lot = new LotCacaoCriee(this.producteur1, typeFeve, quantiteAVendre/4, prixVente);
 		this.miseEnVenteLog.add(lot);
 		return lot;
 	}
 
 	//Clément 
 	public LotCacaoCriee getLotEnVente() {
+
+		if(this.compteurBas > 0)
+		{
+			this.compteurBas -= 1;
+			return makeLot(Feve.FEVE_BASSE, this.tailleLot);
+			//min(producteur1.getStock(Feve.FEVE_BASSE), (double) this.tailleLot));
+		}
+		if(this.compteurMoyen > 0)
+		{
+			this.compteurMoyen -= 1;
+			return makeLot(Feve.FEVE_MOYENNE, this.tailleLot);
+			//min(producteur1.getStock(Feve.FEVE_MOYENNE), (double) this.tailleLot));
+		}
+		return makeLot(Feve.FEVE_BASSE, 0);
+
+		/*
 		if(venteBasseSurCeTour)
 		{
 			this.venteBasseSurCeTour = !this.venteBasseSurCeTour;
@@ -93,7 +143,7 @@ class GestionCriee //implements IVendeurCacaoCriee
 		{
 			this.venteBasseSurCeTour = !this.venteBasseSurCeTour;
 			return makeLot(Feve.FEVE_MOYENNE, producteur1.getStock(Feve.FEVE_MOYENNE));
-		}
+		}*/
 
 
 	}
@@ -121,6 +171,8 @@ class GestionCriee //implements IVendeurCacaoCriee
 				this.lastPrixVenteFeveMoyenne = 0.001;
 			}
 		}
+
+		this.producteur1.ajouterJournaux(Color.RED, "[GestionCriee] - Non vente de : " + lot.getQuantiteEnTonnes() + " de type : " + lot.getFeve());
 	}
 
 	//Clément
@@ -146,7 +198,7 @@ class GestionCriee //implements IVendeurCacaoCriee
 	}
 
 
-	public List<PropositionCriee> getLotVendu()
+	public ArrayList<PropositionCriee> getLotVendu()
 	{
 		return this.venduLog;
 	}
@@ -154,7 +206,7 @@ class GestionCriee //implements IVendeurCacaoCriee
 	//Clément
 	public void notifierVente(PropositionCriee proposition) {
 		Feve typeFeve = proposition.getFeve();
-		this.producteur1.ajouterJournaux("[GestionCriee] - Vente de : " + proposition.getQuantiteEnTonnes() + " de type : " + typeFeve);
+		this.producteur1.ajouterJournaux(Color.GREEN, "[GestionCriee] - Vente de : " + proposition.getQuantiteEnTonnes() + " de type : " + typeFeve);
 		this.producteur1.removeStock(proposition.getQuantiteEnTonnes(), typeFeve);
 		this.venduLog.add(proposition);
 	}
