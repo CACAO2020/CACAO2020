@@ -50,9 +50,7 @@ public class Stock extends AbsStock implements IStock {
 	
 	}
 	
-	public void next() {
-		// Initialisation du suivi des stocks par étape
-		
+	public void next() {		
 		// On jette les chocos périmés
 		jeterChocoPerimes();
 	}
@@ -108,7 +106,6 @@ public class Stock extends AbsStock implements IStock {
 		
 		// On retire successivement les quantités de chocolat stockés par ordre chronologique jusqu'à en avoir retiré assez
 		while (quantiteRestanteARetirer > 0.001) {
-			//System.out.println(chocoDeMarque.name() + "/ " + quantite + "/ " + etapeActuelle + "/ " + etape);
 			double stockEtape = this.chocoEnStockParEtape.get(etape).get(chocoDeMarque);
 			quantiteEtapeARetirer = Double.min(quantiteRestanteARetirer, stockEtape);
 			this.chocoEnStockParEtape.get(etape).put(chocoDeMarque, stockEtape - quantiteEtapeARetirer);
