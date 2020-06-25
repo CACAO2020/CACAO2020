@@ -21,7 +21,7 @@ import abstraction.fourni.Variable;
 
 
 // cette classe a ete créee pour simuler un transformateur dans la filiere test 
-public class Transformateur implements IAcheteurCacaoCriee, IVendeurChocolatBourse {
+public class Transformateur implements IVendeurChocolatBourse {
 
 	private Variable stockFeves;
 	private Variable stockChocolat;
@@ -32,7 +32,7 @@ public class Transformateur implements IAcheteurCacaoCriee, IVendeurChocolatBour
 	public Transformateur(Chocolat choco) {
 		this.choco = choco;
 		this.stockFeves = new Variable("Stock fèves " + getNom(), this, 50);
-		this.stockChocolat = new Variable("Stock chocolat " + getNom(), this, 0);
+		this.stockChocolat = new Variable("Stock chocolat " + getNom(), this, 10000000);
 	}
 	
 	public String getNom() {
@@ -56,18 +56,18 @@ public class Transformateur implements IAcheteurCacaoCriee, IVendeurChocolatBour
 // On ajoute aux couts la main d'oeuvre et les frais en sucre, entretient de machines,...
 	public void next() {
 		double quantiteTransformee = Math.random()*Math.min(100, this.stockFeves.getValeur()); // on suppose qu'on a un stock infini de sucre
-		this.stockFeves.retirer(this, quantiteTransformee);
-		this.stockChocolat.ajouter(this, 2*quantiteTransformee);// 50% cacao, 50% sucre
+		//this.stockFeves.retirer(this, quantiteTransformee);
+		//this.stockChocolat.ajouter(this, 1000*quantiteTransformee);// 50% cacao, 50% sucre
 		if (quantiteTransformee != 0) {
-			this.laBanque.virer(this, cryptogramme, this.laBanque, quantiteTransformee*1.0234); // sucre, main d'oeuvre, autres frais
+			//this.laBanque.virer(this, cryptogramme, this.laBanque, quantiteTransformee*1.0234); // sucre, main d'oeuvre, autres frais
 		}
 	}
 
 	public List<String> getNomsFilieresProposees() {
 		return new ArrayList<String>();
 	}
-
-	public Filiere getFiliere(String nom) {
+ 
+	public Filiere getFiliere(String nom) { 
 		return Filiere.LA_FILIERE;
 	}
 
@@ -127,30 +127,6 @@ public class Transformateur implements IAcheteurCacaoCriee, IVendeurChocolatBour
 
 	public void livrer(Chocolat chocolat, double quantite) {
 		stockChocolat.retirer(this, quantite);
-	}
-
-
-// propose les achats de feves pour la criée en fonction du prix minimal
-
-	public double proposerAchat(LotCacaoCriee lot) {
-		if (lot.getFeve().getGamme() == this.choco.getGamme()) {
-			return lot.getPrixMinPourUneTonne()*lot.getQuantiteEnTonnes();
-		} else {
-			return 0;
-		}
-	}
- 
-	public void notifierPropositionRefusee(PropositionCriee proposition) {
-		
-	}
-
-	public Integer getCryptogramme(SuperviseurCacaoCriee superviseur) {
-		return this.cryptogramme;
-	}
-
-	// envoie une notification de l'achat effectué  
-	public void notifierVente(PropositionCriee proposition) {
-		this.stockFeves.ajouter(proposition.getVendeur(), proposition.getQuantiteEnTonnes());
 	}
 
 }
