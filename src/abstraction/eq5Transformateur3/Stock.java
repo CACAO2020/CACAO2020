@@ -51,8 +51,8 @@ public class Stock {
 		this.stockChocolat.put(Chocolat.CHOCOLAT_HAUTE_EQUITABLE, new ArrayList<Couple<Variable>>());
 		this.stockPate.put(Pate.PATE_BASSE, new ArrayList<Couple<Variable>>());
 		this.stockPate.put(Pate.PATE_MOYENNE, new ArrayList<Couple<Variable>>());
-		this.transformationCostFeve = new Variable(acteur.getNom() + " Cout transformation feve à chocolat", acteur, 10000);
-		this.transformationCostPate = new Variable(acteur.getNom() + " Cout transformation pate à chocolat", acteur, 4000);
+		this.transformationCostFeve = new Variable(acteur.getNom() + " Cout transformation feve à chocolat", acteur, 5000);
+		this.transformationCostPate = new Variable(acteur.getNom() + " Cout transformation pate à chocolat", acteur, 2000);
 		this.stockCostFixe = new Variable(acteur.getNom() + " Cout fixe du stockage", acteur, 1000);
 		this.stockCostVar = new Variable(acteur.getNom() + " Cout Variable du stockage", acteur, 100);
 		this.indicateurs = new ArrayList<Variable>();
