@@ -32,7 +32,9 @@ public class eq2Acteur implements IActeur {
 		this.parametres = new ArrayList<Variable>();
 		this.Usines = new ArrayList<Usine>();
 	}
-
+	public boolean depense(double montant) {
+		return Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme, Filiere.LA_FILIERE.getBanque(), montant);
+	}
 	
 	public int getCrypto(){
 		return this.cryptogramme;
@@ -89,7 +91,7 @@ public class eq2Acteur implements IActeur {
 	public void initialiser() {
 		// Au début de la partie, on va commencer avec quelques arbres déjà plantés
 		this.getPaquetsArbres().add(new PaquetArbres(2500, Feve.FEVE_BASSE, 240));
-		this.getPaquetsArbres().add(new PaquetArbres(1500, Feve.FEVE_MOYENNE, 289));
+		this.getPaquetsArbres().add(new PaquetArbres(1500, Feve.FEVE_MOYENNE, 288));
 		this.getPaquetsArbres().add(new PaquetArbres(1000, Feve.FEVE_HAUTE, 48));
 		this.getPaquetsArbres().add(new PaquetArbres(500, Feve.FEVE_MOYENNE_EQUITABLE,70));
 		this.getPaquetsArbres().add(new PaquetArbres(500, Feve.FEVE_HAUTE_EQUITABLE,80));
