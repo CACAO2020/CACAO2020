@@ -18,7 +18,6 @@ import abstraction.fourni.IActeur;
 public class AchatContratCadreEQ6 extends DistributeurClientFinal implements IAcheteurContratCadre{
 
 	protected ChocolatDeMarque choco;
-	protected List<ExemplaireContratCadre> mesContratEnTantQuAcheteur;
 	 
 	
 	
@@ -26,7 +25,6 @@ public class AchatContratCadreEQ6 extends DistributeurClientFinal implements IAc
 			double pctageMG, double pctageBG) {
 		super(capaciteDeVente, marge, capaciteStockmax, pctageHGE, pctageMG, pctageBG);
 		// TODO Auto-generated constructor stub
-		this.mesContratEnTantQuAcheteur=new LinkedList<ExemplaireContratCadre>();
 	}
 
 	

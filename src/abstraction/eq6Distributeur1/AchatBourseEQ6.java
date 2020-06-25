@@ -6,6 +6,7 @@ import java.util.Map;
 import abstraction.eq8Romu.chocolatBourse.IAcheteurChocolatBourse;
 import abstraction.eq8Romu.chocolatBourse.SuperviseurChocolatBourse;
 import abstraction.eq8Romu.clients.ClientFinal;
+import abstraction.eq8Romu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.ChocolatDeMarque;
 import abstraction.fourni.Filiere;
@@ -21,11 +22,7 @@ public class AchatBourseEQ6 extends Stock implements IAcheteurChocolatBourse{
 	
 	protected HashMap<Integer, HashMap<Chocolat, Double>> historiqueBourse;
 	
-	public double DemandeTotal(){
-		//double consomationAnnuel = Filiere.LA_FILIERE.getIndicateur("CLIENTFINAL consommation annuelle").getValeur();
-		
-		return 0.0;
-	}
+	
 	
 	
 	//mettre à jour EvolutionDemandeChocolat avec VenteSiPasRuptureDeStock à la place de Filiere.LA_FILIERE.getVentes
@@ -92,9 +89,15 @@ public class AchatBourseEQ6 extends Stock implements IAcheteurChocolatBourse{
 			double solde = Filiere.LA_FILIERE.getBanque().getSolde(this,  cryptogramme); // retourne l'argent du compte
 			double max = solde/cours;
 			double stockChoco = this.quantiteEnStockTypeChoco( chocolat);
-			double DemandeTotal = this.DemandeTotal();
 			double DeamndeChoco = this.EvolutionDemandeChocolat(chocolat);
 			evolutionCours.get(Filiere.LA_FILIERE.getEtape()).put(chocolat, cours);
+			double quantitéLivréParContratCadre = 0 ;
+			for (ExemplaireContratCadre contrat : this.mesContratEnTantQuAcheteur) {
+				
+				//if (contrat==0.0 && contrat.getMontantRestantARegler()==0.0) {
+				//}
+			}
+			
 			if (DeamndeChoco<stockChoco) {
 				journalEq6.ajouter("Demande =" + DeamndeChoco + "stock =" + stockChoco + "return 0");
 				return 0;

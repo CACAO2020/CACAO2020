@@ -3,6 +3,7 @@ package abstraction.eq6Distributeur1;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +11,7 @@ import abstraction.eq8Romu.cacaoCriee.FiliereTestVentesCacaoCriee;
 import abstraction.eq8Romu.chocolatBourse.FiliereTestVentesChocolatBourse;
 import abstraction.eq8Romu.clients.ClientFinal;
 import abstraction.eq8Romu.clients.FiliereTestClientFinal;
+import abstraction.eq8Romu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.ChocolatDeMarque;
 import abstraction.eq8Romu.ventesCacaoAleatoires.FiliereVentesCacaoAleatoires;
@@ -29,6 +31,8 @@ public class Distributeur1abs implements IActeur {
 	protected Map<Integer,Map<ChocolatDeMarque,Double>> MapStock;
 	protected Map<Integer,Map<ChocolatDeMarque,Double>> evolutionVentes;
 	protected Map<Integer,Map<ChocolatDeMarque,Double>> VenteSiPasRuptureDeStock;
+	protected List<ExemplaireContratCadre> mesContratEnTantQuAcheteur;
+
 
 
 
@@ -47,6 +51,7 @@ public class Distributeur1abs implements IActeur {
 		this.evolutionVentes = new HashMap<Integer, Map<ChocolatDeMarque,Double>>();
 		this.evolutionVentes.put(0,new HashMap<ChocolatDeMarque,Double>());
 		this.VenteSiPasRuptureDeStock = new HashMap<Integer,Map<ChocolatDeMarque,Double>>();
+		this.mesContratEnTantQuAcheteur=new LinkedList<ExemplaireContratCadre>();
 
 	}
 
