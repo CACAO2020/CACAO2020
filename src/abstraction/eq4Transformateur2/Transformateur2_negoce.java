@@ -185,6 +185,8 @@ public class Transformateur2_negoce extends Transformateur2_gestion_stocks imple
 			double valeur = this.getStockChocolatValeur(chocolat) - quantite ;
 			if (valeur >= 0) {
 				this.setStockChocolatValeur(chocolat, valeur);
+				double marge = this.MARGE_VISEE_CHOCOLAT.get(chocolat).getValeur();
+				this.MARGE_VISEE_CHOCOLAT.get(chocolat).setValeur(this, Math.min(2, marge+0.1)); 
 			}
 			else {throw new IllegalArgumentException("stock insuffisant");}
 		}
@@ -206,6 +208,9 @@ public class Transformateur2_negoce extends Transformateur2_gestion_stocks imple
 			double visee = 0.01/rapport;								//Stock coute 2% de notre solde par tour -> marge esperee de 50%, 1% -> 100%, 5% -> 20%, 10% -> 10%
 			if (rapport < 0.005) { 								//visee capee a 200%
 				visee = 1;
+			}
+			if (rapport > 0.2) {
+				visee = -10;
 			}
 			return visee;
 		}
