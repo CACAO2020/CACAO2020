@@ -92,7 +92,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 		double coutContratsEtape = ac.getAcheteurContratCadre().coutContratsActuels();
 		double soldeDisponible = soldeActuel - coutContratsEtape;
 		if (etapeActuelle == 0) {
-			
+			 
 		} else {
 			beneficeTotal = 0;
 			for (Chocolat choco : Chocolat.values()) {
