@@ -15,7 +15,6 @@ public class Stock  extends Distributeur1abs implements IStock { /** @author Avr
 
 		
 	
-	
 	public Stock(double capaciteStockmax) {
 		this.capaciteStockmax = capaciteStockmax;
 		volumeGlobal = 0;
@@ -88,7 +87,7 @@ public class Stock  extends Distributeur1abs implements IStock { /** @author Avr
 
 	@Override
 	public void destocker(ChocolatDeMarque choco, double quantite) {
-		volumeGlobal -= quantite; 
+		volumeGlobal -= quantite;
 
 		Double quanti = quantite;
 		ArrayList<Integer> listeAEnlever = new ArrayList<Integer>();
