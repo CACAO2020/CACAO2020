@@ -72,9 +72,11 @@ public abstract class AcheteurCacao extends AchatPateCC implements abstraction.e
 					>(this.getStockFeves(lot.getFeve()) + this.getStockChocolat(this.equivalentChocoFeve(lot.getFeve()))) + lot.getQuantiteEnTonnes())
 				&&(nb_proposition.get(lot.getFeve())<=2)) 
 			{
-				return this.getPrixBourse(lot)/2;
+				return this.getPrixBourse(lot)/10;
+
 			}
 		}
+
 		else {
 			if((Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape(),this.equivalentChocoFeve(lot.getFeve())) + 15
 				>(this.getStockFeves(lot.getFeve()) + this.getStockChocolat(this.equivalentChocoFeve(lot.getFeve()))) + lot.getQuantiteEnTonnes())
@@ -85,13 +87,15 @@ public abstract class AcheteurCacao extends AchatPateCC implements abstraction.e
 				{
 					this.journalAchat.ajouter("Proposition d'achat du lot" + lot.toString() + ", Nombre de propositions = " + nb_proposition.get(lot.getFeve()) + ", au prix :" + Journal.doubleSur(this.proposerPrix(lot, nb_proposition.get(lot.getFeve())),4));
 					return this.proposerPrix(lot, nb_proposition.get(lot.getFeve())) ; 			
+
 				}
 				else {	
 						this.journalAchat.ajouter("Impossible d'acheter le lot" + lot.toString() + ", Nombre de propositions = " + nb_proposition.get(lot.getFeve()) + ", au prix" + Journal.doubleSur(this.proposerPrix(lot, nb_proposition.get(lot.getFeve())),4));
 						return 0.0;
+
 					}
 			}
-		this.journalAchat.ajouter("Pas de proposition d'achat pour le lot" + lot.toString() + ", Nombre de propositions = " + nb_proposition.get(lot.getFeve()));
+		this.journalAchat.ajouter("Pas de proposition d'achat pour le lot " + lot.toString() + ", Nombre de propositions = " + nb_proposition.get(lot.getFeve()));
 		return 0.0;
 		
 	}
@@ -108,7 +112,7 @@ public abstract class AcheteurCacao extends AchatPateCC implements abstraction.e
 	 * On fait un simple print de la notification de vente ou de refus de vente, on pourra ajouter cette notification au journal quand l'attribut journal sera mis en protected et qu'on y aura accès dans cette classe
 	 */
 	public void notifierPropositionRefusee(PropositionCriee proposition) {
-		this.journalAchat.ajouter("La proposition " + proposition.getLot().toString() + ", de " + proposition.getVendeur().toString() + ", au prix" + Journal.doubleSur(proposition.getPrixPourLeLot(),4)
+		this.journalAchat.ajouter("La proposition " + proposition.getLot().toString() + ", de " + proposition.getVendeur().toString() + ", au prix " + Journal.doubleSur(proposition.getPrixPourLeLot(),4)
 		+ "a été refusée");
 		nb_proposition.put(proposition.getFeve(),nb_proposition.get(proposition.getFeve())+1);
 		
@@ -118,7 +122,7 @@ public abstract class AcheteurCacao extends AchatPateCC implements abstraction.e
 		//this.reset_propositions();
 		this.setCoutFeves(proposition.getLot().getFeve(), this.calculCoutFeve(proposition.getLot().getFeve(), proposition.getQuantiteEnTonnes(), proposition.getPrixPourUneTonne()));
 		this.setStockFeves(proposition.getLot().getFeve(), proposition.getQuantiteEnTonnes());
-		this.journalAchat.ajouter("Lot " + proposition.getLot().toString() + ", de " + proposition.getVendeur().toString() + ", au prix" + Journal.doubleSur(proposition.getPrixPourLeLot(),4) + " a été effectué");
+		this.journalAchat.ajouter("Lot " + proposition.getLot().toString() + ", de " + proposition.getVendeur().toString() + ", au prix " + Journal.doubleSur(proposition.getPrixPourLeLot(),4) + " a été effectué");
 		nb_proposition.put(proposition.getFeve(), 0.0);
 
 	}
