@@ -48,11 +48,11 @@ public class eq2Vendeur extends eq2Stock implements IVendeurCacaoCriee { //gros 
 	
 	public eq2Vendeur() {
 		super();
-		this.prixTF = new Variable("prixTF",this,50);
-		this.prixTT = new Variable("prixTT",this,52);
-		this.prixTTE = new Variable("prixTTE",this,60);
-		this.prixTC = new Variable("prixTC",this,58);
-		this.prixTCE = new Variable("prixTCE",this,75);
+		this.prixTF = new Variable("prixTF",this,60);
+		this.prixTT = new Variable("prixTT",this,70);
+		this.prixTTE = new Variable("prixTTE",this,80);
+		this.prixTC = new Variable("prixTC",this,80);
+		this.prixTCE = new Variable("prixTCE",this,90);
 		this.prixTPF = new Variable("prixTPF", this, 6050);
 		this.prixTPT = new Variable("prixTPT", this, 6052);
 		this.prixvente = 0;
