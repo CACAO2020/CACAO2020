@@ -9,6 +9,8 @@ import abstraction.fourni.Journal;
 import abstraction.fourni.Variable;
 import abstraction.eq8Romu.cacaoCriee.ExempleVendeurCacaoCriee;
 import abstraction.eq8Romu.cacaoCriee.LotCacaoCriee;
+import abstraction.eq8Romu.contratsCadres.Echeancier;
+import abstraction.eq8Romu.contratsCadres.ExemplaireContratCadre;
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.Feve;
 import abstraction.fourni.Filiere;
@@ -78,26 +80,30 @@ public class Transformateur1 extends VendeurChocolat {
 	}
 	public void decisionTransformation() {
 		for(Chocolat chocolat:this.getStockPate().keySet()) {
-			if(this.getStockPate(chocolat)*4000<Filiere.LA_FILIERE.getBanque().getSolde(this, cryptogramme)){
+			if(this.getStockPate(chocolat)*2000<Filiere.LA_FILIERE.getBanque().getSolde(this, cryptogramme)){
 				this.transformationPateChocolat(chocolat, this.getStockPate(chocolat));
 			}
-			else {
-				this.transformationPateChocolat(chocolat, Filiere.LA_FILIERE.getBanque().getSolde(this, cryptogramme)/4000*0.9);
+			else if((this.getStockPate(chocolat)*2000)/2<Filiere.LA_FILIERE.getBanque().getSolde(this, cryptogramme)*0.9){
+				this.transformationPateChocolat(chocolat, this.getStockPate(chocolat)/2);
 			}
 		}
 		for(Feve feve:this.getStockFeves().keySet()) {
-			if(this.getStockFeves(feve)*8000<Filiere.LA_FILIERE.getBanque().getSolde(this, cryptogramme)) {
+			if(this.getStockFeves(feve)*3500<Filiere.LA_FILIERE.getBanque().getSolde(this, cryptogramme)) {
 				this.transformationFevePate(feve, this.getStockFeves(feve));
 			}
-			else {
-				this.transformationFevePate(feve, Filiere.LA_FILIERE.getBanque().getSolde(this, cryptogramme)/8000*0.9);
-
+			else if(this.getStockFeves(feve)*3500/2<Filiere.LA_FILIERE.getBanque().getSolde(this, cryptogramme)*0.9) {
+				this.transformationFevePate(feve, this.getStockFeves(feve)/2);
 			}
 		}
 	}
 	public void next() {
 		this.decisionTransformation();
-
+		this.quantiteFeveAcheteTour.add(0.0);
+		this.cATour.add(0.0);
+		if(this.finCC>0) {
+			this.finCC=this.finCC-1;
+		}
+		this.descisionCCFeve();
 	}
 	/** @author KARL GUTIERREZ*/
 	public List<Variable> getIndicateurs() {
@@ -122,6 +128,7 @@ public class Transformateur1 extends VendeurChocolat {
 
 		return res;
 	}
+
 
 
 
