@@ -31,47 +31,7 @@ public class Tresorerie {
 	private List<Double> venteBasGlobal;			//l'historique des achats dans la filière bas de gamme
 	private List<Double> venteSecondaireGlobal;
 	private int tour;
-	
-	
-	//private Variable decouvertsConsecutifsAvantFaillite; //parametres fixes à priori
-	//private Variable decouvertAutorise;
-	//private Variable agiosDecouvertAutorise;
-	//private Variable agiosDecouvertAuDela;
-	//private Variable seuilOperationsRefusees;
-	
-	/**public Tresorerie(Transformateur3 acteur, double MontantCompte, double MontantCompteALaFinDuTour, double Decouvert, double Facteur, Variable decouvertsConsecutifsAvantFaillite,
-			Variable decouvertAutorise, Variable agiosDecouvertAutorise, Variable agiosDecouvertAuDela, Variable seuilOperationsRefusees) {
-		this.acteur = acteur;
-		this.MontantCompte=MontantCompte;
-		this.MontantCompteALaFinDuTour=MontantCompteALaFinDuTour;
-		this.Decouvert=Decouvert;
-		this.FacteurPrioriteGamme=Facteur;
-		
-		this.decouvertsConsecutifsAvantFaillite = decouvertsConsecutifsAvantFaillite;
-		this.decouvertAutorise = decouvertAutorise;
-		this.agiosDecouvertAutorise = agiosDecouvertAutorise;
-		this.agiosDecouvertAuDela = agiosDecouvertAuDela;
-		this.seuilOperationsRefusees = seuilOperationsRefusees;
-	}
-	/**
-	     * Initialise la trésorerie
-	     */
-	//public Tresorerie(Transformateur3 acteur) {
-		/**
-		 * La trésorerie est initialisée comme vide, elle est mise à jour en début de tour idéalement
-		 */
-		/**this(acteur,
-				0,									//montantCompte
-				0,									//MontantCompteALaFinDuTour
-				0,									//decouvert actuel
-				0,									//FacteurPriorite
-				Filiere.LA_FILIERE.getBanque().getParametres().get(0),
-				Filiere.LA_FILIERE.getBanque().getParametres().get(1),
-				Filiere.LA_FILIERE.getBanque().getParametres().get(2),
-				Filiere.LA_FILIERE.getBanque().getParametres().get(3),
-				Filiere.LA_FILIERE.getBanque().getParametres().get(4));
-	}*/
-	
+
 	public Tresorerie(Transformateur3 acteur, double MontantCompteALaFinDuTour, double Facteur,double investissementBasACeTour,double investissementSecondaireACeTour,
 			double venteBasACeTour,double venteSecondaireACeTour,List<Double> investissementBasGlobal, List<Double> investissementSecondaireGlobal,	List<Double> venteBasGlobal, 
 			List<Double> venteSecondaireGlobal, int tour) {
@@ -81,7 +41,11 @@ public class Tresorerie {
 		this.investissementBasACeTour=investissementBasACeTour;
 		this.investissementSecondaireACeTour=investissementSecondaireACeTour;
 		this.venteBasACeTour=venteBasACeTour;
-		this.venteSecondaireACeTour=venteSecondaireACeTour;
+		this.venteSecondaireACeTour = venteSecondaireACeTour;
+		this.investissementBasGlobal = investissementBasGlobal;
+		this.investissementSecondaireGlobal = investissementSecondaireGlobal;
+		this.venteBasGlobal = venteBasGlobal;
+		this.venteSecondaireGlobal = venteSecondaireGlobal;
 		this.tour=tour;
 	}
 
