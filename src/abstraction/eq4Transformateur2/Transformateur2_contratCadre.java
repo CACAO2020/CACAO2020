@@ -147,10 +147,11 @@ public class Transformateur2_contratCadre extends Transformateur2_stocks_et_tran
 			double valeur = 0 ;
 			for (ExemplaireContratCadre contrat : this.mesContratEnTantQueVendeur) {
 				if (contrat.getProduit() == pate.conversionPateInterne()) {
-				valeur += contrat.getQuantiteALivrerAuStep() ; }
+					valeur += this.getQuantiteALivrerAuStep(contrat, Filiere.LA_FILIERE.getEtape()+1) ; }
 			}
 			Variable nouvelleQuantite = this.quantitePateCC.get(pate) ;
 			nouvelleQuantite.setValeur(this, valeur);
+			this.journalEq4.ajouter("valeur maj" + valeur);
 			this.quantitePateCC.replace(pate, nouvelleQuantite) ;
 		}
 	}
@@ -196,6 +197,10 @@ public class Transformateur2_contratCadre extends Transformateur2_stocks_et_tran
 		
 		double quantiteLimite = this.getFacteurQuantiteLimite()*super.getCapaciteMaxTFEP() ;
 		quantiteLimite -= this.getQuantitePateCCTotaleValeur() ;
+		if (quantiteLimite < 0) {
+			this.journalEq4.ajouter("quantite limite" + quantiteLimite);
+		}
+		
 		
 		for (int i = e.getStepDebut() ; i < e.getNbEcheances() ; i++) {
 			if (parfait || e.getQuantite(i)>quantiteLimite) {
@@ -225,7 +230,9 @@ public class Transformateur2_contratCadre extends Transformateur2_stocks_et_tran
 		Echeancier echeancier = contrat.getEcheancier() ;
 		List<Echeancier> liste = contrat.getEcheanciers() ;
 		
-		if (!this.vend(pate)) { return null ; } // on ne vend pas cette pâte 
+		if (contrat.getQuantiteTotale() == 0) { return null ;}
+		
+		if (!this.vend(contrat.getProduit())) { return null ; } // on ne vend pas cette pâte 
 		
 		if (liste.size()<2) { //aucune proposition n'a été faite, on envoie notre échéancier idéal
 			 this.echeancierLimite(echeancier, pate, true) ;
@@ -264,9 +271,8 @@ public class Transformateur2_contratCadre extends Transformateur2_stocks_et_tran
 	
 	public double propositionPrix(ExemplaireContratCadre contrat) {
 		PateInterne pate = this.conversionPate(contrat.getProduit()) ;
-		if (contrat.getQuantiteTotale() == 0) { throw new IllegalArgumentException("quantité totale du contrat nulle") ;}
-		else { 
-			return this.getMargePate()*super.getCoutMoyenPateValeur(pate) ;} 
+		this.journalEq4.ajouter(""+(this.getMargePate()*super.getCoutMoyenPateValeur(pate)));
+		return this.getMargePate()*super.getCoutMoyenPateValeur(pate) ;
 			
 				//5000.0 + (1000.0/contrat.getQuantiteTotale());}// plus la quantite est elevee, plus le prix est interessant
 	}
@@ -280,7 +286,10 @@ public class Transformateur2_contratCadre extends Transformateur2_stocks_et_tran
 		List<Double> liste = contrat.getListePrixALaTonne() ;
 		int n = liste.size() ;
 		
-		if (contrat.getPrixALaTonne() >= propositionPrix(contrat)) { // si le contrat est plus intéressant que notre contrat maximal, on accepte
+		this.journalEq4.ajouter("prix courant "+contrat.getPrixALaTonne());
+		this.journalEq4.ajouter("prix voulu "+ this.propositionPrix(contrat));
+		
+		if (contrat.getPrixALaTonne() >= this.propositionPrix(contrat)) { // si le contrat est plus intéressant que notre contrat maximal, on accepte
 			return contrat.getPrixALaTonne() ;
 		}
 		
@@ -300,7 +309,7 @@ public class Transformateur2_contratCadre extends Transformateur2_stocks_et_tran
 			if (prixVoulu < 1.1*super.getCoutMoyenPateValeur(pate)) { //marge minimum à 10%, on reste sur nos positions
 				return liste.get(n-2) ;
 			} else { 
-				if (ecartRelatif < 0.1) { // si l'écart relatif est inférieur à 10% (arbitraire), on ne chipote plus
+				if (ecartRelatif < 0.04) { // si l'écart relatif est inférieur à 4% (arbitraire), on ne chipote plus
 					return contrat.getPrixALaTonne() ;
 			}
 			else { return prixVoulu ; }} // on propose notre prix
@@ -315,6 +324,7 @@ public class Transformateur2_contratCadre extends Transformateur2_stocks_et_tran
 	public void notificationNouveauContratCadre(ExemplaireContratCadre contrat) {
 		this.mesContratEnTantQueVendeur.add(contrat);
 		this.majQuantitePateCC(); 
+		this.journalEq4.ajouter("quantite pate cc totale" + this.getQuantitePateCCTotaleValeur());
 	}
 	
 	
@@ -327,7 +337,8 @@ public class Transformateur2_contratCadre extends Transformateur2_stocks_et_tran
 		if (pate != null && ((pate == PateInterne.PATE_BASSE) || (pate == PateInterne.PATE_MOYENNE))) {
 			return super.getStockPateValeur(pate) - this.getQuantitePateCCValeur(pate) > this.getStockPateMin() ; // quantité de stock minimale
 		}
-		else { return false ; }
+		else { 	
+			return false ; }
 	}
 	
 	// met à jour le stock et renvoie la quantité livrée effectivement
