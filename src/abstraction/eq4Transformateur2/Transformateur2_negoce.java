@@ -194,7 +194,7 @@ public class Transformateur2_negoce extends Transformateur2_gestion_stocks imple
 		// une fois que la vente est acceptée, notifie la vente, met à jour les stocks
 		// fonction à faire
 		
-		/* ADAPTATION DE LA MARGE */
+		/* ADAPTATION DE LA MARGE */ 
 		public void setMargeVisee(PateInterne pate) {
 			int nbTourAuto = super.nbToursAutonomiePateEtFeves(pate);
 			if (nbTourAuto != 1000) {
