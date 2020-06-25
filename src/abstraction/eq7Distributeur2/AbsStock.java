@@ -9,6 +9,7 @@ import java.util.Map;
 import abstraction.eq8Romu.produits.Chocolat;
 import abstraction.eq8Romu.produits.ChocolatDeMarque;
 import abstraction.eq8Romu.produits.Feve;
+import abstraction.eq8Romu.contratsCadres.Echeancier;
 import abstraction.fourni.Filiere;
 import abstraction.fourni.IActeur;
 import abstraction.fourni.Journal;
@@ -18,6 +19,10 @@ public class AbsStock {
 
 	// Enregistre les stocks de chaque chocolat de marque
 	protected Map<ChocolatDeMarque, Variable> stocksChocolatDeMarque;
+	
+	// Une table pour tenir compte des quantités achetée à chaque étape (NE PAS TOUCHER, TRAVAIL EN COURS)
+	protected Map<Integer, Map<ChocolatDeMarque, Double>> chocoEnStockParEtape;
+	protected Map<ChocolatDeMarque, Integer> etapeDuPlusVieuxStock;
 	
 	// Enregistre les stocks de chaque type de chocolat
 	protected Map<Chocolat, Variable> stocksChocolat;
@@ -38,10 +43,17 @@ public class AbsStock {
 	public Color addStockColor = Color.GREEN;
 	public Color removeStockColor = Color.ORANGE;
 	public Color descriptionColor = Color.YELLOW;
+	public Color peremptionColor = Color.MAGENTA;
+	
+	protected int datePeremption = 12; // donc une date de péremption de 6 mois car 12 steps
+	protected int fraisUnitairesStockage = 1;
+	protected double stockLimite = 10.;
 	
 	public AbsStock(Distributeur2 ac) {
 		this.ac = ac;
 		stocksChocolatDeMarque=new HashMap<ChocolatDeMarque, Variable>();
+		chocoEnStockParEtape=new HashMap<Integer, Map<ChocolatDeMarque, Double>>();
+		etapeDuPlusVieuxStock = new HashMap<ChocolatDeMarque, Integer>();
 		stocksChocolat=new HashMap<Chocolat, Variable>();
 		chocoReceptionne = new HashMap<Chocolat, Variable>();
 		initJournaux();

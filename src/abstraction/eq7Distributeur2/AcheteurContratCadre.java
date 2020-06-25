@@ -1,8 +1,10 @@
 package abstraction.eq7Distributeur2;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import abstraction.eq8Romu.contratsCadres.Echeancier;
 import abstraction.eq8Romu.contratsCadres.ExemplaireContratCadre;
@@ -32,8 +34,6 @@ public class AcheteurContratCadre extends AbsAcheteurContratCadre implements IAc
 		majJournalContrats();
 		// Proposition de nouveaux contrats pour les chocolats de marque
 		proposerContratsChocoDeMarque();
-		// Proposition de nouveaux contrats pour les types de chocolat
-		proposerContratsChoco();	
 	}
 
 	// Supprime de la liste nosContrats tous les contrats devenus obsolètes
@@ -53,12 +53,26 @@ public class AcheteurContratCadre extends AbsAcheteurContratCadre implements IAc
 		// IA : l'acheteur propose un contrat à chaque vendeur et pour chaque chocolat de marque à chaque étape
 		// Les durées des échéanciers et les quantités livrées à chaque étape sont fixées (resp. 10 et 1.0)
 		SuperviseurVentesContratCadre superviseur = Filiere.LA_FILIERE.getSuperviseurContratCadre();
+		double seuil = 20.;
 		int etape = Filiere.LA_FILIERE.getEtape();	
 		for (ChocolatDeMarque choco : ac.tousLesChocolatsDeMarquePossibles()) {
-			List<IVendeurContratCadre> vendeurs = superviseur.getVendeurs(choco);
-			ExemplaireContratCadre contrat;
-			for (IVendeurContratCadre vendeur : vendeurs) {
-				contrat = superviseur.demande(ac, vendeur, choco, new Echeancier(etape, 10, 1.0), ac.cryptogramme);
+			double quantiteACommander = ac.getVendeur().getQuantiteACommanderParContrats(choco);
+			if (quantiteACommander > 0) {
+				List<IVendeurContratCadre> vendeurs = superviseur.getVendeurs(choco);
+				Random rand = new Random();
+				IVendeurContratCadre vendeur = vendeurs.get(rand.nextInt(vendeurs.size()));
+				ExemplaireContratCadre contrat;
+				List<Double> quantites = new ArrayList<Double>();
+				while (quantiteACommander > 0) {
+					if (quantiteACommander >= seuil) {
+						quantiteACommander -= seuil;
+						quantites.add(seuil);
+					} else {
+						quantites.add(quantiteACommander);
+						quantiteACommander = 0;
+					}
+				}
+				contrat = superviseur.demande(ac, vendeur, choco, new Echeancier(etape+1, quantites), ac.cryptogramme);
 				if (contrat != null) {
 					nosContrats.add(contrat);
 					notifierNouveauContrat(contrat);
@@ -67,23 +81,12 @@ public class AcheteurContratCadre extends AbsAcheteurContratCadre implements IAc
 		}	
 	}
 	
-	// Propose un contrat à chaque vendeur pour chaque type de chocolat
-	public void proposerContratsChoco() {
-		// IA : l'acheteur propose un contrat à chaque vendeur et pour chaque type de chocolat à chaque étape
-		// Les durées des échéanciers et les quantités livrées à chaque étape sont fixées (resp. 10 et 1.0)
-		SuperviseurVentesContratCadre superviseur = Filiere.LA_FILIERE.getSuperviseurContratCadre();
-		int etape = Filiere.LA_FILIERE.getEtape();	
-		for (Chocolat choco : ac.nosChoco) {
-			List<IVendeurContratCadre> vendeurs = superviseur.getVendeurs(choco);
-			ExemplaireContratCadre contrat;
-			for (IVendeurContratCadre vendeur : vendeurs) {
-				contrat = superviseur.demande(ac, vendeur, choco, new Echeancier(etape+1, 10, 1.0), ac.cryptogramme);
-				if (contrat != null) {
-					nosContrats.add(contrat);
-					notifierNouveauContrat(contrat);  
-				}
-			}
-		}	
+	public double coutContratsActuels() {
+		double res = 0;
+		for (ExemplaireContratCadre contrat : this.nosContrats) {
+			res += contrat.getQuantiteALivrerAuStep()*contrat.getPrixALaTonne();
+		}
+		return res;
 	}
 	
 	// Informe de la signature d'un contrat via le journal principal
@@ -127,21 +130,25 @@ public class AcheteurContratCadre extends AbsAcheteurContratCadre implements IAc
 
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
 		// IA : on tente la négociation de l'échéancier dans 90% des cas en multipliant la quantité à livrer lors de la première livraison (par 2.5)
-		if (Math.random()<0.1) {
-			return contrat.getEcheancier();
+		Echeancier e = contrat.getEcheancier();
+		if (ac.getVendeur().kalm) {
+			for (int i = 0; i < e.getNbEcheances(); i++) {
+				e.set(i, e.getQuantite(i)*1.5);
+			}
 		} else {
-			Echeancier e = contrat.getEcheancier();
-			e.set(e.getStepDebut(), e.getQuantite(e.getStepDebut())*2.5);
-			return e;
+			for (int i = 0; i < e.getNbEcheances(); i++) {
+				e.set(i, e.getQuantite(i)*1.2);	
+			}
 		}
+		return e;
 	}
 
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
 		// IA : on tente la négociation du prix dans 90% des cas en le diminuant de 5%
-		if (Math.random()<0.1) {
-			return contrat.getPrixALaTonne(); 
+		if (ac.getVendeur().kalm) {
+			return contrat.getPrixALaTonne()*0.9;
 		} else {
-			return contrat.getPrixALaTonne()*0.95;
+			return contrat.getPrixALaTonne()*0.8;
 		}
 	}
 
