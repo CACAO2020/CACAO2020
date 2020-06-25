@@ -40,7 +40,7 @@ public class TestNegoceEtContratCadre {
         SuperviseurVentesContratCadre superviseur3 = new SuperviseurVentesContratCadre();
         f.ajouterActeur(superviseur3);
         f.initialiser();
-//        Filiere.LA_FILIERE = f;
+        Filiere.LA_FILIERE = f;
 		
 		/*LinkedList<Double> li = new LinkedList<Double>();
 		for (int i = 0; i < 10; i++) {
@@ -71,7 +71,7 @@ public class TestNegoceEtContratCadre {
 		System.out.println(t.getQuantitePateCCValeur(PateInterne.PATE_BASSE));
 		System.out.println(t.getQuantitePateCCValeur(PateInterne.PATE_MOYENNE)); */
 		
-		LinkedList<Double> li2 = new LinkedList<Double>();
+		/*LinkedList<Double> li2 = new LinkedList<Double>();
 		for (int i = 0; i < 10; i++) {
 			li2.add(100.0);
 		}
@@ -103,6 +103,5 @@ public class TestNegoceEtContratCadre {
 		System.out.println(t.getCoutMoyenPateValeur(PateInterne.PATE_MOYENNE)) ;
 		System.out.println(t.contrePropositionPrixVendeur(ex3)) ;
 		t.notificationNouveauContratCadre(ex3) ; la contre proposition pour les prix marche */
-		
-	}
+   	}
 }

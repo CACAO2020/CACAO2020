@@ -27,8 +27,8 @@ import java.util.Random;
  * L'arbre meurt a 45 ans
  * Il produit des cabosses à partir de ses 3 ans jusqu'a sa mort.
  * Sa pleine maturite dure de 6 a 30 ans
- * Il faut espacer les cacaoyers de 3 m par 3 m, soit 1 111 arbres par hectare
- * On considere qu'il y a un ratio de 2 hectares par employe.
+ * On considère qu'il y a 1 000 arbres par hectare.
+ * On considere qu'il y a un ratio de 1/2 hectares par employe.
  */
 
 
@@ -67,7 +67,7 @@ public class Plantations {
 	
 /*
  * La liste des arbres est stockée comme la liste de leur âge
- * classés dans l'ordre croissant.
+ * classés dans l'ordre décroissant.
  * On retient la dernière récolte car au vu de la phase de traitement
  * nécessaire pour faire sécher les fèves, j'ai implementé un retard
  * entre la récolte et l'ajout au stock des fèves d'un cycle.
@@ -162,10 +162,10 @@ public class Plantations {
 		int F = this.getNouveauxF();
 		int T = this.getNouveauxT();
 		for (int i=0; i<F; i+=1) {
-			this.arbresF.add(0, (Double) 0.0);;
+			this.arbresF.add((Double) 0.0);;
 		}
 		for (int i=0; i<T; i+=1) {
-			this.arbresT.add(0, (Double) 0.0);
+			this.arbresT.add((Double) 0.0);
 		}
 		
 	}
@@ -176,16 +176,16 @@ public class Plantations {
 		ArrayList<Double> l2 = this.getArbresT();
 		double pas = 1/24;
 		boolean bool = true;
+		int index = 0;
 		if (l1.size()!=0 ) {
 			for (int i=0; i<l1.size(); i+=1) {
 				l1.set(i, (Double) l1.get(i)+pas);
 			}
 			bool = true;
 			while (bool) {
-				int i = l1.size()-1;
-				double age = (double) l1.get(i);
-				if (age>45) {
-					l1.remove(i);
+				double age = (double) l1.get(index);
+				if (age>=45) {
+					l1.remove(index);
 				} else {
 					bool = false;
 				}
@@ -199,10 +199,9 @@ public class Plantations {
 			}
 			bool = true;
 			while (bool) {
-				int i = l2.size()-1;
-				double age = (double) l2.get(i);
+				double age = (double) l2.get(index);
 				if (age>45) {
-					l2.remove(i);
+					l2.remove(index);
 				} else {
 					bool = false;
 				}
@@ -225,12 +224,14 @@ public class Plantations {
 			lF.add((Double) age);
 		}
 		Collections.sort(lF);
+		Collections.reverse(lF);
 		this.setArbresF(lF);
 		for (int i=0; i<arbresT; i+= 1) {
 			double age = (double) rand.nextInt(45);
 			lT.add((Double) age);
 		}
 		Collections.sort(lT);
+		Collections.reverse(lT);
 		this.setArbresT(lT);
 	}
 	
@@ -253,20 +254,12 @@ public class Plantations {
 		if (lF != new ArrayList<Double>()) {
 			for (int i=0; i<lF.size(); i+=1) {
 				double age = (double) lF.get(i);
-				if (age==3) {
-					totalF += rendement/4;
-				} else if (age==4) {
-					totalF += rendement/2;
-				} else if (age==5) {
-					totalF += 3*rendement/4;
-				}else if (age<36) {
+				if ((age>=3) && (age<6)) {
+					totalF += rendement*(age/6 - 0.5);
+				}else if (age<=36) {
 					totalF += rendement;
-				} else if (age<39) {
-					totalF += 3*rendement/4;
-				} else if (age<42) {
-					totalF += rendement/2;
-				} else {
-					totalF += rendement/4;
+				} else if (age>36) {
+					totalF += rendement*(-age/9 + 5.0);
 				}
 			}
 		}
@@ -274,20 +267,12 @@ public class Plantations {
 		if (lT != new ArrayList<Double>()) {
 			for (int i=0; i<lT.size(); i+=1) {
 				double age = (double) lT.get(i);
-				if (age==3) {
-					totalT += rendement/4;
-				} else if (age==4) {
-					totalT += rendement/2;
-				} else if (age==5) {
-					totalT += 3*rendement/4;
-				}else if (age<36) {
+				if ((age>=3) && (age<6)) {
+					totalT += rendement*(age/6 - 0.5);
+				}else if (age<=36) {
 					totalT += rendement;
-				} else if (age<39) {
-					totalT += 3*rendement/4;
-				} else if (age<42) {
-					totalT += rendement/2;
-				} else {
-					totalT += rendement/4;
+				} else if (age>36) {
+					totalT += rendement*(-age/9 + 5.0);
 				}
 			}
 		}
