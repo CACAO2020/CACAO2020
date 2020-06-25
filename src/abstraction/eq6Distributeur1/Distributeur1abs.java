@@ -21,7 +21,7 @@ import abstraction.fourni.Variable;
 public class Distributeur1abs implements IActeur {
 
 	protected Integer cryptogramme; 
-	protected Journal journalEq6, journalEq6Stock;
+	protected Journal journalEq6, journalEq6Stock, journalEq6Pub;
 	protected Variable stockHGE;
 	protected Variable stockMG;
 	protected Variable stockBG;
@@ -40,6 +40,7 @@ public class Distributeur1abs implements IActeur {
 		this.stockBG=new Variable(getNom()+"stock"+ Chocolat.CHOCOLAT_BASSE.toString(), this, 0, 1000000000, 1000000);
 		this.journalEq6=new Journal(this.getNom()+" activites", this);
 		this.journalEq6Stock=new Journal(this.getNom()+" stock", this);
+		this.journalEq6Pub=new Journal(this.getNom()+" pub", this);
 		this.evolutionCours = new HashMap<Integer,Map<Chocolat,Double>>();
 		this.evolutionCours.put(0,new HashMap<Chocolat, Double>());
 		this.MapStock = new HashMap<Integer,Map<ChocolatDeMarque,Double>>();
@@ -159,6 +160,7 @@ public class Distributeur1abs implements IActeur {
 		List<Journal> res=new ArrayList<Journal>();
 		res.add(this.journalEq6);
 		res.add(this.journalEq6Stock);
+		res.add(this.journalEq6Pub);
 		return res;
 	}
 

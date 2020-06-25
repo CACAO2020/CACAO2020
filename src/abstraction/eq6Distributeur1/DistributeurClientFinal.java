@@ -20,9 +20,10 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 	private double pctageHGE;
 	private double pctageBG;
 	private double pctageMG;
+	private Integer campagnePub;
 
 	public Map<Integer,Map<ChocolatDeMarque,Double>> VenteSiPasRuptureDeStock;
-	
+
 
 	public DistributeurClientFinal(double capaciteDeVente, double marge, double capaciteStockmax, double pctageHGE, double pctageMG, double pctageBG) {
 		super(capaciteStockmax);
@@ -33,10 +34,11 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 		this.pctageBG=pctageBG;
 		this.pctageHGE=pctageHGE;
 		this.pctageMG=pctageMG;
+		this.campagnePub = 0;
 
 		this.VenteSiPasRuptureDeStock = new HashMap<Integer,Map<ChocolatDeMarque,Double>>();
-		
-		
+
+
 
 	}
 
@@ -52,7 +54,7 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 			}
 		}
 		return produits;
-		
+
 	}
 
 	/** @author Luca Pinguet & Mélissa Tamine */
@@ -123,9 +125,9 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 
 			this.VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()).put(choco, quantite);
 
-			
-			}
+
 		}
+	}
 
 
 	/** @author Luca Pinguet & Mélissa Tamine */
@@ -137,12 +139,35 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 
 	}
 
-	
+
 	@Override
 	public List<ChocolatDeMarque> pubSouhaitee() {
-		// TODO Auto-generated method stub
+		List<ChocolatDeMarque> listePub = new ArrayList<ChocolatDeMarque>();
+		boolean besoinPub = false;
+		if (Filiere.LA_FILIERE.getEtape()%12 == 0) {
+			campagnePub=0;
+		}
+		for (ChocolatDeMarque chocos : this.margeChocolat.keySet()) {
+			if (this.margeChocolat.get(chocos)<1.2 && chocos.getChocolat()==Chocolat.CHOCOLAT_HAUTE_EQUITABLE) {
+				besoinPub = true;
+			}
+		}
+		if (besoinPub==true && campagnePub<=3) {
+			for (Integer etape : this.MapStock.keySet()) {
+				for (ChocolatDeMarque chocos : this.MapStock.get(etape).keySet()) {
+					if (chocos.getChocolat()==Chocolat.CHOCOLAT_BASSE) {
+						listePub.add(chocos);
+					}
+				}
+			}
+			campagnePub = campagnePub+1;
+			journalEq6Pub.ajouter("campagne de pub effectuée pour l'étape : " + Filiere.LA_FILIERE.getEtape());
+			journalEq6Pub.ajouter("nous avons réalisé " + this.campagnePub + " campagnes cette année");
+			return listePub;
+		}
 		return null;
 	}
+
 	//Début V2
 
 	public void evolutionMarge(ChocolatDeMarque choco) {
