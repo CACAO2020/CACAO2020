@@ -19,6 +19,7 @@ public class eq2Investisseur extends VenteContratCadre {
 	private double prixUsine;
 	private Journal journal_achats;
 	private double prime;
+	private Variable constante_achat_arbre;
 
 	public eq2Investisseur() {
 		super();
@@ -26,6 +27,7 @@ public class eq2Investisseur extends VenteContratCadre {
 		this.prixUsine=100;
 		this.prixArbre = 3;
 		this.journal_achats = new Journal("Investissements",this);
+		this.constante_achat_arbre=new Variable("constante_achat_arbre",this,540);
 	}
 
 	public void AchatArbres(int nbrArbres, Feve feve){
@@ -70,7 +72,7 @@ public class eq2Investisseur extends VenteContratCadre {
 			this.AchatArbres((int)Math.floor(ecart*proportioncrioe), Feve.FEVE_HAUTE_EQUITABLE);
 			this.journal_achats.ajouter("on a acheté des arbres car trop peu d'arbres");
 		}
-		else if ((Filiere.LA_FILIERE.getBanque().getSolde(this,this.getCrypto())) > (this.NbTotalArbres()*0.05)*1080 + +this.getCoutTotalStock().getValeur()*1080) {
+		else if ((Filiere.LA_FILIERE.getBanque().getSolde(this,this.getCrypto())) > (this.NbTotalArbres()*0.05)*this.getConstante_achat_arbre().getValeur() + +this.getCoutTotalStock().getValeur()*this.getConstante_achat_arbre().getValeur()) {
 			if (this.getcompteurinvendus()<75) {
 				double investissement_max = Filiere.LA_FILIERE.getBanque().getSolde(this,this.getCrypto())*0.005;
 				double nbre_arbresmax = Math.floor(investissement_max/this.getprixArbre());
@@ -84,6 +86,20 @@ public class eq2Investisseur extends VenteContratCadre {
 		}}
 		
 	}
+	/**
+	 * @return the constante_achat_arbre
+	 */
+	public Variable getConstante_achat_arbre() {
+		return this.constante_achat_arbre;
+	}
+
+	/**
+	 * @param constante_achat_arbre the constante_achat_arbre to set
+	 */
+	public void setConstante_achat_arbre(double constante_achat_arbre) {
+		this.constante_achat_arbre.setValeur(this, constante_achat_arbre);
+	}
+
 	/*
 	 * Paye les employes en fonction du nombre d'arbres
 	 */
