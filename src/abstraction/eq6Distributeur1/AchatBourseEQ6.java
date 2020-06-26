@@ -42,12 +42,12 @@ public class AchatBourseEQ6 extends Stock implements IAcheteurChocolatBourse{
 				//double anneeYa2AN = Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-48+1, chocolat );//pareil que l'autre, mais pour le chocolat en question, en pourcentage
 
 
-				return (anneeYa1AN + (anneeYa1AN-anneeYa2AN)/2)*1.1;//*1.1 pour avoir un peu de stock
+				return (anneeYa1AN + (anneeYa1AN-anneeYa2AN)/2)*1.1+300;//*1.1 pour avoir un peu de stock
 
 			}
 
 			if (Filiere.LA_FILIERE.getEtape()<=48) {
-				return anneeYa1AN;
+				return anneeYa1AN ;
 
 			}
 
@@ -61,7 +61,7 @@ public class AchatBourseEQ6 extends Stock implements IAcheteurChocolatBourse{
 
 
 
-			return anneeYa1AN/2;
+			return 2000;
 
 
 
