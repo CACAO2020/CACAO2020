@@ -89,7 +89,6 @@ public class AcheteurBourse extends AbsAcheteurBourse implements IAcheteurChocol
 		double quantiteACommander;
 		for (Chocolat choco : ac.nosChoco) {
 			quantiteACommander = ac.getVendeur().getQuantiteACommanderEnBourse(choco); 
-			System.out.println(choco.name() + " " + quantiteACommander);
 			quantitesACommander.get(choco).setValeur(ac, quantiteACommander);
 		}
 	}

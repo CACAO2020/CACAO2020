@@ -234,9 +234,9 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		//Le mode panique est-il actif ?
 		boolean estEnPanik = estEnPanik(); 
 		if (estEnPanik) {
-			System.out.println("ici\n\n");
+			//System.out.println("ici\n\n");
 			if (!vendeur.wasPanik) {
-				System.out.println("là\n\n");
+				//System.out.println("là\n\n");
 				//Mode panik vient de s'activer !
 				vendeur.wasPanik = true;
 				vendeur.panik = true;
