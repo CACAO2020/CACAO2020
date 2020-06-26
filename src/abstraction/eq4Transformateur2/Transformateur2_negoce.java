@@ -215,4 +215,5 @@ public class Transformateur2_negoce extends Transformateur2_gestion_stocks imple
 			return visee;
 		}
 		
+		
 }

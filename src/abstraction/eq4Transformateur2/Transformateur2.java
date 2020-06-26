@@ -188,8 +188,8 @@ public class Transformateur2 extends Transformateur2_negoce {
 			double new_capa = stock_pate/3;
 			double qteAInvest = super.getCoutPourAugmenterCapaTPEC() * new_capa;
 			double solde = super.getSolde();
-			if (qteAInvest > 0.5 * solde) {
-				super.investirCapaTPEC(0.5 * solde);
+			if (qteAInvest > 0.3 * solde && solde > 0) {
+				super.investirCapaTPEC(0.3 * solde);
 			}
 			else {
 				super.investirCapaTPEC(qteAInvest);
