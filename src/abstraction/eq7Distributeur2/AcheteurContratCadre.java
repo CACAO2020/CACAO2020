@@ -48,10 +48,8 @@ public class AcheteurContratCadre extends AbsAcheteurContratCadre implements IAc
 		this.nosContrats.removeAll(contratsObsoletes);
 	}
 	
-	// Propose un contrat à chaque vendeur pour chaque chocolat de marque
 	public void proposerContratsChocoDeMarque() {
-		// IA : l'acheteur propose un contrat à chaque vendeur et pour chaque chocolat de marque à chaque étape
-		// Les durées des échéanciers et les quantités livrées à chaque étape sont fixées (resp. 10 et 1.0)
+		// On récupère les quantités demandées par le vendeur et on propose un contrat à un vendeur aléatoire
 		SuperviseurVentesContratCadre superviseur = Filiere.LA_FILIERE.getSuperviseurContratCadre();
 		double seuil = 20.;
 		int etape = Filiere.LA_FILIERE.getEtape();	
@@ -83,6 +81,7 @@ public class AcheteurContratCadre extends AbsAcheteurContratCadre implements IAc
 		}	
 	}
 	
+	// Renvoie le coût total des contrats actuel à l'étape courante
 	public double coutContratsActuels() {
 		double res = 0;
 		for (ExemplaireContratCadre contrat : this.nosContrats) {
@@ -131,8 +130,8 @@ public class AcheteurContratCadre extends AbsAcheteurContratCadre implements IAc
 	}
 
 	public Echeancier contrePropositionDeLAcheteur(ExemplaireContratCadre contrat) {
-		// IA : on tente la négociation de l'échéancier dans 90% des cas en multipliant la quantité à livrer lors de la première livraison (par 2.5)
 		Echeancier e = contrat.getEcheancier();
+		// On demande plus lorsque l'on est en mode kalm (état financier sain)
 		if (ac.getVendeur().kalm) {
 			for (int i = 0; i < e.getNbEcheances(); i++) {
 				e.set(i, e.getQuantite(i)*1.5);
@@ -146,7 +145,7 @@ public class AcheteurContratCadre extends AbsAcheteurContratCadre implements IAc
 	}
 
 	public double contrePropositionPrixAcheteur(ExemplaireContratCadre contrat) {
-		// IA : on tente la négociation du prix dans 90% des cas en le diminuant de 5%
+		// On demande plus de réduction en mode normal (état financier moyen)
 		if (ac.getVendeur().kalm) {
 			return contrat.getPrixALaTonne()*0.9;
 		} else {
