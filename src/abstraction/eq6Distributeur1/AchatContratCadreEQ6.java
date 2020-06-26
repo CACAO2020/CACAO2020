@@ -72,6 +72,7 @@ public class AchatContratCadreEQ6 extends DistributeurClientFinal implements IAc
 	}
 
 	public void nextContrat() { //à mettre dans le next principal
+		System.out.println("on rentre dans la fonction");
 		// On enleve les contrats obsolete (nous pourrions vouloir les conserver pour "archive"...)
 		List<ExemplaireContratCadre> contratsObsoletes=new LinkedList<ExemplaireContratCadre>();
 		for (ExemplaireContratCadre contrat : this.mesContratEnTantQuAcheteur) {

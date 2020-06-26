@@ -98,6 +98,10 @@ public class Distributeur1abs implements IActeur {
 	public double quantiteEnStockTotale() {
 		return 0;
 	}
+	
+	public void nextContrat() {
+		
+	}
 
 	/** @author Luca Pinguet & Mélissa Tamine & Thibault Avril */
 	public void next() {
@@ -131,7 +135,6 @@ public class Distributeur1abs implements IActeur {
 		this.stockMG.setValeur(this, quantiteEnStockTypeChoco(Chocolat.CHOCOLAT_MOYENNE));
 		this.stockBG.setValeur(this, quantiteEnStockTypeChoco(Chocolat.CHOCOLAT_BASSE));
 		this.stockHGE.setValeur(this, quantiteEnStockTypeChoco(Chocolat.CHOCOLAT_HAUTE_EQUITABLE));
-
 		if (this.quantiteEnStockTotale()!=0) {
 			Filiere.LA_FILIERE.getBanque().virer(this, cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), this.quantiteEnStockTotale()*720);
 		}

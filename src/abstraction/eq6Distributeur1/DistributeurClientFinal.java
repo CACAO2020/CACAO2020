@@ -120,6 +120,10 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 		//if (client!=null) { 
 
 		destocker(choco,quantite);
+		stockHGE.setValeur(this, this.quantiteEnStockTypeChoco(Chocolat.CHOCOLAT_HAUTE_EQUITABLE)); 
+		stockMG.setValeur(this, this.quantiteEnStockTypeChoco(Chocolat.CHOCOLAT_MOYENNE)); 
+		stockBG.setValeur(this, this.quantiteEnStockTypeChoco(Chocolat.CHOCOLAT_BASSE)); 
+
 		this.evolutionVentes.get(Filiere.LA_FILIERE.getEtape()).put(choco, quantite);
 
 		this.VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()).put(choco, quantite);
@@ -148,7 +152,7 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 	public List<ChocolatDeMarque> pubSouhaitee() {
 		List<ChocolatDeMarque> listePub = new ArrayList<ChocolatDeMarque>();
 		boolean besoinPub = false;
-		if (Filiere.LA_FILIERE.getEtape()%12 == 0) {
+		if (Filiere.LA_FILIERE.getEtape()%24 == 0) {
 			campagnePub=0;
 		}
 		for (ChocolatDeMarque chocos : this.margeChocolat.keySet()) {
@@ -175,34 +179,40 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 	//Début V2
 
 	public void evolutionMarge(ChocolatDeMarque choco) {
-		if (this.quantiteEnVente(choco)>0 && Filiere.LA_FILIERE.getEtape()>2 && this.evolutionVentes.get(Filiere.LA_FILIERE.getEtape()-2).size()>0 && this.evolutionVentes.get(Filiere.LA_FILIERE.getEtape()-1).size()>0) {
-			double vente2 = Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-2, choco)>0 ? this.evolutionVentes.get(Filiere.LA_FILIERE.getEtape()-2).get(choco)/Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-2, choco):0;
-			double vente1 = Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-2, choco)>0 && Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-1, choco)>0 ? this.evolutionVentes.get(Filiere.LA_FILIERE.getEtape()-1).get(choco)/Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-1, choco):0;
-			if (vente1!=0 && vente2!=0) {
-				if (this.margeChocolat.containsKey(choco)) {
-					double newmarge = this.margeChocolat.get(choco)+((vente1-vente2)/vente2)*0.2;  // faudra faire des tests sur l'évolution des marges
-					if (newmarge<1.5 && newmarge>1.1){
-						this.margeChocolat.replace(choco, newmarge);
-					}
-					if (newmarge>1.5){
-						this.margeChocolat.replace(choco, 1.5);
-					}
-					if (newmarge<1.1) {
-						this.margeChocolat.replace(choco, 1.1);
+
+		if (this.quantiteEnVente(choco)>0 && Filiere.LA_FILIERE.getEtape()>2 && this.VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()-2).size()>0 && this.VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()-1).size()>0) {
+			if(VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()- 1).keySet().contains(choco)&& VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()- 2).keySet().contains(choco)) {
+				double vente2 = Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-2, choco)>0 ? this.VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()-2).get(choco)/Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-2, choco):0;
+				double vente1 = Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-2, choco)>0 && Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-1, choco)>0 ? this.VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()-1).get(choco)/Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-1, choco):0;
+				if (vente1!=0 && vente2!=0) {
+					if (this.margeChocolat.containsKey(choco)) {
+						double newmarge = this.margeChocolat.get(choco)+((vente1-vente2)/vente2)*0.2;  // faudra faire des tests sur l'évolution des marges
+						if (newmarge<1.5 && newmarge>1.1){
+							this.margeChocolat.replace(choco, newmarge);
+						}
+						if (newmarge>1.5){
+							this.margeChocolat.replace(choco, 1.5);
+						}
+						if (newmarge<1.13) {
+							this.margeChocolat.replace(choco, 1.13);
+						}
 					}
 				}
 				else {
+
 					this.margeChocolat.put(choco, marge);
 				}
 			}
 			else {
+
+
 				this.margeChocolat.put(choco, marge);
 			}
 		}
 		else {
-			this.margeChocolat.put(choco, marge);
+			this.margeChocolat.put(choco, 1.24);
 		}
-
+		
 	}
 
 }
