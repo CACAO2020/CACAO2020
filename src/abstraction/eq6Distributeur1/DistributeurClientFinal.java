@@ -58,25 +58,32 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 	/** @author Luca Pinguet & Mélissa Tamine */
 
 	public double prix(ChocolatDeMarque choco) {
-		double cours = this.evolutionCours.get(Filiere.LA_FILIERE.getEtape()).keySet().contains(choco.getChocolat()) ? this.evolutionCours.get(Filiere.LA_FILIERE.getEtape()).get(choco.getChocolat()) : 22000;
-		this.evolutionMarge(choco);
-		if (Filiere.LA_FILIERE.getEtape()==0) {
-			return 22000;
-		}
-		if (this.quantiteEnVente(choco)>0) {
-			if (choco.getChocolat()==Chocolat.CHOCOLAT_HAUTE_EQUITABLE) {
-				return cours*this.margeChocolat.get(choco);}
-			else if (choco.getChocolat()==Chocolat.CHOCOLAT_MOYENNE) {
-				return cours*this.margeChocolat.get(choco);}
-			else if (choco.getChocolat()==Chocolat.CHOCOLAT_BASSE) {
-				return cours*this.margeChocolat.get(choco);}
-			else {
+
+		if (this.VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()) != null) {
+			double cours = this.evolutionCours.get(Filiere.LA_FILIERE.getEtape()).keySet().contains(choco.getChocolat()) ? this.evolutionCours.get(Filiere.LA_FILIERE.getEtape()).get(choco.getChocolat()) : 22000;
+			this.evolutionMarge(choco);
+			if (Filiere.LA_FILIERE.getEtape()==0) {
 				return 22000;
-			}	
+			}
+			if (this.quantiteEnVente(choco)>0) {
+				if (choco.getChocolat()==Chocolat.CHOCOLAT_HAUTE_EQUITABLE) {
+					return cours*this.margeChocolat.get(choco);}
+				else if (choco.getChocolat()==Chocolat.CHOCOLAT_MOYENNE) {
+					return cours*this.margeChocolat.get(choco);}
+				else if (choco.getChocolat()==Chocolat.CHOCOLAT_BASSE) {
+					return cours*this.margeChocolat.get(choco);}
+				else {
+					return 22000;
+				}	
+			}
+			else {
+				return 88000;
+			}
 		}
 		else {
 			return 88000;
 		}
+
 	}
 
 	/** @author Luca Pinguet & Mélissa Tamine */
@@ -119,14 +126,17 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 	public void vendre(ClientFinal client, ChocolatDeMarque choco, double quantite, double montant) {
 		//if (client!=null) { 
 
-		destocker(choco,quantite);
-		stockHGE.setValeur(this, this.quantiteEnStockTypeChoco(Chocolat.CHOCOLAT_HAUTE_EQUITABLE)); 
-		stockMG.setValeur(this, this.quantiteEnStockTypeChoco(Chocolat.CHOCOLAT_MOYENNE)); 
-		stockBG.setValeur(this, this.quantiteEnStockTypeChoco(Chocolat.CHOCOLAT_BASSE)); 
+		if (this.VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()) != null) {
+			destocker(choco,quantite);
+			stockHGE.setValeur(this, this.quantiteEnStockTypeChoco(Chocolat.CHOCOLAT_HAUTE_EQUITABLE)); 
+			stockMG.setValeur(this, this.quantiteEnStockTypeChoco(Chocolat.CHOCOLAT_MOYENNE)); 
+			stockBG.setValeur(this, this.quantiteEnStockTypeChoco(Chocolat.CHOCOLAT_BASSE)); 
 
-		this.evolutionVentes.get(Filiere.LA_FILIERE.getEtape()).put(choco, quantite);
+			this.evolutionVentes.get(Filiere.LA_FILIERE.getEtape()).put(choco, quantite);
 
-		this.VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()).put(choco, quantite);
+			this.VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()).put(choco, quantite);
+		}
+
 
 		//}
 	}
