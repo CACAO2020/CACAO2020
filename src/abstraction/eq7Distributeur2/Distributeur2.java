@@ -107,7 +107,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	// La méthode next, qui lance les appels des fonctions next de chaque sous-acteur
 	// Le vendeur est appelé en premier pour évaluer la quantité de chocolat que les acheteurs doivent commander
 	public void next() {
-		this.debutEtape = false; 
+		this.debutEtape = false;
 		// Paiement des frais (masse salariale et coûts de stockage)
 		payerFrais();
 		if (Filiere.LA_FILIERE.getEtape() > 0) {
@@ -116,7 +116,6 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 				gestionKalm();
 			}
 		}
-		
 		stock.next();
 		vendeur.next();
 		acheteurContratCadre.next();
@@ -217,9 +216,8 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	}
 
 	public boolean estEnPanik() {
-		double soldeActuel = this.getSolde();
-		double soldeMini = this.soldeMini;
-		return (soldeActuel <= soldeMini);
+		return (this.getSolde() <= this.soldeMini);
+
 
 			//double res = 0.;
 			//for (ChocolatDeMarque choco : this.tousLesChocolatsDeMarquePossibles()) {
@@ -249,7 +247,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 				vendeur.wasPanik = true;
 				vendeur.panik = true; // On sait jamais
 				// Ajout au journal la poursuite de la panik
-				journal.ajouter(Journal.texteColore(behaviorColor, Color.BLACK, "[PANIK] Mode PANIK toujours actif !"));
+				//journal.ajouter(Journal.texteColore(behaviorColor, Color.BLACK, "[PANIK] Mode PANIK toujours actif !"));
 			}
 		} else if (!estEnPanik && vendeur.wasPanik) {
 			// La panik vient de se terminer (et nous sommes toujours là)
@@ -293,7 +291,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 			vendeur.kalm = false;
 			vendeur.modeActuel = "normal";
 			//Ajouter au journal la fin du Kalm
-			journal.ajouter(Journal.texteColore(behaviorColor, Color.BLACK, "[KALM OFF] Mode KALM désactivé ! Aie !"));
+			//journal.ajouter(Journal.texteColore(behaviorColor, Color.BLACK, "[KALM OFF] Mode KALM désactivé ! Aie !"));
 		} else {
 			//Pas de Kalm en vue, rien à afficher
 			vendeur.wasKalm = false;
