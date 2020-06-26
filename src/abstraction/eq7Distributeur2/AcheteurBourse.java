@@ -21,7 +21,6 @@ import abstraction.fourni.Variable;
 public class AcheteurBourse extends AbsAcheteurBourse implements IAcheteurChocolatBourse, IActeur {
 	
 	public void next() {
-		majQuantitesARecevoirParContrats();
 		// L'acheteur à la bourse détermine quelle quantité de chaque type de chocolat commander
 		majAchatsBourse();
 	}
@@ -70,25 +69,13 @@ public class AcheteurBourse extends AbsAcheteurBourse implements IAcheteurChocol
 		ac.getStock().chocoReceptionne.get(chocolat.getChocolat()).setValeur(ac, ac.getStock().chocoReceptionne.get(chocolat.getChocolat()).getValeur() + quantite);
 	}
 	
-	public void majQuantitesARecevoirParContrats() {
-		// MAJ quantités à recevoir par contrat
-		Map<Chocolat, Double> quantitesARecevoirParContrats = ac.getAcheteurContratCadre().quantitesARecevoirParContrats;
-		for (ExemplaireContratCadre contrat : ac.getAcheteurContratCadre().nosContrats) {
-			Object produit = contrat.getProduit();
-			if (contrat.getProduit() instanceof Chocolat) {
-				quantitesARecevoirParContrats.put((Chocolat)produit,quantitesARecevoirParContrats.get((Chocolat)produit));
-			} else {
-				quantitesARecevoirParContrats.put(((ChocolatDeMarque)produit).getChocolat(),quantitesARecevoirParContrats.get(((ChocolatDeMarque)produit).getChocolat()));
-			}
-		}
-	}
 	
-	// Méthode qui calcule la quantité qui doit être achetée en bourse, en tenant compte des contrats, pour chaque gamme de chocolat. La table des demandes est tenue à jour.
+	
+	// Méthode qui calcule la quantité qui doit être achetée en bourse pour chaque gamme de chocolat.
 	public void majAchatsBourse() {
-		// IA : quantité à commander = quantité demandée par le vendeur MOINS quantité reçue à l'étape suivante grâce aux contrats en cours
 		double quantiteACommander;
 		for (Chocolat choco : ac.nosChoco) {
-			quantiteACommander = ac.getVendeur().getQuantiteACommanderEnBourse(choco); 
+			quantiteACommander = ac.getVendeur().getQuantiteACommanderEnBourse(choco); // quantité demandée par le vendeur
 			quantitesACommander.get(choco).setValeur(ac, quantiteACommander);
 		}
 	}

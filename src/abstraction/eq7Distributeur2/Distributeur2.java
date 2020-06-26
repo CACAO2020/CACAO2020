@@ -35,20 +35,24 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	
 	protected int cryptogramme;
 	
-	protected double soldeCritique = 2.;
+	// Solde seuil pour le mode panik
+	protected double soldeMini = 100000.;
 	
-	protected double soldeMini = 1000000.;
+	// Solde seuil pour le mode kalm
 	protected double soldeMaxi = 10000000.;
 	
-	//Les sous-acteurs
+	// Instances des sous-acteurs associés au distributeur
 	private AcheteurBourse acheteurBourse;
 	private AcheteurContratCadre acheteurContratCadre;
 	private Vendeur vendeur;
 	private Stock stock;
 	
+	// Frais par étape
 	protected double coutMasseSalariale = 80000;
-	protected double stockInitial = 100;
 	protected double coutPub = 1000;
+	
+	// Stock initial
+	protected double stockInitial = 10000;
 	
 	private Journal journal;
 	private Journal journalTransactions;
@@ -107,7 +111,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	// La méthode next, qui lance les appels des fonctions next de chaque sous-acteur
 	// Le vendeur est appelé en premier pour évaluer la quantité de chocolat que les acheteurs doivent commander
 	public void next() {
-		this.debutEtape = false; 
+		this.debutEtape = false;
 		// Paiement des frais (masse salariale et coûts de stockage)
 		payerFrais();
 		if (Filiere.LA_FILIERE.getEtape() > 0) {
@@ -116,13 +120,13 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 				gestionKalm();
 			}
 		}
-		
 		stock.next();
 		vendeur.next();
 		acheteurContratCadre.next();
 		acheteurBourse.next();
 	}
 	
+	// Renvoie le total des frais de l'étape : frais de stockage, salaires, auxquels sont retirés les bénéfices de livraison
 	public double getFrais() {
 		double coutMasseSalariale = this.coutMasseSalariale;
 		double fraisStockage = this.getStock().fraisStockage();
@@ -147,16 +151,19 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 			vendeur.pubLastStep = false;
 		}
 		if (coutMasseSalariale + fraisStockage < beneficesLivraisons) {
-			beneficesLivraisons = coutMasseSalariale + fraisStockage + 0.001;
+			fraisTotaux = 0;
+		} else {
+			fraisTotaux = coutMasseSalariale + fraisStockage - beneficesLivraisons;
 		}
-		fraisTotaux = coutMasseSalariale + fraisStockage - beneficesLivraisons;
 		return fraisTotaux;
 	}
 	
 	public void payerFrais() {
 		double fraisTotaux = this.getFrais();
-		journalTransactions.ajouter(Journal.texteColore(warningColor, Color.BLACK, "[FRAIS] Paiement de " + Journal.doubleSur(fraisTotaux,2) + " de frais."));
-		Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), fraisTotaux);
+		if (fraisTotaux > 0) {
+			journalTransactions.ajouter(Journal.texteColore(warningColor, Color.BLACK, "[FRAIS] Paiement de " + Journal.doubleSur(fraisTotaux,2) + " de frais."));
+			Filiere.LA_FILIERE.getBanque().virer(this, this.cryptogramme, Filiere.LA_FILIERE.getActeur("Banque"), fraisTotaux);
+		}
 	}
 	
 	public String getNom() {
@@ -202,7 +209,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 	// Affiche le solde dans le journal principal
 	public void notificationSolde() {
 		double solde = getSolde();
-		if (solde > soldeCritique) {
+		if (solde > soldeMini) {
 			journal.ajouter(Journal.texteColore(positiveColor, Color.BLACK, "[SOLDE] Solde après vente : " + Journal.doubleSur(solde,2) + "."));
 		} else {
 			if (solde > 0) {
@@ -212,38 +219,30 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 			}
 		}
 	}
-
+	
+	// L'acteur devient en panik si son solde est inférieur au soldeMini
 	public boolean estEnPanik() {
-		double soldeActuel = this.getSolde();
-		double soldeMini = this.soldeMini;
-		return (soldeActuel <= soldeMini);
-
-			//double res = 0.;
-			//for (ChocolatDeMarque choco : this.tousLesChocolatsDeMarquePossibles()) {
-			//	double cours = Filiere.LA_FILIERE.getIndicateur("BourseChoco cours " + choco.getChocolat().name()).getHistorique().get(Filiere.LA_FILIERE.getEtape()-1).getValeur();
-			//	res += Double.max(0., (this.stock.getStockChocolatDeMarque(choco)-this.stock.stockLimite)*cours);
-			//}
-			//return (res > soldeActuel - soldeMini);
+		return (this.getSolde() <= this.soldeMini);
 	}
 		
 	// Gère la panik de l'acteur
 	public void gestionPanik() {
-		//Le mode panique est-il actif ?
+		// Le mode panique est-il actif ?
 		boolean estEnPanik = estEnPanik(); 
 		if (estEnPanik) {
 			if (!vendeur.wasPanik) {
-				//Mode panik vient de s'activer !
+				// Le mode panik vient de s'activer !
 				vendeur.wasPanik = true;
 				vendeur.panik = true;
 				vendeur.modeActuel = "panik";
-				//Ajout au journal le début du mode panik
+				// Ajout au journal le début du mode panik
 				journal.ajouter(Journal.texteColore(behaviorColor, Color.BLACK, "[PANIK ON] Mode PANIK activé !"));
 			} else {
+				
 				// Le mode panik est actif mais ce n'est pas le premier tour de panik
 				vendeur.wasPanik = true;
 				vendeur.panik = true; // On sait jamais
 				// Ajout au journal la poursuite de la panik
-				//journal.ajouter(Journal.texteColore(behaviorColor, Color.BLACK, "[PANIK] Mode PANIK toujours actif !"));
 			}
 		} else if (!estEnPanik && vendeur.wasPanik) {
 			// La panik vient de se terminer (et nous sommes toujours là)
@@ -258,6 +257,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 		}
 	}
 	
+	// L'acteur devient kalm si son solde est supérieur au soldeMaxi
 	public boolean estKalm() {
 		double soldeActuel = this.getSolde();
 		return soldeActuel > this.soldeMaxi;		
@@ -287,7 +287,7 @@ public class Distributeur2 extends AbsDistributeur2 implements IActeur, IAcheteu
 			vendeur.kalm = false;
 			vendeur.modeActuel = "normal";
 			//Ajouter au journal la fin du Kalm
-			journal.ajouter(Journal.texteColore(behaviorColor, Color.BLACK, "[KALM OFF] Mode KALM désactivé ! Aie !"));
+			//journal.ajouter(Journal.texteColore(behaviorColor, Color.BLACK, "[KALM OFF] Mode KALM désactivé ! Aie !"));
 		} else {
 			//Pas de Kalm en vue, rien à afficher
 			vendeur.wasKalm = false;
