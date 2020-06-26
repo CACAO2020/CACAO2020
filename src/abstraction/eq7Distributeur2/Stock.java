@@ -115,17 +115,17 @@ public class Stock extends AbsStock implements IStock {
 		
 		// On repart de la dernière étape à laquelle on a enlevé du chocolat et on recherche la nouvelle étape du plus vieux stock
 		etape -= 1;
-		while (etape <= etapeActuelle) {
+		while (etape <= etapeActuelle-1) {
 			if (this.chocoEnStockParEtape.get(etape).get(chocoDeMarque) == 0.) {
 				etape += 1;
 			} else {
 				this.etapeDuPlusVieuxStock.put(chocoDeMarque, etape);
-				etape = etapeActuelle + 2;
+				etape = etapeActuelle + 1;
 			}
 		}
 		
-		// Si on n'a plus de stock du tout, on dit que la nouvelle étape du plus vieux stock est l'étape actuelle
-		if (etape == etapeActuelle + 1) {
+		// Si on n'a plus de stock avant l'étape actuelle, la nouvelle étape du plus vieux stock devient l'étape actuelle
+		if (etape == etapeActuelle) {
 			this.etapeDuPlusVieuxStock.put(chocoDeMarque, etapeActuelle);
 		}
 	}
