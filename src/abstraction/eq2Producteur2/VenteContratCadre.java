@@ -140,7 +140,7 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 				return contrat.getEcheancier();
 			}
 		}
-		this.journal_contrats.ajouter("Echéancier refusé");
+		this.journal_contrats.ajouter("Echéancier refusé, ils demandent "+contrat.getQuantiteTotale()+" et on a "+this.getmassedispocrio()+" "+this.getmassedispocrioe()+" "+this.getmassedispofora()+" "+this.getmassedispotrini()+" "+this.getmassedispotrinie());
 		return null;
 	}
 
