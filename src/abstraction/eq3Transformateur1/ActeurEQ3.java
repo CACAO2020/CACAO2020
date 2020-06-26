@@ -33,7 +33,7 @@ public abstract class ActeurEQ3 implements IActeur{
 	}
 	
 	public String getNom() {
-		return "EQ3";
+		return "Ruby";
 	}
 
 	public String getDescription() {

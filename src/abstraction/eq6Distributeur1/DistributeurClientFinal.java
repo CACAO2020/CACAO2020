@@ -136,14 +136,17 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 	public void notificationRayonVide(ChocolatDeMarque choco) { //vérifier que ce soit apres la foncion vendre
 		journalEq6.ajouter(" Aie... j'aurais du mettre davantage de "+choco.name()+" en vente");
 
-		if(VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()).keySet().contains(choco)) {
+		if (this.VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()) != null) {
+			if (VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()).keySet().contains(choco)) {
 
-			double quantité = this.VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()).get(choco);
-			this.VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()).replace(choco, quantité*1.1) ; // on augmente de 10%, valeur à modifier
+				double quantité = this.VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()).get(choco);
+				this.VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()).replace(choco, quantité*1.1) ; // on augmente de 10%, valeur à modifier
+			}
+			else {
+				this.VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()).put(choco, Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-1, choco.getChocolat())*0.02 ) ; // on le prend en compte dans notre liste
+			}
 		}
-		else {
-			this.VenteSiPasRuptureDeStock.get(Filiere.LA_FILIERE.getEtape()).put(choco, Filiere.LA_FILIERE.getVentes(Filiere.LA_FILIERE.getEtape()-1, choco.getChocolat())*0.02 ) ; // on le prend en compte dans notre liste
-		}
+
 
 	}
 
@@ -212,7 +215,7 @@ public class DistributeurClientFinal extends AchatBourseEQ6 implements IDistribu
 		else {
 			this.margeChocolat.put(choco, 1.24);
 		}
-		
+
 	}
 
 }
