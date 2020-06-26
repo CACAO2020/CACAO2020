@@ -21,7 +21,6 @@ import abstraction.fourni.Variable;
 public class AcheteurBourse extends AbsAcheteurBourse implements IAcheteurChocolatBourse, IActeur {
 	
 	public void next() {
-		majQuantitesARecevoirParContrats();
 		// L'acheteur à la bourse détermine quelle quantité de chaque type de chocolat commander
 		majAchatsBourse();
 	}
@@ -70,18 +69,7 @@ public class AcheteurBourse extends AbsAcheteurBourse implements IAcheteurChocol
 		ac.getStock().chocoReceptionne.get(chocolat.getChocolat()).setValeur(ac, ac.getStock().chocoReceptionne.get(chocolat.getChocolat()).getValeur() + quantite);
 	}
 	
-	public void majQuantitesARecevoirParContrats() {
-		// MAJ quantités à recevoir par contrat
-		Map<Chocolat, Double> quantitesARecevoirParContrats = ac.getAcheteurContratCadre().quantitesARecevoirParContrats;
-		for (ExemplaireContratCadre contrat : ac.getAcheteurContratCadre().nosContrats) {
-			Object produit = contrat.getProduit();
-			if (contrat.getProduit() instanceof Chocolat) {
-				quantitesARecevoirParContrats.put((Chocolat)produit,quantitesARecevoirParContrats.get((Chocolat)produit));
-			} else {
-				quantitesARecevoirParContrats.put(((ChocolatDeMarque)produit).getChocolat(),quantitesARecevoirParContrats.get(((ChocolatDeMarque)produit).getChocolat()));
-			}
-		}
-	}
+	
 	
 	// Méthode qui calcule la quantité qui doit être achetée en bourse pour chaque gamme de chocolat.
 	public void majAchatsBourse() {
