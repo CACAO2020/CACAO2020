@@ -75,6 +75,7 @@ public class Transformateur2 extends Transformateur2_negoce {
 		// Coûts de gestion
 		montant += super.getCoutFixeValeur() ;
 		Filiere.LA_FILIERE.getBanque().virer(this, super.cryptogramme, Filiere.LA_FILIERE.getBanque(), montant) ;
+		this.calculeValeurDesStocks() ;
 		
 		// Investissements
 		this.investissementPate();
