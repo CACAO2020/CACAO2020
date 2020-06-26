@@ -156,7 +156,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 					//System.out.println(cours);
 					
 					if (panik) {
-						quantiteACommanderEnBourse = quantite*0.6;
+						quantiteACommanderEnBourse = quantite*0.6; 
 					} else if (kalm) {
 						quantiteACommanderEnBourse = quantite*0.3;
 					} else {
