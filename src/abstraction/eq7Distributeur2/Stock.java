@@ -115,7 +115,8 @@ public class Stock extends AbsStock implements IStock {
 		
 		// On repart de la dernière étape à laquelle on a enlevé du chocolat et on recherche la nouvelle étape du plus vieux stock
 		etape -= 1;
-		while (etape <= etapeActuelle-1) {
+		etape = Integer.max(etape,0);
+		while (etape <= etapeActuelle) {
 			if (this.chocoEnStockParEtape.get(etape).get(chocoDeMarque) == 0.) {
 				etape += 1;
 			} else {
