@@ -175,7 +175,7 @@ public class Vendeur extends AbsVendeur implements IDistributeurChocolatDeMarque
 					quantiteACommanderParContrats = soldeRestant/(nombreProduitsChoco*cours); //valeur inutile car les contrats ne sont pas utilisés
 				} else {
 					quantiteACommanderParContrats = soldeRestant/(nombreProduitsChoco*cours); //valeur inutile car les contrats ne sont pas utilisés
-				}
+				} 
 				this.quantitesACommanderParContrats.get(choco).setValeur(ac, quantiteACommanderParContrats);
 			}
 			
