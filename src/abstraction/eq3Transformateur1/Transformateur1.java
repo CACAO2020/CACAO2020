@@ -30,11 +30,11 @@ public class Transformateur1 extends VendeurChocolat {
 		this.stockPate.put(Chocolat.CHOCOLAT_HAUTE,0.0);
 		this.stockPate.put(Chocolat.CHOCOLAT_HAUTE_EQUITABLE,0.0);
 
-		this.stockChocolat.put(Chocolat.CHOCOLAT_BASSE,500.0);
-		this.stockChocolat.put(Chocolat.CHOCOLAT_MOYENNE,500.0);
-		this.stockChocolat.put(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE,500.0);
-		this.stockChocolat.put(Chocolat.CHOCOLAT_HAUTE,500.0);
-		this.stockChocolat.put(Chocolat.CHOCOLAT_HAUTE_EQUITABLE,500.0);
+		this.stockChocolat.put(Chocolat.CHOCOLAT_BASSE,5.0);
+		this.stockChocolat.put(Chocolat.CHOCOLAT_MOYENNE,5.0);
+		this.stockChocolat.put(Chocolat.CHOCOLAT_MOYENNE_EQUITABLE,5.0);
+		this.stockChocolat.put(Chocolat.CHOCOLAT_HAUTE,5.0);
+		this.stockChocolat.put(Chocolat.CHOCOLAT_HAUTE_EQUITABLE,5.0);
 
 		this.coutFeves.put(Feve.FEVE_BASSE, 10.0);
 		this.coutFeves.put(Feve.FEVE_MOYENNE, 10.0);
