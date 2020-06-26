@@ -83,6 +83,7 @@ public class Stock  extends Distributeur1abs implements IStock { /** @author Avr
 			this.MapStock.get(Filiere.LA_FILIERE.getEtape()).put(choco, quantite);
 		}
 		journalEq6Stock.ajouter("" + this.MapStock.get(Filiere.LA_FILIERE.getEtape()).keySet());
+		journalEq6Stock.ajouter("" + this.quantiteEnStockTotale());
 	}
 
 	@Override
