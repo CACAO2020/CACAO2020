@@ -21,12 +21,12 @@ public class Transformateur2_negoce extends Transformateur2_gestion_stocks imple
 	protected Map<Chocolat, Variable> MARGE_VISEE_CHOCOLAT;
 
 	
-	public Transformateur2_negoce() {
-		super();
-		
+	public Transformateur2_negoce() { 
+		super();   
+		 
 		this.MARGE_VISEE_PATE = new HashMap<PateInterne, Variable>() ;
-		this.MARGE_VISEE_PATE.put(PateInterne.PATE_BASSE, new Variable(getNom()+" marge visee pate basse", this, 0.20)) ;
-		this.MARGE_VISEE_PATE.put(PateInterne.PATE_MOYENNE, new Variable(getNom()+" marge visee pate moyenne", this, 0.20)) ;
+		this.MARGE_VISEE_PATE.put(PateInterne.PATE_BASSE, new Variable(getNom()+" marge visee pate basse", this, 0.30)) ;
+		this.MARGE_VISEE_PATE.put(PateInterne.PATE_MOYENNE, new Variable(getNom()+" marge visee pate moyenne", this, 0.30)) ;
 		this.MARGE_VISEE_PATE.put(PateInterne.PATE_MOYENNE_EQUITABLE, new Variable(getNom()+" marge visee pate moyenne equitable", this, 1)) ;
 		this.MARGE_VISEE_PATE.put(PateInterne.PATE_HAUTE_EQUITABLE,new Variable(getNom()+" marge visee pate haute equitable", this, 1)) ;
 		this.MARGE_VISEE_PATE.put(PateInterne.PATE_HAUTE, new Variable(getNom()+" marge visee pate haute", this, 1)) ;
@@ -43,6 +43,12 @@ public class Transformateur2_negoce extends Transformateur2_gestion_stocks imple
 
 	public List<Variable> getIndicateurs() { 
 		List<Variable> res=super.getIndicateurs();
+		for (PateInterne pate : PateInterne.values()) {
+			res.add(MARGE_VISEE_PATE.get(pate));
+		}		
+		for (Chocolat choc : Chocolat.values()) {
+			res.add(MARGE_VISEE_CHOCOLAT.get(choc));
+		}
 		return res;
 	}
 
@@ -59,7 +65,9 @@ public class Transformateur2_negoce extends Transformateur2_gestion_stocks imple
 	//pour l'instant il essaie d'acheter tout ce qui passe mais à l'avenir on aura un if lot.quantiteentonne <= quantité_dont_on_a_besoin  
 	public double proposerAchat(LotCacaoCriee lot) {
 		double prix = this.prixRentableAchatFeve(lot.getFeve());
-		if (super.getSolde()*0.5>lot.getQuantiteEnTonnes()*prix) { // ON ACHETE QUE SI LE VALEUR DU LOT EST < 50% DE NOTRE SOLDE (PEUT ETRE MODIFIE
+		double total = lot.getQuantiteEnTonnes()*prix;
+		this.journalEq4.ajouter("Propose" + prix + "pour un lot de" + lot.getFeve().name() + "pour un total de" + total);
+		if (super.getSolde()*0.5>total) { // ON ACHETE QUE SI LE VALEUR DU LOT EST < 50% DE NOTRE SOLDE (PEUT ETRE MODIFIE
 			return prix;
 		}
 		else {
@@ -82,7 +90,7 @@ public class Transformateur2_negoce extends Transformateur2_gestion_stocks imple
 	// une fois que l'offre est acceptée, notifie la vente, met à jour les stocks et leur valeur
 	public void notifierVente(PropositionCriee proposition) {
 		Feve feve = proposition.getFeve() ;
-		super.modifierCoutMoyenFeves(feve, proposition.getQuantiteEnTonnes(), proposition.getPrixPourLeLot());
+		super.modifierCoutMoyenFeves(feve, proposition.getQuantiteEnTonnes(), proposition.getPrixPourUneTonne());
 		super.setStockFevesValeur(feve, proposition.getQuantiteEnTonnes()+super.getStockFevesValeur(feve));
 		this.setMargeVisee(super.creerPateAPartirDeFeve(proposition.getFeve()));
 		this.journalEq4.ajouter("Apprend que sa proposition de "+Journal.doubleSur(proposition.getPrixPourUneTonne(), 4)+" pour "+Journal.texteColore(proposition.getVendeur(), Journal.doubleSur(proposition.getQuantiteEnTonnes(), 2)+" tonnes de "+proposition.getFeve().name())+Journal.texteColore(Color.green, Color.black," a ete acceptee"));
@@ -128,7 +136,6 @@ public class Transformateur2_negoce extends Transformateur2_gestion_stocks imple
 			return 0;
 		}
 		double prix_bourse_choco = Filiere.LA_FILIERE.getIndicateur(indicateur).getHistorique().get(Filiere.LA_FILIERE.getEtape()-1).getValeur();
-		//System.out.println(indicateur + " = " + prix_bourse_choco);
 		return prix_bourse_choco/(1+MARGE_VISEE_CHOCOLAT.get(super.creerChocolat(super.creerPateAPartirDeFeve(feve))).getValeur()) - cout_process_product;
 	}
 		else {
@@ -138,9 +145,14 @@ public class Transformateur2_negoce extends Transformateur2_gestion_stocks imple
 	
 	//AU DEBUT DE LA SIMUL CEST NEGATIF ->> A EVITER
 	public double prixRentablePourReventePate(Feve feve) {
+		if (super.nbToursAutonomiePateEtFeves(super.creerPateAPartirDeFeve(feve)) >= super.getNombreDeTourDautoMax()) {
+			return 0;
+		}
+		else {
 		double cout_process_product = this.getCoutMoyenPateValeur(super.creerPateAPartirDeFeve(feve)) - this.getCoutMoyenFeveValeur(feve)*super.getCoeffTFEP();
 		double prix_moy_revente_pate = super.getPrixMoyReventePate(super.creerPateAPartirDeFeve(feve));
 		return prix_moy_revente_pate*(1-MARGE_VISEE_PATE.get(super.creerPateAPartirDeFeve(feve)).getValeur()) - cout_process_product;
+		}
 	}
 	
 	public double prixRentableAchatFeve(Feve feve ) {
@@ -173,6 +185,8 @@ public class Transformateur2_negoce extends Transformateur2_gestion_stocks imple
 			double valeur = this.getStockChocolatValeur(chocolat) - quantite ;
 			if (valeur >= 0) {
 				this.setStockChocolatValeur(chocolat, valeur);
+				double marge = this.MARGE_VISEE_CHOCOLAT.get(chocolat).getValeur();
+				this.MARGE_VISEE_CHOCOLAT.get(chocolat).setValeur(this, Math.min(2, marge+0.1)); 
 			}
 			else {throw new IllegalArgumentException("stock insuffisant");}
 		}
@@ -180,11 +194,11 @@ public class Transformateur2_negoce extends Transformateur2_gestion_stocks imple
 		// une fois que la vente est acceptée, notifie la vente, met à jour les stocks
 		// fonction à faire
 		
-		/* ADAPTATION DE LA MARGE */
+		/* ADAPTATION DE LA MARGE */ 
 		public void setMargeVisee(PateInterne pate) {
 			int nbTourAuto = super.nbToursAutonomiePateEtFeves(pate);
 			if (nbTourAuto != 1000) {
-				double marge = Math.max(Math.min(nbTourAuto-1-super.getNombreDeTourDautoMin()/super.getNombreDeTourDautoMax(), 2), -0.1);
+				double marge = Math.max(Math.min(nbTourAuto-1-super.getNombreDeTourDautoMin()/super.getNombreDeTourDautoMax(), 2), 0.1);
 				MARGE_VISEE_PATE.get(pate).setValeur(this, marge);
 			}
 		}
@@ -193,9 +207,13 @@ public class Transformateur2_negoce extends Transformateur2_gestion_stocks imple
 			double rapport = super.coutStocksChoc()/super.getSolde();
 			double visee = 0.01/rapport;								//Stock coute 2% de notre solde par tour -> marge esperee de 50%, 1% -> 100%, 5% -> 20%, 10% -> 10%
 			if (rapport < 0.005) { 								//visee capee a 200%
-				visee = 2;
+				visee = 1;
+			}
+			if (rapport > 0.2) {
+				visee = -10;
 			}
 			return visee;
 		}
+		
 		
 }
