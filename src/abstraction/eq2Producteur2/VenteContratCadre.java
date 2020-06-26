@@ -51,7 +51,7 @@ public class VenteContratCadre extends eq2Vendeur implements IVendeurContratCadr
 					this.journal_contrats.ajouter("Le contrat n°"+contrat.getNumero()+" est arrivé à terme. Merci pour la moula");
 				}
 			}
-				i++;
+			i++;
 		}
 	}
 	@Override
