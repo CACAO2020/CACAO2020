@@ -124,6 +124,14 @@ public class Producteur2 extends eq2Investisseur implements IActeur {
 		List<Variable> res=new ArrayList<Variable>();
 		res.add(new Variable("cout_arbre",this,this.getprixArbre()));
 		res.add(this.getCoutStock());
+		res.add(this.getPrixTCE());
+		res.add(this.getPrixTF());
+		res.add(this.getPrixTPF());
+		res.add(this.getPrixTPT());
+		res.add(this.getPrixTC());
+		res.add(this.getPrixTT());
+		res.add(this.getPrixTTE());
+		res.add(this.getConstante_achat_arbre());
 		return res;
 	}
 		
